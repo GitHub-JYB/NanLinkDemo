@@ -3,9 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_main.xml" value="0.19610507246376813" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/mtoolbar.xml" value="0.33" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/decoration_menu.xml" value="0.252" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_main.xml" value="0.16" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/coordinatorlayout.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/mtoolbar.xml" value="0.4788877445932029" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/navigation_header.xml" value="0.1656534954407295" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/vp_empty_menu.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/vp_item_menu.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/menu/my_navigation_items.xml" value="0.35208333333333336" />
       </map>
     </option>

@@ -10,5 +10,7 @@
     <color name="theme">#1A1A1A</color>
     <color name="nav">#202020</color>
     <color name="blue">#0078A3</color>
+    <color name="gray">#262626</color>
+    <color name="version">#555555</color>
 
 </resources>

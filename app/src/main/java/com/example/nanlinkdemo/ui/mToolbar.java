@@ -1,26 +1,23 @@
-package com.example.myapplication;
+package com.example.nanlinkdemo.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.example.nanlinkdemo.Application.MyApplication;
+import com.example.nanlinkdemo.databinding.MtoolbarBinding;
+
 
 public class mToolbar extends RelativeLayout {
 
-    @BindView(R.id.toolbar_left_btn)
-    ImageButton leftBtn;
-    @BindView(R.id.toolbar_right_btn)
-    ImageButton rightBtn;
-    @BindView(R.id.toolbar_title)
-    TextView titleTv;
 
+
+
+    MtoolbarBinding binding;
 
     public mToolbar(Context context) {
         this(context,null);
@@ -40,40 +37,40 @@ public class mToolbar extends RelativeLayout {
     }
 
     private void initView() {
-        LayoutInflater.from(getContext()).inflate(R.layout.mtoolbar,this);
-        ButterKnife.bind(this);
 
+        binding = MtoolbarBinding.inflate(LayoutInflater.from(getContext()),this, true);
 
-
+        // 动态设置statusBar的高度
+        LinearLayout.LayoutParams lp= (LinearLayout.LayoutParams) binding.statusBar.getLayoutParams();
+        lp.height= MyApplication.statusHight;
+        binding.statusBar.setLayoutParams(lp);
     }
 
     // 设置左侧按键点击事件
     public void setLeftBtnOnClickListener(OnClickListener li){
-        leftBtn.setOnClickListener(li);
+        binding.toolbarLeftBtn.setOnClickListener(li);
     }
 
     // 设置右侧按键点击事件
     public void setRightBtnOnClickListener(OnClickListener li){
-        rightBtn.setOnClickListener(li);
+        binding.toolbarRightBtn.setOnClickListener(li);
     }
 
     // 设置标题
     public void setTitle(String title){
-        titleTv.setText(title);
+        binding.toolbarTitle.setText(title);
     }
 
     // 设置左侧按键图标
     public void setLeftBtnIcon(int resId){
-        leftBtn.setImageResource(resId);
-        leftBtn.setVisibility(VISIBLE);
+        binding.toolbarLeftBtn.setImageResource(resId);
+        binding.toolbarLeftBtn.setVisibility(VISIBLE);
     }
 
     // 设置右侧按键图标
     public void setRightBtnIcon(int resId){
-        rightBtn.setImageResource(resId);
-        rightBtn.setVisibility(VISIBLE);
+        binding.toolbarRightBtn.setImageResource(resId);
+        binding.toolbarRightBtn.setVisibility(VISIBLE);
     }
-
-
 
 }
