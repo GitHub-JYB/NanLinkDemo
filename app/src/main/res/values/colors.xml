@@ -11,6 +11,10 @@
     <color name="nav">#202020</color>
     <color name="blue">#0078A3</color>
     <color name="gray">#262626</color>
-    <color name="version">#555555</color>
+    <color name="unable">#555555</color>
+    <color name="able">#00AEED</color>
+    <color name="login_hintText">#8E8E8E</color>
+    <color name="loading">#9E9E9E</color>
+
 
 </resources>

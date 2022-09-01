@@ -5,7 +5,7 @@ import static com.example.nanlinkdemo.bean.Menu.TYPE_ITEM;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.MainModel;
-import com.example.nanlinkdemo.mvp.presenter.MainPresenterImpl;
+import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,5 @@
 package com.example.nanlinkdemo.mvp.widget;
 
-import static com.example.nanlinkdemo.bean.Menu.TYPE_ITEM;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -16,9 +14,8 @@ import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.databinding.ActivityMainBinding;
 import com.example.nanlinkdemo.mvp.adapter.MenuAdapter;
-import com.example.nanlinkdemo.mvp.presenter.MainPresenterImpl;
+import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.MainView;
-import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 

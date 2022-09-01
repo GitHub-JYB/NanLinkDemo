@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme" >
+
+
+	<include layout="@layout/mtoolbar" />
+
+	<EditText
+		android:id="@+id/email"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="84dp"
+		android:layout_marginStart="38dp"
+		android:layout_marginEnd="37dp"
+		android:hint="电子邮箱"
+		android:singleLine="true"
+		android:textColor="@color/white"
+		android:textColorHint="@color/login_hintText"
+		android:textSize="17sp"
+		android:theme="@style/Theme.NanLinkDemo"/>
+
+	<EditText
+		android:id="@+id/nickName"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/email"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="6dp"
+		android:layout_marginStart="38dp"
+		android:layout_marginEnd="37dp"
+		android:hint="用户名"
+		android:singleLine="true"
+		android:textColor="@color/white"
+		android:textColorHint="@color/login_hintText"
+		android:textSize="17sp"
+		android:theme="@style/Theme.NanLinkDemo"/>
+
+	<EditText
+		android:id="@+id/password"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/email"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="72dp"
+		android:layout_marginStart="38dp"
+		android:layout_marginEnd="37dp"
+		android:hint="密码"
+		android:inputType="textPassword"
+		android:singleLine="true"
+		android:textColor="@color/white"
+		android:textColorHint="@color/login_hintText"
+		android:textSize="17sp"
+		android:theme="@style/Theme.NanLinkDemo"/>
+
+	<EditText
+		android:id="@+id/confirm_password"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/password"
+		android:layout_centerHorizontal="true"
+		android:layout_marginTop="6dp"
+		android:layout_marginStart="38dp"
+		android:layout_marginEnd="37dp"
+		android:hint="确认密码"
+		android:inputType="textPassword"
+		android:singleLine="true"
+		android:textColor="@color/white"
+		android:textColorHint="@color/login_hintText"
+		android:textSize="17sp"
+		android:theme="@style/Theme.NanLinkDemo"/>
+
+	<RelativeLayout
+		android:id="@+id/code"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/confirm_password"
+		android:layout_marginTop="30dp"
+		android:layout_marginStart="38dp"
+		android:layout_marginEnd="37dp">
+
+		<EditText
+			android:id="@+id/et_code"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toStartOf="@+id/btn_get_code"
+			android:layout_marginEnd="10dp"
+			android:hint="验证码"
+			android:inputType="number"
+			android:singleLine="true"
+			android:textColor="@color/white"
+			android:textColorHint="@color/login_hintText"
+			android:textSize="17sp"
+			android:theme="@style/Theme.NanLinkDemo"/>
+
+		<Button
+			android:id="@+id/btn_get_code"
+			android:layout_width="140dp"
+			android:layout_height="wrap_content"
+			android:layout_alignParentEnd="true"
+			android:background="@drawable/bg_able_btn_login"
+			android:text="获取验证码"
+			android:textColor="@color/white"
+			android:textSize="17sp"
+			/>
+
+	</RelativeLayout>
+
+	<LinearLayout
+		android:id="@+id/check"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/code"
+		android:layout_marginTop="12dp"
+		android:layout_marginStart="38dp"
+		android:layout_marginEnd="30dp"
+		android:orientation="horizontal">
+
+		<ImageButton
+			android:id="@+id/login_check"
+			android:background="@color/theme"
+			android:src="@drawable/unchecked"
+			android:layout_width="32dp"
+			android:layout_height="32dp"/>
+
+		<TextView
+			android:text="我已阅读并同意NANLINK用户协议及NANLINK隐私条款"
+			android:textSize="12sp"
+			android:textColor="@color/white"
+			android:layout_marginStart="4dp"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+
+	</LinearLayout>
+
+	<Button
+		android:id="@+id/btn_register"
+		android:layout_width="182dp"
+		android:layout_height="40dp"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/check"
+		android:layout_marginTop="31dp"
+		android:background="@drawable/bg_unable_btn_login"
+		android:text="注册"
+		android:textSize="17sp"
+		android:textColor="@color/white" />
+
+	<ImageView
+		android:id="@+id/login_logo"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="30dp"
+		android:src="@drawable/ic_nanlink_logo" />
+</RelativeLayout>
