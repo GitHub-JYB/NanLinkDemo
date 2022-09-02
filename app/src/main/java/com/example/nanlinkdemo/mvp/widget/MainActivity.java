@@ -1,5 +1,7 @@
 package com.example.nanlinkdemo.mvp.widget;
 
+import static com.example.nanlinkdemo.ui.readDialog.Type_Read;
+
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -90,7 +92,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     public void showMenuDialog(String menuText) {
-        new readDialog().show(getSupportFragmentManager(),"readDialog");
+        readDialog.newInstance(menuText, Type_Read, true).show(getSupportFragmentManager(),"readDialog");
     }
 
 }

@@ -13,6 +13,7 @@
         <entry key="..\:/Users/97732/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/activity_splash.xml" value="0.358695652173913" />
         <entry key="..\:/Users/97732/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/loading.xml" value="0.358695652173913" />
         <entry key="..\:/Users/97732/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/mtoolbar.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/97732/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/read_dialog.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/decoration_menu.xml" value="0.252" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_main.xml" value="0.16" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/coordinatorlayout.xml" value="0.36614583333333334" />
@@ -21,20 +22,6 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/vp_empty_menu.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/layout/vp_item_menu.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyApplication/app/src/main/res/menu/my_navigation_items.xml" value="0.35208333333333336" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/drawable/bg_able_btn_login.xml" value="0.148" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/drawable/bg_dialog.xml" value="0.1025" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/drawable/bg_loading.xml" value="0.1025" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/drawable/bg_unable_btn_login.xml" value="0.148" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/drawable/decoration_menu.xml" value="0.1025" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/activity_login.xml" value="0.5" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/activity_main.xml" value="0.1656534954407295" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/activity_register.xml" value="0.1656534954407295" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/activity_scanble.xml" value="0.1656534954407295" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/activity_splash.xml" value="0.1656534954407295" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/activity_test.xml" value="0.1651469098277609" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/loading.xml" value="0.1703125" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/mtoolbar.xml" value="0.1656534954407295" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/NanLinkDemo/app/src/main/res/layout/read_dialog.xml" value="0.9" />
       </map>
     </option>
   </component>
