@@ -1,38 +1,34 @@
 package com.example.nanlinkdemo.mvp.widget;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.databinding.ActivityMainBinding;
 import com.example.nanlinkdemo.mvp.adapter.MenuAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.MainView;
+import com.example.nanlinkdemo.ui.readDialog;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements MainView{
+public class MainActivity extends BaseActivity<ActivityMainBinding> implements MainView{
 
 
-    ActivityMainBinding binding;
     private MainPresenterImpl presenter;
     private MenuAdapter menuAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fullScreen(this);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
         setPresenter();
         initToolbar();
         initRecyclerViewMenu();
@@ -44,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements MainView{
     }
 
     private void initRecyclerViewMenu() {
+        binding.version.setText("Version " + MyApplication.getVersion());
         binding.recyclerViewMenu.setLayoutManager(new LinearLayoutManager(this));
 
         // 设置分割线格式并添加
@@ -81,13 +78,6 @@ public class MainActivity extends AppCompatActivity implements MainView{
     }
 
 
-    /**
-     * 通过设置全屏，设置状态栏透明
-     */
-    private void fullScreen(Activity activity) {
-        activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
-
     @Override
     public void showMenu(ArrayList<Menu> menuArrayList) {
         menuAdapter.setData(menuArrayList);
@@ -96,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements MainView{
     @Override
     public void openDrawLayout() {
         binding.drawerLayout.openDrawer(GravityCompat.START);
+    }
+
+    @Override
+    public void showMenuDialog(String menuText) {
+        new readDialog().show(getSupportFragmentManager(),"readDialog");
     }
 
 }

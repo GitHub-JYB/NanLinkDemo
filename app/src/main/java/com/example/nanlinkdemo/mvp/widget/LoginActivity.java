@@ -1,6 +1,5 @@
 package com.example.nanlinkdemo.mvp.widget;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,10 +7,8 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityLoginBinding;
@@ -20,30 +17,21 @@ import com.example.nanlinkdemo.mvp.view.LoginView;
 import com.example.nanlinkdemo.util.SpUtil;
 
 
-public class LoginActivity extends AppCompatActivity implements LoginView, View.OnClickListener {
+public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements LoginView, View.OnClickListener {
 
-    RelativeLayout rlBgLoading;
 
     private LoginPresenterImpl presenter;
-    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fullScreen(this);
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+
         setPresenter();
         binding.loginCheck.setOnClickListener(this);
         binding.btnLogin.setOnClickListener(this);
         binding.btnRegister.setOnClickListener(this);
-        rlBgLoading = binding.loading.ivBgLoading;
-
     }
 
-    private void fullScreen(Activity activity) {
-        activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
 
 
     @Override
@@ -79,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
 
     @Override
     public void starLoading() {
-        rlBgLoading.setVisibility(View.VISIBLE);
+        binding.loading.ivBgLoading.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_loading);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -104,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
     @Override
     public void stopLoading() {
         binding.loading.ivLoading.clearAnimation();
-        rlBgLoading.setVisibility(View.GONE);
+        binding.loading.ivBgLoading.setVisibility(View.GONE);
     }
 
 

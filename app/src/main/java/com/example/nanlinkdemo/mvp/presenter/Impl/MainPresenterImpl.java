@@ -1,13 +1,22 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.Impl.MainModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.MainPresenter;
 import com.example.nanlinkdemo.mvp.view.MainView;
+import com.example.nanlinkdemo.ui.readDialog;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
@@ -35,8 +44,8 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void menuSwitch(String menuText) {
-        SnackBarUtil.show((Activity) mainView, menuText);
-
+//        SnackBarUtil.show((Activity) mainView, menuText);
+        mainView.showMenuDialog(menuText);
     }
 
     @Override

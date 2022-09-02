@@ -1,7 +1,6 @@
 package com.example.nanlinkdemo.mvp.widget;
 
 import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -14,11 +13,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.nanlinkdemo.Application.MyApplication;
-import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.FeasyDevice;
 import com.example.nanlinkdemo.databinding.ActivityScanbleBinding;
 
@@ -28,20 +25,16 @@ import java.util.Arrays;
 
 
 
-public class ScanBleActivity extends AppCompatActivity {
+public class ScanBleActivity extends BaseActivity<ActivityScanbleBinding> {
 
     ArrayList<byte[]> uuidlist = new ArrayList<byte[]>();
     ArrayList<FeasyDevice> deviceList = new ArrayList<FeasyDevice>();
 
 
-    private ActivityScanbleBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fullScreen(this);
-        binding = ActivityScanbleBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
         binding.Scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,8 +150,5 @@ public class ScanBleActivity extends AppCompatActivity {
 
     }
 
-    private void fullScreen(Activity activity) {
-        activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
 
 }

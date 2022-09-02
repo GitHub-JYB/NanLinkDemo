@@ -35,7 +35,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 VpItemMenuBinding vpItemMenuBinding = VpItemMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderItemMenu(vpItemMenuBinding);
             default:
-                VpEmptyMenuBinding  vpEmptyMenuBinding= VpEmptyMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                VpEmptyMenuBinding vpEmptyMenuBinding= VpEmptyMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderEmptyMenu(vpEmptyMenuBinding);
         }
     }

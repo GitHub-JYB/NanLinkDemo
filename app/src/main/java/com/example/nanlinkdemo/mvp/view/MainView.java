@@ -12,4 +12,6 @@ public interface MainView {
     void showMenu(ArrayList<Menu> menuArrayList);
 
     void openDrawLayout();
+
+    void showMenuDialog(String menuText);
 }

@@ -1,8 +1,9 @@
 package com.example.nanlinkdemo.Application;
 
 import android.app.Application;
+import android.content.pm.PackageManager;
 import android.util.DisplayMetrics;
-
+import android.util.Log;
 
 
 public class MyApplication extends Application {
@@ -12,6 +13,9 @@ public class MyApplication extends Application {
     public static int heightPixels;
     public static int statusHight;
     private static float scale;
+    private static String versionName;
+
+
 
     @Override
     public void onCreate() {
@@ -22,6 +26,11 @@ public class MyApplication extends Application {
         heightPixels = density.heightPixels;
         scale = density.density;
         statusHight = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height","dimen","android"));
+        try {
+            versionName = instance.getPackageManager().getPackageInfo("com.example.nanlinkdemo", 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static MyApplication getInstance(){
@@ -34,5 +43,9 @@ public class MyApplication extends Application {
 
     public static int dip2px(float dip){
         return (int)(dip * scale + 0.5f);
+    }
+
+    public static CharSequence getVersion() {
+        return versionName;
     }
 }
