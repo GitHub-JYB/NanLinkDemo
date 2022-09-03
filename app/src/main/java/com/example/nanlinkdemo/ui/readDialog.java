@@ -21,16 +21,7 @@ public class readDialog extends DialogFragment {
     public static int Type_Read = 0;
     public static int Type_Write = 1;
 
-
-    public static readDialog newInstance(String title, int type, boolean isCancel){
-        readDialog myReadDialog = new readDialog();
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        bundle.putInt("type", type);
-        myReadDialog.setArguments(bundle);
-        isCanceledOnTouchOutside = isCancel;
-        return myReadDialog;
-    }
+    private CharSequence title;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,21 +37,7 @@ public class readDialog extends DialogFragment {
         我们在这里可以重新设定view的各个数据，但是不能修改对话框最外层的ViewGroup的布局参数。
         因为这里的view还没添加到父级中，我们需要在下面onStart生命周期里修改对话框尺寸参数
          */
-        Bundle arguments = this.getArguments();
-        binding.readDialogTitle.setText(arguments.getString("title"));
-        if (arguments.getInt("type") == Type_Read){
-            binding.readDialogContent.setVisibility(View.VISIBLE);
-            binding.readDialogInputText.setVisibility(View.GONE);
-            binding.readDialogRetry.setVisibility(View.VISIBLE);
-            binding.readDialogConfirm.setVisibility(View.GONE);
-            binding.readDialogCancel.setVisibility(View.GONE);
-        }else {
-            binding.readDialogContent.setVisibility(View.GONE);
-            binding.readDialogInputText.setVisibility(View.VISIBLE);
-            binding.readDialogRetry.setVisibility(View.GONE);
-            binding.readDialogConfirm.setVisibility(View.VISIBLE);
-            binding.readDialogCancel.setVisibility(View.VISIBLE);
-        }
+        binding.readDialogTitle.setText(title);
 
     }
 
@@ -85,7 +62,7 @@ public class readDialog extends DialogFragment {
 
 
     public void setTitle(CharSequence title){
-        binding.readDialogTitle.setText(title);
+         this.title = title;
     }
 
     public void setContent(CharSequence content){
@@ -93,5 +70,11 @@ public class readDialog extends DialogFragment {
         binding.readDialogContent.setVisibility(View.VISIBLE);
     }
 
+    public void setCancelOnClickListener(View.OnClickListener li){
+        binding.readDialogCancel.setOnClickListener(li);
+    }
 
+    public void setRetryOnClickListener(View.OnClickListener li){
+        binding.readDialogRetry.setOnClickListener(li);
+    }
 }

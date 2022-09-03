@@ -92,7 +92,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     public void showMenuDialog(String menuText) {
-        readDialog.newInstance(menuText, Type_Read, true).show(getSupportFragmentManager(),"readDialog");
+        readDialog dialog = new readDialog();
+        dialog.setTitle(menuText);
+        dialog.show(getSupportFragmentManager(),"readDialog");
+
+
     }
 
 }
