@@ -70,7 +70,7 @@ public class MyDialog extends DialogFragment {
 
 
         binding.myDialogTitle.setText(title);
-//        binding.myDialogTitle.setTextColor(getResources().getColor(titleTextColorResId));
+        binding.myDialogTitle.setTextColor(getResources().getColor(titleTextColorResId));
 
         binding.myDialogMessage.setText(message);
 
@@ -78,17 +78,17 @@ public class MyDialog extends DialogFragment {
 
         binding.myDialogNeutralButton.setOnClickListener(neutralListener);
         binding.myDialogNeutralButton.setText(neutralText);
-//        binding.myDialogNeutralButton.setTextColor(getResources().getColor(neutralTextColorResId));
+        binding.myDialogNeutralButton.setTextColor(getResources().getColor(neutralTextColorResId));
 
 
         binding.myDialogNegativeButton.setOnClickListener(negativeListener);
         binding.myDialogNegativeButton.setText(negativeText);
-//        binding.myDialogNegativeButton.setTextColor(getResources().getColor(negativeTextColorResId));
+        binding.myDialogNegativeButton.setTextColor(getResources().getColor(negativeTextColorResId));
 
 
         binding.myDialogPositiveButton.setOnClickListener(positiveListener);
         binding.myDialogPositiveButton.setText(positiveText);
-//        binding.myDialogPositiveButton.setTextColor(getResources().getColor(positiveTextColorResId));
+        binding.myDialogPositiveButton.setTextColor(getResources().getColor(positiveTextColorResId));
 
 
         binding.myDialogInputTextClean.setOnClickListener(new View.OnClickListener() {

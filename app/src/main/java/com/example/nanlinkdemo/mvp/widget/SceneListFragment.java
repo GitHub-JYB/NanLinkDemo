@@ -1,7 +1,6 @@
 package com.example.nanlinkdemo.mvp.widget;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.databinding.FragmentBaseBinding;
+import com.example.nanlinkdemo.databinding.FragmentRecycleviewBinding;
 import com.example.nanlinkdemo.mvp.adapter.MenuAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.SceneListPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.SceneListView;
@@ -26,8 +25,7 @@ public class SceneListFragment extends Fragment implements SceneListView {
     private SceneListPresenterImpl presenter;
     private MenuAdapter menuAdapter;
     private Context context;
-    private FragmentBaseBinding binding;
-    private ArrayList<Menu> menuList;
+    private FragmentRecycleviewBinding binding;
 
     public SceneListFragment() {
     }
@@ -68,7 +66,7 @@ public class SceneListFragment extends Fragment implements SceneListView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
-        binding = FragmentBaseBinding.inflate(getLayoutInflater());
+        binding = FragmentRecycleviewBinding.inflate(getLayoutInflater());
         initRecyclerView();
         return binding.getRoot();
     }

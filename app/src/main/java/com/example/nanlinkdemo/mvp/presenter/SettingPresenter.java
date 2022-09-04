@@ -9,4 +9,6 @@ public interface SettingPresenter {
     void getSettingListFromView();
 
     void showSettingListToView(ArrayList<Menu> settingArrayList);
+
+    void onClickSwitch(String settingText);
 }

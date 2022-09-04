@@ -13,13 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.bean.RegisterUser;
-import com.example.nanlinkdemo.databinding.FragmentBaseBinding;
+import com.example.nanlinkdemo.databinding.FragmentRecycleviewBinding;
 import com.example.nanlinkdemo.mvp.adapter.SettingAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.SettingPresenterImpl;
-import com.example.nanlinkdemo.mvp.presenter.Impl.UserSettingPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.SettingView;
-import com.example.nanlinkdemo.mvp.view.UserSettingView;
 
 import java.util.ArrayList;
 
@@ -30,7 +27,7 @@ public class SettingFragment extends Fragment implements SettingView {
     private SettingPresenterImpl presenter;
     private SettingAdapter adapter;
     private Context context;
-    private FragmentBaseBinding binding;
+    private FragmentRecycleviewBinding binding;
 
     public SettingFragment() {
     }
@@ -38,9 +35,9 @@ public class SettingFragment extends Fragment implements SettingView {
     private static SettingFragment instance = new SettingFragment();
 
     public static SettingFragment getInstance() {
-        if (instance == null){
-            synchronized (SettingFragment.class){
-                if (instance == null){
+        if (instance == null) {
+            synchronized (SettingFragment.class) {
+                if (instance == null) {
                     instance = new SettingFragment();
                 }
             }
@@ -61,17 +58,31 @@ public class SettingFragment extends Fragment implements SettingView {
 
     @Override
     public void showStories(ArrayList<Menu> settingList) {
-        adapter.setData(settingList,null);
+        adapter.setData(settingList, null);
 
     }
 
+    @Override
+    public void replaceFragment(Fragment oldFragment, Fragment newFragment) {
+        ((MainActivity) instance.getActivity()).replaceFragment(oldFragment, newFragment);
+    }
+
+    @Override
+    public void setToolbar(int leftBtnResId, String title, int rightBtnResId, View.OnClickListener leftListener, View.OnClickListener rightListener) {
+        ((MainActivity) instance.getActivity()).setToolbar(leftBtnResId, title, rightBtnResId,leftListener, rightListener);
+    }
+
+    @Override
+    public void initToolbar() {
+        ((MainActivity) instance.getActivity()).initToolbar();
+    }
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
-        binding = FragmentBaseBinding.inflate(getLayoutInflater());
+        binding = FragmentRecycleviewBinding.inflate(getLayoutInflater());
         initRecyclerView();
         return binding.getRoot();
     }
@@ -90,7 +101,7 @@ public class SettingFragment extends Fragment implements SettingView {
         adapter.setOnClickListener(new SettingAdapter.OnClickListener() {
             @Override
             public void onClick(String settingText) {
-
+                presenter.onClickSwitch(settingText);
             }
         });
     }

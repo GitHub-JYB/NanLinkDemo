@@ -7,6 +7,7 @@ import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.Impl.MainModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.MainPresenter;
 import com.example.nanlinkdemo.mvp.view.MainView;
+import com.example.nanlinkdemo.mvp.widget.AboutFragment;
 import com.example.nanlinkdemo.mvp.widget.SceneListFragment;
 import com.example.nanlinkdemo.mvp.widget.SettingFragment;
 import com.example.nanlinkdemo.mvp.widget.UserSettingFragment;
@@ -44,8 +45,8 @@ public class MainPresenterImpl implements MainPresenter {
                 view.setToolbar(R.drawable.ic_back, "账号设置", 0, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        view.initToolbar();
                         view.replaceFragment(UserSettingFragment.getInstance(), SceneListFragment.getInstance());
+                        view.initToolbar();
                     }
                 }, null);
                 view.replaceFragment(SceneListFragment.getInstance(), UserSettingFragment.getInstance());
@@ -64,14 +65,22 @@ public class MainPresenterImpl implements MainPresenter {
                 view.setToolbar(R.drawable.ic_back, "设置", 0, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        view.initToolbar();
                         view.replaceFragment(SettingFragment.getInstance(), SceneListFragment.getInstance());
+                        view.initToolbar();
                     }
                 }, null);
                 view.replaceFragment(SceneListFragment.getInstance(), SettingFragment.getInstance());
                 break;
             case "有关":
-                view.showMenuDialog(menuText, "该功能还没开发", 0);
+                view.closeDrawLayout();
+                view.replaceFragment(SceneListFragment.getInstance(), AboutFragment.getInstance());
+                view.setToolbar(R.drawable.ic_back, "关于", 0, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.replaceFragment(AboutFragment.getInstance(), SceneListFragment.getInstance());
+                        view.initToolbar();
+                    }
+                }, null);
                 break;
         }
     }

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.bean.RegisterUser;
-import com.example.nanlinkdemo.databinding.FragmentBaseBinding;
+import com.example.nanlinkdemo.databinding.FragmentRecycleviewBinding;
 import com.example.nanlinkdemo.mvp.adapter.SettingAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.UserSettingPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.UserSettingView;
@@ -28,8 +28,7 @@ public class UserSettingFragment extends Fragment implements UserSettingView {
     private UserSettingPresenterImpl presenter;
     private SettingAdapter adapter;
     private Context context;
-    private FragmentBaseBinding binding;
-    private ArrayList<Menu> menuList;
+    private FragmentRecycleviewBinding binding;
 
     public UserSettingFragment() {
     }
@@ -70,7 +69,7 @@ public class UserSettingFragment extends Fragment implements UserSettingView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
-        binding = FragmentBaseBinding.inflate(getLayoutInflater());
+        binding = FragmentRecycleviewBinding.inflate(getLayoutInflater());
         initRecyclerView();
         return binding.getRoot();
     }
