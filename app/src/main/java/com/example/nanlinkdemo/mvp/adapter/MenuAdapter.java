@@ -81,8 +81,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class ViewHolderItemMenu extends RecyclerView.ViewHolder {
 
 
-        ImageView iconMenu;
-        ImageView stateMenu;
+        ImageView iconMenu, stateMenu;
         TextView textMenu;
 
         public ViewHolderItemMenu(@NonNull VpItemMenuBinding binding) {
@@ -109,7 +108,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.onClickListener = onClickListener;
     }
 
-    static class ViewHolderEmptyMenu extends RecyclerView.ViewHolder {
+    class ViewHolderEmptyMenu extends RecyclerView.ViewHolder {
 
 
         public ViewHolderEmptyMenu(@NonNull VpEmptyMenuBinding binding) {

@@ -13,27 +13,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.nanlinkdemo.ui.mToolbar
+        <com.example.nanlinkdemo.ui.MyToolbar
             android:id="@+id/toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent" />
 
 
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/theme">
+            android:layout_height="match_parent">
 
-
-            <TextView
-                android:id="@+id/tx"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="@color/white"
-                android:text="Hello World!"/>
-
-        </RelativeLayout>
+        </FrameLayout>
 
 
 

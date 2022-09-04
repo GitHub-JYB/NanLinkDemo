@@ -1,31 +1,28 @@
 package com.example.nanlinkdemo.ui;
 
-
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.nanlinkdemo.databinding.ReadDialogBinding;
+import com.example.nanlinkdemo.R;
+import com.example.nanlinkdemo.databinding.LoadingDialogBinding;
 
-public class readDialog extends DialogFragment {
+public class LoadingDialog extends DialogFragment {
 
-    ReadDialogBinding binding;
-    static Boolean isCanceledOnTouchOutside = true;
-    public static int Type_Read = 0;
-    public static int Type_Write = 1;
-
-    private CharSequence title;
+    private LoadingDialogBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = ReadDialogBinding.inflate(getLayoutInflater());
+        binding = LoadingDialogBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }
 
@@ -37,8 +34,9 @@ public class readDialog extends DialogFragment {
         我们在这里可以重新设定view的各个数据，但是不能修改对话框最外层的ViewGroup的布局参数。
         因为这里的view还没添加到父级中，我们需要在下面onStart生命周期里修改对话框尺寸参数
          */
-        binding.readDialogTitle.setText(title);
-
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.anim_loading);
+        animation.setRepeatCount(-1);
+        binding.ivLoading.startAnimation(animation);
     }
 
     @Override
@@ -54,27 +52,8 @@ public class readDialog extends DialogFragment {
 
         //getDialog().setCancelable(false);//这个会屏蔽掉返回键
         // 外部点击不会取消
-        if (!isCanceledOnTouchOutside){
-            getDialog().setCanceledOnTouchOutside(isCanceledOnTouchOutside);
-        }
+        getDialog().setCanceledOnTouchOutside(false);
         super.onStart();
     }
 
-
-    public void setTitle(CharSequence title){
-         this.title = title;
-    }
-
-    public void setContent(CharSequence content){
-        binding.readDialogContent.setText(content);
-        binding.readDialogContent.setVisibility(View.VISIBLE);
-    }
-
-    public void setCancelOnClickListener(View.OnClickListener li){
-        binding.readDialogCancel.setOnClickListener(li);
-    }
-
-    public void setRetryOnClickListener(View.OnClickListener li){
-        binding.readDialogRetry.setOnClickListener(li);
-    }
 }

@@ -12,26 +12,26 @@ import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.databinding.MtoolbarBinding;
 
 
-public class mToolbar extends RelativeLayout {
+public class MyToolbar extends RelativeLayout {
 
 
 
 
     MtoolbarBinding binding;
 
-    public mToolbar(Context context) {
+    public MyToolbar(Context context) {
         this(context,null);
     }
 
-    public mToolbar(Context context, @Nullable AttributeSet attrs) {
+    public MyToolbar(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs,0);
     }
 
-    public mToolbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MyToolbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public mToolbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public MyToolbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initView();
     }
@@ -67,10 +67,20 @@ public class mToolbar extends RelativeLayout {
         binding.toolbarLeftBtn.setVisibility(VISIBLE);
     }
 
+    // 隐藏左侧按键图标
+    public void hideLeftBtnIcon(){
+        binding.toolbarLeftBtn.setVisibility(GONE);
+    }
+
     // 设置右侧按键图标
     public void setRightBtnIcon(int resId){
         binding.toolbarRightBtn.setImageResource(resId);
         binding.toolbarRightBtn.setVisibility(VISIBLE);
+    }
+
+    // 隐藏右侧按键图标
+    public void hideRightBtnIcon(){
+        binding.toolbarRightBtn.setVisibility(GONE);
     }
 
 }

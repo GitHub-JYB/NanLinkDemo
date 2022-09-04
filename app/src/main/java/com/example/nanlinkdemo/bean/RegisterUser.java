@@ -11,6 +11,13 @@ public class RegisterUser {
     private String code;
     private String nickName;
 
+    public RegisterUser() {
+    }
+
+    public RegisterUser(String nickName, String email) {
+        setNickName(nickName);
+        setEmail(email);
+    }
 
     public String getEmail() {
         return email;

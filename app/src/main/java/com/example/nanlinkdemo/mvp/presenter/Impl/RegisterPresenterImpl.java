@@ -14,27 +14,27 @@ import com.example.nanlinkdemo.util.SnackBarUtil;
 
 public class RegisterPresenterImpl implements RegisterPresenter {
 
-    private final RegisterView registerView;
-    private final RegisterModelImpl registerModelImpl;
+    private final RegisterView view;
+    private final RegisterModelImpl model;
     private boolean checked = false;
 
 
     public RegisterPresenterImpl(RegisterView registerView) {
-        this.registerView = registerView;
-        this.registerModelImpl = new RegisterModelImpl(this);
+        this.view = registerView;
+        this.model = new RegisterModelImpl(this);
     }
 
     @Override
     public void register(String email, String password, String code, String nickName) {
-        registerModelImpl.register(email, password, code, nickName);
+        model.register(email, password, code, nickName);
     }
 
     @Override
     public void sendMesToView(Message mes) {
         switch (mes.getCode()){
             case 200:
-                registerView.gotoActivity(MainActivity.class);
-                registerView.finish();
+                view.gotoActivity(MainActivity.class);
+                view.finish();
                 break;
             case 1001:
             case 1002:
@@ -47,7 +47,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
             case 1009:
             case 1010:
             case 1011:
-                SnackBarUtil.show((Activity) registerView, "注册失败");
+                SnackBarUtil.show((Activity) view, "注册失败");
 
                 break;
         }
@@ -59,33 +59,33 @@ public class RegisterPresenterImpl implements RegisterPresenter {
 
             case R.id.check:
                 if (checked){
-                    registerView.setCheckImage(R.drawable.unchecked);
+                    this.view.setCheckImage(R.drawable.unchecked);
                     checked = false;
                 }else {
-                    registerView.setCheckImage(R.drawable.checked);
+                    this.view.setCheckImage(R.drawable.checked);
                     checked = true;
                 }
                 break;
             case R.id.btn_register:
-                String email = registerView.getEmail();
-                String password = registerView.getPassword();
-                String confirmPassword = registerView.getConfirmPassword();
-                String code = registerView.getCode();
-                String nickName = registerView.getNickName();
+                String email = this.view.getEmail();
+                String password = this.view.getPassword();
+                String confirmPassword = this.view.getConfirmPassword();
+                String code = this.view.getCode();
+                String nickName = this.view.getNickName();
 
 
                 if (email.isEmpty()){
-                    SnackBarUtil.show((Activity) registerView, "请输入邮箱");
+                    SnackBarUtil.show((Activity) this.view, "请输入邮箱");
                 }else if (password.isEmpty()){
-                    SnackBarUtil.show((Activity) registerView, "请输入密码");
+                    SnackBarUtil.show((Activity) this.view, "请输入密码");
 
                 }else if (password.length() < 6 || password.length() > 20){
-                    SnackBarUtil.show((Activity) registerView, "请输入6-20位密码");
+                    SnackBarUtil.show((Activity) this.view, "请输入6-20位密码");
 
                 }else if (checked){
                     register(email, password, code, nickName);
                 }else {
-                    SnackBarUtil.show((Activity) registerView, "请勾选用户协议");
+                    SnackBarUtil.show((Activity) this.view, "请勾选用户协议");
                 }
                 break;
         }

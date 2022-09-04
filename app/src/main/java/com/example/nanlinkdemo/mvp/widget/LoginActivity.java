@@ -14,6 +14,7 @@ import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityLoginBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.LoginPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.LoginView;
+import com.example.nanlinkdemo.ui.LoadingDialog;
 import com.example.nanlinkdemo.util.SpUtil;
 
 
@@ -21,6 +22,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
 
 
     private LoginPresenterImpl presenter;
+    private LoadingDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,32 +69,13 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
 
     @Override
     public void starLoading() {
-        binding.loading.ivBgLoading.setVisibility(View.VISIBLE);
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_loading);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        animation.setRepeatCount(-1);
-        binding.loading.ivLoading.startAnimation(animation);
+        dialog = new LoadingDialog();
+        dialog.show(getSupportFragmentManager(),"LoadingDialog");
     }
 
     @Override
     public void stopLoading() {
-        binding.loading.ivLoading.clearAnimation();
-        binding.loading.ivBgLoading.setVisibility(View.GONE);
+        dialog.dismiss();
     }
 
 

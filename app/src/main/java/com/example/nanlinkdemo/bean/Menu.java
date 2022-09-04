@@ -21,6 +21,11 @@ public class Menu {
         setType(type);
     }
 
+    public Menu(String text, int stateResId){
+        setText(text);
+        setStateResId(stateResId);
+    }
+
     public int getIconResId() {
         return iconResId;
     }
