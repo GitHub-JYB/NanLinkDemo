@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.databinding.FragmentRecycleviewBinding;
+import com.example.nanlinkdemo.databinding.ActivityRecycleviewBinding;
 import com.example.nanlinkdemo.mvp.adapter.MenuAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.SceneListPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.SceneListView;
@@ -25,7 +25,7 @@ public class SceneListFragment extends Fragment implements SceneListView {
     private SceneListPresenterImpl presenter;
     private MenuAdapter menuAdapter;
     private Context context;
-    private FragmentRecycleviewBinding binding;
+    private ActivityRecycleviewBinding binding;
 
     public SceneListFragment() {
     }
@@ -66,7 +66,7 @@ public class SceneListFragment extends Fragment implements SceneListView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
-        binding = FragmentRecycleviewBinding.inflate(getLayoutInflater());
+        binding = ActivityRecycleviewBinding.inflate(getLayoutInflater());
         initRecyclerView();
         return binding.getRoot();
     }

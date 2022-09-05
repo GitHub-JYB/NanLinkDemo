@@ -1,23 +1,22 @@
 package com.example.nanlinkdemo.mvp.widget;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityLoginBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.LoginPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.LoginView;
 import com.example.nanlinkdemo.ui.LoadingDialog;
+import com.example.nanlinkdemo.ui.MyDialog;
+import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SpUtil;
 
-
+@Route(path = Constant.ACTIVITY_URL_Login)
 public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements LoginView, View.OnClickListener {
 
 
@@ -29,11 +28,15 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         super.onCreate(savedInstanceState);
 
         setPresenter();
+        initToolbar();
+        binding.email.setText(SpUtil.getIntance(getBaseContext()).getUsername());
+    }
+
+    private void initToolbar() {
         binding.loginCheck.setOnClickListener(this);
         binding.btnLogin.setOnClickListener(this);
         binding.btnRegister.setOnClickListener(this);
     }
-
 
 
     @Override
@@ -45,11 +48,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     @Override
     public void setCheckImage(int resId) {
         binding.loginCheck.setImageResource(resId);
-    }
-
-    @Override
-    public void gotoActivity(Class<?> cls) {
-        startActivity(new Intent(LoginActivity.this, cls));
     }
 
     @Override
@@ -76,6 +74,32 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     @Override
     public void stopLoading() {
         dialog.dismiss();
+    }
+
+    @Override
+    public void showMistakeDialog(String title, String message, int type) {
+        MyDialog dialog = new MyDialog();
+        dialog.setType(type);
+        dialog.setTitle(title);
+        dialog.setTitleTextColorResId(R.color.warning);
+        if (type == 0) {
+            dialog.setMessage(message);
+            dialog.setNeutralText("重试");
+            dialog.setNeutralOnClickListener(new MyDialog.NeutralOnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+        }
+        dialog.show(getSupportFragmentManager(), "MyDialog");
+
+
+    }
+
+    @Override
+    public void saveLogin() {
+        SpUtil.getIntance(getBaseContext()).setLogin(true);
     }
 
 

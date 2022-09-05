@@ -1,6 +1,7 @@
 package com.example.nanlinkdemo.mvp.model.Impl;
 
 import static com.example.nanlinkdemo.bean.Menu.TYPE_ITEM;
+import static com.example.nanlinkdemo.bean.Menu.TYPE_LOGO;
 
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
@@ -21,6 +22,7 @@ public class MainModelImpl implements MainModel {
     @Override
     public void getMenu() {
         menuArrayList = new ArrayList<>();
+        menuArrayList.add(new Menu(0,"", TYPE_LOGO));
         menuArrayList.add(new Menu(R.drawable.ic_user,"测试者", TYPE_ITEM));
         menuArrayList.add(new Menu());
         menuArrayList.add(new Menu(R.drawable.ic_add,"创建场景", TYPE_ITEM));

@@ -5,15 +5,18 @@
     android:background="@color/theme" >
 
 
-	<include layout="@layout/mtoolbar" />
+	<com.example.nanlinkdemo.ui.MyToolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
 
 	<EditText
 		android:id="@+id/email"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
 		android:layout_centerHorizontal="true"
-		android:layout_marginTop="84dp"
+		android:layout_below="@+id/toolbar"
+		android:layout_marginTop="20dp"
 		android:layout_marginStart="38dp"
 		android:layout_marginEnd="37dp"
 		android:hint="电子邮箱"

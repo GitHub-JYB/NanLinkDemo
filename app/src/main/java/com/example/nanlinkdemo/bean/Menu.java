@@ -2,9 +2,9 @@ package com.example.nanlinkdemo.bean;
 
 public class Menu {
 
-
-    public static final int TYPE_EMPTY = 0;
-    public static final int TYPE_ITEM = 1;
+    public static final int TYPE_LOGO = 0;
+    public static final int TYPE_EMPTY = 1;
+    public static final int TYPE_ITEM = 2;
 
     private int iconResId = 0;
     private int type = TYPE_EMPTY;

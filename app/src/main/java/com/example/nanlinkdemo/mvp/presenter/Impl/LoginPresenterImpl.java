@@ -3,13 +3,14 @@ package com.example.nanlinkdemo.mvp.presenter.Impl;
 import android.app.Activity;
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.Impl.LoginModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.LoginPresenter;
 import com.example.nanlinkdemo.mvp.view.LoginView;
-import com.example.nanlinkdemo.mvp.widget.MainActivity;
-import com.example.nanlinkdemo.mvp.widget.RegisterActivity;
+import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
 
@@ -36,9 +37,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void sendMesToView(Message mes) {
         switch (mes.getCode()){
             case 200:
-                view.gotoActivity(MainActivity.class);
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
                 view.finish();
                 view.saveEmail(mes.getData().getEmail());
+                view.saveLogin();
                 break;
             case 1001:
             case 1002:
@@ -51,7 +53,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             case 1009:
             case 1010:
             case 1011:
-                SnackBarUtil.show((Activity) view, "登录失败");
+                view.showMistakeDialog("错误", mes.getMsg().toString(),0);
                 break;
         }
     }
@@ -60,7 +62,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void switchOnclick(View view) {
         switch (view.getId()){
             case R.id.btn_register:
-                this.view.gotoActivity(RegisterActivity.class);
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Register).navigation();
                 break;
             case R.id.login_check:
                 if (checked){
@@ -81,8 +83,12 @@ public class LoginPresenterImpl implements LoginPresenter {
                 }else if (password.length() < 6 || password.length() > 20){
                     SnackBarUtil.show((Activity) this.view, "请输入6-20位密码");
                 }else if (checked){
-                    login(email, password);
+                    if (!MyApplication.getInstance().isOpenNetwork()){
+                        this.view.showMistakeDialog("错误", "无法连接服务器",0);
+                        break;
+                    }
                     this.view.starLoading();
+                    login(email, password);
                 }else {
                     SnackBarUtil.show((Activity) this.view,"请勾选用户协议");
                 }

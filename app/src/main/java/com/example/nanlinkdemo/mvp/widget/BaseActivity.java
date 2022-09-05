@@ -8,16 +8,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
+
+import com.alibaba.android.arouter.launcher.ARouter;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 public class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
 
-    public T binding;
+    protected T binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ARouter.getInstance().inject(this);
+
         fullScreen(this);
 
         try {
@@ -34,6 +40,8 @@ public class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
 
         setContentView(binding.getRoot());
     }
+
+
 
     /**
      * 通过设置全屏，设置状态栏透明

@@ -3,12 +3,14 @@ package com.example.nanlinkdemo.mvp.presenter.Impl;
 import android.app.Activity;
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.Impl.RegisterModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.RegisterPresenter;
 import com.example.nanlinkdemo.mvp.view.RegisterView;
 import com.example.nanlinkdemo.mvp.widget.MainActivity;
+import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
 
@@ -33,7 +35,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
     public void sendMesToView(Message mes) {
         switch (mes.getCode()){
             case 200:
-                view.gotoActivity(MainActivity.class);
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
                 view.finish();
                 break;
             case 1001:
@@ -57,6 +59,9 @@ public class RegisterPresenterImpl implements RegisterPresenter {
     public void switchOnclick(View view) {
         switch (view.getId()){
 
+            case R.id.toolbar_left_btn:
+                this.view.finish();
+                break;
             case R.id.check:
                 if (checked){
                     this.view.setCheckImage(R.drawable.unchecked);

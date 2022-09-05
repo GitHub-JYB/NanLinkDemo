@@ -19,6 +19,10 @@ import retrofit2.http.Query;
 public class ApiClient {
 
     public static final String BASE_URL = "https://serv-test.nanlink.com";
+    public static final String PRIVACY_POLICY_URL = "https://cdn-test.nanlink.com/nanlink_privacy_policy_zh.html";
+    public static final String USER_AGREEMENT_URL = "https://cdn-test.nanlink.com/nanlink_user_agreement_zh.html";
+    public static final String ABOUT_URL = "https://cdn-test.nanlink.com/nanlink_about_zh.html";
+
 
 
     private static Retrofit retrofit = null;

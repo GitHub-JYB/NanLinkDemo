@@ -17,6 +17,7 @@
     <color name="loading">#9E9E9E</color>
     <color name="decoration_dialog">#2C2C2C</color>
     <color name="dialog_input_text">#3E3E3E</color>
+    <color name="warning">#EE3F0B</color>
 
 
 </resources>

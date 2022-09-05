@@ -9,8 +9,6 @@ public interface LoginView {
 
     void setCheckImage(int resId);
 
-    void gotoActivity(Class<?> cls);
-
     String getEmail();
 
     String getPassword();
@@ -22,4 +20,8 @@ public interface LoginView {
     void starLoading();
 
     void stopLoading();
+
+    void showMistakeDialog(String title, String message, int type);
+
+    void saveLogin();
 }

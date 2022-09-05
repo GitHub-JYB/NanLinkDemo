@@ -9,8 +9,6 @@ public interface RegisterView {
 
     void setCheckImage(int resId);
 
-    void gotoActivity(Class<?> cls);
-
     String getEmail();
 
     String getPassword();

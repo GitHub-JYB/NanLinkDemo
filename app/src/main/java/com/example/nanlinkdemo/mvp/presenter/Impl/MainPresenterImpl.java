@@ -1,16 +1,18 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
+
+import android.app.Activity;
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.Impl.MainModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.MainPresenter;
 import com.example.nanlinkdemo.mvp.view.MainView;
-import com.example.nanlinkdemo.mvp.widget.AboutFragment;
-import com.example.nanlinkdemo.mvp.widget.SceneListFragment;
-import com.example.nanlinkdemo.mvp.widget.SettingFragment;
-import com.example.nanlinkdemo.mvp.widget.UserSettingFragment;
+import com.example.nanlinkdemo.mvp.widget.WebViewActivity;
+import com.example.nanlinkdemo.util.ApiClient;
+import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
 
@@ -37,23 +39,12 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void menuSwitch(String menuText) {
-//        SnackBarUtil.show((Activity) mainView, menuText);
         view.closeDrawLayout();
         switch (menuText){
             case "测试者":
-                view.closeDrawLayout();
-                view.setToolbar(R.drawable.ic_back, "账号设置", 0, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        view.replaceFragment(UserSettingFragment.getInstance(), SceneListFragment.getInstance());
-                        view.initToolbar();
-                    }
-                }, null);
-                view.replaceFragment(SceneListFragment.getInstance(), UserSettingFragment.getInstance());
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_UserSetting).navigation();
                 break;
             case "创建场景":
-                view.showMenuDialog(menuText, "", 1);
-                break;
             case "创建场景群组":
                 view.showMenuDialog(menuText, "", 1);
                 break;
@@ -61,26 +52,10 @@ public class MainPresenterImpl implements MainPresenter {
                 view.showMenuDialog(menuText, "该功能还没开发", 0);
                 break;
             case "设置":
-                view.closeDrawLayout();
-                view.setToolbar(R.drawable.ic_back, "设置", 0, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        view.replaceFragment(SettingFragment.getInstance(), SceneListFragment.getInstance());
-                        view.initToolbar();
-                    }
-                }, null);
-                view.replaceFragment(SceneListFragment.getInstance(), SettingFragment.getInstance());
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Setting).navigation();
                 break;
             case "有关":
-                view.closeDrawLayout();
-                view.replaceFragment(SceneListFragment.getInstance(), AboutFragment.getInstance());
-                view.setToolbar(R.drawable.ic_back, "关于", 0, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        view.replaceFragment(AboutFragment.getInstance(), SceneListFragment.getInstance());
-                        view.initToolbar();
-                    }
-                }, null);
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_WebView).withInt("contentId", Constant.ABOUT).navigation();
                 break;
         }
     }

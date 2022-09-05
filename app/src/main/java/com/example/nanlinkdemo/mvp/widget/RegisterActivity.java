@@ -1,18 +1,20 @@
 package com.example.nanlinkdemo.mvp.widget;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityRegisterBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.RegisterPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.RegisterView;
+import com.example.nanlinkdemo.util.Constant;
 
 
-
+@Route(path = Constant.ACTIVITY_URL_Register)
 public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> implements RegisterView, View.OnClickListener {
 
     private RegisterPresenterImpl presenter;
@@ -21,10 +23,21 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> impl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setPresenter();
+        initToolbar();
+        initBtnOnClick();
+    }
+
+    private void initBtnOnClick() {
         binding.btnRegister.setOnClickListener(this);
         binding.btnGetCode.setOnClickListener(this);
         binding.loginCheck.setOnClickListener(this);
+    }
 
+    private void initToolbar() {
+        binding.toolbar.setTitle("注册");
+        binding.toolbar.setTitleColor(R.color.blue);
+        binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
+        binding.toolbar.setLeftBtnOnClickListener(this);
     }
 
     @Override
@@ -35,11 +48,6 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> impl
     @Override
     public void setCheckImage(int resId) {
         binding.loginCheck.setImageResource(resId);
-    }
-
-    @Override
-    public void gotoActivity(Class<?> cls) {
-        startActivity(new Intent(RegisterActivity.this, cls));
     }
 
     @Override

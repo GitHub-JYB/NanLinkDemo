@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="202dp"
+    android:layout_marginTop="7dp"
+    android:layout_marginStart="7dp"
+    android:layout_marginEnd="7dp"
+    android:background="@drawable/bg_Scene">
+
+
+
+
+    <TextView
+        android:id="@+id/name_scene"
+        android:textColor="@color/blue"
+        android:textSize="20sp"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="31dp"
+        android:layout_alignParentTop="true"
+        android:text="Demo Scene"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/fixtureName_scene"
+        android:textColor="@color/login_hintText"
+        android:textSize="12sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/name_scene"
+        android:layout_marginEnd="31dp"
+        android:text="设备数量: 15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/remark_scene"
+        android:textColor="@color/login_hintText"
+        android:textSize="12sp"
+        android:layout_below="@+id/name_scene"
+        android:layout_marginTop="13dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginEnd="31dp"
+        android:text="场景备注场景备注场景备注场景备注场景备注场景备注场景备注场景备注"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/menu_scene"
+        android:src="@drawable/ic_three_point"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="31dp"
+        android:layout_marginBottom="28dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+
+    <TextView
+        android:id="@+id/modifiedData_scene"
+        android:textColor="@color/login_hintText"
+        android:textSize="12sp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="31dp"
+        android:layout_marginBottom="27dp"
+        android:text="最后编辑时间:2020/04/23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/createdData_scene"
+        android:textColor="@color/login_hintText"
+        android:textSize="12sp"
+        android:layout_above="@+id/modifiedData_scene"
+        android:layout_marginStart="31dp"
+        android:text="创建时间:2020/04/23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
+

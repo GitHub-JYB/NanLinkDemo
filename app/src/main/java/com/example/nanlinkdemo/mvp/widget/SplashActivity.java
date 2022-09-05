@@ -1,12 +1,13 @@
 package com.example.nanlinkdemo.mvp.widget;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivitySplashBinding;
+import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SpUtil;
 
 
@@ -40,11 +41,11 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        if (SpUtil.getIntance(getBaseContext()).getUsername() == ""){
-                            startActivity(new Intent(SplashActivity.this,LoginActivity.class));
+                        if (SpUtil.getIntance(getBaseContext()).isLogin()){
+                            ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
                             finish();
                         }else {
-                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                            ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
                             finish();
                         }
                     }

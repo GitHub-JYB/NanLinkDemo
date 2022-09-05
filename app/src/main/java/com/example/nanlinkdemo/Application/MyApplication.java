@@ -1,9 +1,14 @@
 package com.example.nanlinkdemo.Application;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+
+import com.alibaba.android.arouter.launcher.ARouter;
+
 
 
 public class MyApplication extends Application {
@@ -21,6 +26,9 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+        ARouter.init(this);
+
         DisplayMetrics density = getResources().getDisplayMetrics();
         widthPixels = density.widthPixels;
         heightPixels = density.heightPixels;
@@ -31,6 +39,12 @@ public class MyApplication extends Application {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        ARouter.getInstance().destroy();
     }
 
     public static MyApplication getInstance(){
@@ -47,5 +61,13 @@ public class MyApplication extends Application {
 
     public static CharSequence getVersion() {
         return versionName;
+    }
+
+    public boolean isOpenNetwork(){
+        ConnectivityManager manager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (manager.getActiveNetworkInfo() != null){
+            return manager.getActiveNetworkInfo().isAvailable();
+        }
+        return false;
     }
 }

@@ -61,6 +61,11 @@ public class MyToolbar extends RelativeLayout {
         binding.toolbarTitle.setText(title);
     }
 
+    // 设置标题颜色
+    public void setTitleColor(int color){
+        binding.toolbarTitle.setTextColor(getResources().getColor(color));
+    }
+
     // 设置左侧按键图标
     public void setLeftBtnIcon(int resId){
         binding.toolbarLeftBtn.setImageResource(resId);

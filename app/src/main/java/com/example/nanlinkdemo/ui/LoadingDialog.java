@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ public class LoadingDialog extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = LoadingDialogBinding.inflate(getLayoutInflater());
         return binding.getRoot();
+
     }
 
     @Override
@@ -35,7 +37,13 @@ public class LoadingDialog extends DialogFragment {
         因为这里的view还没添加到父级中，我们需要在下面onStart生命周期里修改对话框尺寸参数
          */
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.anim_loading);
+
+        // 动画循环不卡顿
+        animation.setInterpolator(new LinearInterpolator());
+
+        // 无限循环
         animation.setRepeatCount(-1);
+
         binding.ivLoading.startAnimation(animation);
     }
 

@@ -1,11 +1,14 @@
 package com.example.nanlinkdemo.mvp.model.Impl;
 
 
+import android.app.Activity;
+
 import com.example.nanlinkdemo.bean.LoginUser;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.LoginModel;
 import com.example.nanlinkdemo.mvp.presenter.Impl.LoginPresenterImpl;
 import com.example.nanlinkdemo.util.ApiClient;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 
 import io.reactivex.Observer;

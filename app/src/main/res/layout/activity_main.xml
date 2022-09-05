@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/theme"
         android:orientation="vertical">
 
         <com.example.nanlinkdemo.ui.MyToolbar
@@ -19,12 +20,14 @@
             android:layout_width="match_parent" />
 
 
-        <FrameLayout
-            android:id="@+id/content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleView"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/theme">
 
-        </FrameLayout>
+        </androidx.recyclerview.widget.RecyclerView>
 
 
 
@@ -38,18 +41,10 @@
         android:layout_gravity="start"
         android:background="@color/nav">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="53dp"
-            android:src="@drawable/ic_nanlink_logo" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_menu"
-            android:layout_below="@+id/imageView"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="44dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"/>

@@ -2,14 +2,13 @@ package com.example.nanlinkdemo.mvp.widget;
 
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
@@ -18,11 +17,12 @@ import com.example.nanlinkdemo.mvp.adapter.MenuAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.MainView;
 import com.example.nanlinkdemo.ui.MyDialog;
+import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
 
-
-public class MainActivity extends BaseActivity<ActivityMainBinding> implements MainView {
+@Route(path = Constant.ACTIVITY_URL_Main)
+public class MainActivity extends BaseActivity<ActivityMainBinding> implements MainView, View.OnClickListener {
 
 
     private MainPresenterImpl presenter;
@@ -33,15 +33,41 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         super.onCreate(savedInstanceState);
         setPresenter();
         initToolbar();
-        initRecyclerViewMenu();
-        replaceFragment(null, SceneListFragment.getInstance());
+        initMenu();
+        initRecycleView();
+    }
+
+    private void initRecycleView() {
+        binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
+
+        // 设置分割线格式并添加
+        DividerItemDecoration decoration = new DividerItemDecoration(this, LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(getDrawable(R.drawable.decoration_menu));
+        binding.recycleView.addItemDecoration(decoration);
+        menuAdapter = new MenuAdapter();
+        presenter.getMenuFromModel();
+        binding.recycleView.setAdapter(menuAdapter);
+        menuAdapter.setOnClickListener(new MenuAdapter.OnClickListener() {
+            @Override
+            public void onClick(String menuText) {
+                presenter.menuSwitch(menuText);
+            }
+        });
+    }
+
+    private void initToolbar() {
+        binding.toolbar.setTitle("设备列表");
+        binding.toolbar.setLeftBtnIcon(R.drawable.ic_menu);
+        binding.toolbar.setRightBtnIcon(R.drawable.ic_search);
+        binding.toolbar.setLeftBtnOnClickListener(this);
+        binding.toolbar.setRightBtnOnClickListener(this);
     }
 
     private void setPresenter() {
         presenter = new MainPresenterImpl(this);
     }
 
-    private void initRecyclerViewMenu() {
+    private void initMenu() {
         binding.version.setText("Version " + MyApplication.getVersion());
         binding.recyclerViewMenu.setLayoutManager(new LinearLayoutManager(this));
 
@@ -59,16 +85,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
                 presenter.menuSwitch(menuText);
             }
         });
-    }
-
-    @Override
-    public void initToolbar() {
-        setToolbar(R.drawable.ic_menu, "场景列表", R.drawable.ic_search, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.toolbarSwitch(v);
-            }
-        },null);
     }
 
 
@@ -125,42 +141,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     }
 
     @Override
-    public void replaceFragment(Fragment oldFragment, Fragment newFragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (!newFragment.isAdded()) {
-            if (oldFragment != null) {
-                transaction.hide(oldFragment).add(R.id.content, newFragment).commit();
-            } else {
-                transaction.add(R.id.content, newFragment).commit();
-            }
-        } else {
-            if (oldFragment != null) {
-                transaction.hide(oldFragment).show(newFragment).commit();
-            } else {
-                transaction.show(newFragment).commit();
-            }
-        }
+    public void onClick(View v) {
+        presenter.toolbarSwitch(v);
     }
-
-    @Override
-    public void setToolbar(int leftBtnResId, String title, int rightBtnResId, View.OnClickListener leftListener, View.OnClickListener rightListener) {
-        binding.toolbar.setTitle(title);
-        if (leftBtnResId != 0){
-            binding.toolbar.setLeftBtnIcon(leftBtnResId);
-        }else {
-            binding.toolbar.hideLeftBtnIcon();
-        }
-        if (rightBtnResId != 0){
-            binding.toolbar.setRightBtnIcon(rightBtnResId);
-        }else {
-            binding.toolbar.hideRightBtnIcon();
-        }
-        if (leftListener != null){
-            binding.toolbar.setLeftBtnOnClickListener(leftListener);
-        }
-        if (rightListener != null){
-            binding.toolbar.setRightBtnOnClickListener(rightListener);
-        }
-    }
-
 }

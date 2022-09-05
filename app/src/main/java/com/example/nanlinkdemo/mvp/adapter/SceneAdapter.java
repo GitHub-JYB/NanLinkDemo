@@ -21,7 +21,7 @@ import com.example.nanlinkdemo.databinding.VpItemMenuBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private List<Menu> menuList = new ArrayList<>();
