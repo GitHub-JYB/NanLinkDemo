@@ -1,8 +1,6 @@
 package com.example.nanlinkdemo.mvp.adapter;
 
-import static com.example.nanlinkdemo.bean.Menu.TYPE_EMPTY;
-import static com.example.nanlinkdemo.bean.Menu.TYPE_ITEM;
-import static com.example.nanlinkdemo.bean.Menu.TYPE_LOGO;
+
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.databinding.VpEmptyMenuBinding;
-import com.example.nanlinkdemo.databinding.VpImageMenuBinding;
-import com.example.nanlinkdemo.databinding.VpItemMenuBinding;
+import com.example.nanlinkdemo.DB.bean.Scene;
+import com.example.nanlinkdemo.DB.bean.SceneGroup;
+import com.example.nanlinkdemo.databinding.VpDecorationBinding;
+import com.example.nanlinkdemo.databinding.VpSceneScenelistBinding;
+import com.example.nanlinkdemo.databinding.VpScenegroupScenelistBinding;
+import com.example.nanlinkdemo.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,112 +24,184 @@ import java.util.List;
 public class SceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    private List<Menu> menuList = new ArrayList<>();
+    public static final int TYPE_SCENE = 1;
+    public static final int TYPE_SCENE_GROUP = 2;
+    private static final int TYPE_DECORATION = 3;
+    private List<Scene> sceneList = new ArrayList<Scene>();
+    private List<SceneGroup> sceneGroupList = new ArrayList<SceneGroup>();
     private OnClickListener onClickListener;
-
+    private MenuOnClickListener menuOnClickListener;
 
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType){
-            case TYPE_LOGO:
-                VpImageMenuBinding vpImageMenuBinding = VpImageMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-                return new ViewHolderImageMenu(vpImageMenuBinding);
-            case TYPE_ITEM:
-                VpItemMenuBinding vpItemMenuBinding = VpItemMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-                return new ViewHolderItemMenu(vpItemMenuBinding);
-            default:
-                VpEmptyMenuBinding vpEmptyMenuBinding= VpEmptyMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-                return new ViewHolderEmptyMenu(vpEmptyMenuBinding);
+        if (viewType == TYPE_SCENE_GROUP) {
+
+            VpScenegroupScenelistBinding vpScenegroupScenelistBinding = VpScenegroupScenelistBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new ViewHolderSceneGroupSceneList(vpScenegroupScenelistBinding);
+
+
+        } else if (viewType == TYPE_DECORATION) {
+            VpDecorationBinding vpDecorationBinding = VpDecorationBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new ViewHolderDecorationSceneList(vpDecorationBinding);
+
+        }else {
+            VpSceneScenelistBinding vpSceneScenelistBinding = VpSceneScenelistBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new ViewHolderSceneSceneList(vpSceneScenelistBinding);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ViewHolderImageMenu){
-
-        }
-        if (holder instanceof ViewHolderEmptyMenu){
-
-        }else if (holder instanceof ViewHolderItemMenu){
-            if (menuList.get(position).getIconResId() != 0){
-                ((ViewHolderItemMenu) holder).iconMenu.setImageResource(menuList.get(position).getIconResId());
-            }
-            if (menuList.get(position).getType() != 0){
-                ((ViewHolderItemMenu) holder).stateMenu.setImageResource(menuList.get(position).getStateResId());
-            }
-            if (menuList.get(position).getText() != null){
-                ((ViewHolderItemMenu) holder).textMenu.setText(menuList.get(position).getText());
-            }
+        if (holder instanceof ViewHolderSceneSceneList){
+            ((ViewHolderSceneSceneList) holder).name.setText(sceneList.get(position).getName());
+            ((ViewHolderSceneSceneList) holder).fixtureNum.setText("设备数量: " + sceneList.get(position).getFixtureNum());
+            ((ViewHolderSceneSceneList) holder).remark.setText(sceneList.get(position).getRemark());
+            ((ViewHolderSceneSceneList) holder).createdData.setText("创建时间:" + DateUtil.getDate(sceneList.get(position).getCreatedDate()));
+            ((ViewHolderSceneSceneList) holder).modifiedData.setText("最后编辑时间:" + DateUtil.getDate(sceneList.get(position).getModifiedDate()));
+        }else if (holder instanceof ViewHolderSceneGroupSceneList){
+            ((ViewHolderSceneGroupSceneList) holder).name.setText(sceneGroupList.get(position - sceneList.size() - 1).getName());
+            ((ViewHolderSceneGroupSceneList) holder).sceneNum.setText("场景数量: " + sceneGroupList.get(position - sceneList.size() - 1).getSceneNum());
+            ((ViewHolderSceneGroupSceneList) holder).remark.setText(sceneGroupList.get(position - sceneList.size() - 1).getRemark());
+            ((ViewHolderSceneGroupSceneList) holder).createdData.setText("创建时间:" + DateUtil.getDate(sceneGroupList.get(position - sceneList.size() - 1).getCreatedDate()));
+            ((ViewHolderSceneGroupSceneList) holder).modifiedData.setText("最后编辑时间:" + DateUtil.getDate(sceneGroupList.get(position - sceneList.size() - 1).getModifiedDate()));
+        }else if (holder instanceof ViewHolderDecorationSceneList){
+            ((ViewHolderDecorationSceneList) holder).name.setText("场景群组");
         }
     }
 
     @Override
     public int getItemCount() {
-        return menuList == null? 0 : menuList.size();
+        if (sceneList.size() == 0 && sceneGroupList.size() == 0){
+            return 0;
+        }else if (sceneGroupList.size() == 0){
+            return sceneList.size();
+        }else {
+            return sceneList.size() + sceneGroupList.size() + 1;
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        switch (menuList.get(position).getType()){
-            case 0:
-                return TYPE_LOGO;
-            case 2:
-                return TYPE_ITEM;
-            default:
-                return TYPE_EMPTY;
-        }
+
+       if (sceneGroupList.size() == 0){
+           return TYPE_SCENE;
+       }else if (sceneList.size() == 0){
+           if (position == 0) {
+               return TYPE_DECORATION;
+           }else {
+               return TYPE_SCENE_GROUP;
+           }
+       }else {
+           if (position < sceneList.size()) {
+               return TYPE_SCENE;
+           } else if (position == sceneList.size()) {
+               return TYPE_DECORATION;
+           } else {
+               return TYPE_SCENE_GROUP;
+           }
+       }
     }
 
-    public void setData(List<Menu> menuList) {
-        this.menuList = menuList;
+    public void setData(List<Scene> sceneList, List<SceneGroup> sceneGroupList) {
+        this.sceneList = sceneList;
+        this.sceneGroupList = sceneGroupList;
         notifyDataSetChanged();
     }
 
-    class ViewHolderItemMenu extends RecyclerView.ViewHolder {
+    class ViewHolderSceneSceneList extends RecyclerView.ViewHolder {
 
 
-        ImageView iconMenu, stateMenu;
-        TextView textMenu;
+        TextView name, fixtureNum, remark, createdData, modifiedData;
 
-        public ViewHolderItemMenu(@NonNull VpItemMenuBinding binding) {
+        public ViewHolderSceneSceneList(@NonNull VpSceneScenelistBinding binding) {
             super(binding.getRoot());
-            iconMenu = binding.iconMenu;
-            stateMenu = binding.stateMenu;
-            textMenu = binding.textMenu;
+            name = binding.name;
+            fixtureNum = binding.fixtureNum;
+            remark = binding.remark;
+            createdData = binding.createdData;
+            modifiedData = binding.modifiedData;
+            binding.menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (menuOnClickListener != null){
+                        menuOnClickListener.onClick(TYPE_SCENE, getAdapterPosition());
+                    }
+                }
+            });
+
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickListener != null){
-                        onClickListener.onClick(menuList.get(getAdapterPosition()).getText());
+
+                        onClickListener.onClick(getAdapterPosition());
                     }
                 }
             });
         }
     }
 
+    class ViewHolderSceneGroupSceneList extends RecyclerView.ViewHolder {
+
+
+        TextView name, sceneNum, remark, createdData, modifiedData;
+
+        public ViewHolderSceneGroupSceneList(@NonNull VpScenegroupScenelistBinding binding) {
+            super(binding.getRoot());
+            name = binding.name;
+            sceneNum = binding.sceneNum;
+            remark = binding.remark;
+            createdData = binding.createdData;
+            modifiedData = binding.modifiedData;
+            binding.menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (menuOnClickListener != null){
+                        menuOnClickListener.onClick(TYPE_SCENE_GROUP, getAdapterPosition());
+                    }
+                }
+            });
+
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickListener != null){
+
+                        onClickListener.onClick(getAdapterPosition());
+                    }
+                }
+            });
+        }
+    }
+
+    class ViewHolderDecorationSceneList extends RecyclerView.ViewHolder {
+
+
+        TextView name, sceneNum, remark, createdData, modifiedData;
+
+        public ViewHolderDecorationSceneList(@NonNull VpDecorationBinding binding) {
+            super(binding.getRoot());
+            name = binding.name;
+        }
+
+    }
+
     public interface OnClickListener {
-        void onClick(String menuText);
+        void onClick(int position);
     }
 
     public void setOnClickListener(OnClickListener onClickListener){
         this.onClickListener = onClickListener;
     }
 
-    class ViewHolderEmptyMenu extends RecyclerView.ViewHolder {
-
-
-        public ViewHolderEmptyMenu(@NonNull VpEmptyMenuBinding binding) {
-            super(binding.getRoot());
-        }
+    public interface MenuOnClickListener {
+        void onClick(int type, int position);
     }
 
-    class ViewHolderImageMenu extends RecyclerView.ViewHolder {
-
-
-        public ViewHolderImageMenu(@NonNull VpImageMenuBinding binding) {
-            super(binding.getRoot());
-        }
+    public void setMenuOnClickListener(MenuOnClickListener menuOnClickListener){
+        this.menuOnClickListener = menuOnClickListener;
     }
+
 }

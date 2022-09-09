@@ -4,40 +4,39 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "scene")
-public class Scene {
+@Entity(tableName = "sceneGroup")
+public class SceneGroup {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "name",typeAffinity = ColumnInfo.TEXT)
     private String name;
     @ColumnInfo
-    private int fixtureNum;
+    private int sceneNum;
     @ColumnInfo
     private String remark;
     @ColumnInfo
     private Long createdDate;
     @ColumnInfo
     private Long modifiedDate;
-    @ColumnInfo(name = "sceneGroup",typeAffinity = ColumnInfo.TEXT)
-    private String sceneGroup;
 
 
-    public Scene(String name, int fixtureNum, String remark, Long createdDate, Long modifiedDate){
+
+    public SceneGroup(String name, int sceneNum, String remark, Long createdDate, Long modifiedDate){
         this.name = name;
-        this.fixtureNum = fixtureNum;
+        this.sceneNum = sceneNum;
         this.remark = remark;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
 
     }
 
-    public int getFixtureNum() {
-        return fixtureNum;
+    public int getSceneNum() {
+        return sceneNum;
     }
 
-    public void setFixtureNum(int fixtureNum) {
-        this.fixtureNum = fixtureNum;
+    public void setSceneNum(int sceneNum) {
+        this.sceneNum = sceneNum;
     }
 
     public Long getCreatedDate() {
@@ -78,13 +77,5 @@ public class Scene {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getSceneGroup() {
-        return sceneGroup;
-    }
-
-    public void setSceneGroup(String sceneGroup) {
-        this.sceneGroup = sceneGroup;
     }
 }

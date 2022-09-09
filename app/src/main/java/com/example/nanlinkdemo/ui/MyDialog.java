@@ -1,7 +1,6 @@
 package com.example.nanlinkdemo.ui;
 
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,11 +13,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.nanlinkdemo.R;
-import com.example.nanlinkdemo.databinding.MyDialogBinding;
+import com.example.nanlinkdemo.databinding.DialogMyBinding;
 
 public class MyDialog extends DialogFragment {
 
-    MyDialogBinding binding;
+    DialogMyBinding binding;
     static Boolean isCanceledOnTouchOutside = true;
 
     private CharSequence title, message, neutralText, positiveText, negativeText, hintInputText;
@@ -31,12 +30,20 @@ public class MyDialog extends DialogFragment {
     private PositiveOnClickListener positiveListener;
     private NeutralOnClickListener neutralListener;
 
+    public MyDialog(){
 
+    }
+
+    public MyDialog(int type, String title, String message){
+        this.type = type;
+        this.title = title;
+        this.message = message;
+    }
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = MyDialogBinding.inflate(getLayoutInflater());
+        binding = DialogMyBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }
 
@@ -56,6 +63,7 @@ public class MyDialog extends DialogFragment {
                 binding.myDialogNegativeButton.setVisibility(View.VISIBLE);
                 binding.decorationDialogPositiveNegative.setVisibility(View.VISIBLE);
                 binding.myDialogPositiveButton.setVisibility(View.VISIBLE);
+                setCanceledOnTouchOutside(false);
                 break;
             default:
                 binding.myDialogMessage.setVisibility(View.VISIBLE);
@@ -90,6 +98,20 @@ public class MyDialog extends DialogFragment {
         binding.myDialogPositiveButton.setText(positiveText);
         binding.myDialogPositiveButton.setTextColor(getResources().getColor(positiveTextColorResId));
 
+
+        binding.myDialogNeutralButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        binding.myDialogNegativeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         binding.myDialogInputTextClean.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,5 +235,10 @@ public class MyDialog extends DialogFragment {
     // 设置dialog的类型
     public void setType(int type){
         this.type = type;
+    }
+
+    // 获取输入框文本
+    public String getInputText(){
+        return binding.myDialogInputText.getText().toString().trim();
     }
 }

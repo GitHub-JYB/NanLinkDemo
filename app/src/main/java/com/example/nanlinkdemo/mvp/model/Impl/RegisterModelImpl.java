@@ -11,6 +11,7 @@ import com.example.nanlinkdemo.util.ApiClient;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -32,23 +33,11 @@ public class RegisterModelImpl implements RegisterModel {
                 .register(registerUser)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Message>() {
+                .subscribe(new Consumer<Message>() {
                     @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
+                    public void accept(Message message) throws Exception {
+                        presenter.sendMesToView(message);
 
-                    @Override
-                    public void onComplete() {
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(Message mes) {
-                        presenter.sendMesToView(mes);
                     }
                 });
     }

@@ -77,11 +77,11 @@ public class LoginPresenterImpl implements LoginPresenter {
                 email = this.view.getEmail();
                 password = this.view.getPassword();
                 if (email.isEmpty()){
-                    SnackBarUtil.show((Activity) this.view, "请输入邮箱");
+                    SnackBarUtil.show(view, "请输入邮箱");
                 }else if (password.isEmpty()){
-                    SnackBarUtil.show((Activity) this.view,"请输入密码");
+                    SnackBarUtil.show(view,"请输入密码");
                 }else if (password.length() < 6 || password.length() > 20){
-                    SnackBarUtil.show((Activity) this.view, "请输入6-20位密码");
+                    SnackBarUtil.show(view, "请输入6-20位密码");
                 }else if (checked){
                     if (!MyApplication.getInstance().isOpenNetwork()){
                         this.view.showMistakeDialog("错误", "无法连接服务器",0);
@@ -90,7 +90,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                     this.view.starLoading();
                     login(email, password);
                 }else {
-                    SnackBarUtil.show((Activity) this.view,"请勾选用户协议");
+                    SnackBarUtil.show(view,"请勾选用户协议");
                 }
                 break;
         }

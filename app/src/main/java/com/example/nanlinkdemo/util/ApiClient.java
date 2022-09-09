@@ -6,6 +6,7 @@ import com.example.nanlinkdemo.bean.RegisterUser;
 
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -31,10 +32,10 @@ public class ApiClient {
 
 
         @POST("/nanlinkUser/v1/user/loginAccount")
-        Observable<Message> login(@Body LoginUser loginUser, @Query("token") String token);
+        Single<Message> login(@Body LoginUser loginUser, @Query("token") String token);
 
         @POST("/nanlinkUser/v1/user/registerAccount")
-        Observable<Message> register(@Body RegisterUser registerUser);
+        Single<Message> register(@Body RegisterUser registerUser);
 
     }
 

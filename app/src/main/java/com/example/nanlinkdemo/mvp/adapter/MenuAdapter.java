@@ -102,7 +102,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     if (onClickListener != null){
-                        onClickListener.onClick(menuList.get(getAdapterPosition()).getText());
+                        onClickListener.onClick(getAdapterPosition());
                     }
                 }
             });
@@ -110,7 +110,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface OnClickListener {
-        void onClick(String menuText);
+        void onClick(int position);
     }
 
     public void setOnClickListener(OnClickListener onClickListener){

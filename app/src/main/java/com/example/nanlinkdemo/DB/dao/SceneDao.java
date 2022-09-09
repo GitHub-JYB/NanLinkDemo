@@ -8,25 +8,30 @@ import androidx.room.Update;
 
 import com.example.nanlinkdemo.DB.bean.Scene;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Single;
 
 @Dao
 public interface SceneDao {
 
     @Query("select * from scene")
-    ArrayList<Scene> getAllSceneInfo();
+    Single<List<Scene>> getAllSceneInfo();
 
     @Query("select * from scene where name = :name")
-    ArrayList<Scene> getSceneInfo(String name);
+    Single<List<Scene>> getSceneInfo(String name);
+
+    @Query("select * from scene where sceneGroup = :sceneGroup")
+    Single<List<Scene>> getSceneFromSceneGroup(String sceneGroup);
 
     @Insert
-    void insert(ArrayList<Scene> sceneList);
+    Single<Long> insert(Scene scenes);
 
     @Update
-    void updateSceneInfo(Scene...scenes);
+    Single<Integer> updateSceneInfo(Scene scenes);
 
     @Delete
-    void deleteInfo(Scene...scenes);
+    Single<Integer> deleteInfo(Scene scenes);
 
 
 }

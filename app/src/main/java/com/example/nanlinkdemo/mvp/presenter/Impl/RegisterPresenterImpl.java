@@ -49,7 +49,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
             case 1009:
             case 1010:
             case 1011:
-                SnackBarUtil.show((Activity) view, "注册失败");
+                SnackBarUtil.show((View) view, "注册失败");
 
                 break;
         }
@@ -80,17 +80,17 @@ public class RegisterPresenterImpl implements RegisterPresenter {
 
 
                 if (email.isEmpty()){
-                    SnackBarUtil.show((Activity) this.view, "请输入邮箱");
+                    SnackBarUtil.show(view, "请输入邮箱");
                 }else if (password.isEmpty()){
-                    SnackBarUtil.show((Activity) this.view, "请输入密码");
+                    SnackBarUtil.show(view, "请输入密码");
 
                 }else if (password.length() < 6 || password.length() > 20){
-                    SnackBarUtil.show((Activity) this.view, "请输入6-20位密码");
+                    SnackBarUtil.show(view, "请输入6-20位密码");
 
                 }else if (checked){
                     register(email, password, code, nickName);
                 }else {
-                    SnackBarUtil.show((Activity) this.view, "请勾选用户协议");
+                    SnackBarUtil.show(view, "请勾选用户协议");
                 }
                 break;
         }

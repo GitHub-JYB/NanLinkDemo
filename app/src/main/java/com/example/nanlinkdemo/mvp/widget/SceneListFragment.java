@@ -78,7 +78,7 @@ public class SceneListFragment extends Fragment implements SceneListView {
         binding.recycleView.setAdapter(menuAdapter);
         menuAdapter.setOnClickListener(new MenuAdapter.OnClickListener() {
             @Override
-            public void onClick(String menuText) {
+            public void onClick(int position) {
 //                Intent intent = new Intent(getContext(), DetailActivity.class);
 //                intent.putExtra("storyId",storyId);
 //                context.startActivity(intent);

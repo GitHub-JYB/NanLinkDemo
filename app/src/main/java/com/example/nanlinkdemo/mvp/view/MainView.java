@@ -1,8 +1,11 @@
 package com.example.nanlinkdemo.mvp.view;
 
+import com.example.nanlinkdemo.DB.bean.Scene;
+import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.bean.Menu;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface MainView {
 
@@ -14,4 +17,19 @@ public interface MainView {
 
     void showMenuDialog(String title, String message, int type);
 
+    void showSceneList(List<Scene> sceneList, List<SceneGroup> sceneGroupList);
+
+    void updateSceneList();
+
+    void showThreePointMenu(ArrayList<String> threePointList, int type, int position);
+
+    void dismissSettingDialog();
+
+    void dismissMyDialog();
+
+    void deleteScene(int furtherPosition);
+
+    void deleteSceneGroup(int furtherPosition);
+
+    void showSnack(CharSequence message);
 }

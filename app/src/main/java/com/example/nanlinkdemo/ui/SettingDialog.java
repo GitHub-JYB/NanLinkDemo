@@ -1,31 +1,39 @@
 package com.example.nanlinkdemo.ui;
 
+
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.nanlinkdemo.R;
-import com.example.nanlinkdemo.databinding.DialogLoadingBinding;
+import com.example.nanlinkdemo.databinding.DialogSettingBinding;
+import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 
-public class LoadingDialog extends DialogFragment {
+import java.util.ArrayList;
 
-    private DialogLoadingBinding binding;
+public class SettingDialog extends DialogFragment {
+
+    DialogSettingBinding binding;
+    static Boolean isCanceledOnTouchOutside = false;
+
+    private ThreePointAdapter adapter;
+    private ArrayList<String> settingList;
+    private ThreePointAdapter.OnClickListener listener;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DialogLoadingBinding.inflate(getLayoutInflater());
+        binding = DialogSettingBinding.inflate(getLayoutInflater());
         return binding.getRoot();
-
     }
 
     @Override
@@ -36,15 +44,23 @@ public class LoadingDialog extends DialogFragment {
         我们在这里可以重新设定view的各个数据，但是不能修改对话框最外层的ViewGroup的布局参数。
         因为这里的view还没添加到父级中，我们需要在下面onStart生命周期里修改对话框尺寸参数
          */
-        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.anim_loading);
+        binding.recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // 动画循环不卡顿
-        animation.setInterpolator(new LinearInterpolator());
+        // 设置分割线格式并添加
+        UnlessLastItemDecoration decoration = new UnlessLastItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+        decoration.setDrawable(getResources().getDrawable(R.drawable.decoration_setting_dialog));
+        binding.recycleView.addItemDecoration(decoration);
 
-        // 无限循环
-        animation.setRepeatCount(-1);
+        adapter = new ThreePointAdapter();
+        adapter.setData(settingList);
+        adapter.setOnClickListener(listener);
+        binding.recycleView.setAdapter(adapter);
 
-        binding.ivLoading.startAnimation(animation);
+
+
+
+
+
     }
 
     @Override
@@ -60,8 +76,20 @@ public class LoadingDialog extends DialogFragment {
 
         //getDialog().setCancelable(false);//这个会屏蔽掉返回键
         // 外部点击不会取消
-        getDialog().setCanceledOnTouchOutside(false);
+        if (!isCanceledOnTouchOutside){
+            getDialog().setCanceledOnTouchOutside(isCanceledOnTouchOutside);
+        }
         super.onStart();
+    }
+
+    // 设置标题
+    public void setData(ArrayList<String> settingList){
+         this.settingList = settingList;
+    }
+
+    // 设置标题
+    public void setOnClickListener(ThreePointAdapter.OnClickListener listener){
+        this.listener = listener;
     }
 
 }

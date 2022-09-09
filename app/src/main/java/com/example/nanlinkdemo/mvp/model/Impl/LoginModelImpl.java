@@ -14,6 +14,7 @@ import com.example.nanlinkdemo.util.SnackBarUtil;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -34,28 +35,16 @@ public class LoginModelImpl implements LoginModel {
                 .login(loginUser, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Message>() {
+                .subscribe(new Consumer<Message>() {
                     @Override
-                    public void onError(Throwable e) {
+                    public void accept(Message message) throws Exception {
                         presenter.stopLoading();
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(Message mes) {
-                        presenter.stopLoading();
-                        presenter.sendMesToView(mes);
+                        presenter.sendMesToView(message);
                     }
                 });
+
     }
+
 
 
 }
