@@ -102,8 +102,10 @@
 		<Button
 			android:id="@+id/btn_get_code"
 			android:layout_width="140dp"
-			android:layout_height="wrap_content"
+			android:layout_height="36dp"
+			android:textAllCaps="false"
 			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
 			android:background="@drawable/bg_able_btn_login"
 			android:text="获取验证码"
 			android:textColor="@color/white"
@@ -131,6 +133,7 @@
 			android:layout_height="32dp"/>
 
 		<TextView
+			android:id="@+id/tv_userAgreement_privacyPolicy"
 			android:text="我已阅读并同意NANLINK用户协议及NANLINK隐私条款"
 			android:textSize="12sp"
 			android:textColor="@color/white"

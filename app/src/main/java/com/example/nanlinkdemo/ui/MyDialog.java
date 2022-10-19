@@ -26,9 +26,24 @@ public class MyDialog extends DialogFragment {
     private int neutralTextColorResId = R.color.blue;
     private int positiveTextColorResId = R.color.blue;
     private int negativeTextColorResId = R.color.white;
-    private NegativeOnClickListener negativeListener;
-    private PositiveOnClickListener positiveListener;
-    private NeutralOnClickListener neutralListener;
+    private NegativeOnClickListener negativeListener = new NegativeOnClickListener() {
+        @Override
+        public void onClick(View view) {
+            dismiss();
+        }
+    };
+    private PositiveOnClickListener positiveListener = new PositiveOnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+        }
+    };
+    private NeutralOnClickListener neutralListener = new NeutralOnClickListener() {
+        @Override
+        public void onClick(View view) {
+            dismiss();
+        }
+    };
 
     public MyDialog(){
 
@@ -99,19 +114,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogPositiveButton.setTextColor(getResources().getColor(positiveTextColorResId));
 
 
-        binding.myDialogNeutralButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
 
-        binding.myDialogNegativeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
 
         binding.myDialogInputTextClean.setOnClickListener(new View.OnClickListener() {
             @Override

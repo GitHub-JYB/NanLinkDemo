@@ -1,35 +1,23 @@
 package com.example.nanlinkdemo.mvp.view;
 
-
 import com.example.nanlinkdemo.ui.MyDialog;
 
-public interface RegisterView {
-
-    void setPresenter();
-
-    void setCheckImage(int resId);
-
+public interface ForgetPasswordResetView {
     String getEmail();
+
+    String getCode();
 
     String getPassword();
 
-    void finish();
-
     String getConfirmPassword();
 
-    String getNickName();
+    void finish();
 
-    String getCode();
+    void showMistakeDialog(String title, String content, int type);
 
     void stopLoading();
 
     void startLoading();
-
-    void updateGetCodeBtn();
-
-    void updatedRegisterBtnBg(int res);
-
-    void showMistakeDialog(String title, String content, int type);
 
     void dismissDialog();
 

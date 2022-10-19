@@ -70,6 +70,7 @@
 			android:layout_height="32dp"/>
 
 		<TextView
+			android:id="@+id/tv_userAgreement_privacyPolicy"
 			android:text="我已阅读并同意NANLINK用户协议及NANLINK隐私条款"
 			android:textSize="12sp"
 			android:textColor="@color/white"
@@ -80,6 +81,7 @@
 	</LinearLayout>
 
 	<TextView
+		android:id="@+id/tv_forgetPassword"
 		android:text="忘记密码? 或 访客模式"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

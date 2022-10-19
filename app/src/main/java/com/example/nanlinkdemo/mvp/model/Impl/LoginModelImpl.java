@@ -38,7 +38,6 @@ public class LoginModelImpl implements LoginModel {
                 .subscribe(new Consumer<Message>() {
                     @Override
                     public void accept(Message message) throws Exception {
-                        presenter.stopLoading();
                         presenter.sendMesToView(message);
                     }
                 });

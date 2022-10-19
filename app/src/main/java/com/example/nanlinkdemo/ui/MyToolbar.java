@@ -1,6 +1,7 @@
 package com.example.nanlinkdemo.ui;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
@@ -64,6 +65,11 @@ public class MyToolbar extends RelativeLayout {
     // 设置标题颜色
     public void setTitleColor(int color){
         binding.toolbarTitle.setTextColor(getResources().getColor(color));
+    }
+
+    // 设置标题字体类型
+    public void setTitleType(int type){
+        binding.toolbarTitle.setTypeface(null, type);
     }
 
     // 设置左侧按键图标

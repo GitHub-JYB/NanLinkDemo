@@ -11,6 +11,8 @@ public class Scene {
     private int id;
     @ColumnInfo(name = "name",typeAffinity = ColumnInfo.TEXT)
     private String name;
+    @ColumnInfo(name = "email",typeAffinity = ColumnInfo.TEXT)
+    private String email;
     @ColumnInfo
     private int fixtureNum;
     @ColumnInfo

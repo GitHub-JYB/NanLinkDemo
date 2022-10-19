@@ -16,7 +16,7 @@ public class SnackBarUtil {
 
 
 
-    public static void show(View view,CharSequence message){
+    public static void show(View view, CharSequence message){
 
         Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
         Snackbar.SnackbarLayout snackBarView = (Snackbar.SnackbarLayout) snackbar.getView();

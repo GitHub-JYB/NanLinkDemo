@@ -1,15 +1,13 @@
 package com.example.nanlinkdemo.mvp.presenter;
 
-
 import android.view.View;
 
 import com.example.nanlinkdemo.bean.Message;
 
-public interface RegisterPresenter {
+public interface ForgetPasswordPresenter {
+    void switchOnclick(View v);
 
-    void switchOnclick(View view);
-
-    void checkRegisterMessage();
+    void checkCode();
 
     void sendMesToView(Message message, String function);
 }
