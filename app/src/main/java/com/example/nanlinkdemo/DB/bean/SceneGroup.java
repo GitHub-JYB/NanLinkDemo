@@ -80,4 +80,12 @@ public class SceneGroup {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
+import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.bean.Menu;
 
 import java.util.ArrayList;
@@ -56,4 +57,8 @@ public interface MainPresenter {
     void switchQuerySceneResult(String inputText, List<Scene> scenes);
 
     void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups);
+
+    void getOnlineUserFromModel();
+
+    void receiveOnlineUser(List<User> users);
 }

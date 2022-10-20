@@ -30,7 +30,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
 
 
     private LoginPresenterImpl presenter;
-    private LoadingDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         initToolbar();
         initUserAgreement();
         initForgetPassword();
-        initUsername();
+        initEmail();
     }
 
     private void initForgetPassword() {
@@ -79,8 +78,8 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         binding.tvUserAgreementPrivacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    private void initUsername() {
-        binding.email.setText(SpUtil.getIntance(getBaseContext()).getUsername());
+    private void initEmail() {
+        presenter.getLastUserEmail();
     }
 
     private void initToolbar() {
@@ -112,17 +111,9 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     }
 
     @Override
-    public void saveEmail(String email) {
-        SpUtil.getIntance(getBaseContext()).setUsername(email);
+    public void updateEmail(String email) {
+        binding.email.setText(email);
     }
-
-
-
-    @Override
-    public void saveLogin() {
-        SpUtil.getIntance(getBaseContext()).setLogin(true);
-    }
-
 
     @Override
     public void onClick(View view) {

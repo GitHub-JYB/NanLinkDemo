@@ -3,7 +3,10 @@ package com.example.nanlinkdemo.mvp.presenter;
 
 import android.view.View;
 
+import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.bean.Message;
+
+import java.util.List;
 
 public interface LoginPresenter {
 
@@ -11,4 +14,9 @@ public interface LoginPresenter {
 
     void switchOnclick(View view);
 
+    void getLastUserEmail();
+
+    void sendLastUserToView(List<User> users);
+
+    void receiveUser(List<User> users);
 }

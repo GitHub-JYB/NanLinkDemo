@@ -13,7 +13,7 @@ public interface ForgetPasswordView {
 
     String getCode();
 
-    void updateGetCodeBtn();
+    void updateGetCodeBtn(boolean able);
 
     void startLoading();
 
@@ -22,4 +22,6 @@ public interface ForgetPasswordView {
     void showMistakeDialog(String title, String content, int type);
 
     void updateResetBtn(boolean able);
+
+    void updateGetCodeBtnText(String text);
 }

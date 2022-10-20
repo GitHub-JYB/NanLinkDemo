@@ -1,6 +1,7 @@
 package com.example.nanlinkdemo.mvp.model.Impl;
 
 
+import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.bean.RegisterUser;
 import com.example.nanlinkdemo.mvp.model.RegisterModel;
@@ -8,7 +9,11 @@ import com.example.nanlinkdemo.mvp.presenter.Impl.RegisterPresenterImpl;
 import com.example.nanlinkdemo.util.ApiClient;
 
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -53,6 +58,26 @@ public class RegisterModelImpl implements RegisterModel {
 
                     }
                 });
+    }
+
+    @Override
+    public void startCountDown() {
+        Observable.intervalRange(1, 60, 0, 1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        presenter.sendProgressToView(aLong);
+                    }
+                })
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        presenter.endCountDown();
+                    }
+                })
+                .subscribe();
     }
 
 

@@ -45,7 +45,8 @@ public class RegisterPresenterImpl implements RegisterPresenter {
                         });
                         break;
                     case ApiClient.Function_GetCode:
-                        view.updateGetCodeBtn();
+                        view.updateGetCodeBtn(false);
+                        model.startCountDown();
                         break;
                 }
                 break;
@@ -63,6 +64,16 @@ public class RegisterPresenterImpl implements RegisterPresenter {
                 view.showMistakeDialog("错误", mes.getMsg().toString(),0);
                 break;
         }
+    }
+
+    @Override
+    public void endCountDown() {
+        view.updateGetCodeBtnText("获取验证码");
+    }
+
+    @Override
+    public void sendProgressToView(Long aLong) {
+        view.updateGetCodeBtnText("已发送 " + (60-aLong) + "s");
     }
 
     @Override

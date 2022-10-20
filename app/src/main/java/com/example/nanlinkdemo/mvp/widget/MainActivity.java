@@ -12,6 +12,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
+import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.databinding.ActivityMainBinding;
@@ -42,6 +43,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     private List<Scene> sceneList;
     private List<SceneGroup> sceneGroupList;
     private MyDialog dialog;
+
 
 
     @Override

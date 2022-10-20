@@ -10,4 +10,8 @@ public interface ForgetPasswordPresenter {
     void checkCode();
 
     void sendMesToView(Message message, String function);
+
+    void updateProgressCountToView(Long aLong);
+
+    void endCountToView();
 }

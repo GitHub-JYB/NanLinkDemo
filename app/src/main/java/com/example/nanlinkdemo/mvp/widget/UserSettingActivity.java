@@ -53,11 +53,6 @@ public class UserSettingActivity extends BaseActivity<ActivityRecycleviewBinding
 
     }
 
-    @Override
-    public void saveLogin() {
-        SpUtil.getIntance(this).setLogin(false);
-    }
-
 
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));

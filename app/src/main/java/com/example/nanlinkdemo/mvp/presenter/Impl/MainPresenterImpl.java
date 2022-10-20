@@ -9,6 +9,7 @@ import android.view.View;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
+import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.Impl.MainModelImpl;
@@ -37,7 +38,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void getMenuFromModel() {
-        model.getMenu();
+        model.getOnlineUser();
     }
 
     @Override
@@ -49,21 +50,21 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void menuSwitch(int position) {
         view.closeDrawLayout();
-        switch (menuArrayList.get(position).getText()) {
-            case "测试者":
+        switch (position) {
+            case 1:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_UserSetting).navigation();
                 break;
-            case "创建场景":
-            case "创建场景群组":
+            case 3:
+            case 4:
                 view.showMenuDialog(menuArrayList.get(position).getText(), "", 1);
                 break;
-            case "排序":
+            case 5:
                 view.showMenuDialog(menuArrayList.get(position).getText(), "该功能还没开发", 0);
                 break;
-            case "设置":
+            case 7:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Setting).navigation();
                 break;
-            case "有关":
+            case 8:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_WebView).withInt("contentId", Constant.ABOUT).navigation();
                 break;
         }
@@ -230,6 +231,16 @@ public class MainPresenterImpl implements MainPresenter {
         }else {
             view.showMenuDialog("创建场景群组", "该场景群组名称已存在，请尝试使用其它名称。", 0);
         }
+    }
+
+    @Override
+    public void getOnlineUserFromModel() {
+        model.getOnlineUser();
+    }
+
+    @Override
+    public void receiveOnlineUser(List<User> users) {
+        model.getMenu(users.get(0).getNickName());
     }
 
 }

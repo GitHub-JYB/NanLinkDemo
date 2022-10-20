@@ -8,6 +8,7 @@ import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
+import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.MainModel;
@@ -33,10 +34,10 @@ public class MainModelImpl implements MainModel {
     }
 
     @Override
-    public void getMenu() {
+    public void getMenu(String nickName) {
         ArrayList<Menu> menuArrayList = new ArrayList<>();
         menuArrayList.add(new Menu(0,"", TYPE_LOGO));
-        menuArrayList.add(new Menu(R.drawable.ic_user,"测试者", TYPE_ITEM));
+        menuArrayList.add(new Menu(R.drawable.ic_user, nickName, TYPE_ITEM));
         menuArrayList.add(new Menu());
         menuArrayList.add(new Menu(R.drawable.ic_add,"创建场景", TYPE_ITEM));
         menuArrayList.add(new Menu(R.drawable.ic_add,"创建场景群组", TYPE_ITEM));
@@ -178,6 +179,21 @@ public class MainModelImpl implements MainModel {
                     @Override
                     public void accept(List<SceneGroup> sceneGroups) throws Exception {
                         presenter.switchQuerySceneGroupResult(inputText, sceneGroups);
+                    }
+                });
+    }
+
+    @Override
+    public void getOnlineUser() {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getUserDao()
+                .getUserFromTypeInfo("online")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<User>>() {
+                    @Override
+                    public void accept(List<User> users) throws Exception {
+                        presenter.receiveOnlineUser(users);
                     }
                 });
     }

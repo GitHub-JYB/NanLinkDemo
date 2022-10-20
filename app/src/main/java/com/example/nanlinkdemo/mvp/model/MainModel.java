@@ -4,7 +4,7 @@ import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 
 public interface MainModel {
-    void getMenu();
+    void getMenu(String nickName);
 
     void getSceneList();
 
@@ -23,4 +23,6 @@ public interface MainModel {
     void queryScene(String inputText);
 
     void querySceneGroup(String inputText);
+
+    void getOnlineUser();
 }

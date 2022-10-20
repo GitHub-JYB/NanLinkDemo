@@ -89,4 +89,12 @@ public class Scene {
     public void setSceneGroup(String sceneGroup) {
         this.sceneGroup = sceneGroup;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

@@ -15,13 +15,11 @@ public interface LoginView {
 
     void finish();
 
-    void saveEmail(String email);
-
     void showMistakeDialog(String title, String message, int type);
-
-    void saveLogin();
 
     void stopLoading();
 
     void startLoading();
+
+    void updateEmail(String email);
 }

@@ -67,7 +67,8 @@ public class ForgetPasswordPresenterImpl implements ForgetPasswordPresenter {
             case 200:
                 switch (function){
                     case ApiClient.Function_GetCode:
-                        view.updateGetCodeBtn();
+                        view.updateResetBtn(false);
+                        model.startCountDown();
                         break;
                     case ApiClient.Function_VerifyCode:
                         ARouter.getInstance().build(Constant.ACTIVITY_URL_ForgetPasswordReset).withString("email", email).withString("code", code).navigation();
@@ -88,6 +89,18 @@ public class ForgetPasswordPresenterImpl implements ForgetPasswordPresenter {
                 view.showMistakeDialog("错误", message.getMsg().toString(),0);
                 break;
         }
+    }
+
+    @Override
+    public void updateProgressCountToView(Long aLong) {
+        view.updateGetCodeBtnText("已发送 " + (60-aLong) + "s");
+    }
+
+    @Override
+    public void endCountToView() {
+        view.updateResetBtn(true);
+        view.updateGetCodeBtnText("获取验证码");
+
     }
 
     @Override

@@ -14,6 +14,4 @@ public interface UserSettingView {
 
     void finish();
 
-    void saveLogin();
-
 }

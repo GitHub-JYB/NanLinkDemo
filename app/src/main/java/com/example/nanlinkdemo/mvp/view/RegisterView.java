@@ -25,7 +25,7 @@ public interface RegisterView {
 
     void startLoading();
 
-    void updateGetCodeBtn();
+    void updateGetCodeBtn(boolean able);
 
     void updatedRegisterBtnBg(int res);
 
@@ -34,4 +34,6 @@ public interface RegisterView {
     void dismissDialog();
 
     void showSuccessDialog(String title, String content, int type, MyDialog.NeutralOnClickListener listener);
+
+    void updateGetCodeBtnText(String text);
 }

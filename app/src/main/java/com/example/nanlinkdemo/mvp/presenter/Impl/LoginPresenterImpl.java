@@ -1,9 +1,12 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
+import static com.example.nanlinkdemo.util.Constant.ACTIVITY_URL_Main;
+
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
+import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.Impl.LoginModelImpl;
@@ -12,14 +15,16 @@ import com.example.nanlinkdemo.mvp.view.LoginView;
 import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
+import java.util.List;
+
 
 public class LoginPresenterImpl implements LoginPresenter {
 
     private final LoginView view;
     private final LoginModelImpl model;
     private boolean checked = false;
-    private String email;
-    private String password;
+    private String email, password;
+    private User onlineUser;
 
 
     public LoginPresenterImpl(LoginView loginView) {
@@ -32,10 +37,8 @@ public class LoginPresenterImpl implements LoginPresenter {
         view.stopLoading();
         switch (mes.getCode()){
             case 200:
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
-                view.finish();
-                view.saveEmail(mes.getData().getEmail());
-                view.saveLogin();
+                onlineUser = new User(mes.getData().getEmail(), mes.getData().getNickName(), mes.getData().getVocation(), "online", mes.getData().getToken());
+                model.queryEmail(onlineUser.getEmail());
                 break;
             case 1001:
             case 1002:
@@ -89,6 +92,29 @@ public class LoginPresenterImpl implements LoginPresenter {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void getLastUserEmail() {
+        model.getLastUser();
+    }
+
+    @Override
+    public void sendLastUserToView(List<User> users) {
+        if (!users.isEmpty()){
+            view.updateEmail(users.get(0).getEmail());
+        }
+    }
+
+    @Override
+    public void receiveUser(List<User> users) {
+        if (!users.isEmpty()){
+            model.updateUser(onlineUser);
+        }else {
+            model.addUser(onlineUser);
+        }
+        ARouter.getInstance().build(ACTIVITY_URL_Main).navigation();
+        view.finish();
     }
 
 }

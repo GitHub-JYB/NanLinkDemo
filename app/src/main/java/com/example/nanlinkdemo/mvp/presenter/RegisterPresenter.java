@@ -12,4 +12,8 @@ public interface RegisterPresenter {
     void checkRegisterMessage();
 
     void sendMesToView(Message message, String function);
+
+    void endCountDown();
+
+    void sendProgressToView(Long aLong);
 }

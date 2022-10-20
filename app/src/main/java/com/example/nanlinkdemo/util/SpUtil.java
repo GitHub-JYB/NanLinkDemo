@@ -26,21 +26,5 @@ public class SpUtil {
         return spUtil;
     }
 
-    public void setUsername(String username){
-        editor.putString(KEY_USERNAME,username);
-        editor.commit();
-    }
 
-    public String getUsername(){
-        return mSharedPreferences.getString(KEY_USERNAME,"");
-    }
-
-    public boolean isLogin() {
-        return mSharedPreferences.getBoolean(KEY_LOGIN,false);
-    }
-
-    public void setLogin(boolean isLogin) {
-        editor.putBoolean(KEY_LOGIN, isLogin);
-        editor.commit();
-    }
 }

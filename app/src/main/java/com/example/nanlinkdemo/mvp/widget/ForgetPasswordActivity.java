@@ -14,15 +14,7 @@ import com.example.nanlinkdemo.databinding.ActivityForgetPasswordBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ForgetPasswordPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.ForgetPasswordView;
 import com.example.nanlinkdemo.util.Constant;
-import com.example.nanlinkdemo.util.SnackBarUtil;
 
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 @Route(path = Constant.ACTIVITY_URL_ForgetPassword)
 public class ForgetPasswordActivity extends BaseActivity<ActivityForgetPasswordBinding> implements ForgetPasswordView, View.OnClickListener {
@@ -100,27 +92,13 @@ public class ForgetPasswordActivity extends BaseActivity<ActivityForgetPasswordB
     }
 
     @Override
-    public void updateGetCodeBtn() {
-        Observable.intervalRange(1, 60, 0, 1, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        binding.btnGetCode.setClickable(false);
-                        binding.btnGetCode.setText("已发送 " + (60-aLong) + "s");
-                        binding.btnGetCode.setBackgroundResource(R.drawable.bg_unable_btn_login);
-                    }
-                })
-                .doOnComplete(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        binding.btnGetCode.setBackgroundResource(R.drawable.bg_able_btn_login);
-                        binding.btnGetCode.setText("获取验证码");
-                        binding.btnGetCode.setClickable(true);
-                    }
-                })
-                .subscribe();
+    public void updateGetCodeBtn(boolean able) {
+        binding.btnGetCode.setClickable(able);
+        if (able){
+            binding.btnGetCode.setBackgroundResource(R.drawable.bg_able_btn_login);
+        }else {
+            binding.btnGetCode.setBackgroundResource(R.drawable.bg_unable_btn_login);
+        }
     }
 
     @Override
@@ -131,5 +109,10 @@ public class ForgetPasswordActivity extends BaseActivity<ActivityForgetPasswordB
         }else {
             binding.btnResetPassword.setBackgroundResource(R.drawable.bg_unable_btn_login);
         }
+    }
+
+    @Override
+    public void updateGetCodeBtnText(String text) {
+        binding.btnGetCode.setText(text);
     }
 }

@@ -12,6 +12,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -22,11 +23,9 @@ public class ApiClient {
     public static final String PRIVACY_POLICY_URL = "https://cdn-test.nanlink.com/nanlink_privacy_policy_zh.html";
     public static final String USER_AGREEMENT_URL = "https://cdn-test.nanlink.com/nanlink_user_agreement_zh.html";
     public static final String ABOUT_URL = "https://cdn-test.nanlink.com/nanlink_about_zh.html";
-    public static final String Function_Login = "login";
     public static final String Function_Register = "register";
     public static final String Function_GetCode = "getCode";
     public static final String Function_VerifyCode = "verifyCode";
-    public static final String Function_ResetPassword = "resetPassword";
 
 
 
@@ -37,7 +36,7 @@ public class ApiClient {
 
 
         @POST("/nanlinkUser/v1/user/loginAccount")
-        Single<Message> login(@Body LoginUser loginUser, @Query("token") String token);
+        Single<Message> login(@Body LoginUser loginUser);
 
         @POST("/nanlinkUser/v1/user/registerAccount")
         Single<Message> register(@Body RegisterUser registerUser);
@@ -50,6 +49,9 @@ public class ApiClient {
 
         @POST("/nanlinkUser/v1/user/resetPwd")
         Single<Message> resetPassword(@Body ResetPasswordUser resetPasswordUser);
+
+        @GET("/nanlinkUser/v1/user/getInfo")
+        Single<Message> getUserInfo(@Header("token") String token);
     }
 
     private static Retrofit getClient(String url){

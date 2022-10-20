@@ -2,12 +2,12 @@ package com.example.nanlinkdemo.mvp.model;
 
 import com.example.nanlinkdemo.DB.bean.User;
 
-public interface UserSettingModel {
-    void getSettingList(User user);
-
-    void getLastUser();
+public interface SplashModel {
+    void startCountDown();
 
     void getOnlineUser();
+
+    void getUserInfo(String token);
 
     void updateUser(User user);
 }

@@ -1,56 +1,42 @@
 package com.example.nanlinkdemo.mvp.model.Impl;
 
-
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
 import com.example.nanlinkdemo.DB.bean.User;
-import com.example.nanlinkdemo.R;
-import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.bean.RegisterUser;
-import com.example.nanlinkdemo.mvp.model.UserSettingModel;
-import com.example.nanlinkdemo.mvp.presenter.Impl.UserSettingPresenterImpl;
+import com.example.nanlinkdemo.bean.Message;
+import com.example.nanlinkdemo.mvp.model.SplashModel;
+import com.example.nanlinkdemo.mvp.presenter.Impl.SplashPresenterImpl;
+import com.example.nanlinkdemo.util.ApiClient;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class UserSettingModelImpl implements UserSettingModel {
+public class SplashModelImpl implements SplashModel {
 
-    private final UserSettingPresenterImpl presenter;
-    private ArrayList<Menu> settingArrayList;
-    private ArrayList<RegisterUser> userArrayList;
+    private final SplashPresenterImpl presenter;
 
-    public UserSettingModelImpl(UserSettingPresenterImpl presenter) {
+    public SplashModelImpl(SplashPresenterImpl presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void getSettingList(User user) {
-        settingArrayList = new ArrayList<>();
-        settingArrayList.add(new Menu("编辑账号信息", R.drawable.ic_setting_expand));
-        settingArrayList.add(new Menu("修改密码", R.drawable.ic_setting_expand));
-        settingArrayList.add(new Menu("退出登录", R.drawable.ic_setting_expand));
-
-        userArrayList = new ArrayList<>();
-        userArrayList.add(new RegisterUser(user.getNickName(), user.getEmail()));
-        presenter.showSettingListToView(settingArrayList, userArrayList);
-    }
-
-    @Override
-    public void getLastUser() {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getUserDao()
-                .getUserFromTypeInfo("lastUser")
+    public void startCountDown() {
+        /**
+         * 定时1秒结束欢迎界面
+         */
+        Observable.timer(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<User>>() {
+                .subscribe(new Consumer<Long>() {
                     @Override
-                    public void accept(List<User> users) throws Exception {
-                        presenter.receiveLastUser(users);
+                    public void accept(Long aLong) throws Exception {
+                        presenter.endCountDown();
                     }
                 });
     }
@@ -66,6 +52,21 @@ public class UserSettingModelImpl implements UserSettingModel {
                     @Override
                     public void accept(List<User> users) throws Exception {
                         presenter.receiveOnlineUser(users);
+
+                    }
+                });
+    }
+
+    @Override
+    public void getUserInfo(String token) {
+        ApiClient.getService(ApiClient.BASE_URL)
+                .getUserInfo(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Message>() {
+                    @Override
+                    public void accept(Message message) throws Exception {
+                        presenter.sendMesToView(message);
                     }
                 });
     }
