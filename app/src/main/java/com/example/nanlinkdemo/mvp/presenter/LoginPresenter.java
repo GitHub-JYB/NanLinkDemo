@@ -16,7 +16,11 @@ public interface LoginPresenter {
 
     void getLastUserEmail();
 
-    void sendLastUserToView(List<User> users);
+    void receiveLastUser(List<User> users);
 
     void receiveUser(List<User> users);
+
+    void completeUpdateUser();
+
+    void completeAddUser();
 }

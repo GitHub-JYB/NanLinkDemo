@@ -7,9 +7,7 @@ import com.example.nanlinkdemo.bean.RegisterUser;
 import com.example.nanlinkdemo.mvp.model.Impl.UserSettingModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.UserSettingPresenter;
 import com.example.nanlinkdemo.mvp.view.UserSettingView;
-import com.example.nanlinkdemo.mvp.widget.MainActivity;
 import com.example.nanlinkdemo.util.Constant;
-import com.example.nanlinkdemo.util.SpUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.List;
 public class UserSettingPresenterImpl implements UserSettingPresenter {
     private final UserSettingModelImpl model;
     private final UserSettingView view;
-    private User onlineUser;
+    private User onlineUser, lastUser;
 
     public UserSettingPresenterImpl(UserSettingView view) {
         this.view = view;
@@ -50,14 +48,21 @@ public class UserSettingPresenterImpl implements UserSettingPresenter {
     @Override
     public void receiveLastUser(List<User> users) {
         if (!users.isEmpty()){
-            users.get(0).setType("normal");
-            model.updateUser(users.get(0));
+            lastUser = users.get(0);
+            lastUser.setType("normal");
+            model.updateUser(lastUser);
+        }else {
+            onlineUser.setType("lastUser");
+            model.updateUser(onlineUser);
         }
-        onlineUser.setType("lastUser");
-        model.updateUser(onlineUser);
+
+
+    }
+    @Override
+    public void updateOnlineUser() {
+
         ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
         view.finish();
-
     }
 
     @Override

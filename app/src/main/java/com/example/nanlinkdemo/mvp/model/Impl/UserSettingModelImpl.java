@@ -80,7 +80,7 @@ public class UserSettingModelImpl implements UserSettingModel {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-
+                        presenter.updateOnlineUser();
                     }
                 });
     }

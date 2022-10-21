@@ -56,7 +56,7 @@ public class LoginModelImpl implements LoginModel {
                 .subscribe(new Consumer<List<User>>() {
                     @Override
                     public void accept(List<User> users) throws Exception {
-                        presenter.sendLastUserToView(users);
+                        presenter.receiveLastUser(users);
                     }
                 });
     }
@@ -71,7 +71,7 @@ public class LoginModelImpl implements LoginModel {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-
+                        presenter.completeAddUser();
                     }
                 });
     }
@@ -101,7 +101,7 @@ public class LoginModelImpl implements LoginModel {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-
+                        presenter.completeUpdateUser();
                     }
                 });
     }

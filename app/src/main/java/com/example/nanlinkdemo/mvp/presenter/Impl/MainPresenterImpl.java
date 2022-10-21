@@ -15,6 +15,7 @@ import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.Impl.MainModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.MainPresenter;
 import com.example.nanlinkdemo.mvp.view.MainView;
+import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class MainPresenterImpl implements MainPresenter {
     private List<Scene> sceneList;
     private List<SceneGroup> sceneGroupList;
     private boolean completeGetScene, completeGetSceneGroup;
+    private User onlineUser;
 
 
     public MainPresenterImpl(MainView mainView) {
@@ -56,10 +58,15 @@ public class MainPresenterImpl implements MainPresenter {
                 break;
             case 3:
             case 4:
-                view.showMenuDialog(menuArrayList.get(position).getText(), "", 1);
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "", menuArrayList.get(position).getText(), "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switchDialog(view.getInputTextMyDialog(), menuArrayList.get(position).getText());
+                    }
+                });
                 break;
             case 5:
-                view.showMenuDialog(menuArrayList.get(position).getText(), "该功能还没开发", 0);
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, menuArrayList.get(position).getText(), "该功能还没开发", "重试",null);
                 break;
             case 7:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Setting).navigation();
@@ -240,7 +247,8 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void receiveOnlineUser(List<User> users) {
-        model.getMenu(users.get(0).getNickName());
+        onlineUser = users.get(0);
+        model.getMenu(onlineUser.getNickName());
     }
 
 }

@@ -65,33 +65,23 @@ public class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
         loadingDialog.dismiss();
     }
 
-    public void showMistakeDialog(String title, String message, int type) {
-        myDialog = new MyDialog();
-        myDialog.setType(type);
-        myDialog.setTitle(title);
-        myDialog.setTitleTextColorResId(R.color.warning);
-        if (type == 0) {
-            myDialog.setMessage(message);
-            myDialog.setNeutralText("重试");
-        }
+    public void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralListener) {
+        myDialog = new MyDialog(type, title, message, neutralText, neutralListener);
         myDialog.show(getSupportFragmentManager(), "MyDialog");
     }
 
-    public void dismissDialog(){
+    public void showMyDialog(int type, String title, String message, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener) {
+        myDialog = new MyDialog(type, title, message, negativeText, negativeListener, positiveText, positiveListener);
+        myDialog.show(getSupportFragmentManager(), "MyDialog");
+    }
+
+    public String getInputTextMyDialog(){
+        return myDialog.getInputText();
+    }
+
+    public void dismissMyDialog(){
         myDialog.dismiss();
     }
 
-    public void showSuccessDialog(String title, String message, int type, MyDialog.NeutralOnClickListener listener) {
-        myDialog = new MyDialog();
-        myDialog.setType(type);
-        myDialog.setTitle(title);
-        if (type == 0) {
-            myDialog.setMessage(message);
-            myDialog.setNeutralText("完成");
-            myDialog.setNeutralOnClickListener(listener);
-        }
-        myDialog.setCanceledOnTouchOutside(false);
-        myDialog.show(getSupportFragmentManager(), "MyDialog");
-    }
 
 }

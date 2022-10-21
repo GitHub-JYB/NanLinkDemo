@@ -16,5 +16,7 @@ public interface UserSettingPresenter {
 
     void receiveLastUser(List<User> users);
 
+    void updateOnlineUser();
+
     void receiveOnlineUser(List<User> users);
 }

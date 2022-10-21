@@ -20,12 +20,25 @@ public class MyDialog extends DialogFragment {
     DialogMyBinding binding;
     static Boolean isCanceledOnTouchOutside = true;
 
+    public static final int Read_OneBtn_NormalTitle_WhiteOneBtn = 1;
+    public static final int Read_OneBtn_NormalTitle_BlueOneBtn = 2;
+    public static final int Read_OneBtn_WarningTitle_BlueOneBtn = 3;
+    public static final int Read_OneBtn_WarningTitle_WarningOneBtn = 4;
+    public static final int Read_TwoBtn_NormalTitle_WhiteTwoBtn = 5;
+    public static final int Read_TwoBtn_NormalTitle_BlueTwoBtn = 6;
+    public static final int Read_TwoBtn_WarningTitle_BlueTwoBtn = 7;
+    public static final int Read_TwoBtn_WarningTitle_WarningTwoBtn = 8;
+    public static final int Write_OneBtn_NormalTitle_WhiteOneBtn = 9;
+    public static final int Write_OneBtn_NormalTitle_BlueOneBtn = 10;
+    public static final int Write_OneBtn_WarningTitle_BlueOneBtn = 11;
+    public static final int Write_OneBtn_WarningTitle_WarningOneBtn = 12;
+    public static final int Write_TwoBtn_NormalTitle_WhiteTwoBtn = 13;
+    public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn = 14;
+    public static final int Write_TwoBtn_WarningTitle_BlueTwoBtn = 15;
+    public static final int Write_TwoBtn_WarningTitle_WarningTwoBtn = 16;
+
     private CharSequence title, message, neutralText, positiveText, negativeText, hintInputText;
     private int type = 0;
-    private int titleTextColorResId = R.color.blue;
-    private int neutralTextColorResId = R.color.blue;
-    private int positiveTextColorResId = R.color.blue;
-    private int negativeTextColorResId = R.color.white;
     private NegativeOnClickListener negativeListener = new NegativeOnClickListener() {
         @Override
         public void onClick(View view) {
@@ -49,10 +62,28 @@ public class MyDialog extends DialogFragment {
 
     }
 
-    public MyDialog(int type, String title, String message){
+    public MyDialog(int type, String title, String message, String neutralText, NeutralOnClickListener neutralListener){
         this.type = type;
         this.title = title;
         this.message = message;
+        this.neutralText = neutralText;
+        if (neutralListener != null){
+            this.neutralListener= neutralListener;
+        }
+    }
+
+    public MyDialog(int type, String title, String message, String negativeText, NegativeOnClickListener negativeListener, String positiveText, PositiveOnClickListener positiveListener){
+        this.type = type;
+        this.title = title;
+        this.message = message;
+        this.negativeText = negativeText;
+        if (negativeListener != null){
+            this.negativeListener = negativeListener;
+        }
+        this.positiveText = negativeText;
+        if (negativeListener != null){
+            this.positiveListener = positiveListener;
+        }
     }
 
 
@@ -71,29 +102,106 @@ public class MyDialog extends DialogFragment {
         因为这里的view还没添加到父级中，我们需要在下面onStart生命周期里修改对话框尺寸参数
          */
         switch (type){
-            case 1:
-                binding.myDialogMessage.setVisibility(View.GONE);
-                binding.myDialogNeutralButton.setVisibility(View.GONE);
-                binding.myDialogInput.setVisibility(View.VISIBLE);
-                binding.myDialogNegativeButton.setVisibility(View.VISIBLE);
-                binding.decorationDialogPositiveNegative.setVisibility(View.VISIBLE);
-                binding.myDialogPositiveButton.setVisibility(View.VISIBLE);
-                setCanceledOnTouchOutside(false);
+            case Read_OneBtn_NormalTitle_WhiteOneBtn:
+                setRead();
+                setOneBtn();
+                setNormalTitle();
+                setWhiteOneBtn();
                 break;
-            default:
-                binding.myDialogMessage.setVisibility(View.VISIBLE);
-                binding.myDialogNeutralButton.setVisibility(View.VISIBLE);
-                binding.myDialogInput.setVisibility(View.GONE);
-                binding.myDialogNegativeButton.setVisibility(View.GONE);
-                binding.decorationDialogPositiveNegative.setVisibility(View.GONE);
-                binding.myDialogPositiveButton.setVisibility(View.GONE);
+            case Read_OneBtn_NormalTitle_BlueOneBtn:
+                setRead();
+                setOneBtn();
+                setNormalTitle();
+                setBlueOneBtn();
                 break;
-
+            case Read_OneBtn_WarningTitle_BlueOneBtn:
+                setRead();
+                setOneBtn();
+                setWarningTitle();
+                setBlueOneBtn();
+                break;
+            case Read_OneBtn_WarningTitle_WarningOneBtn:
+                setRead();
+                setOneBtn();
+                setWarningTitle();
+                setWarningOneBtn();
+                break;
+            case Read_TwoBtn_NormalTitle_WhiteTwoBtn:
+                setRead();
+                setTwoBtn();
+                setNormalTitle();
+                setWhiteTwoBtn();
+                break;
+            case Read_TwoBtn_NormalTitle_BlueTwoBtn:
+                setRead();
+                setTwoBtn();
+                setNormalTitle();
+                setBlueTwoBtn();
+                break;
+            case Read_TwoBtn_WarningTitle_BlueTwoBtn:
+                setRead();
+                setTwoBtn();
+                setWarningTitle();
+                setBlueTwoBtn();
+                break;
+            case Read_TwoBtn_WarningTitle_WarningTwoBtn:
+                setRead();
+                setTwoBtn();
+                setWarningTitle();
+                setWarningTwoBtn();
+                break;
+            case Write_OneBtn_NormalTitle_WhiteOneBtn:
+                setWrite();
+                setOneBtn();
+                setNormalTitle();
+                setWhiteOneBtn();
+                break;
+            case Write_OneBtn_NormalTitle_BlueOneBtn:
+                setWrite();
+                setOneBtn();
+                setNormalTitle();
+                setBlueOneBtn();
+                break;
+            case Write_OneBtn_WarningTitle_BlueOneBtn:
+                setWrite();
+                setOneBtn();
+                setWarningTitle();
+                setBlueOneBtn();
+                break;
+            case Write_OneBtn_WarningTitle_WarningOneBtn:
+                setWrite();
+                setOneBtn();
+                setWarningTitle();
+                setWarningOneBtn();
+                break;
+            case Write_TwoBtn_NormalTitle_WhiteTwoBtn:
+                setWrite();
+                setTwoBtn();
+                setNormalTitle();
+                setWhiteTwoBtn();
+                break;
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn:
+                setWrite();
+                setTwoBtn();
+                setNormalTitle();
+                setBlueTwoBtn();
+                break;
+            case Write_TwoBtn_WarningTitle_BlueTwoBtn:
+                setWrite();
+                setTwoBtn();
+                setWarningTitle();
+                setBlueTwoBtn();
+                break;
+            case Write_TwoBtn_WarningTitle_WarningTwoBtn:
+                setWrite();
+                setTwoBtn();
+                setWarningTitle();
+                setWarningTwoBtn();
+                break;
         }
 
 
         binding.myDialogTitle.setText(title);
-        binding.myDialogTitle.setTextColor(getResources().getColor(titleTextColorResId));
 
         binding.myDialogMessage.setText(message);
 
@@ -101,17 +209,14 @@ public class MyDialog extends DialogFragment {
 
         binding.myDialogNeutralButton.setOnClickListener(neutralListener);
         binding.myDialogNeutralButton.setText(neutralText);
-        binding.myDialogNeutralButton.setTextColor(getResources().getColor(neutralTextColorResId));
 
 
         binding.myDialogNegativeButton.setOnClickListener(negativeListener);
         binding.myDialogNegativeButton.setText(negativeText);
-        binding.myDialogNegativeButton.setTextColor(getResources().getColor(negativeTextColorResId));
 
 
         binding.myDialogPositiveButton.setOnClickListener(positiveListener);
         binding.myDialogPositiveButton.setText(positiveText);
-        binding.myDialogPositiveButton.setTextColor(getResources().getColor(positiveTextColorResId));
 
 
 
@@ -126,6 +231,65 @@ public class MyDialog extends DialogFragment {
 
 
 
+    }
+
+    private void setWhiteOneBtn() {
+        binding.myDialogNeutralButton.setTextColor(getResources().getColor(R.color.white));
+    }
+
+    private void setBlueOneBtn() {
+        binding.myDialogNeutralButton.setTextColor(getResources().getColor(R.color.blue));
+    }
+
+    private void setWarningOneBtn() {
+        binding.myDialogNeutralButton.setTextColor(getResources().getColor(R.color.warning));
+    }
+
+    private void setWhiteTwoBtn() {
+        binding.myDialogPositiveButton.setTextColor(getResources().getColor(R.color.white));
+    }
+
+    private void setBlueTwoBtn() {
+        binding.myDialogPositiveButton.setTextColor(getResources().getColor(R.color.blue));
+    }
+
+    private void setWarningTwoBtn() {
+        binding.myDialogPositiveButton.setTextColor(getResources().getColor(R.color.warning));
+    }
+
+    private void setNormalTitle() {
+        binding.myDialogTitle.setTextColor(getResources().getColor(R.color.blue));
+    }
+
+    private void setWarningTitle() {
+        binding.myDialogTitle.setTextColor(getResources().getColor(R.color.warning));
+    }
+
+    private void setRead() {
+        binding.myDialogInput.setVisibility(View.GONE);
+        binding.myDialogMessage.setVisibility(View.VISIBLE);
+        this.hintInputText = this.message;
+    }
+
+    private void setWrite() {
+        binding.myDialogInput.setVisibility(View.VISIBLE);
+        binding.myDialogMessage.setVisibility(View.GONE);
+    }
+
+    private void setOneBtn() {
+        binding.myDialogNeutralButton.setVisibility(View.VISIBLE);
+        binding.myDialogNegativeButton.setVisibility(View.GONE);
+        binding.myDialogPositiveButton.setVisibility(View.GONE);
+        binding.decorationDialogPositiveNegative.setVisibility(View.GONE);
+
+    }
+
+    private void setTwoBtn() {
+        binding.myDialogNeutralButton.setVisibility(View.GONE);
+        binding.myDialogNegativeButton.setVisibility(View.VISIBLE);
+        binding.myDialogPositiveButton.setVisibility(View.VISIBLE);
+        binding.decorationDialogPositiveNegative.setVisibility(View.VISIBLE);
+        setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -152,10 +316,6 @@ public class MyDialog extends DialogFragment {
          this.title = title;
     }
 
-    // 设置标题
-    public void setTitleTextColorResId(int titleTextColorResId){
-        this.titleTextColorResId = titleTextColorResId;
-    }
 
     // 设置提示信息
     public void setMessage(CharSequence message){
@@ -184,10 +344,6 @@ public class MyDialog extends DialogFragment {
         this.negativeText = negativeText;
     }
 
-    // 设置消极按键的文字颜色
-    public void setNegativeTextColorResId(int negativeTextColorResId) {
-        this.negativeTextColorResId = negativeTextColorResId;
-    }
 
     // 积极按键的点击接口
     public interface PositiveOnClickListener extends View.OnClickListener {
@@ -204,10 +360,6 @@ public class MyDialog extends DialogFragment {
         this.positiveText = positiveText;
     }
 
-    // 设置积极按键的文字颜色
-    public void setPositiveTextColorResId(int positiveTextColorResId) {
-        this.positiveTextColorResId = positiveTextColorResId;
-    }
 
 
     // 普通按键的点击接口
@@ -225,10 +377,6 @@ public class MyDialog extends DialogFragment {
         this.neutralText = neutralText;
     }
 
-    // 设置普通按键的文字颜色
-    public void setNeutralTextColorResId(int neutralTextColorResId) {
-        this.neutralTextColorResId = neutralTextColorResId;
-    }
 
     // 设置点击外边是否可以取消
     public void setCanceledOnTouchOutside(Boolean isCanceledOnTouchOutside) {

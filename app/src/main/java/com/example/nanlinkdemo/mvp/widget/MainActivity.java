@@ -138,34 +138,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     }
 
 
-
-    @Override
-    public void showMenuDialog(String title, String message, int type) {
-        dialog = new MyDialog(type, title, message);
-        if(type == 0){
-            dialog.setMessage(message);
-            dialog.setNeutralText("重试");
-            dialog.setNeutralOnClickListener(new MyDialog.NeutralOnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-        }else {
-            dialog.setPositiveText("创建");
-            dialog.setNegativeText("取消");
-            dialog.setPositiveOnClickListener(new MyDialog.PositiveOnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    presenter.switchDialog(dialog.getInputText(), title);
-//                    dialog.dismiss();
-                }
-            });
-        }
-
-        dialog.show(getSupportFragmentManager(), "MyDialog");
-    }
-
     @Override
     public void showSceneList(List<Scene> sceneList, List<SceneGroup> sceneGroupList) {
         this.sceneList = sceneList;
@@ -194,11 +166,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     @Override
     public void dismissSettingDialog() {
         settingDialog.dismiss();
-    }
-
-    @Override
-    public void dismissMyDialog() {
-        dialog.dismiss();
     }
 
     @Override

@@ -37,8 +37,8 @@ public class SplashPresenterImpl implements SplashPresenter {
             updateUser(onlineUser);
         }else {
             ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
+            view.finish();
         }
-        view.finish();
     }
 
     @Override
@@ -49,6 +49,7 @@ public class SplashPresenterImpl implements SplashPresenter {
                 onlineUser.setVocation(message.getData().getVocation());
                 model.updateUser(onlineUser);
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
+                view.finish();
                 break;
             case 1001:
             case 1002:

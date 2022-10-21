@@ -3,6 +3,7 @@ package com.example.nanlinkdemo.mvp.view;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.bean.Menu;
+import com.example.nanlinkdemo.ui.MyDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,9 @@ public interface MainView {
 
     void closeDrawLayout();
 
-    void showMenuDialog(String title, String message, int type);
+    void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
+
+    void showMyDialog(int type, String title, String message, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
 
     void showSceneList(List<Scene> sceneList, List<SceneGroup> sceneGroupList);
 
@@ -24,6 +27,8 @@ public interface MainView {
     void showThreePointMenu(ArrayList<String> threePointList, int type, int position);
 
     void dismissSettingDialog();
+
+    String getInputTextMyDialog();
 
     void dismissMyDialog();
 

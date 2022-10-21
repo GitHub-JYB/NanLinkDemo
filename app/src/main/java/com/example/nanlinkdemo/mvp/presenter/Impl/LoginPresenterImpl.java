@@ -24,7 +24,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     private final LoginModelImpl model;
     private boolean checked = false;
     private String email, password;
-    private User onlineUser;
+    private User onlineUser, lastUser;
 
 
     public LoginPresenterImpl(LoginView loginView) {
@@ -100,21 +100,33 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void sendLastUserToView(List<User> users) {
+    public void receiveLastUser(List<User> users) {
         if (!users.isEmpty()){
-            view.updateEmail(users.get(0).getEmail());
+            lastUser = users.get(0);
+            view.updateEmail(lastUser.getEmail());
         }
     }
 
     @Override
     public void receiveUser(List<User> users) {
         if (!users.isEmpty()){
+            onlineUser.setId(users.get(0).getId());
             model.updateUser(onlineUser);
         }else {
             model.addUser(onlineUser);
         }
         ARouter.getInstance().build(ACTIVITY_URL_Main).navigation();
         view.finish();
+    }
+
+    @Override
+    public void completeUpdateUser() {
+
+    }
+
+    @Override
+    public void completeAddUser() {
+
     }
 
 }
