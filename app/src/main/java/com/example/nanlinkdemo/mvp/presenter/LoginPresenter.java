@@ -19,4 +19,8 @@ public interface LoginPresenter {
     void completeUpdateUser();
 
     void completeAddUser();
+
+    void getLastUserFromModel();
+
+    void receiveLastUser(List<User> users);
 }

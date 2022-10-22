@@ -2,10 +2,12 @@ package com.example.nanlinkdemo.mvp.view;
 
 import com.example.nanlinkdemo.ui.MyDialog;
 
-public interface ForgetPasswordResetView {
+public interface ResetPasswordResetView {
     String getEmail();
 
     String getCode();
+
+    int getType();
 
     String getPassword();
 

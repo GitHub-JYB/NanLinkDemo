@@ -33,6 +33,12 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     private LoginPresenterImpl presenter;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        initEmail();
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -40,7 +46,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         initToolbar();
         initUserAgreement();
         initForgetPassword();
-        initEmail();
     }
 
     private void initForgetPassword() {
@@ -80,9 +85,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     }
 
     private void initEmail() {
-        if (MyApplication.getLastUser() != null){
-            updateEmail(MyApplication.getLastUser().getEmail());
-        }
+        presenter.getLastUserFromModel();
     }
 
     private void initToolbar() {

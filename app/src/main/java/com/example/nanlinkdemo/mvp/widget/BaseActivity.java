@@ -4,14 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
 
 import android.app.Activity;
-import android.app.Dialog;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.ui.LoadingDialog;
 import com.example.nanlinkdemo.ui.MyDialog;
 

@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.example.nanlinkdemo.bean.Message;
 
-public interface ForgetPasswordPresenter {
+public interface ResetPasswordPresenter {
     void switchOnclick(View v);
 
     void checkCode();

@@ -1,10 +1,9 @@
 package com.example.nanlinkdemo.mvp.model.Impl;
 
 
-import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.ForgetPasswordModel;
-import com.example.nanlinkdemo.mvp.presenter.Impl.ForgetPasswordPresenterImpl;
+import com.example.nanlinkdemo.mvp.presenter.Impl.ResetPasswordPresenterImpl;
 import com.example.nanlinkdemo.util.ApiClient;
 
 import java.util.concurrent.TimeUnit;
@@ -15,10 +14,10 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class ForgetPasswordModelImpl implements ForgetPasswordModel {
-    private final ForgetPasswordPresenterImpl presenter;
+public class ResetPasswordModelImpl implements ForgetPasswordModel {
+    private final ResetPasswordPresenterImpl presenter;
 
-    public ForgetPasswordModelImpl(ForgetPasswordPresenterImpl presenter) {
+    public ResetPasswordModelImpl(ResetPasswordPresenterImpl presenter) {
         this.presenter = presenter;
     }
 

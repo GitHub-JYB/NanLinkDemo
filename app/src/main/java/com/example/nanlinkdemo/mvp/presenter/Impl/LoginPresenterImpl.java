@@ -118,4 +118,17 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     }
 
+    @Override
+    public void getLastUserFromModel() {
+        model.getLastUser();
+    }
+
+    @Override
+    public void receiveLastUser(List<User> users) {
+        if (!users.isEmpty()){
+            MyApplication.setLastUser(users.get(0));
+            view.updateEmail(MyApplication.getLastUser().getEmail());
+        }
+    }
+
 }

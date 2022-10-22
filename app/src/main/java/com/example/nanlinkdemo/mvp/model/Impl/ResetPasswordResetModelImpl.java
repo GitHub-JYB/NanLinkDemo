@@ -2,17 +2,17 @@ package com.example.nanlinkdemo.mvp.model.Impl;
 
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.bean.ResetPasswordUser;
-import com.example.nanlinkdemo.mvp.presenter.Impl.ForgetPasswordResetPresenterImpl;
+import com.example.nanlinkdemo.mvp.presenter.Impl.ResetPasswordResetPresenterImpl;
 import com.example.nanlinkdemo.util.ApiClient;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class ForgetPasswordResetModelImpl {
-    private final ForgetPasswordResetPresenterImpl presenter;
+public class ResetPasswordResetModelImpl {
+    private final ResetPasswordResetPresenterImpl presenter;
 
-    public ForgetPasswordResetModelImpl(ForgetPasswordResetPresenterImpl presenter) {
+    public ResetPasswordResetModelImpl(ResetPasswordResetPresenterImpl presenter) {
         this.presenter = presenter;
     }
 

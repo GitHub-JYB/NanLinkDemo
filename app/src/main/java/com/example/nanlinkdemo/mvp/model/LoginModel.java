@@ -12,4 +12,6 @@ public interface LoginModel {
     void queryEmail(String email);
 
     void updateUser(User user);
+
+    void getLastUser();
 }

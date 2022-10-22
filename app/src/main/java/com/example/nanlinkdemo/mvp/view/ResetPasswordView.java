@@ -3,7 +3,7 @@ package com.example.nanlinkdemo.mvp.view;
 
 import com.example.nanlinkdemo.ui.MyDialog;
 
-public interface ForgetPasswordView {
+public interface ResetPasswordView {
 
     void setPresenter();
 
@@ -24,4 +24,6 @@ public interface ForgetPasswordView {
     void updateResetBtn(boolean able);
 
     void updateGetCodeBtnText(String text);
+
+    int getType();
 }

@@ -1,6 +1,9 @@
 package com.example.nanlinkdemo.mvp.widget;
 
 
+import static com.example.nanlinkdemo.mvp.widget.ResetPasswordActivity.Type_Change_Password;
+import static com.example.nanlinkdemo.mvp.widget.ResetPasswordActivity.Type_Forget_Password;
+
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,13 +14,13 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityResetPasswordResetBinding;
-import com.example.nanlinkdemo.mvp.presenter.Impl.ForgetPasswordResetPresenterImpl;
-import com.example.nanlinkdemo.mvp.view.ForgetPasswordResetView;
+import com.example.nanlinkdemo.mvp.presenter.Impl.ResetPasswordResetPresenterImpl;
+import com.example.nanlinkdemo.mvp.view.ResetPasswordResetView;
 import com.example.nanlinkdemo.util.Constant;
 
 
 @Route(path = Constant.ACTIVITY_URL_ResetPasswordReset)
-public class ResetPasswordResetActivity extends BaseActivity<ActivityResetPasswordResetBinding> implements ForgetPasswordResetView, View.OnClickListener {
+public class ResetPasswordResetActivity extends BaseActivity<ActivityResetPasswordResetBinding> implements ResetPasswordResetView, View.OnClickListener {
 
     @Autowired(name = "email")
     String email;
@@ -25,14 +28,17 @@ public class ResetPasswordResetActivity extends BaseActivity<ActivityResetPasswo
     @Autowired(name = "code")
     String code;
 
-    private ForgetPasswordResetPresenterImpl presenter;
+    @Autowired(name = "type")
+    int type;
+
+    private ResetPasswordResetPresenterImpl presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setPresenter();
         initToolbar();
-        initBtnOnClick();
+        initBtn();
         initTextWatcher();
     }
 
@@ -65,20 +71,29 @@ public class ResetPasswordResetActivity extends BaseActivity<ActivityResetPasswo
         }
     }
 
-    private void initBtnOnClick() {
+    private void initBtn() {
+        if (type == Type_Forget_Password){
+            binding.btnResetPassword.setText("重置密码");
+        }else if (type == Type_Change_Password){
+            binding.btnResetPassword.setText("修改密码");
+        }
         binding.btnResetPassword.setOnClickListener(this);
     }
 
     private void initToolbar() {
-        binding.toolbar.setTitle("重置密码");
-        binding.toolbar.setTitleType(Typeface.BOLD);
-        binding.toolbar.setTitleColor(R.color.blue);
+        if (type == Type_Forget_Password){
+            binding.toolbar.setTitle("重置密码");
+            binding.toolbar.setTitleType(Typeface.BOLD);
+            binding.toolbar.setTitleColor(R.color.blue);
+        }else if (type == Type_Change_Password){
+            binding.toolbar.setTitle("修改密码");
+        }
         binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
         binding.toolbar.setLeftBtnOnClickListener(this);
     }
 
     public void setPresenter() {
-        presenter = new ForgetPasswordResetPresenterImpl(this);
+        presenter = new ResetPasswordResetPresenterImpl(this);
     }
 
     @Override
@@ -89,6 +104,11 @@ public class ResetPasswordResetActivity extends BaseActivity<ActivityResetPasswo
     @Override
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public int getType() {
+        return type;
     }
 
     @Override

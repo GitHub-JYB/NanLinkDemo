@@ -10,6 +10,7 @@ import com.example.nanlinkdemo.bean.RegisterUser;
 import com.example.nanlinkdemo.mvp.model.Impl.UserSettingModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.UserSettingPresenter;
 import com.example.nanlinkdemo.mvp.view.UserSettingView;
+import com.example.nanlinkdemo.mvp.widget.ResetPasswordActivity;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
 
@@ -38,7 +39,7 @@ public class UserSettingPresenterImpl implements UserSettingPresenter {
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_EditUserInfo).navigation();
                 break;
             case "修改密码":
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, settingText, "该功能还没开发", "重试", null);
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_ResetPassword).withString("email", MyApplication.getOnlineUser().getEmail()).withInt("type", ResetPasswordActivity.Type_Change_Password).navigation();
                 break;
             case "退出登录":
                 view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, settingText, "是否要退出登录?", "取消", null, "退出登录", new MyDialog.PositiveOnClickListener() {

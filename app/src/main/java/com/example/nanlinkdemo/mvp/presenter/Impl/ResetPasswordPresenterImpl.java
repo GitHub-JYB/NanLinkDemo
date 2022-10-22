@@ -8,22 +8,22 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Message;
-import com.example.nanlinkdemo.mvp.model.Impl.ForgetPasswordModelImpl;
-import com.example.nanlinkdemo.mvp.presenter.ForgetPasswordPresenter;
-import com.example.nanlinkdemo.mvp.view.ForgetPasswordView;
+import com.example.nanlinkdemo.mvp.model.Impl.ResetPasswordModelImpl;
+import com.example.nanlinkdemo.mvp.presenter.ResetPasswordPresenter;
+import com.example.nanlinkdemo.mvp.view.ResetPasswordView;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.ApiClient;
 import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
-public class ForgetPasswordPresenterImpl implements ForgetPasswordPresenter {
-    private final ForgetPasswordView view;
-    private final ForgetPasswordModelImpl model;
+public class ResetPasswordPresenterImpl implements ResetPasswordPresenter {
+    private final ResetPasswordView view;
+    private final ResetPasswordModelImpl model;
     private String email, code;
 
-    public ForgetPasswordPresenterImpl(ForgetPasswordView view) {
+    public ResetPasswordPresenterImpl(ResetPasswordView view) {
         this.view = view;
-        model = new ForgetPasswordModelImpl(this);
+        model = new ResetPasswordModelImpl(this);
     }
 
     @Override
@@ -68,11 +68,11 @@ public class ForgetPasswordPresenterImpl implements ForgetPasswordPresenter {
             case 200:
                 switch (function){
                     case ApiClient.Function_GetCode:
-                        view.updateResetBtn(false);
+                        view.updateGetCodeBtn(false);
                         model.startCountDown();
                         break;
                     case ApiClient.Function_VerifyCode:
-                        ARouter.getInstance().build(Constant.ACTIVITY_URL_ResetPasswordReset).withString("email", email).withString("code", code).navigation();
+                        ARouter.getInstance().build(Constant.ACTIVITY_URL_ResetPasswordReset).withString("email", email).withString("code", code).withInt("type", view.getType()).navigation();
                         break;
                 }
                 break;
@@ -99,7 +99,7 @@ public class ForgetPasswordPresenterImpl implements ForgetPasswordPresenter {
 
     @Override
     public void endCountToView() {
-        view.updateResetBtn(true);
+        view.updateGetCodeBtn(true);
         view.updateGetCodeBtnText("获取验证码");
 
     }

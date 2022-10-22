@@ -11,13 +11,13 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityResetPasswordBinding;
-import com.example.nanlinkdemo.mvp.presenter.Impl.ForgetPasswordPresenterImpl;
-import com.example.nanlinkdemo.mvp.view.ForgetPasswordView;
+import com.example.nanlinkdemo.mvp.presenter.Impl.ResetPasswordPresenterImpl;
+import com.example.nanlinkdemo.mvp.view.ResetPasswordView;
 import com.example.nanlinkdemo.util.Constant;
 
 
 @Route(path = Constant.ACTIVITY_URL_ResetPassword)
-public class ResetPasswordActivity extends BaseActivity<ActivityResetPasswordBinding> implements ForgetPasswordView, View.OnClickListener {
+public class ResetPasswordActivity extends BaseActivity<ActivityResetPasswordBinding> implements ResetPasswordView, View.OnClickListener {
 
     @Autowired(name = "email")
     String email;
@@ -27,7 +27,7 @@ public class ResetPasswordActivity extends BaseActivity<ActivityResetPasswordBin
     public static final int Type_Forget_Password = 0;
     public static final int Type_Change_Password = 1;
 
-    private ForgetPasswordPresenterImpl presenter;
+    private ResetPasswordPresenterImpl presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class ResetPasswordActivity extends BaseActivity<ActivityResetPasswordBin
     }
 
     public void setPresenter() {
-        presenter = new ForgetPasswordPresenterImpl(this);
+        presenter = new ResetPasswordPresenterImpl(this);
     }
 
     @Override
@@ -149,5 +149,10 @@ public class ResetPasswordActivity extends BaseActivity<ActivityResetPasswordBin
     @Override
     public void updateGetCodeBtnText(String text) {
         binding.btnGetCode.setText(text);
+    }
+
+    @Override
+    public int getType() {
+        return type;
     }
 }
