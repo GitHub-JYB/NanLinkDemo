@@ -1,5 +1,6 @@
 package com.example.nanlinkdemo.util;
 
+import com.example.nanlinkdemo.bean.EditUser;
 import com.example.nanlinkdemo.bean.LoginUser;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.bean.RegisterUser;
@@ -52,6 +53,9 @@ public class ApiClient {
 
         @GET("/nanlinkUser/v1/user/getInfo")
         Single<Message> getUserInfo(@Header("token") String token);
+
+        @POST("/nanlinkUser/v1/user/editInfo")
+        Single<Message> editUserInfo(@Header("token") String token, @Body EditUser editUser);
     }
 
     private static Retrofit getClient(String url){

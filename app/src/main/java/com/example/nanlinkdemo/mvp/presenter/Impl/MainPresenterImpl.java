@@ -7,6 +7,7 @@ import static com.example.nanlinkdemo.mvp.adapter.SceneAdapter.TYPE_SCENE_GROUP;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.DB.bean.User;
@@ -17,6 +18,7 @@ import com.example.nanlinkdemo.mvp.presenter.MainPresenter;
 import com.example.nanlinkdemo.mvp.view.MainView;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,6 @@ public class MainPresenterImpl implements MainPresenter {
     private List<Scene> sceneList;
     private List<SceneGroup> sceneGroupList;
     private boolean completeGetScene, completeGetSceneGroup;
-    private User onlineUser;
 
 
     public MainPresenterImpl(MainView mainView) {
@@ -40,7 +41,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void getMenuFromModel() {
-        model.getOnlineUser();
+        model.getMenu(MyApplication.getOnlineUser().getNickName());
     }
 
     @Override
@@ -58,7 +59,7 @@ public class MainPresenterImpl implements MainPresenter {
                 break;
             case 3:
             case 4:
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "", menuArrayList.get(position).getText(), "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, menuArrayList.get(position).getText(), "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
                         switchDialog(view.getInputTextMyDialog(), menuArrayList.get(position).getText());
@@ -116,18 +117,8 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public void addSceneToModel(String inputText) {
-        model.addScene(inputText);
-    }
-
-    @Override
-    public void addSceneGroupToModel(String inputText) {
-        model.addSceneGroup(inputText);
-    }
-
-    @Override
     public void updateSceneListToView() {
-        view.updateSceneList();
+        view.updateRecycleView();
     }
 
     @Override
@@ -143,27 +134,50 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void switchThreePointMenu(int position, int type, int furtherPosition) {
-        switch (threePointList.get(position)){
-            case "重命名":
+        switch (position){
+            case 1:
                 view.dismissSettingDialog();
-                view.showMenuDialog("重命名", "", 1);
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), "", "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        switchDialog(view.getInputTextMyDialog(), menuArrayList.get(position).getText());
+                    }
+                });
                 break;
-            case "编辑备注":
+            case 2:
                 view.dismissSettingDialog();
-                view.showMenuDialog("编辑备注", "", 1);
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), "", "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        switchDialog(view.getInputTextMyDialog(), menuArrayList.get(position).getText());
+                    }
+                });
                 break;
-            case "删除":
+            case 3:
                 view.dismissSettingDialog();
 
                 if (type == TYPE_SCENE_GROUP){
-                    view.deleteSceneGroup(furtherPosition - sceneList.size() - 1);
+                    view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            view.dismissMyDialog();
+                            view.deleteSceneGroup(furtherPosition - sceneList.size() - 1);
+                        }
+                    });
 
                 }else if (type == TYPE_SCENE){
-                    view.deleteScene(furtherPosition);
+                    view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            view.dismissMyDialog();
+//                            view.startLoading();
+                            view.deleteScene(furtherPosition);
+                        }
+                    });
 
                 }
                 break;
-            case "取消":
+            case 4:
                 view.dismissSettingDialog();
                 break;
         }
@@ -227,7 +241,7 @@ public class MainPresenterImpl implements MainPresenter {
         if (scenes.size() == 0){
             model.addScene(inputText);
         }else {
-            view.showMenuDialog("创建场景", "该场景名称已存在，请尝试使用其它名称。", 0);
+            view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景", "该场景名称已存在，请尝试使用其它名称。", "重试",null);
         }
     }
 
@@ -236,19 +250,8 @@ public class MainPresenterImpl implements MainPresenter {
         if (sceneGroups.size() == 0){
             model.addSceneGroup(inputText);
         }else {
-            view.showMenuDialog("创建场景群组", "该场景群组名称已存在，请尝试使用其它名称。", 0);
+            view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景群组", "该场景群组名称已存在，请尝试使用其它名称。", "重试",null);
         }
-    }
-
-    @Override
-    public void getOnlineUserFromModel() {
-        model.getOnlineUser();
-    }
-
-    @Override
-    public void receiveOnlineUser(List<User> users) {
-        onlineUser = users.get(0);
-        model.getMenu(onlineUser.getNickName());
     }
 
 }

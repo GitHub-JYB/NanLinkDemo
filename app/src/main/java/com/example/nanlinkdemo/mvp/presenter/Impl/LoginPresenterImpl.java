@@ -12,6 +12,7 @@ import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.Impl.LoginModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.LoginPresenter;
 import com.example.nanlinkdemo.mvp.view.LoginView;
+import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
@@ -24,7 +25,6 @@ public class LoginPresenterImpl implements LoginPresenter {
     private final LoginModelImpl model;
     private boolean checked = false;
     private String email, password;
-    private User onlineUser, lastUser;
 
 
     public LoginPresenterImpl(LoginView loginView) {
@@ -37,8 +37,8 @@ public class LoginPresenterImpl implements LoginPresenter {
         view.stopLoading();
         switch (mes.getCode()){
             case 200:
-                onlineUser = new User(mes.getData().getEmail(), mes.getData().getNickName(), mes.getData().getVocation(), "online", mes.getData().getToken());
-                model.queryEmail(onlineUser.getEmail());
+                MyApplication.setOnlineUser(new User(mes.getData().getEmail(), mes.getData().getNickName(), mes.getData().getVocation(), "online", mes.getData().getToken()));
+                model.queryEmail(MyApplication.getOnlineUser().getEmail());
                 break;
             case 1001:
             case 1002:
@@ -51,7 +51,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             case 1009:
             case 1010:
             case 1011:
-                view.showMistakeDialog("错误", mes.getMsg().toString(),0);
+                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", mes.getMsg().toString(),"重试", null);
                 break;
         }
     }
@@ -82,7 +82,8 @@ public class LoginPresenterImpl implements LoginPresenter {
                     SnackBarUtil.show(view, "请输入6-20位密码");
                 }else if (checked){
                     if (!MyApplication.getInstance().isOpenNetwork()){
-                        this.view.showMistakeDialog("错误", "无法连接服务器",0);
+                        this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "无法连接服务器","重试", null);
+
                         break;
                     }
                     this.view.startLoading();
@@ -94,26 +95,14 @@ public class LoginPresenterImpl implements LoginPresenter {
         }
     }
 
-    @Override
-    public void getLastUserEmail() {
-        model.getLastUser();
-    }
-
-    @Override
-    public void receiveLastUser(List<User> users) {
-        if (!users.isEmpty()){
-            lastUser = users.get(0);
-            view.updateEmail(lastUser.getEmail());
-        }
-    }
 
     @Override
     public void receiveUser(List<User> users) {
         if (!users.isEmpty()){
-            onlineUser.setId(users.get(0).getId());
-            model.updateUser(onlineUser);
+            MyApplication.getOnlineUser().setId(users.get(0).getId());
+            model.updateUser(MyApplication.getOnlineUser());
         }else {
-            model.addUser(onlineUser);
+            model.addUser(MyApplication.getOnlineUser());
         }
         ARouter.getInstance().build(ACTIVITY_URL_Main).navigation();
         view.finish();

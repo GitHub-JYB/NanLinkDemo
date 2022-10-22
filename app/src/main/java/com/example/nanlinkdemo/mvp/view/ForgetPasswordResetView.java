@@ -13,13 +13,12 @@ public interface ForgetPasswordResetView {
 
     void finish();
 
-    void showMistakeDialog(String title, String content, int type);
+    void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
 
     void stopLoading();
 
     void startLoading();
 
-    void dismissDialog();
+    void dismissMyDialog();
 
-    void showSuccessDialog(String title, String content, int type, MyDialog.NeutralOnClickListener listener);
 }

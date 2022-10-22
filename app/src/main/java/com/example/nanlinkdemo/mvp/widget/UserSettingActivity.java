@@ -15,9 +15,7 @@ import com.example.nanlinkdemo.databinding.ActivityRecycleviewBinding;
 import com.example.nanlinkdemo.mvp.adapter.SettingAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.UserSettingPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.UserSettingView;
-import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
-import com.example.nanlinkdemo.util.SpUtil;
 
 import java.util.ArrayList;
 
@@ -34,6 +32,17 @@ public class UserSettingActivity extends BaseActivity<ActivityRecycleviewBinding
         setPresenter();
         initToolbar();
         initRecyclerView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        updateRecyclerView();
+    }
+
+    @Override
+    public void updateRecyclerView() {
+        presenter.getSettingListFromModel();
     }
 
     private void initToolbar() {
@@ -61,9 +70,8 @@ public class UserSettingActivity extends BaseActivity<ActivityRecycleviewBinding
         DividerItemDecoration decoration = new DividerItemDecoration(getBaseContext(), LinearLayoutManager.VERTICAL);
         decoration.setDrawable(getBaseContext().getDrawable(R.drawable.decoration_setting));
         binding.recycleView.addItemDecoration(decoration);
-
         adapter = new SettingAdapter();
-        presenter.getSettingListFromView();
+        presenter.getSettingListFromModel();
         binding.recycleView.setAdapter(adapter);
         adapter.setOnClickListener(new SettingAdapter.OnClickListener() {
             @Override
@@ -73,36 +81,6 @@ public class UserSettingActivity extends BaseActivity<ActivityRecycleviewBinding
         });
     }
 
-    @Override
-    public void showMenuDialog(String title, String message, int type) {
-        MyDialog dialog = new MyDialog();
-        dialog.setType(type);
-        dialog.setTitle(title);
-        if (type == 0) {
-            dialog.setMessage(message);
-            dialog.setNeutralText("重试");
-            dialog.setNeutralOnClickListener(new MyDialog.NeutralOnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-        } else {
-            dialog.setNegativeText("取消");
-            dialog.setPositiveText("创建");
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setNegativeOnClickListener(new MyDialog.NegativeOnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-        }
-
-        dialog.show(getSupportFragmentManager(), "MyDialog");
-
-
-    }
 
     @Override
     public void onClick(View v) {

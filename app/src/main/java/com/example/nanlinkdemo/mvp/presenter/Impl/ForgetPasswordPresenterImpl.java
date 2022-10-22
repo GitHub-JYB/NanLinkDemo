@@ -11,6 +11,7 @@ import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.Impl.ForgetPasswordModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.ForgetPasswordPresenter;
 import com.example.nanlinkdemo.mvp.view.ForgetPasswordView;
+import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.ApiClient;
 import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SnackBarUtil;
@@ -36,7 +37,7 @@ public class ForgetPasswordPresenterImpl implements ForgetPasswordPresenter {
                 if (email.isEmpty()){
                     SnackBarUtil.show(v, "请输入邮箱");
                 }else if (!MyApplication.getInstance().isOpenNetwork()){
-                    view.showMistakeDialog("错误", "无法连接服务器",0);
+                    view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器", "重试", null);
                 }else {
                     view.startLoading();
                     model.getCode(email, Constant.Code_ResetPassword);
@@ -50,7 +51,7 @@ public class ForgetPasswordPresenterImpl implements ForgetPasswordPresenter {
                 }else if (code.isEmpty()){
                     SnackBarUtil.show(v, "请输入验证码");
                 }else if (!MyApplication.getInstance().isOpenNetwork()){
-                    view.showMistakeDialog("错误", "无法连接服务器",0);
+                    view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器", "重试", null);
                 }else {
                     view.startLoading();
                     model.verifyCode(email, code);
@@ -71,7 +72,7 @@ public class ForgetPasswordPresenterImpl implements ForgetPasswordPresenter {
                         model.startCountDown();
                         break;
                     case ApiClient.Function_VerifyCode:
-                        ARouter.getInstance().build(Constant.ACTIVITY_URL_ForgetPasswordReset).withString("email", email).withString("code", code).navigation();
+                        ARouter.getInstance().build(Constant.ACTIVITY_URL_ResetPasswordReset).withString("email", email).withString("code", code).navigation();
                         break;
                 }
                 break;
@@ -86,7 +87,7 @@ public class ForgetPasswordPresenterImpl implements ForgetPasswordPresenter {
             case 1009:
             case 1010:
             case 1011:
-                view.showMistakeDialog("错误", message.getMsg().toString(),0);
+                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", message.getMsg().toString(), "重试", null);
                 break;
         }
     }

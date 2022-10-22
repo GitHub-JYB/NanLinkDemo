@@ -11,7 +11,6 @@ import com.example.nanlinkdemo.mvp.model.UserSettingModel;
 import com.example.nanlinkdemo.mvp.presenter.Impl.UserSettingPresenterImpl;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -29,46 +28,17 @@ public class UserSettingModelImpl implements UserSettingModel {
     }
 
     @Override
-    public void getSettingList(User user) {
+    public void getSettingList() {
         settingArrayList = new ArrayList<>();
         settingArrayList.add(new Menu("编辑账号信息", R.drawable.ic_setting_expand));
         settingArrayList.add(new Menu("修改密码", R.drawable.ic_setting_expand));
         settingArrayList.add(new Menu("退出登录", R.drawable.ic_setting_expand));
 
         userArrayList = new ArrayList<>();
-        userArrayList.add(new RegisterUser(user.getNickName(), user.getEmail()));
+        userArrayList.add(new RegisterUser(MyApplication.getOnlineUser().getNickName(), MyApplication.getOnlineUser().getEmail()));
         presenter.showSettingListToView(settingArrayList, userArrayList);
     }
 
-    @Override
-    public void getLastUser() {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getUserDao()
-                .getUserFromTypeInfo("lastUser")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<User>>() {
-                    @Override
-                    public void accept(List<User> users) throws Exception {
-                        presenter.receiveLastUser(users);
-                    }
-                });
-    }
-
-    @Override
-    public void getOnlineUser() {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getUserDao()
-                .getUserFromTypeInfo("online")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<User>>() {
-                    @Override
-                    public void accept(List<User> users) throws Exception {
-                        presenter.receiveOnlineUser(users);
-                    }
-                });
-    }
 
     @Override
     public void updateUser(User user) {
@@ -80,7 +50,6 @@ public class UserSettingModelImpl implements UserSettingModel {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-                        presenter.updateOnlineUser();
                     }
                 });
     }

@@ -32,10 +32,6 @@ public interface MainPresenter {
 
     void querySceneGroupToModel(String inputText);
 
-    void addSceneToModel(String inputText);
-
-    void addSceneGroupToModel(String inputText);
-
     void updateSceneListToView();
 
     void getThreePointMenuFromModel(int type, int furtherPosition);
@@ -58,7 +54,4 @@ public interface MainPresenter {
 
     void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups);
 
-    void getOnlineUserFromModel();
-
-    void receiveOnlineUser(List<User> users);
 }

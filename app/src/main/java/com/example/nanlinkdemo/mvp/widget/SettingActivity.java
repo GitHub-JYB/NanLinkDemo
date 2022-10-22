@@ -71,37 +71,6 @@ public class SettingActivity extends BaseActivity<ActivityRecycleviewBinding> im
     }
 
     @Override
-    public void showMenuDialog(String title, String message, int type) {
-        MyDialog dialog = new MyDialog();
-        dialog.setType(type);
-        dialog.setTitle(title);
-        if (type == 0) {
-            dialog.setMessage(message);
-            dialog.setNeutralText("重试");
-            dialog.setNeutralOnClickListener(new MyDialog.NeutralOnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-        } else {
-            dialog.setNegativeText("取消");
-            dialog.setPositiveText("创建");
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setNegativeOnClickListener(new MyDialog.NegativeOnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-        }
-
-        dialog.show(getSupportFragmentManager(), "MyDialog");
-
-
-    }
-
-    @Override
     public void onClick(View v) {
         finish();
     }

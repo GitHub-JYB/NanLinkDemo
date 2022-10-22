@@ -14,10 +14,6 @@ public interface LoginPresenter {
 
     void switchOnclick(View view);
 
-    void getLastUserEmail();
-
-    void receiveLastUser(List<User> users);
-
     void receiveUser(List<User> users);
 
     void completeUpdateUser();

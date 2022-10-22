@@ -1,12 +1,16 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
+import android.view.View;
+
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.bean.RegisterUser;
 import com.example.nanlinkdemo.mvp.model.Impl.UserSettingModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.UserSettingPresenter;
 import com.example.nanlinkdemo.mvp.view.UserSettingView;
+import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
@@ -15,17 +19,12 @@ import java.util.List;
 public class UserSettingPresenterImpl implements UserSettingPresenter {
     private final UserSettingModelImpl model;
     private final UserSettingView view;
-    private User onlineUser, lastUser;
 
     public UserSettingPresenterImpl(UserSettingView view) {
         this.view = view;
         model = new UserSettingModelImpl(this);
     }
 
-    @Override
-    public void getSettingListFromView() {
-        model.getOnlineUser();
-    }
 
     @Override
     public void showSettingListToView(ArrayList<Menu> settingArrayList, ArrayList<RegisterUser> userArrayList) {
@@ -36,40 +35,34 @@ public class UserSettingPresenterImpl implements UserSettingPresenter {
     public void settingSwitch(String settingText) {
         switch (settingText){
             case "编辑账号信息":
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_EditUserInfo).navigation();
+                break;
             case "修改密码":
-                view.showMenuDialog(settingText, "该功能还没开发", 0);
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, settingText, "该功能还没开发", "重试", null);
                 break;
             case "退出登录":
-                model.getLastUser();
+                view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, settingText, "是否要退出登录?", "取消", null, "退出登录", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (MyApplication.getLastUser() != null){
+                            MyApplication.getLastUser().setType("normal");
+                            model.updateUser(MyApplication.getLastUser());
+                        }
+                        MyApplication.getOnlineUser().setType("lastUser");
+                        MyApplication.setLastUser(MyApplication.getOnlineUser());
+                        MyApplication.setOnlineUser(null);
+                        model.updateUser(MyApplication.getLastUser());
+                        ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
+                        view.finish();
+                        }
+                });
                 break;
         }
     }
 
     @Override
-    public void receiveLastUser(List<User> users) {
-        if (!users.isEmpty()){
-            lastUser = users.get(0);
-            lastUser.setType("normal");
-            model.updateUser(lastUser);
-        }else {
-            onlineUser.setType("lastUser");
-            model.updateUser(onlineUser);
-        }
-
-
-    }
-    @Override
-    public void updateOnlineUser() {
-
-        ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
-        view.finish();
+    public void getSettingListFromModel() {
+        model.getSettingList();
     }
 
-    @Override
-    public void receiveOnlineUser(List<User> users) {
-        onlineUser = users.get(0);
-        model.getSettingList(onlineUser);
-
-
-    }
 }

@@ -7,8 +7,6 @@ public interface LoginModel {
 
     void login(String email, String password);
 
-    void getLastUser();
-
     void addUser(User user);
 
     void queryEmail(String email);

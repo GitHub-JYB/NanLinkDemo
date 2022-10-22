@@ -38,8 +38,9 @@
         <activity android:name=".mvp.widget.WebViewActivity" />
         <activity android:name=".mvp.widget.SettingActivity" />
         <activity android:name=".mvp.widget.UserSettingActivity" />
-        <activity android:name=".mvp.widget.ForgetPasswordActivity" />
-        <activity android:name=".mvp.widget.ForgetPasswordResetActivity" />
+        <activity android:name=".mvp.widget.ResetPasswordActivity" />
+        <activity android:name=".mvp.widget.ResetPasswordResetActivity" />
+        <activity android:name=".mvp.widget.EditUserInfoActivity" />
     </application>
 
 </manifest>

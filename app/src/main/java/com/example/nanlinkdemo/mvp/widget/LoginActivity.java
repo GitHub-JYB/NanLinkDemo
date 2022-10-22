@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityLoginBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.LoginPresenterImpl;
@@ -47,7 +48,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         builder.setSpan(new ClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_ForgetPassword).withString("email", getEmail()).navigation();
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_ResetPassword).withString("email", getEmail()).withInt("type", ResetPasswordActivity.Type_Forget_Password).navigation();
 
             }
         }, 0, 5, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
@@ -79,7 +80,9 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     }
 
     private void initEmail() {
-        presenter.getLastUserEmail();
+        if (MyApplication.getLastUser() != null){
+            updateEmail(MyApplication.getLastUser().getEmail());
+        }
     }
 
     private void initToolbar() {

@@ -10,17 +10,22 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
-import com.example.nanlinkdemo.databinding.ActivityForgetPasswordBinding;
+import com.example.nanlinkdemo.databinding.ActivityResetPasswordBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ForgetPasswordPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.ForgetPasswordView;
 import com.example.nanlinkdemo.util.Constant;
 
 
-@Route(path = Constant.ACTIVITY_URL_ForgetPassword)
-public class ForgetPasswordActivity extends BaseActivity<ActivityForgetPasswordBinding> implements ForgetPasswordView, View.OnClickListener {
+@Route(path = Constant.ACTIVITY_URL_ResetPassword)
+public class ResetPasswordActivity extends BaseActivity<ActivityResetPasswordBinding> implements ForgetPasswordView, View.OnClickListener {
 
     @Autowired(name = "email")
     String email;
+    @Autowired(name = "type")
+    int type;
+
+    public static final int Type_Forget_Password = 0;
+    public static final int Type_Change_Password = 1;
 
     private ForgetPasswordPresenterImpl presenter;
 
@@ -29,9 +34,18 @@ public class ForgetPasswordActivity extends BaseActivity<ActivityForgetPasswordB
         super.onCreate(savedInstanceState);
         setPresenter();
         initToolbar();
-        initBtnOnClick();
+        initBtn();
         initEmail();
         initCode();
+        initLogo();
+    }
+
+    private void initLogo() {
+        if (type == Type_Forget_Password){
+            binding.loginLogo.setVisibility(View.VISIBLE);
+        }else if (type == Type_Change_Password){
+            binding.loginLogo.setVisibility(View.GONE);
+        }
     }
 
     private void initCode() {
@@ -56,18 +70,35 @@ public class ForgetPasswordActivity extends BaseActivity<ActivityForgetPasswordB
 
 
     private void initEmail() {
-        binding.email.setText(email);
+        if (type == Type_Forget_Password){
+            binding.etEmail.setVisibility(View.VISIBLE);
+            binding.tvEmail.setVisibility(View.GONE);
+            binding.etEmail.setText(email);
+        }else if (type == Type_Change_Password){
+            binding.etEmail.setVisibility(View.GONE);
+            binding.tvEmail.setVisibility(View.VISIBLE);
+            binding.tvEmail.setText(email);
+        }
     }
 
-    private void initBtnOnClick() {
+    private void initBtn() {
+        if (type == Type_Forget_Password){
+            binding.btnResetPassword.setText("重置密码");
+        }else if (type == Type_Change_Password){
+            binding.btnResetPassword.setText("修改密码");
+        }
         binding.btnGetCode.setOnClickListener(this);
         binding.btnResetPassword.setOnClickListener(this);
     }
 
     private void initToolbar() {
-        binding.toolbar.setTitle("重置密码");
-        binding.toolbar.setTitleType(Typeface.BOLD);
-        binding.toolbar.setTitleColor(R.color.blue);
+        if (type == Type_Forget_Password){
+            binding.toolbar.setTitle("重置密码");
+            binding.toolbar.setTitleType(Typeface.BOLD);
+            binding.toolbar.setTitleColor(R.color.blue);
+        }else if (type == Type_Change_Password){
+            binding.toolbar.setTitle("修改密码");
+        }
         binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
         binding.toolbar.setLeftBtnOnClickListener(this);
     }
@@ -78,7 +109,11 @@ public class ForgetPasswordActivity extends BaseActivity<ActivityForgetPasswordB
 
     @Override
     public String getEmail() {
-        return binding.email.getText().toString().trim();
+        if (type == Type_Forget_Password){
+            return binding.etEmail.getText().toString().trim();
+        }else {
+            return binding.tvEmail.getText().toString().trim();
+        }
     }
 
     @Override

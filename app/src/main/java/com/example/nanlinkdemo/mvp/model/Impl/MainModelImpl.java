@@ -183,20 +183,5 @@ public class MainModelImpl implements MainModel {
                 });
     }
 
-    @Override
-    public void getOnlineUser() {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getUserDao()
-                .getUserFromTypeInfo("online")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<User>>() {
-                    @Override
-                    public void accept(List<User> users) throws Exception {
-                        presenter.receiveOnlineUser(users);
-                    }
-                });
-    }
-
 
 }

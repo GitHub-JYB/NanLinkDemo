@@ -2,7 +2,6 @@ package com.example.nanlinkdemo.mvp.widget;
 
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
-import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.databinding.ActivityMainBinding;
@@ -25,9 +23,7 @@ import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.ui.SettingDialog;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 import com.example.nanlinkdemo.util.Constant;
-import com.example.nanlinkdemo.util.DateUtil;
 import com.example.nanlinkdemo.util.SnackBarUtil;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +51,25 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         initRecycleView();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        updateMenu();
+        updateRecycleView();
+
+    }
+
+    @Override
+    public void updateRecycleView() {
+        presenter.getSceneListFromModel();
+    }
+
+
+    @Override
+    public void updateMenu() {
+        presenter.getMenuFromModel();
+    }
+
     private void initRecycleView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -63,7 +78,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         decoration.setDrawable(getDrawable(R.drawable.decoration_scene));
         binding.recycleView.addItemDecoration(decoration);
         sceneAdapter = new SceneAdapter();
-        updateSceneList();
         binding.recycleView.setAdapter(sceneAdapter);
         sceneAdapter.setMenuOnClickListener(new SceneAdapter.MenuOnClickListener() {
             @Override
@@ -105,7 +119,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         binding.recyclerViewMenu.addItemDecoration(decoration);
 
         menuAdapter = new MenuAdapter();
-        presenter.getMenuFromModel();
         binding.recyclerViewMenu.setAdapter(menuAdapter);
         menuAdapter.setOnClickListener(new MenuAdapter.OnClickListener() {
             @Override
@@ -143,11 +156,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         this.sceneList = sceneList;
         this.sceneGroupList = sceneGroupList;
         sceneAdapter.setData(sceneList, sceneGroupList);
-    }
-
-    @Override
-    public void updateSceneList() {
-        presenter.getSceneListFromModel();
     }
 
     @Override

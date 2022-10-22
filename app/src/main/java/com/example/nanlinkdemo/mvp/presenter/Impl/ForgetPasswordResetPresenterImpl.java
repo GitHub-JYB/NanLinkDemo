@@ -48,10 +48,10 @@ public class ForgetPasswordResetPresenterImpl {
         view.stopLoading();
         switch (message.getCode()) {
             case 200:
-                view.showSuccessDialog("重置密码", "重置密码成功！\n您可使用新密码进行登录", 0, new MyDialog.NeutralOnClickListener() {
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn,"重置密码", "重置密码成功！\n您可使用新密码进行登录", "完成", new MyDialog.NeutralOnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        view.dismissDialog();
+                        view.dismissMyDialog();
                         ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
                         view.finish();
                     }
@@ -68,7 +68,7 @@ public class ForgetPasswordResetPresenterImpl {
             case 1009:
             case 1010:
             case 1011:
-                view.showMistakeDialog("错误", message.getMsg().toString(),0);
+                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", message.getMsg().toString(),"重试", null);
                 break;
         }
     }

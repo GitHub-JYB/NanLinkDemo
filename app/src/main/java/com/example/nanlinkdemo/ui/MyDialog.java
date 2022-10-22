@@ -38,7 +38,7 @@ public class MyDialog extends DialogFragment {
     public static final int Write_TwoBtn_WarningTitle_WarningTwoBtn = 16;
 
     private CharSequence title, message, neutralText, positiveText, negativeText, hintInputText;
-    private int type = 0;
+    private int type;
     private NegativeOnClickListener negativeListener = new NegativeOnClickListener() {
         @Override
         public void onClick(View view) {
@@ -80,8 +80,8 @@ public class MyDialog extends DialogFragment {
         if (negativeListener != null){
             this.negativeListener = negativeListener;
         }
-        this.positiveText = negativeText;
-        if (negativeListener != null){
+        this.positiveText = positiveText;
+        if (positiveListener != null){
             this.positiveListener = positiveListener;
         }
     }

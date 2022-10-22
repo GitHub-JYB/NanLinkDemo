@@ -35,10 +35,10 @@ public class RegisterPresenterImpl implements RegisterPresenter {
             case 200:
                 switch (function){
                     case ApiClient.Function_Register:
-                        view.showSuccessDialog("注册", "注册成功！\n您可使用该邮箱进行登录", 0, new MyDialog.NeutralOnClickListener() {
+                        view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn,"注册", "注册成功！\n您可使用该邮箱进行登录", "完成", new MyDialog.NeutralOnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                view.dismissDialog();
+                                view.dismissMyDialog();
                                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
                                 view.finish();
                             }
@@ -61,7 +61,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
             case 1009:
             case 1010:
             case 1011:
-                view.showMistakeDialog("错误", mes.getMsg().toString(),0);
+                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", mes.getMsg().toString(),"重试", null);
                 break;
         }
     }
@@ -111,7 +111,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
 
                 }else if (checked){
                     if (!MyApplication.getInstance().isOpenNetwork()){
-                        this.view.showMistakeDialog("错误", "无法连接服务器",0);
+                        this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "无法连接服务器","重试", null);
                         break;
                     }
                     this.view.startLoading();
@@ -126,7 +126,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
                 if (email.isEmpty()){
                     SnackBarUtil.show(view, "请输入邮箱");
                 }else if (!MyApplication.getInstance().isOpenNetwork()){
-                    this.view.showMistakeDialog("错误", "无法连接服务器",0);
+                    this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器","重试", null);
                 }else {
                     this.view.startLoading();
                     model.getCode(email, Constant.Code_Register);

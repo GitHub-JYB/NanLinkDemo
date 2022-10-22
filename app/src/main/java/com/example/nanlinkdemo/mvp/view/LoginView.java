@@ -1,7 +1,7 @@
 package com.example.nanlinkdemo.mvp.view;
 
 
-
+import com.example.nanlinkdemo.ui.MyDialog;
 
 public interface LoginView {
 
@@ -15,7 +15,7 @@ public interface LoginView {
 
     void finish();
 
-    void showMistakeDialog(String title, String message, int type);
+    void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
 
     void stopLoading();
 

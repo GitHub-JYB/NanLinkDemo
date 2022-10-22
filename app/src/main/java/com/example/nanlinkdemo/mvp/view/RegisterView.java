@@ -29,11 +29,10 @@ public interface RegisterView {
 
     void updatedRegisterBtnBg(int res);
 
-    void showMistakeDialog(String title, String content, int type);
+    void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
 
-    void dismissDialog();
+    void dismissMyDialog();
 
-    void showSuccessDialog(String title, String content, int type, MyDialog.NeutralOnClickListener listener);
 
     void updateGetCodeBtnText(String text);
 }

@@ -43,7 +43,7 @@ public class MyToolbar extends RelativeLayout {
 
         // 动态设置statusBar的高度
         LinearLayout.LayoutParams lp= (LinearLayout.LayoutParams) binding.statusBar.getLayoutParams();
-        lp.height= MyApplication.statusHight;
+        lp.height= MyApplication.statusHigh;
         binding.statusBar.setLayoutParams(lp);
     }
 

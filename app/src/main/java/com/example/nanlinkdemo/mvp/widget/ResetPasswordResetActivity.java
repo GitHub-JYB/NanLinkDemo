@@ -10,14 +10,14 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
-import com.example.nanlinkdemo.databinding.ActivityForgetPasswordResetBinding;
+import com.example.nanlinkdemo.databinding.ActivityResetPasswordResetBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ForgetPasswordResetPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.ForgetPasswordResetView;
 import com.example.nanlinkdemo.util.Constant;
 
 
-@Route(path = Constant.ACTIVITY_URL_ForgetPasswordReset)
-public class ForgetPasswordResetActivity extends BaseActivity<ActivityForgetPasswordResetBinding> implements ForgetPasswordResetView, View.OnClickListener {
+@Route(path = Constant.ACTIVITY_URL_ResetPasswordReset)
+public class ResetPasswordResetActivity extends BaseActivity<ActivityResetPasswordResetBinding> implements ForgetPasswordResetView, View.OnClickListener {
 
     @Autowired(name = "email")
     String email;

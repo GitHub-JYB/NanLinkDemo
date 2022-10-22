@@ -8,7 +8,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-
+import com.example.nanlinkdemo.DB.bean.User;
 
 
 public class MyApplication extends Application {
@@ -16,10 +16,26 @@ public class MyApplication extends Application {
     private static MyApplication instance;
     public static int widthPixels;
     public static int heightPixels;
-    public static int statusHight;
+    public static int statusHigh;
     private static float scale;
     private static String versionName;
+    private static User onlineUser, lastUser;
 
+    public static User getOnlineUser() {
+        return onlineUser;
+    }
+
+    public static void setOnlineUser(User onlineUser) {
+        MyApplication.onlineUser = onlineUser;
+    }
+
+    public static User getLastUser() {
+        return lastUser;
+    }
+
+    public static void setLastUser(User lastUser) {
+        MyApplication.lastUser = lastUser;
+    }
 
 
     @Override
@@ -33,7 +49,7 @@ public class MyApplication extends Application {
         widthPixels = density.widthPixels;
         heightPixels = density.heightPixels;
         scale = density.density;
-        statusHight = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height","dimen","android"));
+        statusHigh = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height","dimen","android"));
         try {
             versionName = instance.getPackageManager().getPackageInfo("com.example.nanlinkdemo", 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {

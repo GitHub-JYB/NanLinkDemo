@@ -13,8 +13,11 @@ public class Constant {
     public static final String ACTIVITY_URL_Register = "/widget/RegisterActivity";
     public static final String ACTIVITY_URL_Setting = "/widget/SettingActivity";
     public static final String ACTIVITY_URL_UserSetting = "/widget/UserSettingActivity";
-    public static final String ACTIVITY_URL_ForgetPassword = "/widget/ForgetPasswordActivity";
-    public static final String ACTIVITY_URL_ForgetPasswordReset = "/widget/ForgetPasswordResetActivity";
+    public static final String ACTIVITY_URL_ResetPassword = "/widget/ResetPasswordActivity";
+    public static final String ACTIVITY_URL_ResetPasswordReset = "/widget/ResetPasswordResetActivity";
+    public static final String ACTIVITY_URL_EditUserInfo = "/widget/EditUserInfoActivity";
+
+
 
 
     public static final int Code_Register = 0;

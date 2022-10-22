@@ -5,6 +5,7 @@ import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.Impl.SettingModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.SettingPresenter;
 import com.example.nanlinkdemo.mvp.view.SettingView;
+import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class SettingPresenterImpl implements SettingPresenter {
             case "语言设置":
             case "意见反馈":
             case "防止休眠":
-                view.showMenuDialog(settingText, "该功能还没开发", 0);
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, settingText, "该功能还没开发", "重试", null);
                 break;
         }
     }

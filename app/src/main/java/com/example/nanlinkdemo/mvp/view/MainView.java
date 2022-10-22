@@ -10,6 +10,10 @@ import java.util.List;
 
 public interface MainView {
 
+    void updateRecycleView();
+
+    void updateMenu();
+
     void showMenu(ArrayList<Menu> menuArrayList);
 
     void openDrawLayout();
@@ -21,8 +25,6 @@ public interface MainView {
     void showMyDialog(int type, String title, String message, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
 
     void showSceneList(List<Scene> sceneList, List<SceneGroup> sceneGroupList);
-
-    void updateSceneList();
 
     void showThreePointMenu(ArrayList<String> threePointList, int type, int position);
 
@@ -37,4 +39,8 @@ public interface MainView {
     void deleteSceneGroup(int furtherPosition);
 
     void showSnack(CharSequence message);
+
+    void startLoading();
+
+    void stopLoading();
 }

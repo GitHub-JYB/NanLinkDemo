@@ -1,6 +1,7 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.Impl.SplashModelImpl;
@@ -13,7 +14,6 @@ import java.util.List;
 public class SplashPresenterImpl implements SplashPresenter {
     private final SplashView view;
     private final SplashModelImpl model;
-    private User onlineUser;
 
     public SplashPresenterImpl(SplashView view) {
         this.view = view;
@@ -33,8 +33,8 @@ public class SplashPresenterImpl implements SplashPresenter {
     @Override
     public void receiveOnlineUser(List<User> users) {
         if (!users.isEmpty()){
-            onlineUser = users.get(0);
-            updateUser(onlineUser);
+            MyApplication.setOnlineUser(users.get(0));
+            model.getUserInfo(MyApplication.getOnlineUser().getToken());
         }else {
             ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
             view.finish();
@@ -45,9 +45,9 @@ public class SplashPresenterImpl implements SplashPresenter {
     public void sendMesToView(Message message) {
         switch (message.getCode()) {
             case 200:
-                onlineUser.setNickName(message.getData().getNickName());
-                onlineUser.setVocation(message.getData().getVocation());
-                model.updateUser(onlineUser);
+                MyApplication.getOnlineUser().setNickName(message.getData().getNickName());
+                MyApplication.getOnlineUser().setVocation(message.getData().getVocation());
+                model.updateUser(MyApplication.getOnlineUser());
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
                 view.finish();
                 break;
@@ -65,9 +65,5 @@ public class SplashPresenterImpl implements SplashPresenter {
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
                 break;
         }
-    }
-
-    private void updateUser(User user) {
-        model.getUserInfo(user.getToken());
     }
 }

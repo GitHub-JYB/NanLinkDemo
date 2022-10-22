@@ -24,5 +24,4 @@ public interface MainModel {
 
     void querySceneGroup(String inputText);
 
-    void getOnlineUser();
 }
