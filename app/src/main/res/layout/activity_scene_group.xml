@@ -39,26 +39,15 @@
         android:id="@+id/navigation"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
         android:background="@color/nav">
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_menu"
-            android:layout_marginTop="9dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"/>
-
-        <TextView
-            android:id="@+id/version"
-            android:textSize="12sp"
-            android:textColor="@color/unable"
-            android:layout_width="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="17dp"
-            android:layout_height="wrap_content"/>
 
 
     </RelativeLayout>

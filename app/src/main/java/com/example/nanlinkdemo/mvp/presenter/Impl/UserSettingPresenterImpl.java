@@ -53,6 +53,7 @@ public class UserSettingPresenterImpl implements UserSettingPresenter {
                         MyApplication.setLastUser(MyApplication.getOnlineUser());
                         MyApplication.setOnlineUser(null);
                         model.updateUser(MyApplication.getLastUser());
+
                         ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
                         view.finish();
                         }

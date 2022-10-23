@@ -1,12 +1,13 @@
 package com.example.nanlinkdemo.mvp.widget;
 
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.os.Bundle;
-import android.view.View;
-
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Scene;
@@ -14,11 +15,14 @@ import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.databinding.ActivityMainBinding;
+import com.example.nanlinkdemo.databinding.ActivitySceneGroupBinding;
 import com.example.nanlinkdemo.mvp.adapter.MenuAdapter;
 import com.example.nanlinkdemo.mvp.adapter.SceneAdapter;
 import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
+import com.example.nanlinkdemo.mvp.presenter.Impl.SceneGroupPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.MainView;
+import com.example.nanlinkdemo.mvp.view.SceneGroupView;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.ui.SettingDialog;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
@@ -28,16 +32,18 @@ import com.example.nanlinkdemo.util.SnackBarUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(path = Constant.ACTIVITY_URL_Main)
-public class MainActivity extends BaseActivity<ActivityMainBinding> implements MainView, View.OnClickListener {
+@Route(path = Constant.ACTIVITY_URL_SceneGroup)
+public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> implements SceneGroupView, View.OnClickListener {
 
 
-    private MainPresenterImpl presenter;
+    @Autowired(name = "sceneGroup")
+    SceneGroup sceneGroup;
+
+    private SceneGroupPresenterImpl presenter;
     private MenuAdapter menuAdapter;
     private SceneAdapter sceneAdapter;
     private SettingDialog settingDialog;
     private List<Scene> sceneList;
-    private List<SceneGroup> sceneGroupList;
     private MyDialog dialog;
 
 
@@ -98,19 +104,20 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     }
 
     private void initToolbar() {
-        binding.toolbar.setTitle("场景列表");
-        binding.toolbar.setLeftBtnIcon(R.drawable.ic_menu);
-        binding.toolbar.setRightBtnIcon(R.drawable.ic_search);
+        binding.toolbar.setTitle(sceneGroup.getName());
+        binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
+        binding.toolbar.setRightSecondBtnIcon(R.drawable.ic_search);
+        binding.toolbar.setRightBtnIcon(R.drawable.ic_menu);
         binding.toolbar.setLeftBtnOnClickListener(this);
+        binding.toolbar.setRightSecondBtnOnClickListener(this);
         binding.toolbar.setRightBtnOnClickListener(this);
     }
 
     private void setPresenter() {
-        presenter = new MainPresenterImpl(this);
+        presenter = new SceneGroupPresenterImpl(this);
     }
 
     private void initMenu() {
-        binding.version.setText("Version " + MyApplication.getVersion());
         binding.recyclerViewMenu.setLayoutManager(new LinearLayoutManager(this));
 
         // 设置分割线格式并添加
@@ -142,7 +149,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     public void openDrawLayout() {
-        binding.drawerLayout.openDrawer(GravityCompat.START);
+        binding.drawerLayout.openDrawer(GravityCompat.END);
     }
 
     @Override
@@ -154,7 +161,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     @Override
     public void showSceneList(List<Scene> sceneList, List<SceneGroup> sceneGroupList) {
         this.sceneList = sceneList;
-        this.sceneGroupList = sceneGroupList;
         sceneAdapter.setData(sceneList, sceneGroupList);
     }
 

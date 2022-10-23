@@ -15,11 +15,11 @@ import io.reactivex.Single;
 @Dao
 public interface SceneGroupDao {
 
-    @Query("select * from sceneGroup")
-    Single<List<SceneGroup>> getAllSceneInfo();
+    @Query("select * from sceneGroup where email = :email")
+    Single<List<SceneGroup>> getAllSceneInfo(String email);
 
-    @Query("select * from sceneGroup where name = :name")
-    Single<List<SceneGroup>> getSceneGroupInfo(String name);
+    @Query("select * from sceneGroup where email = :email AND name = :name")
+    Single<List<SceneGroup>> getSceneGroupInfo(String email, String name);
 
     @Insert
     Single<Long> insert(SceneGroup sceneGroup);

@@ -21,17 +21,18 @@ public class Scene {
     private Long createdDate;
     @ColumnInfo
     private Long modifiedDate;
-    @ColumnInfo(name = "sceneGroup",typeAffinity = ColumnInfo.TEXT)
+    @ColumnInfo
     private String sceneGroup;
 
 
-    public Scene(String name, int fixtureNum, String remark, Long createdDate, Long modifiedDate){
+    public Scene(String email, String name, int fixtureNum, String remark, Long createdDate, Long modifiedDate){
+        this.email = email;
         this.name = name;
         this.fixtureNum = fixtureNum;
         this.remark = remark;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
-
+        this.sceneGroup = "";
     }
 
     public int getFixtureNum() {

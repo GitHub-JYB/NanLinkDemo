@@ -1,6 +1,8 @@
 package com.example.nanlinkdemo.mvp.view;
 
 
+import android.os.Bundle;
+
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.ui.MyDialog;
 
@@ -13,4 +15,6 @@ public interface SettingView {
 
     void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
 
-    }
+    void finish();
+
+}

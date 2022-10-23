@@ -27,7 +27,7 @@ public class SplashPresenterImpl implements SplashPresenter {
 
     @Override
     public void endCountDown() {
-        model.getOnlineUser();
+        model.getLastUser();
     }
 
     @Override
@@ -65,5 +65,14 @@ public class SplashPresenterImpl implements SplashPresenter {
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
                 break;
         }
+    }
+
+    @Override
+    public void receiveLastUser(List<User> users) {
+        if (!users.isEmpty()){
+            MyApplication.setLastUser(users.get(0));
+        }
+        model.getOnlineUser();
+
     }
 }

@@ -52,7 +52,7 @@ public class MainModelImpl implements MainModel {
     public void getSceneList() {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .getAllSceneInfo()
+                .getOnlineSceneInfo(MyApplication.getOnlineUser().getEmail(), "")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<Scene>>() {
@@ -68,7 +68,7 @@ public class MainModelImpl implements MainModel {
     public void getSceneGroupList() {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneGroupDao()
-                .getAllSceneInfo()
+                .getAllSceneInfo(MyApplication.getOnlineUser().getEmail())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<SceneGroup>>() {
@@ -112,7 +112,7 @@ public class MainModelImpl implements MainModel {
 
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .insert(new Scene(inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()))
+                .insert(new Scene(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -127,7 +127,7 @@ public class MainModelImpl implements MainModel {
     public void addSceneGroup(String inputText) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneGroupDao()
-                .insert(new SceneGroup(inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()))
+                .insert(new SceneGroup(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -157,7 +157,7 @@ public class MainModelImpl implements MainModel {
     public void queryScene(String inputText) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .getSceneInfo(inputText)
+                .getSceneInfo(MyApplication.getOnlineUser().getEmail(), inputText)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Scene>>() {
@@ -172,7 +172,7 @@ public class MainModelImpl implements MainModel {
     public void querySceneGroup(String inputText) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneGroupDao()
-                .getSceneGroupInfo(inputText)
+                .getSceneGroupInfo(MyApplication.getOnlineUser().getEmail(), inputText)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<SceneGroup>>() {

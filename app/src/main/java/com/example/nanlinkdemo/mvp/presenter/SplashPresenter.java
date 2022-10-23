@@ -13,4 +13,6 @@ public interface SplashPresenter {
     void receiveOnlineUser(List<User> users);
 
     void sendMesToView(Message message);
+
+    void receiveLastUser(List<User> users);
 }

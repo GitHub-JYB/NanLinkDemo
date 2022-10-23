@@ -1,6 +1,7 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.Impl.SettingModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.SettingPresenter;
@@ -36,9 +37,16 @@ public class SettingPresenterImpl implements SettingPresenter {
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_UserSetting).navigation();
                 break;
             case "语言设置":
-            case "意见反馈":
-            case "防止休眠":
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, settingText, "该功能还没开发", "重试", null);
+                break;
+            case "意见反馈":
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Feedback).navigation();
+                break;
+            case "防止休眠":
+                MyApplication.getOnlineUser().setKeepScreenOn(!MyApplication.getOnlineUser().isKeepScreenOn());
+                model.updateUser(MyApplication.getOnlineUser());
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Setting).navigation();
+                view.finish();
                 break;
         }
     }

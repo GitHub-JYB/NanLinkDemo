@@ -10,4 +10,6 @@ public interface SplashModel {
     void getUserInfo(String token);
 
     void updateUser(User user);
+
+    void getLastUser();
 }

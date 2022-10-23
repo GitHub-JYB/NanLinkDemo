@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme" >
+
+
+	<com.example.nanlinkdemo.ui.MyToolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/toolbar"
+		android:layout_marginTop="27dp"
+		android:layout_marginStart="31dp"
+		android:layout_marginEnd="30dp"
+		android:text="分享您的意见或反馈帮助我们改进产品!"
+		android:textColor="@color/login_hintText"
+		android:textSize="15sp"
+		android:theme="@style/Theme.NanLinkDemo"/>
+
+	<EditText
+		android:id="@+id/feedback"
+		android:layout_width="match_parent"
+		android:layout_height="224dp"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/toolbar"
+		android:layout_marginTop="57dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="20dp"
+		android:paddingBottom="11dp"
+		android:paddingTop="10dp"
+		android:paddingStart="11dp"
+		android:paddingEnd="10dp"
+		android:shadowColor="@color/shadowColor"
+		android:shadowDx="0"
+		android:shadowDy="3"
+		android:shadowRadius="3"
+		android:gravity="top"
+		android:background="@drawable/bg_et_feedback"
+		android:textCursorDrawable="@null"
+		android:textColor="@color/white"
+		android:textSize="15sp" />
+
+
+
+	<Button
+		android:id="@+id/btn_submit"
+		android:layout_width="182dp"
+		android:layout_height="40dp"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/feedback"
+		android:layout_marginTop="30dp"
+		android:clickable="false"
+		android:background="@drawable/bg_unable_btn_login"
+		android:text="发送"
+		android:textSize="17sp"
+		android:textColor="@color/white" />
+
+
+</RelativeLayout>

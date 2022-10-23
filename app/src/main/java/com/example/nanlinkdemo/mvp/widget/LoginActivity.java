@@ -8,6 +8,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 
 
@@ -36,6 +37,12 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     protected void onStart() {
         super.onStart();
         initEmail();
+    }
+
+    private void initEmail() {
+        if (MyApplication.getLastUser() != null){
+            updateEmail(MyApplication.getLastUser().getEmail());
+        }
     }
 
     @Override
@@ -82,10 +89,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         builder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white)), 0, 30, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         binding.tvUserAgreementPrivacyPolicy.setText(builder);
         binding.tvUserAgreementPrivacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());
-    }
-
-    private void initEmail() {
-        presenter.getLastUserFromModel();
     }
 
     private void initToolbar() {

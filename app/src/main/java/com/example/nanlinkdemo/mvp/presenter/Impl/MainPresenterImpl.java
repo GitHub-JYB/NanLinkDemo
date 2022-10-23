@@ -83,11 +83,26 @@ public class MainPresenterImpl implements MainPresenter {
         switch (v.getId()) {
             case R.id.toolbar_left_btn:
                 view.openDrawLayout();
+                break;
+            case R.id.toolbar_right_btn:
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "搜索", "该功能还没开发", "重试", null);
+                break;
         }
     }
 
     @Override
     public void sceneListSwitch(int position) {
+        if (sceneList.size() == 0){
+            if (position != 0){
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "场景列表点击", sceneGroupList.get(position - 1).getName(), "重试", null);
+            }
+        }else {
+            if (position < sceneList.size()){
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "场景列表点击", sceneList.get(position).getName(), "重试", null);
+            }else if (position > sceneList.size()){
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "场景列表点击", sceneGroupList.get(position - sceneList.size() - 1).getName(), "重试", null);
+            }
+        }
 
     }
 

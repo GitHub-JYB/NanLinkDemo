@@ -32,6 +32,7 @@ public class UserSettingActivity extends BaseActivity<ActivityRecycleviewBinding
         setPresenter();
         initToolbar();
         initRecyclerView();
+
     }
 
     @Override

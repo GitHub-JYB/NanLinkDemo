@@ -41,6 +41,8 @@
         <activity android:name=".mvp.widget.ResetPasswordActivity" />
         <activity android:name=".mvp.widget.ResetPasswordResetActivity" />
         <activity android:name=".mvp.widget.EditUserInfoActivity" />
+        <activity android:name=".mvp.widget.FeedbackActivity" />
+        <activity android:name=".mvp.widget.SceneGroupActivity" />
     </application>
 
 </manifest>

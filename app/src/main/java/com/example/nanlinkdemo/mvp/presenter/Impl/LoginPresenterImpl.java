@@ -84,10 +84,11 @@ public class LoginPresenterImpl implements LoginPresenter {
                     if (!MyApplication.getInstance().isOpenNetwork()){
                         this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "无法连接服务器","重试", null);
 
-                        break;
+
+                    }else {
+                        this.view.startLoading();
+                        model.login(email, password);
                     }
-                    this.view.startLoading();
-                    model.login(email, password);
                 }else {
                     SnackBarUtil.show(view,"请勾选用户协议");
                 }
@@ -100,6 +101,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void receiveUser(List<User> users) {
         if (!users.isEmpty()){
             MyApplication.getOnlineUser().setId(users.get(0).getId());
+            MyApplication.getOnlineUser().setKeepScreenOn(users.get(0).isKeepScreenOn());
             model.updateUser(MyApplication.getOnlineUser());
         }else {
             model.addUser(MyApplication.getOnlineUser());
@@ -108,27 +110,5 @@ public class LoginPresenterImpl implements LoginPresenter {
         view.finish();
     }
 
-    @Override
-    public void completeUpdateUser() {
-
-    }
-
-    @Override
-    public void completeAddUser() {
-
-    }
-
-    @Override
-    public void getLastUserFromModel() {
-        model.getLastUser();
-    }
-
-    @Override
-    public void receiveLastUser(List<User> users) {
-        if (!users.isEmpty()){
-            MyApplication.setLastUser(users.get(0));
-            view.updateEmail(MyApplication.getLastUser().getEmail());
-        }
-    }
 
 }

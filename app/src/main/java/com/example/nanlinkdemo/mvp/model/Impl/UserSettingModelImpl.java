@@ -1,6 +1,8 @@
 package com.example.nanlinkdemo.mvp.model.Impl;
 
 
+import android.util.Log;
+
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
 import com.example.nanlinkdemo.DB.bean.User;

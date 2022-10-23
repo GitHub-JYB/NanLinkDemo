@@ -57,6 +57,11 @@ public class MyToolbar extends RelativeLayout {
         binding.toolbarRightBtn.setOnClickListener(li);
     }
 
+    // 设置右侧第二个按键点击事件
+    public void setRightSecondBtnOnClickListener(OnClickListener li){
+        binding.toolbarRightSecondBtn.setOnClickListener(li);
+    }
+
     // 设置标题
     public void setTitle(String title){
         binding.toolbarTitle.setText(title);
@@ -92,6 +97,17 @@ public class MyToolbar extends RelativeLayout {
     // 隐藏右侧按键图标
     public void hideRightBtnIcon(){
         binding.toolbarRightBtn.setVisibility(GONE);
+    }
+
+    // 设置右侧第二个按键图标
+    public void setRightSecondBtnIcon(int resId){
+        binding.toolbarRightSecondBtn.setImageResource(resId);
+        binding.toolbarRightSecondBtn.setVisibility(VISIBLE);
+    }
+
+    // 隐藏右侧第二个按键图标
+    public void hideRightSecondBtnIcon(){
+        binding.toolbarRightSecondBtn.setVisibility(GONE);
     }
 
 }

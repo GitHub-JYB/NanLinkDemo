@@ -19,8 +19,10 @@ public class User {
     private String vocation;
     @ColumnInfo
     private String token;
-    @ColumnInfo(name = "type",typeAffinity = ColumnInfo.TEXT, defaultValue = "online")
+    @ColumnInfo
     private String type;
+    @ColumnInfo
+    private boolean isKeepScreenOn;
 
 
     public User(String email, String nickName, String vocation, String type, String token){
@@ -29,6 +31,7 @@ public class User {
         this.vocation = vocation;
         this.type = type;
         this.token = token;
+        this.isKeepScreenOn = false;
     }
 
     public String getEmail() {
@@ -77,5 +80,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isKeepScreenOn() {
+        return isKeepScreenOn;
+    }
+
+    public void setKeepScreenOn(boolean keepScreenOn) {
+        isKeepScreenOn = keepScreenOn;
     }
 }

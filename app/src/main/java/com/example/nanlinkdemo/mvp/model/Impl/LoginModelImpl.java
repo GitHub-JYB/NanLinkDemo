@@ -56,7 +56,6 @@ public class LoginModelImpl implements LoginModel {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        presenter.completeAddUser();
                     }
                 });
     }
@@ -86,22 +85,6 @@ public class LoginModelImpl implements LoginModel {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-                        presenter.completeUpdateUser();
-                    }
-                });
-    }
-
-    @Override
-    public void getLastUser() {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getUserDao()
-                .getUserFromTypeInfo("lastUser")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<User>>() {
-                    @Override
-                    public void accept(List<User> users) throws Exception {
-                        presenter.receiveLastUser(users);
                     }
                 });
     }

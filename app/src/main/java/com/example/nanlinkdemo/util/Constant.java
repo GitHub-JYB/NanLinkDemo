@@ -16,6 +16,8 @@ public class Constant {
     public static final String ACTIVITY_URL_ResetPassword = "/widget/ResetPasswordActivity";
     public static final String ACTIVITY_URL_ResetPasswordReset = "/widget/ResetPasswordResetActivity";
     public static final String ACTIVITY_URL_EditUserInfo = "/widget/EditUserInfoActivity";
+    public static final String ACTIVITY_URL_Feedback = "/widget/FeedbackActivity";
+    public static final String ACTIVITY_URL_SceneGroup = "/widget/SceneGroupActivity";
 
 
 

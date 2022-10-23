@@ -24,7 +24,8 @@ public class SceneGroup {
 
 
 
-    public SceneGroup(String name, int sceneNum, String remark, Long createdDate, Long modifiedDate){
+    public SceneGroup(String email, String name, int sceneNum, String remark, Long createdDate, Long modifiedDate){
+        this.email = email;
         this.name = name;
         this.sceneNum = sceneNum;
         this.remark = remark;

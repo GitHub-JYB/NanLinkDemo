@@ -13,5 +13,4 @@ public interface LoginModel {
 
     void updateUser(User user);
 
-    void getLastUser();
 }

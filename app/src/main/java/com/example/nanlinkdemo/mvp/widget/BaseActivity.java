@@ -1,5 +1,7 @@
 package com.example.nanlinkdemo.mvp.widget;
 
+import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
 
@@ -11,17 +13,35 @@ import android.view.View;
 
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.ui.LoadingDialog;
 import com.example.nanlinkdemo.ui.MyDialog;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-public class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
+public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
 
     protected T binding;
     private LoadingDialog loadingDialog;
     private MyDialog myDialog;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        getWindow().setFlags(FLAG_KEEP_SCREEN_ON, FLAG_KEEP_SCREEN_ON);
+        if (MyApplication.getOnlineUser() != null){
+            if (MyApplication.getOnlineUser().isKeepScreenOn()){
+                getWindow().addFlags(FLAG_KEEP_SCREEN_ON);
+            }
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getWindow().clearFlags(FLAG_KEEP_SCREEN_ON);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +64,7 @@ public class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
 
 
         setContentView(binding.getRoot());
+        overridePendingTransition(0, 0);
     }
 
 
@@ -81,6 +102,5 @@ public class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
     public void dismissMyDialog(){
         myDialog.dismiss();
     }
-
 
 }

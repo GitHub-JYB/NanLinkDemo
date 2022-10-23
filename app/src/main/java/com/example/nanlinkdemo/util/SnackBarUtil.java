@@ -1,14 +1,10 @@
 package com.example.nanlinkdemo.util;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-import com.example.nanlinkdemo.R;
 import com.google.android.material.snackbar.Snackbar;
 
 public class SnackBarUtil {
