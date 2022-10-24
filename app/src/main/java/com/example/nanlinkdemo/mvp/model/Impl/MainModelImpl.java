@@ -8,7 +8,6 @@ import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
-import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.MainModel;
@@ -82,14 +81,14 @@ public class MainModelImpl implements MainModel {
 
 
     @Override
-    public void getThreePointMenu(int type, int furtherPosition) {
+    public void getThreePointMenu(int scenePosition) {
         ArrayList<String> threePointList = new ArrayList<>();
         threePointList.add("设置");
         threePointList.add("重命名");
         threePointList.add("编辑备注");
         threePointList.add("删除");
         threePointList.add("取消");
-        presenter.showThreePointMenuToView(threePointList, type, furtherPosition);
+        presenter.receiveThreePointMenu(threePointList, scenePosition);
     }
 
     @Override
@@ -108,11 +107,11 @@ public class MainModelImpl implements MainModel {
     }
 
     @Override
-    public void addScene(String inputText) {
+    public void addScene(Scene scene) {
 
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .insert(new Scene(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()))
+                .insert(scene)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -124,10 +123,10 @@ public class MainModelImpl implements MainModel {
     }
 
     @Override
-    public void addSceneGroup(String inputText) {
+    public void addSceneGroup(SceneGroup sceneGroup) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneGroupDao()
-                .insert(new SceneGroup(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()))
+                .insert(sceneGroup)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {

@@ -1,24 +1,21 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 
-import static com.example.nanlinkdemo.mvp.adapter.SceneAdapter.TYPE_SCENE;
-import static com.example.nanlinkdemo.mvp.adapter.SceneAdapter.TYPE_SCENE_GROUP;
-
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
-import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
+import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 import com.example.nanlinkdemo.mvp.model.Impl.MainModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.MainPresenter;
 import com.example.nanlinkdemo.mvp.view.MainView;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
-import com.example.nanlinkdemo.util.SnackBarUtil;
+import com.example.nanlinkdemo.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +25,6 @@ public class MainPresenterImpl implements MainPresenter {
     private final MainView view;
     private final MainModelImpl model;
     private ArrayList<Menu> menuArrayList;
-    private ArrayList<String> threePointList;
     private List<Scene> sceneList;
     private List<SceneGroup> sceneGroupList;
     private boolean completeGetScene, completeGetSceneGroup;
@@ -92,18 +88,12 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void sceneListSwitch(int position) {
-        if (sceneList.size() == 0){
-            if (position != 0){
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "场景列表点击", sceneGroupList.get(position - 1).getName(), "重试", null);
-            }
-        }else {
-            if (position < sceneList.size()){
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "场景列表点击", sceneList.get(position).getName(), "重试", null);
-            }else if (position > sceneList.size()){
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "场景列表点击", sceneGroupList.get(position - sceneList.size() - 1).getName(), "重试", null);
-            }
+        if ((sceneList.size() == 0 & position != 0) || (sceneList.size() != 0 & position > sceneList.size())){
+            ARouter.getInstance().build(Constant.ACTIVITY_URL_SceneGroup).withString("sceneGroupName", sceneGroupList.get(position - sceneList.size() - 1).getName()).navigation();
         }
-
+        if (sceneList.size() != 0 & position < sceneList.size()){
+            view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "场景列表点击", sceneList.get(position).getName(), "重试", null);
+        }
     }
 
     @Override
@@ -122,86 +112,66 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public void querySceneToModel(String inputText) {
-        model.queryScene(inputText);
-    }
-
-    @Override
-    public void querySceneGroupToModel(String inputText) {
-        model.querySceneGroup(inputText);
-    }
-
-    @Override
     public void updateSceneListToView() {
         view.updateRecycleView();
     }
 
-    @Override
-    public void getThreePointMenuFromModel(int type, int position) {
-        model.getThreePointMenu(type, position);
-    }
 
     @Override
-    public void showThreePointMenuToView(ArrayList<String> threePointList, int type, int position) {
-        this.threePointList = threePointList;
-        view.showThreePointMenu(threePointList, type, position);
-    }
-
-    @Override
-    public void switchThreePointMenu(int position, int type, int furtherPosition) {
-        switch (position){
-            case 1:
-                view.dismissSettingDialog();
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), "", "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+    public void receiveThreePointMenu(ArrayList<String> threePointList, int scenePosition) {
+        view.showSettingDialog(threePointList, new ThreePointAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position) {
+                switch (position){
+                    case 1:
+                        view.dismissSettingDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), "", "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 //                        switchDialog(view.getInputTextMyDialog(), menuArrayList.get(position).getText());
-                    }
-                });
-                break;
-            case 2:
-                view.dismissSettingDialog();
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), "", "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                            }
+                        });
+                        break;
+                    case 2:
+                        view.dismissSettingDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), "", "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 //                        switchDialog(view.getInputTextMyDialog(), menuArrayList.get(position).getText());
-                    }
-                });
-                break;
-            case 3:
-                view.dismissSettingDialog();
+                            }
+                        });
+                        break;
+                    case 3:
+                        view.dismissSettingDialog();
 
-                if (type == TYPE_SCENE_GROUP){
-                    view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            view.dismissMyDialog();
-                            view.deleteSceneGroup(furtherPosition - sceneList.size() - 1);
+                        if ((sceneList.size() == 0 & scenePosition != 0) || (sceneList.size() != 0 & scenePosition > sceneList.size())){
+                            view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景群组?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    view.dismissMyDialog();
+                                    model.deleteSceneGroup(sceneGroupList.get(scenePosition - sceneList.size() - 1));
+                                }
+                            });
                         }
-                    });
-
-                }else if (type == TYPE_SCENE){
-                    view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            view.dismissMyDialog();
+                        if (sceneList.size() != 0 & scenePosition < sceneList.size()){
+                            view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    view.dismissMyDialog();
 //                            view.startLoading();
-                            view.deleteScene(furtherPosition);
+                                    model.deleteScene(sceneList.get(scenePosition));
+                                }
+                            });
                         }
-                    });
-
+                        break;
+                    case 4:
+                        view.dismissSettingDialog();
+                        break;
                 }
-                break;
-            case 4:
-                view.dismissSettingDialog();
-                break;
-        }
+            }
+        });
     }
 
-    @Override
-    public void deleteSceneFromModel(Scene scene) {
-        model.deleteScene(scene);
-    }
 
     @Override
     public void completeGetScene(List<Scene> scenes) {
@@ -221,10 +191,6 @@ public class MainPresenterImpl implements MainPresenter {
         }
     }
 
-    @Override
-    public void deleteSceneGroupFromModel(SceneGroup sceneGroup) {
-        model.deleteSceneGroup(sceneGroup);
-    }
 
     @Override
     public void switchDialog(String inputText, String title) {
@@ -233,7 +199,7 @@ public class MainPresenterImpl implements MainPresenter {
                 if (inputText.length() == 0){
                     view.showSnack("请输入场景名称");
                 }else {
-                    querySceneToModel(inputText);
+                    model.queryScene(inputText);
                     view.dismissMyDialog();
                 }
                 break;
@@ -241,7 +207,7 @@ public class MainPresenterImpl implements MainPresenter {
                 if (inputText.length() == 0){
                     view.showSnack("请输入场景群组名称");
                 }else {
-                    querySceneGroupToModel(inputText);
+                    model.querySceneGroup(inputText);
                     view.dismissMyDialog();
                 }
                 break;
@@ -254,7 +220,7 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void switchQuerySceneResult(String inputText, List<Scene> scenes) {
         if (scenes.size() == 0){
-            model.addScene(inputText);
+            model.addScene(new Scene(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime(), ""));
         }else {
             view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景", "该场景名称已存在，请尝试使用其它名称。", "重试",null);
         }
@@ -263,10 +229,15 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups) {
         if (sceneGroups.size() == 0){
-            model.addSceneGroup(inputText);
+            model.addSceneGroup(new SceneGroup(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()));
         }else {
             view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景群组", "该场景群组名称已存在，请尝试使用其它名称。", "重试",null);
         }
+    }
+
+    @Override
+    public void sceneMenuSwitch(int position) {
+        model.getThreePointMenu(position);
     }
 
 }

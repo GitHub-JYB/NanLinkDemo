@@ -14,17 +14,21 @@ import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
+import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 import com.example.nanlinkdemo.ui.LoadingDialog;
 import com.example.nanlinkdemo.ui.MyDialog;
+import com.example.nanlinkdemo.ui.SettingDialog;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
 
     protected T binding;
     private LoadingDialog loadingDialog;
     private MyDialog myDialog;
+    private SettingDialog settingDialog;
 
     @Override
     protected void onStart() {
@@ -90,9 +94,20 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         myDialog.show(getSupportFragmentManager(), "MyDialog");
     }
 
+    public void showSettingDialog(ArrayList<String> settingList, ThreePointAdapter.OnClickListener listener) {
+        settingDialog = new SettingDialog();
+        settingDialog.setData(settingList);
+        settingDialog.setOnClickListener(listener);
+        settingDialog.show(getSupportFragmentManager(), "SettingDialog");
+    }
+
     public void showMyDialog(int type, String title, String message, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener) {
         myDialog = new MyDialog(type, title, message, negativeText, negativeListener, positiveText, positiveListener);
         myDialog.show(getSupportFragmentManager(), "MyDialog");
+    }
+
+    public MyDialog getMyDialog(){
+        return myDialog;
     }
 
     public String getInputTextMyDialog(){
@@ -101,6 +116,10 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
     public void dismissMyDialog(){
         myDialog.dismiss();
+    }
+
+    public void dismissSettingDialog(){
+        settingDialog.dismiss();
     }
 
 }

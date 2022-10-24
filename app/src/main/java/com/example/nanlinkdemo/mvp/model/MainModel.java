@@ -10,13 +10,13 @@ public interface MainModel {
 
     void getSceneGroupList();
 
-    void getThreePointMenu(int type, int furtherPosition);
+    void getThreePointMenu(int scenePosition);
 
     void deleteScene(Scene scene);
 
-    void addScene(String inputText);
+    void addScene(Scene scene);
 
-    void addSceneGroup(String inputText);
+    void addSceneGroup(SceneGroup sceneGroup);
 
     void deleteSceneGroup(SceneGroup sceneGroup);
 

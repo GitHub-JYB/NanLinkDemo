@@ -1,6 +1,5 @@
 package com.example.nanlinkdemo.mvp.widget;
 
-import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -16,11 +15,8 @@ import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.databinding.ActivityMainBinding;
 import com.example.nanlinkdemo.mvp.adapter.MenuAdapter;
 import com.example.nanlinkdemo.mvp.adapter.SceneAdapter;
-import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.MainView;
-import com.example.nanlinkdemo.ui.MyDialog;
-import com.example.nanlinkdemo.ui.SettingDialog;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SnackBarUtil;
@@ -33,12 +29,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
 
     private MainPresenterImpl presenter;
-    private MenuAdapter menuAdapter;
     private SceneAdapter sceneAdapter;
-    private SettingDialog settingDialog;
-    private List<Scene> sceneList;
-    private List<SceneGroup> sceneGroupList;
-    private MyDialog dialog;
 
 
 
@@ -81,8 +72,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         binding.recycleView.setAdapter(sceneAdapter);
         sceneAdapter.setMenuOnClickListener(new SceneAdapter.MenuOnClickListener() {
             @Override
-            public void onClick(int type, int position) {
-                showThreePointDialog(type, position);
+            public void onClick(int position) {
+                presenter.sceneMenuSwitch(position);
             }
         });
         sceneAdapter.setOnClickListener(new SceneAdapter.OnClickListener() {
@@ -91,10 +82,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
                 presenter.sceneListSwitch(position);
             }
         });
-    }
-
-    private void showThreePointDialog(int type, int position) {
-        presenter.getThreePointMenuFromModel(type, position);
     }
 
     private void initToolbar() {
@@ -110,17 +97,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     }
 
     private void initMenu() {
-        binding.version.setText("Version " + MyApplication.getVersion());
-        binding.recyclerViewMenu.setLayoutManager(new LinearLayoutManager(this));
-
-        // 设置分割线格式并添加
-        UnlessLastItemDecoration decoration = new UnlessLastItemDecoration(this, LinearLayoutManager.VERTICAL);
-        decoration.setDrawable(getDrawable(R.drawable.decoration_menu));
-        binding.recyclerViewMenu.addItemDecoration(decoration);
-
-        menuAdapter = new MenuAdapter();
-        binding.recyclerViewMenu.setAdapter(menuAdapter);
-        menuAdapter.setOnClickListener(new MenuAdapter.OnClickListener() {
+        binding.navigation.setVersion("Version " + MyApplication.getVersion());
+        binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
                 presenter.menuSwitch(position);
@@ -130,14 +108,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
-
-    @Override
     public void showMenu(ArrayList<Menu> menuArrayList) {
-        menuAdapter.setData(menuArrayList);
+        binding.navigation.setData(menuArrayList);
     }
 
     @Override
@@ -153,43 +125,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     public void showSceneList(List<Scene> sceneList, List<SceneGroup> sceneGroupList) {
-        this.sceneList = sceneList;
-        this.sceneGroupList = sceneGroupList;
         sceneAdapter.setData(sceneList, sceneGroupList);
     }
 
     @Override
-    public void showThreePointMenu(ArrayList<String> threePointList, int type, int furtherPosition) {
-        settingDialog = new SettingDialog();
-        settingDialog.setData(threePointList);
-        settingDialog.show(getSupportFragmentManager(), "SettingDialog");
-        settingDialog.setOnClickListener(new ThreePointAdapter.OnClickListener() {
-            @Override
-            public void onClick(int position) {
-                presenter.switchThreePointMenu(position, type, furtherPosition);
-            }
-        });
-    }
-
-    @Override
-    public void dismissSettingDialog() {
-        settingDialog.dismiss();
-    }
-
-    @Override
-    public void deleteScene(int furtherPosition) {
-        presenter.deleteSceneFromModel(sceneList.get(furtherPosition));
-    }
-
-    @Override
-    public void deleteSceneGroup(int furtherPosition) {
-        presenter.deleteSceneGroupFromModel(sceneGroupList.get(furtherPosition));
-
-    }
-
-    @Override
     public void showSnack(CharSequence message) {
-        SnackBarUtil.show(dialog.getView(), message);
+        SnackBarUtil.show(getMyDialog().getView(), message);
     }
 
 

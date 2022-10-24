@@ -3,28 +3,20 @@ package com.example.nanlinkdemo.mvp.widget;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.databinding.ActivityMainBinding;
 import com.example.nanlinkdemo.databinding.ActivitySceneGroupBinding;
 import com.example.nanlinkdemo.mvp.adapter.MenuAdapter;
 import com.example.nanlinkdemo.mvp.adapter.SceneAdapter;
-import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
-import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
 import com.example.nanlinkdemo.mvp.presenter.Impl.SceneGroupPresenterImpl;
-import com.example.nanlinkdemo.mvp.view.MainView;
 import com.example.nanlinkdemo.mvp.view.SceneGroupView;
-import com.example.nanlinkdemo.ui.MyDialog;
-import com.example.nanlinkdemo.ui.SettingDialog;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SnackBarUtil;
@@ -36,15 +28,11 @@ import java.util.List;
 public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> implements SceneGroupView, View.OnClickListener {
 
 
-    @Autowired(name = "sceneGroup")
-    SceneGroup sceneGroup;
+    @Autowired(name = "sceneGroupName")
+    String sceneGroupName;
 
     private SceneGroupPresenterImpl presenter;
-    private MenuAdapter menuAdapter;
     private SceneAdapter sceneAdapter;
-    private SettingDialog settingDialog;
-    private List<Scene> sceneList;
-    private MyDialog dialog;
 
 
 
@@ -55,6 +43,11 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
         initToolbar();
         initMenu();
         initRecycleView();
+        initSceneGroup();
+    }
+
+    private void initSceneGroup() {
+        presenter.getSceneGroupFromModel(sceneGroupName);
     }
 
     @Override
@@ -62,12 +55,11 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
         super.onStart();
         updateMenu();
         updateRecycleView();
-
     }
 
     @Override
     public void updateRecycleView() {
-        presenter.getSceneListFromModel();
+        presenter.getSceneListFromModel(sceneGroupName);
     }
 
 
@@ -87,8 +79,8 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
         binding.recycleView.setAdapter(sceneAdapter);
         sceneAdapter.setMenuOnClickListener(new SceneAdapter.MenuOnClickListener() {
             @Override
-            public void onClick(int type, int position) {
-                showThreePointDialog(type, position);
+            public void onClick(int position) {
+                presenter.sceneMenuSwitch(position);
             }
         });
         sceneAdapter.setOnClickListener(new SceneAdapter.OnClickListener() {
@@ -99,12 +91,8 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
         });
     }
 
-    private void showThreePointDialog(int type, int position) {
-        presenter.getThreePointMenuFromModel(type, position);
-    }
-
     private void initToolbar() {
-        binding.toolbar.setTitle(sceneGroup.getName());
+        binding.toolbar.setTitle(sceneGroupName);
         binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
         binding.toolbar.setRightSecondBtnIcon(R.drawable.ic_search);
         binding.toolbar.setRightBtnIcon(R.drawable.ic_menu);
@@ -118,16 +106,7 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     }
 
     private void initMenu() {
-        binding.recyclerViewMenu.setLayoutManager(new LinearLayoutManager(this));
-
-        // 设置分割线格式并添加
-        UnlessLastItemDecoration decoration = new UnlessLastItemDecoration(this, LinearLayoutManager.VERTICAL);
-        decoration.setDrawable(getDrawable(R.drawable.decoration_menu));
-        binding.recyclerViewMenu.addItemDecoration(decoration);
-
-        menuAdapter = new MenuAdapter();
-        binding.recyclerViewMenu.setAdapter(menuAdapter);
-        menuAdapter.setOnClickListener(new MenuAdapter.OnClickListener() {
+        binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
                 presenter.menuSwitch(position);
@@ -137,14 +116,8 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
 
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
-
-    @Override
     public void showMenu(ArrayList<Menu> menuArrayList) {
-        menuAdapter.setData(menuArrayList);
+        binding.navigation.setData(menuArrayList);
     }
 
     @Override
@@ -159,48 +132,23 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
 
 
     @Override
-    public void showSceneList(List<Scene> sceneList, List<SceneGroup> sceneGroupList) {
-        this.sceneList = sceneList;
-        sceneAdapter.setData(sceneList, sceneGroupList);
-    }
-
-    @Override
-    public void showThreePointMenu(ArrayList<String> threePointList, int type, int furtherPosition) {
-        settingDialog = new SettingDialog();
-        settingDialog.setData(threePointList);
-        settingDialog.show(getSupportFragmentManager(), "SettingDialog");
-        settingDialog.setOnClickListener(new ThreePointAdapter.OnClickListener() {
-            @Override
-            public void onClick(int position) {
-                presenter.switchThreePointMenu(position, type, furtherPosition);
-            }
-        });
-    }
-
-    @Override
-    public void dismissSettingDialog() {
-        settingDialog.dismiss();
-    }
-
-    @Override
-    public void deleteScene(int furtherPosition) {
-        presenter.deleteSceneFromModel(sceneList.get(furtherPosition));
-    }
-
-    @Override
-    public void deleteSceneGroup(int furtherPosition) {
-        presenter.deleteSceneGroupFromModel(sceneGroupList.get(furtherPosition));
-
+    public void showSceneList(List<Scene> sceneList) {
+        sceneAdapter.setData(sceneList, new ArrayList<SceneGroup>());
     }
 
     @Override
     public void showSnack(CharSequence message) {
-        SnackBarUtil.show(dialog.getView(), message);
+        SnackBarUtil.show(getMyDialog().getView(), message);
     }
 
 
     @Override
     public void onClick(View v) {
         presenter.toolbarSwitch(v);
+    }
+
+    @Override
+    public String getSceneGroupName() {
+        return sceneGroupName;
     }
 }

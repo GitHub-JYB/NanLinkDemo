@@ -34,24 +34,12 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        app:insetForeground="@android:color/transparent"
+
+    <com.example.nanlinkdemo.ui.MyNavigation
         android:id="@+id/navigation"
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="@color/nav">
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"/>
-
-
-    </RelativeLayout>
-
+        android:layout_width="280dp"
+        android:layout_height="match_parent" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -25,14 +25,14 @@ public class Scene {
     private String sceneGroup;
 
 
-    public Scene(String email, String name, int fixtureNum, String remark, Long createdDate, Long modifiedDate){
+    public Scene(String email, String name, int fixtureNum, String remark, Long createdDate, Long modifiedDate, String sceneGroup){
         this.email = email;
         this.name = name;
         this.fixtureNum = fixtureNum;
         this.remark = remark;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
-        this.sceneGroup = "";
+        this.sceneGroup = sceneGroup;
     }
 
     public int getFixtureNum() {

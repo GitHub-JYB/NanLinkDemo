@@ -28,25 +28,13 @@ public interface MainPresenter {
 
     void showSceneListToView(List<Scene> sceneList, List<SceneGroup> sceneGroupList);
 
-    void querySceneToModel(String inputText);
-
-    void querySceneGroupToModel(String inputText);
-
     void updateSceneListToView();
 
-    void getThreePointMenuFromModel(int type, int furtherPosition);
-
-    void showThreePointMenuToView(ArrayList<String> threePointList, int type, int furtherPosition);
-
-    void switchThreePointMenu(int position, int type, int furtherPosition);
-
-    void deleteSceneFromModel(Scene scene);
+    void receiveThreePointMenu(ArrayList<String> threePointList, int scenePosition);
 
     void completeGetScene(List<Scene> scenes);
 
     void completeGetSceneGroup(List<SceneGroup> sceneGroups);
-
-    void deleteSceneGroupFromModel(SceneGroup sceneGroup);
 
     void switchDialog(String inputText, String title);
 
@@ -54,4 +42,5 @@ public interface MainPresenter {
 
     void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups);
 
+    void sceneMenuSwitch(int position);
 }

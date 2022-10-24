@@ -126,7 +126,7 @@ public class SceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     if (menuOnClickListener != null){
-                        menuOnClickListener.onClick(TYPE_SCENE, getAdapterPosition());
+                        menuOnClickListener.onClick(getAdapterPosition());
                     }
                 }
             });
@@ -159,7 +159,7 @@ public class SceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     if (menuOnClickListener != null){
-                        menuOnClickListener.onClick(TYPE_SCENE_GROUP, getAdapterPosition());
+                        menuOnClickListener.onClick(getAdapterPosition());
                     }
                 }
             });
@@ -197,7 +197,7 @@ public class SceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public interface MenuOnClickListener {
-        void onClick(int type, int position);
+        void onClick(int position);
     }
 
     public void setMenuOnClickListener(MenuOnClickListener menuOnClickListener){

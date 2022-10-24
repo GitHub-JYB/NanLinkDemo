@@ -50,7 +50,7 @@ public class ThreePointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else if (holder instanceof ViewHolderSettingThreePoint){
             ((ViewHolderSettingThreePoint) holder).setting.setText(settingList.get(position));
             if (settingList.get(position) == "删除"){
-                TextView tv=((ViewHolderSettingThreePoint) holder).setting;
+                TextView tv = ((ViewHolderSettingThreePoint) holder).setting;
                 ((ViewHolderSettingThreePoint) holder).setting.setTextColor(ContextCompat.getColor(tv.getContext(),R.color.warning));
             }
         }
