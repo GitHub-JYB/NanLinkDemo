@@ -15,6 +15,8 @@ public interface MainView {
 
     void updateMenu();
 
+    void initMenu();
+
     void showMenu(ArrayList<Menu> menuArrayList);
 
     void openDrawLayout();
@@ -35,13 +37,9 @@ public interface MainView {
 
     void dismissMyDialog();
 
-//    void deleteScene(int furtherPosition);
-//
-//    void deleteSceneGroup(int furtherPosition);
-
-    void showSnack(CharSequence message);
-
     void startLoading();
 
     void stopLoading();
+
+    void showSortList(ArrayList<Menu> sortArrayList);
 }

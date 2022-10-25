@@ -19,7 +19,6 @@ import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.MainView;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 import com.example.nanlinkdemo.util.Constant;
-import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +95,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         presenter = new MainPresenterImpl(this);
     }
 
-    private void initMenu() {
+    @Override
+    public void initMenu() {
         binding.navigation.setVersion("Version " + MyApplication.getVersion());
         binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
             @Override
@@ -129,10 +129,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     }
 
     @Override
-    public void showSnack(CharSequence message) {
-        SnackBarUtil.show(getMyDialog().getView(), message);
+    public void showSortList(ArrayList<Menu> sortArrayList) {
+        showMenu(sortArrayList);
+        binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position) {
+                presenter.sortSwitch(position);
+            }
+        });
     }
-
 
     @Override
     public void onClick(View v) {

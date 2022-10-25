@@ -206,6 +206,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogMessage.setText(message);
 
         binding.myDialogInputText.setHint(hintInputText);
+        binding.myDialogInputText.setText(message);
 
         binding.myDialogNeutralButton.setOnClickListener(neutralListener);
         binding.myDialogNeutralButton.setText(neutralText);

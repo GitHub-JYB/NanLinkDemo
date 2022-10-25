@@ -16,6 +16,7 @@ import com.example.nanlinkdemo.mvp.view.MainView;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.DateUtil;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,10 @@ public class MainPresenterImpl implements MainPresenter {
     private List<Scene> sceneList;
     private List<SceneGroup> sceneGroupList;
     private boolean completeGetScene, completeGetSceneGroup;
+    private static final int Type_add = 0;
+    private static final int Type_rename = 1;
+    private int scenePosition;
+    private ArrayList<Menu> sortArrayList;
 
 
     public MainPresenterImpl(MainView mainView) {
@@ -48,28 +53,49 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void menuSwitch(int position) {
-        view.closeDrawLayout();
         switch (position) {
-            case 1:
+            case 2:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_UserSetting).navigation();
+                view.closeDrawLayout();
                 break;
-            case 3:
             case 4:
                 view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, menuArrayList.get(position).getText(), "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switchDialog(view.getInputTextMyDialog(), menuArrayList.get(position).getText());
+                        if (view.getInputTextMyDialog().isEmpty()){
+                            SnackBarUtil.show(v, "请输入场景名称");
+                        }else {
+                            model.queryScene(view.getInputTextMyDialog(), Type_add);
+                            view.dismissMyDialog();
+                        }
                     }
                 });
+                view.closeDrawLayout();
                 break;
             case 5:
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, menuArrayList.get(position).getText(), "该功能还没开发", "重试",null);
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, menuArrayList.get(position).getText(), "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (view.getInputTextMyDialog().isEmpty()){
+                            SnackBarUtil.show(v, "请输入场景群组名称");
+                        }else {
+                            model.querySceneGroup(view.getInputTextMyDialog(), Type_add);
+                            view.dismissMyDialog();
+                        }
+                    }
+                });
+                view.closeDrawLayout();
                 break;
-            case 7:
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Setting).navigation();
+            case 6:
+                model.getSortList(MyApplication.getOnlineUser().getSortPosition());
                 break;
             case 8:
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Setting).navigation();
+                view.closeDrawLayout();
+                break;
+            case 9:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_WebView).withInt("contentId", Constant.ABOUT).navigation();
+                view.closeDrawLayout();
                 break;
         }
     }
@@ -118,38 +144,72 @@ public class MainPresenterImpl implements MainPresenter {
 
 
     @Override
-    public void receiveThreePointMenu(ArrayList<String> threePointList, int scenePosition) {
+    public void receiveThreePointMenu(ArrayList<String> threePointList) {
         view.showSettingDialog(threePointList, new ThreePointAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
+                view.dismissSettingDialog();
                 switch (position){
                     case 1:
-                        view.dismissSettingDialog();
-                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), "", "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-//                        switchDialog(view.getInputTextMyDialog(), menuArrayList.get(position).getText());
-                            }
-                        });
+                        if ((sceneList.size() == 0 & scenePosition != 0) || (sceneList.size() != 0 & scenePosition > sceneList.size())){
+                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), sceneGroupList.get(scenePosition - sceneList.size() - 1).getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (view.getInputTextMyDialog().isEmpty()){
+                                        SnackBarUtil.show(v, "请输入场景群组名称");
+                                    }else {
+                                        model.querySceneGroup(view.getInputTextMyDialog(), Type_rename);
+                                    }
+                                }
+                            });
+                        }
+                        if (sceneList.size() != 0 & scenePosition < sceneList.size()){
+                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), sceneList.get(scenePosition).getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (view.getInputTextMyDialog().isEmpty()){
+                                        SnackBarUtil.show(v, "请输入场景名称");
+                                    }else {
+                                        model.queryScene(view.getInputTextMyDialog(), Type_rename);
+                                    }
+                                }
+                            });
+                        }
+
                         break;
                     case 2:
-                        view.dismissSettingDialog();
-                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), "", "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-//                        switchDialog(view.getInputTextMyDialog(), menuArrayList.get(position).getText());
-                            }
-                        });
+                        if ((sceneList.size() == 0 & scenePosition != 0) || (sceneList.size() != 0 & scenePosition > sceneList.size())){
+                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), sceneGroupList.get(scenePosition - sceneList.size() - 1).getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    sceneGroupList.get(scenePosition - sceneList.size() - 1).setRemark(view.getInputTextMyDialog());
+                                    sceneGroupList.get(scenePosition - sceneList.size() - 1).setModifiedDate(DateUtil.getTime());
+                                    model.updateSceneGroup(sceneGroupList.get(scenePosition - sceneList.size() - 1));
+                                    view.dismissMyDialog();
+
+                                }
+                            });
+                        }
+                        if (sceneList.size() != 0 & scenePosition < sceneList.size()){
+                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), sceneList.get(scenePosition).getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    sceneList.get(scenePosition).setRemark(view.getInputTextMyDialog());
+                                    sceneList.get(scenePosition).setModifiedDate(DateUtil.getTime());
+                                    model.updateScene(sceneList.get(scenePosition));
+                                    view.dismissMyDialog();
+
+                                }
+                            });
+                        }
                         break;
                     case 3:
-                        view.dismissSettingDialog();
-
                         if ((sceneList.size() == 0 & scenePosition != 0) || (sceneList.size() != 0 & scenePosition > sceneList.size())){
                             view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景群组?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    view.dismissMyDialog();
                                     model.deleteSceneGroup(sceneGroupList.get(scenePosition - sceneList.size() - 1));
+                                    view.dismissMyDialog();
                                 }
                             });
                         }
@@ -157,15 +217,15 @@ public class MainPresenterImpl implements MainPresenter {
                             view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    view.dismissMyDialog();
 //                            view.startLoading();
                                     model.deleteScene(sceneList.get(scenePosition));
+                                    view.dismissMyDialog();
+
                                 }
                             });
                         }
                         break;
                     case 4:
-                        view.dismissSettingDialog();
                         break;
                 }
             }
@@ -193,51 +253,140 @@ public class MainPresenterImpl implements MainPresenter {
 
 
     @Override
-    public void switchDialog(String inputText, String title) {
-        switch (title){
-            case "创建场景":
-                if (inputText.length() == 0){
-                    view.showSnack("请输入场景名称");
-                }else {
-                    model.queryScene(inputText);
-                    view.dismissMyDialog();
-                }
-                break;
-            case "创建场景群组":
-                if (inputText.length() == 0){
-                    view.showSnack("请输入场景群组名称");
-                }else {
-                    model.querySceneGroup(inputText);
-                    view.dismissMyDialog();
-                }
-                break;
-
-            case "重命名":
-
+    public void switchQuerySceneResult(String inputText, List<Scene> scenes, int type) {
+        if (type == Type_add){
+            if (scenes.size() == 0){
+                model.addScene(new Scene(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime(), ""));
+            }else {
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景", "该场景名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "创建场景", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (view.getInputTextMyDialog().isEmpty()){
+                                    SnackBarUtil.show(v, "请输入场景名称");
+                                }else {
+                                    model.queryScene(view.getInputTextMyDialog(), Type_add);
+                                    view.dismissMyDialog();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }else if (type == Type_rename){
+            if (scenes.size() == 0){
+                sceneList.get(scenePosition).setName(inputText);
+                sceneList.get(scenePosition).setModifiedDate(DateUtil.getTime());
+                model.updateScene(sceneList.get(scenePosition));
+                view.dismissMyDialog();
+            }else {
+                view.dismissMyDialog();
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "重命名", "该场景名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "重命名", sceneList.get(scenePosition).getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (view.getInputTextMyDialog().isEmpty()){
+                                    SnackBarUtil.show(v, "请输入场景名称");
+                                }else {
+                                    model.queryScene(view.getInputTextMyDialog(), Type_rename);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
         }
+
     }
 
     @Override
-    public void switchQuerySceneResult(String inputText, List<Scene> scenes) {
-        if (scenes.size() == 0){
-            model.addScene(new Scene(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime(), ""));
-        }else {
-            view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景", "该场景名称已存在，请尝试使用其它名称。", "重试",null);
-        }
-    }
-
-    @Override
-    public void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups) {
-        if (sceneGroups.size() == 0){
-            model.addSceneGroup(new SceneGroup(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()));
-        }else {
-            view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景群组", "该场景群组名称已存在，请尝试使用其它名称。", "重试",null);
+    public void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups, int type) {
+        if (type == Type_add) {
+            if (sceneGroups.size() == 0) {
+                model.addSceneGroup(new SceneGroup(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()));
+            } else {
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景群组", "该场景群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "创建场景群组", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (view.getInputTextMyDialog().isEmpty()){
+                                    SnackBarUtil.show(v, "请输入场景群组名称");
+                                }else {
+                                    model.querySceneGroup(view.getInputTextMyDialog(), Type_add);
+                                    view.dismissMyDialog();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }else if (type == Type_rename){
+            if (sceneGroups.size() == 0) {
+                sceneGroupList.get(scenePosition - sceneList.size() - 1).setName(inputText);
+                sceneGroupList.get(scenePosition - sceneList.size() - 1).setModifiedDate(DateUtil.getTime());
+                model.updateSceneGroup(sceneGroupList.get(scenePosition - sceneList.size() - 1));
+                view.dismissMyDialog();
+            } else {
+                view.dismissMyDialog();
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "重命名", "该场景群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "重命名", sceneGroupList.get(scenePosition - sceneList.size() - 1).getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (view.getInputTextMyDialog().isEmpty()){
+                                    SnackBarUtil.show(v, "请输入场景群组名称");
+                                }else {
+                                    model.querySceneGroup(view.getInputTextMyDialog(), Type_rename);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
 
     @Override
     public void sceneMenuSwitch(int position) {
-        model.getThreePointMenu(position);
+        scenePosition = position;
+        model.getThreePointMenu();
+    }
+
+    @Override
+    public void showSortListToView(ArrayList<Menu> sortArrayList) {
+        this.sortArrayList = sortArrayList;
+        view.showSortList(sortArrayList);
+
+    }
+
+    @Override
+    public void sortSwitch(int position) {
+        switch (position){
+            case 0:
+                view.initMenu();
+                getMenuFromModel();
+                break;
+            case 1:
+                break;
+            default:
+                MyApplication.getOnlineUser().setSortPosition(position - 2);
+                model.updateUser(MyApplication.getOnlineUser());
+                model.getSortList(position - 2);
+                view.initMenu();
+                getMenuFromModel();
+                break;
+        }
     }
 
 }

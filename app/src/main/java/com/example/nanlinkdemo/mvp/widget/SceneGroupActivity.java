@@ -19,7 +19,6 @@ import com.example.nanlinkdemo.mvp.presenter.Impl.SceneGroupPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.SceneGroupView;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 import com.example.nanlinkdemo.util.Constant;
-import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +104,8 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
         presenter = new SceneGroupPresenterImpl(this);
     }
 
-    private void initMenu() {
+    @Override
+    public void initMenu() {
         binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
@@ -137,12 +137,6 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     }
 
     @Override
-    public void showSnack(CharSequence message) {
-        SnackBarUtil.show(getMyDialog().getView(), message);
-    }
-
-
-    @Override
     public void onClick(View v) {
         presenter.toolbarSwitch(v);
     }
@@ -150,5 +144,16 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     @Override
     public String getSceneGroupName() {
         return sceneGroupName;
+    }
+
+    @Override
+    public void showSortList(ArrayList<Menu> sortArrayList) {
+        showMenu(sortArrayList);
+        binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position) {
+                presenter.sortSwitch(position);
+            }
+        });
     }
 }

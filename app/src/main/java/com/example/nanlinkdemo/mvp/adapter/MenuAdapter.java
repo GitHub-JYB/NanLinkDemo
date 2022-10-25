@@ -1,7 +1,8 @@
 package com.example.nanlinkdemo.mvp.adapter;
 
 import static com.example.nanlinkdemo.bean.Menu.TYPE_EMPTY;
-import static com.example.nanlinkdemo.bean.Menu.TYPE_ITEM;
+import static com.example.nanlinkdemo.bean.Menu.TYPE_ITEM_nav_bg;
+import static com.example.nanlinkdemo.bean.Menu.TYPE_ITEM_gray_bg;
 import static com.example.nanlinkdemo.bean.Menu.TYPE_LOGO;
 
 import android.view.LayoutInflater;
@@ -16,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.databinding.VpEmptyMenuBinding;
 import com.example.nanlinkdemo.databinding.VpImageMenuBinding;
-import com.example.nanlinkdemo.databinding.VpItemMenuBinding;
+import com.example.nanlinkdemo.databinding.VpItemMenuGrayBgBinding;
+import com.example.nanlinkdemo.databinding.VpItemMenuNavBgBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +38,12 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case TYPE_LOGO:
                 VpImageMenuBinding vpImageMenuBinding = VpImageMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderImageMenu(vpImageMenuBinding);
-            case TYPE_ITEM:
-                VpItemMenuBinding vpItemMenuBinding = VpItemMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-                return new ViewHolderItemMenu(vpItemMenuBinding);
+            case TYPE_ITEM_gray_bg:
+                VpItemMenuGrayBgBinding vpItemMenuGrayBgBinding = VpItemMenuGrayBgBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new ViewHolderItemMenuGrayBg(vpItemMenuGrayBgBinding);
+            case TYPE_ITEM_nav_bg:
+                VpItemMenuNavBgBinding vpItemMenuNavBgBinding = VpItemMenuNavBgBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new ViewHolderItemMenuNavBg(vpItemMenuNavBgBinding);
             default:
                 VpEmptyMenuBinding vpEmptyMenuBinding= VpEmptyMenuBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderEmptyMenu(vpEmptyMenuBinding);
@@ -49,18 +54,27 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderImageMenu){
 
-        }
-        if (holder instanceof ViewHolderEmptyMenu){
+        }else if (holder instanceof ViewHolderEmptyMenu){
 
-        }else if (holder instanceof ViewHolderItemMenu){
+        }else if (holder instanceof ViewHolderItemMenuGrayBg){
             if (menuList.get(position).getIconResId() != 0){
-                ((ViewHolderItemMenu) holder).iconMenu.setImageResource(menuList.get(position).getIconResId());
+                ((ViewHolderItemMenuGrayBg) holder).iconMenu.setImageResource(menuList.get(position).getIconResId());
             }
             if (menuList.get(position).getType() != 0){
-                ((ViewHolderItemMenu) holder).stateMenu.setImageResource(menuList.get(position).getStateResId());
+                ((ViewHolderItemMenuGrayBg) holder).stateMenu.setImageResource(menuList.get(position).getStateResId());
             }
             if (menuList.get(position).getText() != null){
-                ((ViewHolderItemMenu) holder).textMenu.setText(menuList.get(position).getText());
+                ((ViewHolderItemMenuGrayBg) holder).textMenu.setText(menuList.get(position).getText());
+            }
+        }else if (holder instanceof ViewHolderItemMenuNavBg){
+            if (menuList.get(position).getIconResId() != 0){
+                ((ViewHolderItemMenuNavBg) holder).iconMenu.setImageResource(menuList.get(position).getIconResId());
+            }
+            if (menuList.get(position).getType() != 0){
+                ((ViewHolderItemMenuNavBg) holder).stateMenu.setImageResource(menuList.get(position).getStateResId());
+            }
+            if (menuList.get(position).getText() != null){
+                ((ViewHolderItemMenuNavBg) holder).textMenu.setText(menuList.get(position).getText());
             }
         }
     }
@@ -76,7 +90,9 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case 0:
                 return TYPE_LOGO;
             case 2:
-                return TYPE_ITEM;
+                return TYPE_ITEM_gray_bg;
+            case 3:
+                return TYPE_ITEM_nav_bg;
             default:
                 return TYPE_EMPTY;
         }
@@ -87,13 +103,35 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    class ViewHolderItemMenu extends RecyclerView.ViewHolder {
+    class ViewHolderItemMenuGrayBg extends RecyclerView.ViewHolder {
 
 
         ImageView iconMenu, stateMenu;
         TextView textMenu;
 
-        public ViewHolderItemMenu(@NonNull VpItemMenuBinding binding) {
+        public ViewHolderItemMenuGrayBg(@NonNull VpItemMenuGrayBgBinding binding) {
+            super(binding.getRoot());
+            iconMenu = binding.iconMenu;
+            stateMenu = binding.stateMenu;
+            textMenu = binding.textMenu;
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickListener != null){
+                        onClickListener.onClick(getAdapterPosition());
+                    }
+                }
+            });
+        }
+    }
+
+    class ViewHolderItemMenuNavBg extends RecyclerView.ViewHolder {
+
+
+        ImageView iconMenu, stateMenu;
+        TextView textMenu;
+
+        public ViewHolderItemMenuNavBg(@NonNull VpItemMenuNavBgBinding binding) {
             super(binding.getRoot());
             iconMenu = binding.iconMenu;
             stateMenu = binding.stateMenu;

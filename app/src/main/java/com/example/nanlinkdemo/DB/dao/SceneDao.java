@@ -29,10 +29,10 @@ public interface SceneDao {
     Single<Long> insert(Scene scenes);
 
     @Update
-    Single<Integer> updateSceneInfo(Scene scenes);
+    Single<Integer> updateSceneInfo(Scene... scenes);
 
     @Delete
-    Single<Integer> deleteInfo(Scene scenes);
+    Single<Integer> deleteInfo(Scene... scenes);
 
 
 }

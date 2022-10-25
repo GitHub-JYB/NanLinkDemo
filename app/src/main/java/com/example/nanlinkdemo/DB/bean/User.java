@@ -23,7 +23,8 @@ public class User {
     private String type;
     @ColumnInfo
     private boolean isKeepScreenOn;
-
+    @ColumnInfo
+    private int sortPosition;
 
     public User(String email, String nickName, String vocation, String type, String token){
         this.email = email;
@@ -32,6 +33,7 @@ public class User {
         this.type = type;
         this.token = token;
         this.isKeepScreenOn = false;
+        sortPosition = 0;
     }
 
     public String getEmail() {
@@ -88,5 +90,13 @@ public class User {
 
     public void setKeepScreenOn(boolean keepScreenOn) {
         isKeepScreenOn = keepScreenOn;
+    }
+
+    public int getSortPosition() {
+        return sortPosition;
+    }
+
+    public void setSortPosition(int sortPosition) {
+        this.sortPosition = sortPosition;
     }
 }

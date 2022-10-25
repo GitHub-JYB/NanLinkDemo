@@ -14,6 +14,8 @@ public interface SceneGroupView {
 
     void updateMenu();
 
+    void initMenu();
+
     void showMenu(ArrayList<Menu> menuArrayList);
 
     void openDrawLayout();
@@ -22,14 +24,11 @@ public interface SceneGroupView {
 
     void showSceneList(List<Scene> sceneList);
 
-    void showSnack(CharSequence message);
-
     void finish();
 
     void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralOnClickListener);
 
     void showMyDialog(int type, String title, String message, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
-
 
     void dismissSettingDialog();
 
@@ -40,4 +39,6 @@ public interface SceneGroupView {
     String getInputTextMyDialog();
 
     String getSceneGroupName();
+
+    void showSortList(ArrayList<Menu> sortArrayList);
 }

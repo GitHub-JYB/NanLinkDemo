@@ -4,7 +4,9 @@ public class Menu {
 
     public static final int TYPE_LOGO = 0;
     public static final int TYPE_EMPTY = 1;
-    public static final int TYPE_ITEM = 2;
+    public static final int TYPE_ITEM_gray_bg = 2;
+    public static final int TYPE_ITEM_nav_bg = 3;
+
 
 
     private int iconResId = 0;
@@ -16,10 +18,11 @@ public class Menu {
 
     }
 
-    public Menu(int iconResId, String text, int type){
+    public Menu(int iconResId, String text, int stateResId, int type){
         setIconResId(iconResId);
         setText(text);
         setType(type);
+        setStateResId(stateResId);
     }
 
     public Menu(String text, int stateResId){

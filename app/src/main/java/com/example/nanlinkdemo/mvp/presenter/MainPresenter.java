@@ -30,17 +30,19 @@ public interface MainPresenter {
 
     void updateSceneListToView();
 
-    void receiveThreePointMenu(ArrayList<String> threePointList, int scenePosition);
+    void receiveThreePointMenu(ArrayList<String> threePointList);
 
     void completeGetScene(List<Scene> scenes);
 
     void completeGetSceneGroup(List<SceneGroup> sceneGroups);
 
-    void switchDialog(String inputText, String title);
+    void switchQuerySceneResult(String inputText, List<Scene> scenes, int type);
 
-    void switchQuerySceneResult(String inputText, List<Scene> scenes);
-
-    void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups);
+    void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups, int type);
 
     void sceneMenuSwitch(int position);
+
+    void showSortListToView(ArrayList<Menu> sortArrayList);
+
+    void sortSwitch(int position);
 }

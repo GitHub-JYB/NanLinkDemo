@@ -2,6 +2,7 @@ package com.example.nanlinkdemo.mvp.model;
 
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
+import com.example.nanlinkdemo.DB.bean.User;
 
 public interface MainModel {
     void getMenu(String nickName);
@@ -10,7 +11,7 @@ public interface MainModel {
 
     void getSceneGroupList();
 
-    void getThreePointMenu(int scenePosition);
+    void getThreePointMenu();
 
     void deleteScene(Scene scene);
 
@@ -20,8 +21,15 @@ public interface MainModel {
 
     void deleteSceneGroup(SceneGroup sceneGroup);
 
-    void queryScene(String inputText);
+    void queryScene(String inputText, int type);
 
-    void querySceneGroup(String inputText);
+    void querySceneGroup(String inputText, int type);
 
+    void updateScene(Scene scene);
+
+    void updateSceneGroup(SceneGroup sceneGroup);
+
+    void getSortList(int position);
+
+    void updateUser(User user);
 }

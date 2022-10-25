@@ -106,10 +106,6 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         myDialog.show(getSupportFragmentManager(), "MyDialog");
     }
 
-    public MyDialog getMyDialog(){
-        return myDialog;
-    }
-
     public String getInputTextMyDialog(){
         return myDialog.getInputText();
     }

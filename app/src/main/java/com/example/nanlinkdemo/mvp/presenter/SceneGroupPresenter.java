@@ -27,13 +27,17 @@ public interface SceneGroupPresenter {
 
     void sceneMenuSwitch(int position);
 
-    void receiveThreePointMenu(ArrayList<String> threePointList, int scenePosition);
+    void receiveThreePointMenu(ArrayList<String> threePointList);
 
     void updateSceneListToView();
 
-    void switchQuerySceneResult(String inputText, List<Scene> scenes);
+    void switchQuerySceneResult(String inputText, List<Scene> scenes, int type);
 
     void getSceneGroupFromModel(String sceneGroupName);
 
     void updateSceneGroup(List<SceneGroup> sceneGroups);
+
+    void showSortListToView(ArrayList<Menu> sortArrayList);
+
+    void sortSwitch(int position);
 }
