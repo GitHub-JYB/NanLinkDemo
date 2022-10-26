@@ -45,4 +45,5 @@ public interface MainPresenter {
     void showSortListToView(ArrayList<Menu> sortArrayList);
 
     void sortSwitch(int position);
+
 }

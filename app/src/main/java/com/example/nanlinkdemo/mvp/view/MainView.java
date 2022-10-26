@@ -13,8 +13,6 @@ public interface MainView {
 
     void updateRecycleView();
 
-    void updateMenu();
-
     void initMenu();
 
     void showMenu(ArrayList<Menu> menuArrayList);
@@ -22,6 +20,10 @@ public interface MainView {
     void openDrawLayout();
 
     void closeDrawLayout();
+
+    void showMyDialog(int type, String title, String bigSizeMessage, String smallSizeMessage, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
+
+    void showMyDialog(int type, String title, String bigSizeMessageOne, String smallSizeMessageOne, MyDialog.MessageOneOnClickListener messageOneListener, String bigSizeMessageTwo, String smallSizeMessageTwo, MyDialog.MessageTwoOnClickListener messageTwoListener, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
 
     void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
 

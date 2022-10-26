@@ -46,7 +46,7 @@ public class SceneGroupModelImpl implements SceneGroupModel {
     public void getSceneList(String name) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .getOnlineSceneInfo(MyApplication.getOnlineUser().getEmail(), name)
+                .getSceneInfoFromName(MyApplication.getOnlineUser().getEmail(), name)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<Scene>>() {
@@ -87,13 +87,13 @@ public class SceneGroupModelImpl implements SceneGroupModel {
     public void queryScene(String sceneName, int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .getSceneInfo(MyApplication.getOnlineUser().getEmail(), sceneName)
+                .getSceneInfoFromName(MyApplication.getOnlineUser().getEmail(), sceneName)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<Scene>>() {
                     @Override
                     public void accept(List<Scene> scenes) throws Exception {
-                        presenter.switchQuerySceneResult(sceneName, scenes, type);
+                        presenter.switchQuerySceneResult(scenes, type);
                     }
                 });
     }
@@ -115,7 +115,7 @@ public class SceneGroupModelImpl implements SceneGroupModel {
     }
 
     @Override
-    public void querySceneGroup(String sceneGroupName) {
+    public void querySceneGroup(String sceneGroupName, int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneGroupDao()
                 .getSceneGroupInfo(MyApplication.getOnlineUser().getEmail(), sceneGroupName)
@@ -124,7 +124,7 @@ public class SceneGroupModelImpl implements SceneGroupModel {
                 .subscribe(new Consumer<List<SceneGroup>>() {
                     @Override
                     public void accept(List<SceneGroup> sceneGroups) throws Exception {
-                        presenter.updateSceneGroup(sceneGroups);
+                        presenter.receiveSceneGroup(sceneGroups, type);
 
                     }
                 });
@@ -263,5 +263,16 @@ public class SceneGroupModelImpl implements SceneGroupModel {
                     public void accept(Integer integer) throws Exception {
                     }
                 });
+    }
+
+    @Override
+    public void getSettingList() {
+        ArrayList<Menu> menuArrayList = new ArrayList<>();
+        menuArrayList.add(new Menu(R.drawable.ic_back,"", 0, TYPE_ITEM_nav_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_set, "设置", 0, TYPE_ITEM_nav_bg));
+        menuArrayList.add(new Menu(0,"重命名", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(0,"编辑备注", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(0,"删除该场景群组", 0, TYPE_ITEM_gray_bg));
+        presenter.showSettingListToView(menuArrayList);
     }
 }

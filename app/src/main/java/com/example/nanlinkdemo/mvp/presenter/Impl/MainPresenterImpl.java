@@ -105,6 +105,7 @@ public class MainPresenterImpl implements MainPresenter {
         switch (v.getId()) {
             case R.id.toolbar_left_btn:
                 view.openDrawLayout();
+                view.initMenu();
                 break;
             case R.id.toolbar_right_btn:
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "搜索", "该功能还没开发", "重试", null);
@@ -179,7 +180,7 @@ public class MainPresenterImpl implements MainPresenter {
                         break;
                     case 2:
                         if ((sceneList.size() == 0 & scenePosition != 0) || (sceneList.size() != 0 & scenePosition > sceneList.size())){
-                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), sceneGroupList.get(scenePosition - sceneList.size() - 1).getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark, threePointList.get(position), sceneGroupList.get(scenePosition - sceneList.size() - 1).getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     sceneGroupList.get(scenePosition - sceneList.size() - 1).setRemark(view.getInputTextMyDialog());
@@ -205,13 +206,30 @@ public class MainPresenterImpl implements MainPresenter {
                         break;
                     case 3:
                         if ((sceneList.size() == 0 & scenePosition != 0) || (sceneList.size() != 0 & scenePosition > sceneList.size())){
-                            view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景群组?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                            view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_WhiteOneBtn_TwoMessage, threePointList.get(position), "删除该场景群组及群组中的场景", "(该群组中的场景将会被删除)", new MyDialog.MessageOneOnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    model.deleteSceneGroup(sceneGroupList.get(scenePosition - sceneList.size() - 1));
                                     view.dismissMyDialog();
+                                    view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否确定要删除该场景群组?", "(该群组中的场景将会被删除)", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    });
+
                                 }
-                            });
+                            }, "仅删除场景群组", "(该群组中的场景将会被返回到场景列表中)", new MyDialog.MessageTwoOnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    view.dismissMyDialog();
+                                    view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否确定要删除该场景群组?", "(该群组中的场景将会返回到场景列表中)", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    });
+                                }
+                            }, "取消", null);
                         }
                         if (sceneList.size() != 0 & scenePosition < sceneList.size()){
                             view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否要删除该场景?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
@@ -375,7 +393,6 @@ public class MainPresenterImpl implements MainPresenter {
         switch (position){
             case 0:
                 view.initMenu();
-                getMenuFromModel();
                 break;
             case 1:
                 break;
@@ -384,7 +401,6 @@ public class MainPresenterImpl implements MainPresenter {
                 model.updateUser(MyApplication.getOnlineUser());
                 model.getSortList(position - 2);
                 view.initMenu();
-                getMenuFromModel();
                 break;
         }
     }

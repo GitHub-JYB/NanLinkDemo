@@ -17,7 +17,7 @@ public interface SceneGroupModel {
 
     void addScene(Scene scene);
 
-    void querySceneGroup(String sceneGroupName);
+    void querySceneGroup(String sceneGroupName, int type);
 
     void updateSceneGroup(SceneGroup sceneGroup);
 
@@ -26,4 +26,6 @@ public interface SceneGroupModel {
     void getSortList(int position);
 
     void updateUser(User user);
+
+    void getSettingList();
 }

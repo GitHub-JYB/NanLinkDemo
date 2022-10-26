@@ -20,10 +20,10 @@ public interface SceneDao {
 
 
     @Query("select * from scene where email = :email AND sceneGroup = :sceneGroup")
-    Single<List<Scene>> getOnlineSceneInfo(String email, String sceneGroup);
+    Single<List<Scene>> getSceneInfoFromSceneGroup(String email, String sceneGroup);
 
     @Query("select * from scene where email = :email AND name = :name")
-    Single<List<Scene>> getSceneInfo(String email, String name);
+    Single<List<Scene>> getSceneInfoFromName(String email, String name);
 
     @Insert
     Single<Long> insert(Scene scenes);

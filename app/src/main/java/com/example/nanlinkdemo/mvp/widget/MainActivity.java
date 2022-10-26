@@ -37,14 +37,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         super.onCreate(savedInstanceState);
         setPresenter();
         initToolbar();
-        initMenu();
         initRecycleView();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        updateMenu();
         updateRecycleView();
 
     }
@@ -54,11 +52,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         presenter.getSceneListFromModel();
     }
 
-
-    @Override
-    public void updateMenu() {
-        presenter.getMenuFromModel();
-    }
 
     private void initRecycleView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
@@ -97,6 +90,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     @Override
     public void initMenu() {
+        presenter.getMenuFromModel();
         binding.navigation.setVersion("Version " + MyApplication.getVersion());
         binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
             @Override

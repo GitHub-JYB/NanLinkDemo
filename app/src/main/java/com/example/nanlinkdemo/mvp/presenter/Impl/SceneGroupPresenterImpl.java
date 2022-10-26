@@ -26,8 +26,10 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
     private SceneGroup sceneGroup;
     private static final int Type_add = 0;
     private static final int Type_rename = 1;
+    private static final int Type_int = 2;
     private int scenePosition;
     private ArrayList<Menu> sortArrayList;
+    private ArrayList<Menu> settingArrayList;
 
     public SceneGroupPresenterImpl(SceneGroupView view) {
         this.view = view;
@@ -41,6 +43,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                 view.finish();
                 break;
             case R.id.toolbar_right_btn:
+                view.initMenu();
                 view.openDrawLayout();
                 break;
             case R.id.toolbar_right_second_btn:
@@ -73,7 +76,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                 model.getSortList(MyApplication.getOnlineUser().getSortPosition());
                 break;
             case 6:
-                view.openDrawLayout();
+                model.getSettingList();
                 break;
         }
     }
@@ -131,7 +134,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                         });
                         break;
                     case 2:
-                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), sceneList.get(scenePosition).getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark, threePointList.get(position), sceneList.get(scenePosition).getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 sceneList.get(scenePosition).setRemark(view.getInputTextMyDialog());
@@ -166,10 +169,10 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
     }
 
     @Override
-    public void switchQuerySceneResult(String inputText, List<Scene> scenes, int type) {
+    public void switchQuerySceneResult(List<Scene> scenes, int type) {
         if (type == Type_add){
-            if (scenes.size() == 0){
-                model.addScene(new Scene(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime(), view.getSceneGroupName()));
+            if (scenes.isEmpty()){
+                model.addScene(new Scene(MyApplication.getOnlineUser().getEmail(), view.getInputTextMyDialog(), 0, "", DateUtil.getTime(), DateUtil.getTime(), view.getSceneGroupName()));
                 sceneGroup.setSceneNum(sceneGroup.getSceneNum() + 1 );
                 sceneGroup.setModifiedDate(DateUtil.getTime());
                 model.updateSceneGroup(sceneGroup);
@@ -193,8 +196,8 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                 });
             }
         }else if (type == Type_rename){
-            if (scenes.size() == 0){
-                sceneList.get(scenePosition).setName(inputText);
+            if (scenes.isEmpty()){
+                sceneList.get(scenePosition).setName(view.getInputTextMyDialog());
                 sceneList.get(scenePosition).setModifiedDate(DateUtil.getTime());
                 model.updateScene(sceneList.get(scenePosition));
                 view.dismissMyDialog();
@@ -224,12 +227,42 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
 
     @Override
     public void getSceneGroupFromModel(String sceneGroupName) {
-        model.querySceneGroup(sceneGroupName);
+        model.querySceneGroup(sceneGroupName, Type_int);
     }
 
     @Override
-    public void updateSceneGroup(List<SceneGroup> sceneGroups) {
-        sceneGroup = sceneGroups.get(0);
+    public void receiveSceneGroup(List<SceneGroup> sceneGroups, int type) {
+        if (type == Type_int){
+            sceneGroup = sceneGroups.get(0);
+        }else if (type == Type_rename){
+            if (sceneGroups.isEmpty()){
+                sceneGroup.setName(view.getInputTextMyDialog());
+                sceneGroup.setModifiedDate(DateUtil.getTime());
+                view.setTitle(sceneGroup.getName());
+                model.updateSceneGroup(sceneGroup);
+                view.dismissMyDialog();
+            }else {
+                view.dismissMyDialog();
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "重命名", "该场景群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "重命名", sceneGroup.getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (view.getInputTextMyDialog().isEmpty()){
+                                    SnackBarUtil.show(v, "请输入场景群组名称");
+                                }else {
+                                    model.querySceneGroup(view.getInputTextMyDialog(), Type_rename);
+                                }
+                            }
+                        });
+                    }
+                });
+
+
+            }
+        }
     }
 
     @Override
@@ -243,7 +276,6 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
         switch (position){
             case 0:
                 view.initMenu();
-                getMenuFromModel();
                 break;
             case 1:
                 break;
@@ -252,8 +284,63 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                 model.updateUser(MyApplication.getOnlineUser());
                 model.getSortList(position - 2);
                 view.initMenu();
-                getMenuFromModel();
                 break;
+        }
+    }
+
+    @Override
+    public void showSettingListToView(ArrayList<Menu> settingArrayList) {
+        this.settingArrayList = settingArrayList;
+        view.showSettingList(settingArrayList);
+    }
+
+    @Override
+    public void settingSwitch(int position) {
+        switch (position){
+            case 0:
+                view.initMenu();
+                break;
+            case 1:
+                break;
+            case 2:
+                view.closeDrawLayout();
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, settingArrayList.get(position).getText(), sceneGroup.getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (view.getInputTextMyDialog().isEmpty()){
+                            SnackBarUtil.show(v, "请输入场景群组名称");
+                        }else {
+                            model.querySceneGroup(view.getInputTextMyDialog(), Type_rename);
+                        }
+                    }
+                });
+                break;
+            case 3:
+                view.closeDrawLayout();
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, settingArrayList.get(position).getText(), sceneGroup.getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sceneGroup.setRemark(view.getInputTextMyDialog());
+                        sceneGroup.setModifiedDate(DateUtil.getTime());
+                        model.updateSceneGroup(sceneGroup);
+                        view.dismissMyDialog();
+                    }
+                });
+                break;
+            case 4:
+                view.closeDrawLayout();
+                view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, settingArrayList.get(position).getText(), "是否要删除该场景群组?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        model.deleteSceneGroup(sceneGroup);
+//                        sceneGroup.setSceneNum(sceneGroup.getSceneNum() - 1);
+//                        sceneGroup.setModifiedDate(DateUtil.getTime());
+//                        model.updateSceneGroup(sceneGroup);
+                        view.dismissMyDialog();
+                    }
+                });
+                break;
+
         }
     }
 }

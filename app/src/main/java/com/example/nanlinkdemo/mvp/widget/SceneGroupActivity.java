@@ -40,7 +40,6 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
         super.onCreate(savedInstanceState);
         setPresenter();
         initToolbar();
-        initMenu();
         initRecycleView();
         initSceneGroup();
     }
@@ -52,7 +51,6 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     @Override
     protected void onStart() {
         super.onStart();
-        updateMenu();
         updateRecycleView();
     }
 
@@ -61,11 +59,6 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
         presenter.getSceneListFromModel(sceneGroupName);
     }
 
-
-    @Override
-    public void updateMenu() {
-        presenter.getMenuFromModel();
-    }
 
     private void initRecycleView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
@@ -91,7 +84,7 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     }
 
     private void initToolbar() {
-        binding.toolbar.setTitle(sceneGroupName);
+        setTitle(sceneGroupName);
         binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
         binding.toolbar.setRightSecondBtnIcon(R.drawable.ic_search);
         binding.toolbar.setRightBtnIcon(R.drawable.ic_menu);
@@ -100,12 +93,18 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
         binding.toolbar.setRightBtnOnClickListener(this);
     }
 
+    @Override
+    public void setTitle(String title){
+        binding.toolbar.setTitle(title);
+    }
+
     private void setPresenter() {
         presenter = new SceneGroupPresenterImpl(this);
     }
 
     @Override
     public void initMenu() {
+        presenter.getMenuFromModel();
         binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
@@ -153,6 +152,17 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
             @Override
             public void onClick(int position) {
                 presenter.sortSwitch(position);
+            }
+        });
+    }
+
+    @Override
+    public void showSettingList(ArrayList<Menu> settingArrayList) {
+        showMenu(settingArrayList);
+        binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position) {
+                presenter.settingSwitch(position);
             }
         });
     }

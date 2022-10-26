@@ -106,6 +106,17 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         myDialog.show(getSupportFragmentManager(), "MyDialog");
     }
 
+    public void showMyDialog(int type, String title, String bigSizeMessageOne, String smallSizeMessageOne, MyDialog.MessageOneOnClickListener messageOneListener, String bigSizeMessageTwo, String smallSizeMessageTwo, MyDialog.MessageTwoOnClickListener messageTwoListener, String neutralText, MyDialog.NeutralOnClickListener neutralListener){
+        myDialog = new MyDialog(type, title, bigSizeMessageOne, smallSizeMessageOne, messageOneListener, bigSizeMessageTwo, smallSizeMessageTwo, messageTwoListener, neutralText, neutralListener);
+        myDialog.show(getSupportFragmentManager(), "MyDialog");
+    }
+
+    public void showMyDialog(int type, String title, String bigSizeMessage, String smallSizeMessage, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener){
+        myDialog = new MyDialog(type, title, bigSizeMessage, smallSizeMessage, negativeText, negativeListener, positiveText, positiveListener);
+        myDialog.show(getSupportFragmentManager(), "MyDialog");
+    }
+
+
     public String getInputTextMyDialog(){
         return myDialog.getInputText();
     }

@@ -57,20 +57,32 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }else if (holder instanceof ViewHolderEmptyMenu){
 
         }else if (holder instanceof ViewHolderItemMenuGrayBg){
-            if (menuList.get(position).getIconResId() != 0){
+            if (menuList.get(position).getIconResId() == 0){
+                ((ViewHolderItemMenuGrayBg) holder).iconMenu.setVisibility(View.INVISIBLE);
+            }else {
+                ((ViewHolderItemMenuGrayBg) holder).iconMenu.setVisibility(View.VISIBLE);
                 ((ViewHolderItemMenuGrayBg) holder).iconMenu.setImageResource(menuList.get(position).getIconResId());
             }
-            if (menuList.get(position).getType() != 0){
+            if (menuList.get(position).getStateResId() == 0){
+                ((ViewHolderItemMenuGrayBg) holder).stateMenu.setVisibility(View.INVISIBLE);
+            }else {
+                ((ViewHolderItemMenuGrayBg) holder).stateMenu.setVisibility(View.VISIBLE);
                 ((ViewHolderItemMenuGrayBg) holder).stateMenu.setImageResource(menuList.get(position).getStateResId());
             }
             if (menuList.get(position).getText() != null){
                 ((ViewHolderItemMenuGrayBg) holder).textMenu.setText(menuList.get(position).getText());
             }
         }else if (holder instanceof ViewHolderItemMenuNavBg){
-            if (menuList.get(position).getIconResId() != 0){
+            if (menuList.get(position).getIconResId() == 0){
+                ((ViewHolderItemMenuNavBg) holder).iconMenu.setVisibility(View.INVISIBLE);
+            }else {
+                ((ViewHolderItemMenuNavBg) holder).iconMenu.setVisibility(View.VISIBLE);
                 ((ViewHolderItemMenuNavBg) holder).iconMenu.setImageResource(menuList.get(position).getIconResId());
             }
-            if (menuList.get(position).getType() != 0){
+            if (menuList.get(position).getStateResId() == 0){
+                ((ViewHolderItemMenuNavBg) holder).stateMenu.setVisibility(View.INVISIBLE);
+            }else {
+                ((ViewHolderItemMenuNavBg) holder).stateMenu.setVisibility(View.VISIBLE);
                 ((ViewHolderItemMenuNavBg) holder).stateMenu.setImageResource(menuList.get(position).getStateResId());
             }
             if (menuList.get(position).getText() != null){

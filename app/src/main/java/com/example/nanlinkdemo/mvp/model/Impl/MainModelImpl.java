@@ -53,7 +53,7 @@ public class MainModelImpl implements MainModel {
     public void getSceneList() {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .getOnlineSceneInfo(MyApplication.getOnlineUser().getEmail(), "")
+                .getSceneInfoFromSceneGroup(MyApplication.getOnlineUser().getEmail(), "")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<Scene>>() {
@@ -155,31 +155,31 @@ public class MainModelImpl implements MainModel {
     }
 
     @Override
-    public void queryScene(String inputText, int type) {
+    public void queryScene(String sceneName, int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .getSceneInfo(MyApplication.getOnlineUser().getEmail(), inputText)
+                .getSceneInfoFromName(MyApplication.getOnlineUser().getEmail(), sceneName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Scene>>() {
                     @Override
                     public void accept(List<Scene> scenes) throws Exception {
-                        presenter.switchQuerySceneResult(inputText, scenes, type);
+                        presenter.switchQuerySceneResult(sceneName, scenes, type);
                     }
                 });
     }
 
     @Override
-    public void querySceneGroup(String inputText, int type) {
+    public void querySceneGroup(String sceneGroupName, int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneGroupDao()
-                .getSceneGroupInfo(MyApplication.getOnlineUser().getEmail(), inputText)
+                .getSceneGroupInfo(MyApplication.getOnlineUser().getEmail(), sceneGroupName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<SceneGroup>>() {
                     @Override
                     public void accept(List<SceneGroup> sceneGroups) throws Exception {
-                        presenter.switchQuerySceneGroupResult(inputText, sceneGroups, type);
+                        presenter.switchQuerySceneGroupResult(sceneGroupName, sceneGroups, type);
                     }
                 });
     }

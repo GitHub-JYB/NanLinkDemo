@@ -21,9 +21,9 @@ public interface MainModel {
 
     void deleteSceneGroup(SceneGroup sceneGroup);
 
-    void queryScene(String inputText, int type);
+    void queryScene(String sceneName, int type);
 
-    void querySceneGroup(String inputText, int type);
+    void querySceneGroup(String sceneGroupName, int type);
 
     void updateScene(Scene scene);
 

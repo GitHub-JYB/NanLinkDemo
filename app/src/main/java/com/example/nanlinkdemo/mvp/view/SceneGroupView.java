@@ -12,7 +12,7 @@ import java.util.List;
 public interface SceneGroupView {
     void updateRecycleView();
 
-    void updateMenu();
+    void setTitle(String title);
 
     void initMenu();
 
@@ -41,4 +41,6 @@ public interface SceneGroupView {
     String getSceneGroupName();
 
     void showSortList(ArrayList<Menu> sortArrayList);
+
+    void showSettingList(ArrayList<Menu> settingArrayList);
 }
