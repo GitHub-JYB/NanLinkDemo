@@ -43,6 +43,8 @@
         <activity android:name=".mvp.widget.EditUserInfoActivity" />
         <activity android:name=".mvp.widget.FeedbackActivity" />
         <activity android:name=".mvp.widget.SceneGroupActivity" />
+        <activity android:name=".mvp.widget.ManageSceneActivity" />
+        <activity android:name=".mvp.widget.SceneActivity" />
     </application>
 
 </manifest>

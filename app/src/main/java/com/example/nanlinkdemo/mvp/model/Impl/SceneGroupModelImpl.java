@@ -46,7 +46,7 @@ public class SceneGroupModelImpl implements SceneGroupModel {
     public void getSceneList(String name) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .getSceneInfoFromName(MyApplication.getOnlineUser().getEmail(), name)
+                .getSceneInfoFromSceneGroup(MyApplication.getOnlineUser().getEmail(), name)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<Scene>>() {
@@ -104,8 +104,8 @@ public class SceneGroupModelImpl implements SceneGroupModel {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
                 .insert(scene)
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
@@ -274,5 +274,35 @@ public class SceneGroupModelImpl implements SceneGroupModel {
         menuArrayList.add(new Menu(0,"编辑备注", 0, TYPE_ITEM_gray_bg));
         menuArrayList.add(new Menu(0,"删除该场景群组", 0, TYPE_ITEM_gray_bg));
         presenter.showSettingListToView(menuArrayList);
+    }
+
+    @Override
+    public void deleteSceneGroup(SceneGroup sceneGroup) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getSceneGroupDao()
+                .deleteInfo(sceneGroup)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        presenter.updateSceneListToView();
+                    }
+                });
+    }
+
+    @Override
+    public void querySceneFromGroup(String sceneGroupName, int type) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getSceneDao()
+                .getSceneInfoFromSceneGroup(MyApplication.getOnlineUser().getEmail(), sceneGroupName)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<Scene>>() {
+                    @Override
+                    public void accept(List<Scene> scenes) throws Exception {
+                        presenter.receiveQuerySceneFromSceneGroup(scenes, type);
+                    }
+                });
     }
 }

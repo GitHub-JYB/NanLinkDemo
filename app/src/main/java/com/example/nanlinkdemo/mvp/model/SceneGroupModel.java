@@ -28,4 +28,8 @@ public interface SceneGroupModel {
     void updateUser(User user);
 
     void getSettingList();
+
+    void deleteSceneGroup(SceneGroup sceneGroup);
+
+    void querySceneFromGroup(String sceneGroupName, int type);
 }

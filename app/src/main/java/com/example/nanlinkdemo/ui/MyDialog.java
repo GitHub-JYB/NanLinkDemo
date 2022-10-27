@@ -366,7 +366,7 @@ public class MyDialog extends DialogFragment {
     private void setRead() {
         binding.myDialogInput.setVisibility(View.GONE);
         binding.myDialogMessage.setVisibility(View.VISIBLE);
-        binding.myDialogSmallSize.setVisibility(View.GONE);
+        binding.myDialogSmallSize.setVisibility(View.VISIBLE);
         binding.myDialogTwoMessage.setVisibility(View.GONE);
         binding.myDialogInputRemark.setVisibility(View.GONE);
     }

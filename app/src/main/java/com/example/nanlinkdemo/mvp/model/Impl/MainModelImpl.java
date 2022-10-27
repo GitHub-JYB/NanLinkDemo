@@ -164,7 +164,7 @@ public class MainModelImpl implements MainModel {
                 .subscribe(new Consumer<List<Scene>>() {
                     @Override
                     public void accept(List<Scene> scenes) throws Exception {
-                        presenter.switchQuerySceneResult(sceneName, scenes, type);
+                        presenter.switchQuerySceneResult(scenes, type);
                     }
                 });
     }
@@ -179,7 +179,7 @@ public class MainModelImpl implements MainModel {
                 .subscribe(new Consumer<List<SceneGroup>>() {
                     @Override
                     public void accept(List<SceneGroup> sceneGroups) throws Exception {
-                        presenter.switchQuerySceneGroupResult(sceneGroupName, sceneGroups, type);
+                        presenter.switchQuerySceneGroupResult(sceneGroups, type);
                     }
                 });
     }
@@ -315,6 +315,22 @@ public class MainModelImpl implements MainModel {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
+                    }
+                });
+    }
+
+    @Override
+    public void querySceneFromGroup(String sceneGroupName, int type) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getSceneDao()
+                .getSceneInfoFromSceneGroup(MyApplication.getOnlineUser().getEmail(), sceneGroupName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Scene>>() {
+                    @Override
+                    public void accept(List<Scene> scenes) throws Exception {
+                        presenter.receiveQuerySceneFromSceneGroup(scenes, type);
+
                     }
                 });
     }

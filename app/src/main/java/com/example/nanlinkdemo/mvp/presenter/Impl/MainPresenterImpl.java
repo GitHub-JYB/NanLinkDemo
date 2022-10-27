@@ -31,6 +31,8 @@ public class MainPresenterImpl implements MainPresenter {
     private boolean completeGetScene, completeGetSceneGroup;
     private static final int Type_add = 0;
     private static final int Type_rename = 1;
+    private static final int Type_delete = 2;
+    private static final int Type_update = 3;
     private int scenePosition;
     private ArrayList<Menu> sortArrayList;
 
@@ -212,8 +214,10 @@ public class MainPresenterImpl implements MainPresenter {
                                     view.dismissMyDialog();
                                     view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否确定要删除该场景群组?", "(该群组中的场景将会被删除)", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                                         @Override
-                                        public void onClick(View view) {
-
+                                        public void onClick(View v) {
+                                            model.deleteSceneGroup(sceneGroupList.get(scenePosition - sceneList.size() - 1));
+                                            model.querySceneFromGroup(sceneGroupList.get(scenePosition - sceneList.size() -1).getName(), Type_delete);
+                                            view.dismissMyDialog();
                                         }
                                     });
 
@@ -224,8 +228,10 @@ public class MainPresenterImpl implements MainPresenter {
                                     view.dismissMyDialog();
                                     view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, threePointList.get(position), "是否确定要删除该场景群组?", "(该群组中的场景将会返回到场景列表中)", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                                         @Override
-                                        public void onClick(View view) {
-
+                                        public void onClick(View v) {
+                                            model.deleteSceneGroup(sceneGroupList.get(scenePosition - sceneList.size() - 1));
+                                            model.querySceneFromGroup(sceneGroupList.get(scenePosition - sceneList.size() -1).getName(), Type_update);
+                                            view.dismissMyDialog();
                                         }
                                     });
                                 }
@@ -271,10 +277,10 @@ public class MainPresenterImpl implements MainPresenter {
 
 
     @Override
-    public void switchQuerySceneResult(String inputText, List<Scene> scenes, int type) {
+    public void switchQuerySceneResult(List<Scene> scenes, int type) {
         if (type == Type_add){
             if (scenes.size() == 0){
-                model.addScene(new Scene(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime(), ""));
+                model.addScene(new Scene(MyApplication.getOnlineUser().getEmail(), view.getInputTextMyDialog(), 0, "", DateUtil.getTime(), DateUtil.getTime(), ""));
             }else {
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景", "该场景名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
                     @Override
@@ -296,7 +302,7 @@ public class MainPresenterImpl implements MainPresenter {
             }
         }else if (type == Type_rename){
             if (scenes.size() == 0){
-                sceneList.get(scenePosition).setName(inputText);
+                sceneList.get(scenePosition).setName(view.getInputTextMyDialog());
                 sceneList.get(scenePosition).setModifiedDate(DateUtil.getTime());
                 model.updateScene(sceneList.get(scenePosition));
                 view.dismissMyDialog();
@@ -324,10 +330,10 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups, int type) {
+    public void switchQuerySceneGroupResult(List<SceneGroup> sceneGroups, int type) {
         if (type == Type_add) {
             if (sceneGroups.size() == 0) {
-                model.addSceneGroup(new SceneGroup(MyApplication.getOnlineUser().getEmail(), inputText, 0, "", DateUtil.getTime(), DateUtil.getTime()));
+                model.addSceneGroup(new SceneGroup(MyApplication.getOnlineUser().getEmail(), view.getInputTextMyDialog(), 0, "", DateUtil.getTime(), DateUtil.getTime()));
             } else {
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景群组", "该场景群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
                     @Override
@@ -349,7 +355,7 @@ public class MainPresenterImpl implements MainPresenter {
             }
         }else if (type == Type_rename){
             if (sceneGroups.size() == 0) {
-                sceneGroupList.get(scenePosition - sceneList.size() - 1).setName(inputText);
+                sceneGroupList.get(scenePosition - sceneList.size() - 1).setName(view.getInputTextMyDialog());
                 sceneGroupList.get(scenePosition - sceneList.size() - 1).setModifiedDate(DateUtil.getTime());
                 model.updateSceneGroup(sceneGroupList.get(scenePosition - sceneList.size() - 1));
                 view.dismissMyDialog();
@@ -402,6 +408,20 @@ public class MainPresenterImpl implements MainPresenter {
                 model.getSortList(position - 2);
                 view.initMenu();
                 break;
+        }
+    }
+
+    @Override
+    public void receiveQuerySceneFromSceneGroup(List<Scene> scenes, int type) {
+        if (type == Type_delete){
+            for (Scene scene : scenes) {
+                model.deleteScene(scene);
+            }
+        }else if (type == Type_update){
+            for (Scene scene : scenes){
+                scene.setSceneGroup("");
+                model.updateScene(scene);
+            }
         }
     }
 

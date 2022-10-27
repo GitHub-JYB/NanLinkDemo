@@ -36,9 +36,9 @@ public interface MainPresenter {
 
     void completeGetSceneGroup(List<SceneGroup> sceneGroups);
 
-    void switchQuerySceneResult(String inputText, List<Scene> scenes, int type);
+    void switchQuerySceneResult(List<Scene> scenes, int type);
 
-    void switchQuerySceneGroupResult(String inputText, List<SceneGroup> sceneGroups, int type);
+    void switchQuerySceneGroupResult(List<SceneGroup> sceneGroups, int type);
 
     void sceneMenuSwitch(int position);
 
@@ -46,4 +46,5 @@ public interface MainPresenter {
 
     void sortSwitch(int position);
 
+    void receiveQuerySceneFromSceneGroup(List<Scene> scenes, int type);
 }

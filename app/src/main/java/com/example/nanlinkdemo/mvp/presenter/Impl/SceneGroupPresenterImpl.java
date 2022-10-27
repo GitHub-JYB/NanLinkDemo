@@ -2,6 +2,7 @@ package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
@@ -12,6 +13,7 @@ import com.example.nanlinkdemo.mvp.model.Impl.SceneGroupModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.SceneGroupPresenter;
 import com.example.nanlinkdemo.mvp.view.SceneGroupView;
 import com.example.nanlinkdemo.ui.MyDialog;
+import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.DateUtil;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
@@ -27,6 +29,9 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
     private static final int Type_add = 0;
     private static final int Type_rename = 1;
     private static final int Type_int = 2;
+    private static final int Type_delete = 3;
+    private static final int Type_update = 4;
+
     private int scenePosition;
     private ArrayList<Menu> sortArrayList;
     private ArrayList<Menu> settingArrayList;
@@ -56,6 +61,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
     public void menuSwitch(int position) {
         switch (position) {
             case 1:
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_ManageScene).withString("sceneGroupName", sceneGroup.getName()).navigation();
                 view.closeDrawLayout();
                 break;
             case 3:
@@ -66,7 +72,6 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                             SnackBarUtil.show(v, "请输入场景名称");
                         }else {
                             model.queryScene(view.getInputTextMyDialog(), Type_add);
-                            view.dismissMyDialog();
                         }
                     }
                 });
@@ -176,7 +181,9 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                 sceneGroup.setSceneNum(sceneGroup.getSceneNum() + 1 );
                 sceneGroup.setModifiedDate(DateUtil.getTime());
                 model.updateSceneGroup(sceneGroup);
+                view.dismissMyDialog();
             }else {
+                view.dismissMyDialog();
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景", "该场景名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -188,7 +195,6 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                                     SnackBarUtil.show(v, "请输入场景名称");
                                 }else {
                                     model.queryScene(view.getInputTextMyDialog(), Type_add);
-                                    view.dismissMyDialog();
                                 }
                             }
                         });
@@ -300,8 +306,6 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
             case 0:
                 view.initMenu();
                 break;
-            case 1:
-                break;
             case 2:
                 view.closeDrawLayout();
                 view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, settingArrayList.get(position).getText(), sceneGroup.getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
@@ -329,18 +333,54 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                 break;
             case 4:
                 view.closeDrawLayout();
-                view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, settingArrayList.get(position).getText(), "是否要删除该场景群组?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_WhiteOneBtn_TwoMessage, settingArrayList.get(position).getText(), "删除该场景群组及群组中的场景", "(该群组中的场景将会被删除)", new MyDialog.MessageOneOnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        model.deleteSceneGroup(sceneGroup);
-//                        sceneGroup.setSceneNum(sceneGroup.getSceneNum() - 1);
-//                        sceneGroup.setModifiedDate(DateUtil.getTime());
-//                        model.updateSceneGroup(sceneGroup);
                         view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, settingArrayList.get(position).getText(), "是否确定要删除该场景群组?", "(该群组中的场景将会被删除)", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                model.querySceneFromGroup(sceneGroup.getName(), Type_delete);
+                                model.deleteSceneGroup(sceneGroup);
+                                view.dismissMyDialog();
+                                view.finish();
+                            }
+                        });
+
                     }
-                });
+                }, "仅删除场景群组", "(该群组中的场景将会被返回到场景列表中)", new MyDialog.MessageTwoOnClickListener()
+
+                    {
+                        @Override
+                        public void onClick (View v){
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, settingArrayList.get(position).getText(), "是否确定要删除该场景群组?", "(该群组中的场景将会返回到场景列表中)", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                model.querySceneFromGroup(sceneGroup.getName(), Type_update);
+                                model.deleteSceneGroup(sceneGroup);
+                                view.dismissMyDialog();
+                                view.finish();
+                            }
+                        });
+                    }
+                    }, "取消", null);
                 break;
 
+        }
+    }
+
+    @Override
+    public void receiveQuerySceneFromSceneGroup(List<Scene> scenes, int type) {
+        if (type == Type_delete){
+            for (Scene scene : scenes){
+                model.deleteScene(scene);
+            }
+        }else if (type == Type_update){
+            for (Scene scene : scenes){
+                scene.setSceneGroup("");
+                model.updateScene(scene);
+            }
         }
     }
 }

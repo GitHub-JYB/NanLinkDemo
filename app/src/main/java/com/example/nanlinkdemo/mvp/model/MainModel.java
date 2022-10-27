@@ -32,4 +32,6 @@ public interface MainModel {
     void getSortList(int position);
 
     void updateUser(User user);
+
+    void querySceneFromGroup(String sceneGroupName, int type);
 }

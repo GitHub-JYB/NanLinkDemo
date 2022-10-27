@@ -44,4 +44,6 @@ public interface SceneGroupPresenter {
     void showSettingListToView(ArrayList<Menu> settingArrayList);
 
     void settingSwitch(int position);
+
+    void receiveQuerySceneFromSceneGroup(List<Scene> scenes, int type);
 }

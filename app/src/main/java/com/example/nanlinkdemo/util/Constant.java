@@ -18,13 +18,15 @@ public class Constant {
     public static final String ACTIVITY_URL_EditUserInfo = "/widget/EditUserInfoActivity";
     public static final String ACTIVITY_URL_Feedback = "/widget/FeedbackActivity";
     public static final String ACTIVITY_URL_SceneGroup = "/widget/SceneGroupActivity";
+    public static final String ACTIVITY_URL_ManageScene = "/widget/ManageSceneActivity";
+    public static final String ACTIVITY_URL_Scene = "/widget/SceneActivity";
+
 
 
 
 
     public static final int Code_Register = 0;
     public static final int Code_ResetPassword = 1;
-
 
 
 }
