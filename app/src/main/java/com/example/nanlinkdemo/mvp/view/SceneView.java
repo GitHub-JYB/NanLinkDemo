@@ -1,15 +1,15 @@
 package com.example.nanlinkdemo.mvp.view;
 
-import com.example.nanlinkdemo.DB.bean.Scene;
-import com.example.nanlinkdemo.DB.bean.SceneGroup;
+import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 import com.example.nanlinkdemo.ui.MyDialog;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public interface SceneGroupView {
+public interface SceneView {
     void updateRecycleView();
 
     void setTitle(String title);
@@ -22,9 +22,11 @@ public interface SceneGroupView {
 
     void closeDrawLayout();
 
-    void showSceneList(List<Scene> sceneList);
+    void showFixtureList(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList);
 
-    void finish();
+    void showSortList(ArrayList<Menu> sortArrayList);
+
+    void showSettingList(ArrayList<Menu> settingArrayList);
 
     void showMyDialog(int type, String title, String bigSizeMessage, String smallSizeMessage, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
 
@@ -34,15 +36,9 @@ public interface SceneGroupView {
 
     void showMyDialog(int type, String title, String message, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
 
-    void dismissSettingDialog();
-
     void dismissMyDialog();
 
-    void showSettingDialog(ArrayList<String> settingList, ThreePointAdapter.OnClickListener listener);
+    void finish();
 
     String getInputTextMyDialog();
-
-    void showSortList(ArrayList<Menu> sortArrayList);
-
-    void showSettingList(ArrayList<Menu> settingArrayList);
 }

@@ -5,7 +5,6 @@ package com.example.nanlinkdemo.mvp.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
-import com.example.nanlinkdemo.databinding.VpDecorationBinding;
+import com.example.nanlinkdemo.databinding.VpDecorationSceneListBinding;
 import com.example.nanlinkdemo.databinding.VpSceneScenelistBinding;
 import com.example.nanlinkdemo.databinding.VpScenegroupScenelistBinding;
 import com.example.nanlinkdemo.util.DateUtil;
@@ -43,7 +42,7 @@ public class SceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
         } else if (viewType == TYPE_DECORATION) {
-            VpDecorationBinding vpDecorationBinding = VpDecorationBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            VpDecorationSceneListBinding vpDecorationBinding = VpDecorationSceneListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new ViewHolderDecorationSceneList(vpDecorationBinding);
 
         }else {
@@ -181,7 +180,7 @@ public class SceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         TextView name, sceneNum, remark, createdData, modifiedData;
 
-        public ViewHolderDecorationSceneList(@NonNull VpDecorationBinding binding) {
+        public ViewHolderDecorationSceneList(@NonNull VpDecorationSceneListBinding binding) {
             super(binding.getRoot());
             name = binding.name;
         }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@drawable/bg_fixture">
+
+
+
+    <TextView
+        android:id="@+id/name"
+        android:text="Demo Scene"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="7dp"
+        android:textColor="@color/white"
+        android:textSize="17sp"/>
+
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_below="@+id/name"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/login_hintText"
+        android:text="CH: 15"/>
+
+    <TextView
+        android:id="@+id/connectType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_below="@+id/name"
+        android:layout_toEndOf="@id/number"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/login_hintText"
+        android:text="蓝牙"/>
+
+
+    <ImageView
+        android:id="@+id/right_third_icon"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:layout_toStartOf="@+id/right_second_icon"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/ic_full_battery"
+        android:background="@android:color/transparent"/>
+
+
+    <ImageView
+        android:id="@+id/right_second_icon"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:layout_toStartOf="@+id/menu"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/ic_dim_on"
+        android:background="@android:color/transparent"/>
+
+
+    <ImageView
+        android:id="@+id/menu"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_three_point"
+        android:background="@android:color/transparent"/>
+
+</RelativeLayout>
+

@@ -8,16 +8,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.nanlinkdemo.DB.bean.Scene;
-import com.example.nanlinkdemo.DB.bean.SceneGroup;
+import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.databinding.ActivitySceneBinding;
-import com.example.nanlinkdemo.databinding.ActivitySceneGroupBinding;
+import com.example.nanlinkdemo.mvp.adapter.FixtureAdapter;
 import com.example.nanlinkdemo.mvp.adapter.MenuAdapter;
-import com.example.nanlinkdemo.mvp.adapter.SceneAdapter;
-import com.example.nanlinkdemo.mvp.presenter.Impl.SceneGroupPresenterImpl;
-import com.example.nanlinkdemo.mvp.view.SceneGroupView;
+import com.example.nanlinkdemo.mvp.presenter.Impl.ScenePresenterImpl;
+import com.example.nanlinkdemo.mvp.view.SceneView;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 import com.example.nanlinkdemo.util.Constant;
 
@@ -25,14 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route(path = Constant.ACTIVITY_URL_Scene)
-public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements SceneGroupView, View.OnClickListener {
+public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements SceneView, View.OnClickListener {
 
 
     @Autowired(name = "sceneName")
-    String sceneGroupName;
+    String sceneName;
 
-    private SceneGroupPresenterImpl presenter;
-    private SceneAdapter sceneAdapter;
+    private ScenePresenterImpl presenter;
+    private FixtureAdapter fixtureAdapter;
 
 
 
@@ -42,11 +41,16 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         setPresenter();
         initToolbar();
         initRecycleView();
-        initSceneGroup();
+        initScene();
+        initAddNewFixtureLogo();
     }
 
-    private void initSceneGroup() {
-        presenter.getSceneGroupFromModel(sceneGroupName);
+    private void initAddNewFixtureLogo() {
+        binding.addFixture.setOnClickListener(this);
+    }
+
+    private void initScene() {
+        presenter.getSceneFromModel(sceneName);
     }
 
     @Override
@@ -57,7 +61,7 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
 
     @Override
     public void updateRecycleView() {
-        presenter.getSceneListFromModel(sceneGroupName);
+        presenter.getFixtureListFromModel(sceneName);
     }
 
 
@@ -68,29 +72,39 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         UnlessLastItemDecoration decoration = new UnlessLastItemDecoration(this, LinearLayoutManager.VERTICAL);
         decoration.setDrawable(getDrawable(R.drawable.decoration_scene));
         binding.recycleView.addItemDecoration(decoration);
-        sceneAdapter = new SceneAdapter();
-        binding.recycleView.setAdapter(sceneAdapter);
-        sceneAdapter.setMenuOnClickListener(new SceneAdapter.MenuOnClickListener() {
+        fixtureAdapter = new FixtureAdapter();
+        binding.recycleView.setAdapter(fixtureAdapter);
+        fixtureAdapter.setMenuOnClickListener(new FixtureAdapter.MenuOnClickListener() {
             @Override
             public void onClick(int position) {
-                presenter.sceneMenuSwitch(position);
+
             }
         });
-        sceneAdapter.setOnClickListener(new SceneAdapter.OnClickListener() {
+        fixtureAdapter.setOnClickListener(new FixtureAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
-                presenter.sceneListSwitch(position);
+
+            }
+        });
+        fixtureAdapter.setRightSecondIconOnClickListener(new FixtureAdapter.RightSecondIconOnClickListener() {
+            @Override
+            public void onClick(int position) {
+
+            }
+        });
+        fixtureAdapter.setSpreadIconOnClickListener(new FixtureAdapter.SpreadIconOnClickListener() {
+            @Override
+            public void onClick(int position) {
+
             }
         });
     }
 
     private void initToolbar() {
-        setTitle(sceneGroupName);
-        binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
-        binding.toolbar.setRightSecondBtnIcon(R.drawable.ic_search);
+        setTitle(sceneName);
+        binding.toolbar.setLeftBtnIcon(R.drawable.ic_exit);
         binding.toolbar.setRightBtnIcon(R.drawable.ic_menu);
         binding.toolbar.setLeftBtnOnClickListener(this);
-        binding.toolbar.setRightSecondBtnOnClickListener(this);
         binding.toolbar.setRightBtnOnClickListener(this);
     }
 
@@ -100,7 +114,7 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
     }
 
     private void setPresenter() {
-        presenter = new SceneGroupPresenterImpl(this);
+        presenter = new ScenePresenterImpl(this);
     }
 
     @Override
@@ -132,18 +146,21 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
 
 
     @Override
-    public void showSceneList(List<Scene> sceneList) {
-        sceneAdapter.setData(sceneList, new ArrayList<SceneGroup>());
+    public void showFixtureList(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList) {
+        if (fixtureGroupList.isEmpty() && fixtureList.isEmpty()){
+            binding.addFixture.setVisibility(View.VISIBLE);
+            binding.recycleView.setVisibility(View.GONE);
+        }else {
+            binding.addFixture.setVisibility(View.GONE);
+            binding.recycleView.setVisibility(View.VISIBLE);
+            fixtureAdapter.setData(fixtureGroupList, fixtureList);
+
+        }
     }
 
     @Override
     public void onClick(View v) {
-        presenter.toolbarSwitch(v);
-    }
-
-    @Override
-    public String getSceneGroupName() {
-        return sceneGroupName;
+        presenter.switchOnclick(v);
     }
 
     @Override

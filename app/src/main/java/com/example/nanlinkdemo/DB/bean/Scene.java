@@ -23,6 +23,8 @@ public class Scene {
     private Long modifiedDate;
     @ColumnInfo
     private String sceneGroup;
+    @ColumnInfo
+    private int sortPosition;
 
 
     public Scene(String email, String name, int fixtureNum, String remark, Long createdDate, Long modifiedDate, String sceneGroup){
@@ -33,6 +35,7 @@ public class Scene {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.sceneGroup = sceneGroup;
+        this.sortPosition = 0;
     }
 
     public int getFixtureNum() {
@@ -97,5 +100,13 @@ public class Scene {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getSortPosition() {
+        return sortPosition;
+    }
+
+    public void setSortPosition(int sortPosition) {
+        this.sortPosition = sortPosition;
     }
 }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
@@ -12,8 +11,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityRecycleviewBinding;
-import com.example.nanlinkdemo.mvp.adapter.FixtureAdapter;
-import com.example.nanlinkdemo.mvp.adapter.SettingAdapter;
+import com.example.nanlinkdemo.mvp.adapter.ManageGroupAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ManageScenePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.ManageSceneView;
 import com.example.nanlinkdemo.util.Constant;
@@ -28,7 +26,7 @@ public class ManageSceneActivity extends BaseActivity<ActivityRecycleviewBinding
     String sceneGroupName;
 
     private ManageScenePresenterImpl presenter;
-    private FixtureAdapter adapter;
+    private ManageGroupAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,9 +78,9 @@ public class ManageSceneActivity extends BaseActivity<ActivityRecycleviewBinding
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
-        adapter = new FixtureAdapter();
+        adapter = new ManageGroupAdapter();
         binding.recycleView.setAdapter(adapter);
-        adapter.setOnClickListener(new FixtureAdapter.OnClickListener() {
+        adapter.setOnClickListener(new ManageGroupAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
                 presenter.switchSceneList(position);

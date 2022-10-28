@@ -8,30 +8,39 @@
     tools:context=".mvp.widget.MainActivity">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/theme"
-        android:orientation="vertical">
+        android:background="@color/theme">
 
         <com.example.nanlinkdemo.ui.MyToolbar
             android:id="@+id/toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent" />
 
+        <ImageView
+            android:id="@+id/add_fixture"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="69dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/toolbar"
+            android:src="@drawable/ic_add_new_fixture"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycleView"
+            android:layout_below="@+id/toolbar"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:background="@color/theme">
 
         </androidx.recyclerview.widget.RecyclerView>
 
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <com.example.nanlinkdemo.ui.MyNavigation

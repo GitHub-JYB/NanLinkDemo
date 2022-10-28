@@ -88,7 +88,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
 
     @Override
     public void sceneListSwitch(int position) {
-        view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "场景列表点击", sceneList.get(position).getName(), "重试", null);
+        ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withString("sceneName", sceneList.get(position).getName()).navigation();
     }
 
     @Override
@@ -177,7 +177,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
     public void switchQuerySceneResult(List<Scene> scenes, int type) {
         if (type == Type_add){
             if (scenes.isEmpty()){
-                model.addScene(new Scene(MyApplication.getOnlineUser().getEmail(), view.getInputTextMyDialog(), 0, "", DateUtil.getTime(), DateUtil.getTime(), view.getSceneGroupName()));
+                model.addScene(new Scene(MyApplication.getOnlineUser().getEmail(), view.getInputTextMyDialog(), 0, "", DateUtil.getTime(), DateUtil.getTime(), sceneGroup.getName()));
                 sceneGroup.setSceneNum(sceneGroup.getSceneNum() + 1 );
                 sceneGroup.setModifiedDate(DateUtil.getTime());
                 model.updateSceneGroup(sceneGroup);

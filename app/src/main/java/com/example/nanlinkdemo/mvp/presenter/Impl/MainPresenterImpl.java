@@ -121,7 +121,7 @@ public class MainPresenterImpl implements MainPresenter {
             ARouter.getInstance().build(Constant.ACTIVITY_URL_SceneGroup).withString("sceneGroupName", sceneGroupList.get(position - sceneList.size() - 1).getName()).navigation();
         }
         if (sceneList.size() != 0 & position < sceneList.size()){
-            view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "场景列表点击", sceneList.get(position).getName(), "重试", null);
+            ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withString("sceneName", sceneList.get(position).getName()).navigation();
         }
     }
 

@@ -141,11 +141,6 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     }
 
     @Override
-    public String getSceneGroupName() {
-        return sceneGroupName;
-    }
-
-    @Override
     public void showSortList(ArrayList<Menu> sortArrayList) {
         showMenu(sortArrayList);
         binding.navigation.setItemOnClickListener(new MenuAdapter.OnClickListener() {
