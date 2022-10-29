@@ -16,11 +16,14 @@ import io.reactivex.Single;
 public interface FixtureDao {
 
 
-    @Query("select * from fixture where sceneName = :sceneName AND fixtureGroupName = :fixtureGroupName")
-    Single<List<Fixture>> getFixtureInfoFromFixtureGroup(String sceneName, String fixtureGroupName);
+    @Query("select * from fixture where email = :email AND sceneName = :sceneName")
+    Single<List<Fixture>> getAllFixtureInfo(String email, String sceneName);
 
-    @Query("select * from fixture where sceneName = :sceneName AND CH = :CH")
-    Single<List<Fixture>> getFixtureInfoFromName(String sceneName, int CH);
+    @Query("select * from fixture where email = :email AND sceneName = :sceneName AND fixtureGroupName = :fixtureGroupName")
+    Single<List<Fixture>> getFixtureInfoFromFixtureGroup(String email, String sceneName, String fixtureGroupName);
+
+    @Query("select * from fixture where email = :email AND sceneName = :sceneName AND CH = :CH")
+    Single<List<Fixture>> getFixtureInfoFromName(String email, String sceneName, int CH);
 
     @Insert
     Single<Long> insert(Fixture fixtures);

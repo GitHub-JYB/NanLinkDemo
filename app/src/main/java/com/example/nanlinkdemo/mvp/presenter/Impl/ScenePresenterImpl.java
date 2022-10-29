@@ -2,7 +2,8 @@ package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 import android.view.View;
 
-import com.example.nanlinkdemo.Application.MyApplication;
+import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
@@ -20,9 +21,30 @@ public class ScenePresenterImpl implements ScenePresenter {
     private final SceneView view;
     private final SceneModelImpl model;
     private ArrayList<Menu> menuArrayList;
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
     private Scene scene;
     private ArrayList<Menu> sortArrayList;
+    private ArrayList<Fixture> fixtureList;
+    private ArrayList<FixtureGroup> fixtureGroupList;
+
+
     private ArrayList<Menu> settingArrayList;
+    private static final int Type_add = 0;
+    private static final int Type_rename = 1;
+    private static final int Type_init = 2;
+    private static final int Type_delete = 3;
+    private static final int Type_update = 4;
+
+
+
 
     public ScenePresenterImpl(SceneView view) {
         this.view = view;
@@ -31,7 +53,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void getSceneFromModel(String sceneName) {
-        model.getSceneList(sceneName);
+        model.queryScene(sceneName, Type_init);
     }
 
     @Override
@@ -50,7 +72,6 @@ public class ScenePresenterImpl implements ScenePresenter {
                 break;
             case R.id.toolbar_right_btn:
                 view.initMenu();
-                view.openDrawLayout();
                 break;
         }
     }
@@ -84,7 +105,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                     @Override
                     public void onClick(View v) {
                         if (view.getInputTextMyDialog().isEmpty()){
-                            SnackBarUtil.show(v, "请输入场景群组名称");
+                            SnackBarUtil.show(v, "请输入场景名称");
                         }else {
                             model.queryScene(view.getInputTextMyDialog(), Type_rename);
                         }
@@ -93,7 +114,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                 break;
             case 3:
                 view.closeDrawLayout();
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, settingArrayList.get(position).getText(), scene.getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark, settingArrayList.get(position).getText(), scene.getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
                         scene.setRemark(view.getInputTextMyDialog());
@@ -105,46 +126,24 @@ public class ScenePresenterImpl implements ScenePresenter {
                 break;
             case 4:
                 view.closeDrawLayout();
-                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_WhiteOneBtn_TwoMessage, settingArrayList.get(position).getText(), "删除该场景群组及群组中的场景", "(该群组中的场景将会被删除)", new MyDialog.MessageOneOnClickListener() {
+                view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, settingArrayList.get(position).getText(), "是否要删除该场景?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        model.deleteScene(scene);
+                        model.queryAllFixture(Type_delete);
+                        model.queryAllFixtureGroup(Type_delete);
                         view.dismissMyDialog();
-                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, settingArrayList.get(position).getText(), "是否确定要删除该场景群组?", "(该群组中的场景将会被删除)", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                model.querySceneFromGroup(scene.getName(), Type_delete);
-                                model.deleteScene(scene);
-                                view.dismissMyDialog();
-                                view.finish();
-                            }
-                        });
-
+                        view.finish();
                     }
-                }, "仅删除场景群组", "(该群组中的场景将会被返回到场景列表中)", new MyDialog.MessageTwoOnClickListener()
-
-                {
-                    @Override
-                    public void onClick (View v){
-                        view.dismissMyDialog();
-                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, settingArrayList.get(position).getText(), "是否确定要删除该场景群组?", "(该群组中的场景将会返回到场景列表中)", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                model.querySceneFromGroup(sceneGroup.getName(), Type_update);
-                                model.deleteSceneGroup(sceneGroup);
-                                view.dismissMyDialog();
-                                view.finish();
-                            }
-                        });
-                    }
-                }, "取消", null);
+                });
                 break;
 
         }
     }
 
     @Override
-    public void getFixtureListFromModel(String sceneName) {
-
+    public void getFixtureListFromModel() {
+        model.queryAllFixtureGroup(Type_init);
     }
 
     @Override
@@ -156,7 +155,31 @@ public class ScenePresenterImpl implements ScenePresenter {
     public void menuSwitch(int position) {
         switch (position){
             case 1:
+                view.closeDrawLayout();
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, menuArrayList.get(position).getText(), "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (view.getInputTextMyDialog().isEmpty()){
+                            SnackBarUtil.show(v, "请输入地址码");
+                        }else {
+                            model.queryFixture(view.getInputTextMyDialog(), Type_add);
+                        }
+                    }
+                });
+                break;
             case 2:
+                view.closeDrawLayout();
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, menuArrayList.get(position).getText(), "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (view.getInputTextMyDialog().isEmpty()){
+                            SnackBarUtil.show(v, "请输入设备群组名称");
+                        }else {
+                            model.queryFixtureGroup(view.getInputTextMyDialog(), Type_add);
+                        }
+                    }
+                });
+                break;
             case 3:
                 model.getSortList(scene.getSortPosition());
                 break;
@@ -164,6 +187,8 @@ public class ScenePresenterImpl implements ScenePresenter {
             case 7:
             case 8:
             case 10:
+                view.closeDrawLayout();
+                break;
             case 12:
                 model.getSettingList();
                 break;
@@ -172,7 +197,18 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void FixtureListSwitch(int position) {
+        if (fixtureGroupList.isEmpty()){
+            if (position > 0){
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_WhiteOneBtn, "点击设备群组: " + fixtureGroupList.get(position - 1).getName(), "该功能还没开发", "重试", null);
+            }
+        }else {
+            if (position > 0 && position <= fixtureGroupList.size()) {
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_WhiteOneBtn, "点击设备群组: " + fixtureGroupList.get(position - 1).getName(), "该功能还没开发", "重试", null);
+            } else if (position > fixtureGroupList.size() + 1) {
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_WhiteOneBtn, "点击设备: " + fixtureGroupList.get(position - fixtureGroupList.size() - 2).getName(), "该功能还没开发", "重试", null);
 
+            }
+        }
     }
 
     @Override
@@ -184,6 +220,7 @@ public class ScenePresenterImpl implements ScenePresenter {
     public void receiveMenu(ArrayList<Menu> menuArrayList) {
         this.menuArrayList = menuArrayList;
         view.showMenu(menuArrayList);
+        view.openDrawLayout();
     }
 
     @Override
@@ -193,13 +230,142 @@ public class ScenePresenterImpl implements ScenePresenter {
     }
 
     @Override
-    public void receiveSceneList(List<Scene> scenes) {
-        scene = scenes.get(0);
+    public void receiveSceneList(List<Scene> scenes, int type) {
+        if (type == Type_init){
+            setScene(scenes.get(0));
+            view.updateRecycleView();
+        }else if (type == Type_rename){
+            if (scenes.isEmpty()){
+                model.queryAllFixture(Type_rename);
+                model.queryAllFixtureGroup(Type_rename);
+                scene.setName(view.getInputTextMyDialog());
+                scene.setModifiedDate(DateUtil.getTime());
+                model.updateScene(scene);
+                view.setTitle(scene.getName());
+                view.dismissMyDialog();
+            }else {
+                view.dismissMyDialog();
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "重命名", scene.getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (view.getInputTextMyDialog().isEmpty()){
+                            SnackBarUtil.show(v, "请输入场景名称");
+                        }else {
+                            model.queryScene(view.getInputTextMyDialog(), Type_rename);
+                        }
+                    }
+                });
+            }
+        }
     }
 
     @Override
     public void showSettingListToView(ArrayList<Menu> settingArrayList) {
         this.settingArrayList = settingArrayList;
         view.showSettingList(settingArrayList);
+    }
+
+    @Override
+    public void receiveAllFixture(List<Fixture> fixtures, int type) {
+        if (type == Type_delete){
+            for (Fixture fixture : fixtures){
+                model.deleteFixture(fixture);
+            }
+        }
+        if (type == Type_rename){
+            for (Fixture fixture : fixtures){
+                fixture.setSceneName(view.getInputTextMyDialog());
+                model.updateFixture(fixture);
+            }
+        }
+
+    }
+
+    @Override
+    public void receiveAllFixtureGroup(List<FixtureGroup> fixtureGroups, int type) {
+        if (type == Type_init){
+            fixtureGroupList = (ArrayList<FixtureGroup>) fixtureGroups;
+            model.queryFixtureFromFixtureGroupName("", Type_init);
+        }
+        if (type == Type_delete){
+            for (FixtureGroup fixtureGroup : fixtureGroups){
+                model.deleteFixtureGroup(fixtureGroup);
+            }
+        }
+        if (type == Type_rename){
+            for (FixtureGroup fixtureGroup : fixtureGroups){
+                fixtureGroup.setSceneName(view.getInputTextMyDialog());
+                model.updateFixtureGroup(fixtureGroup);
+            }
+        }
+
+    }
+
+    @Override
+    public void updateFixtureList() {
+        getFixtureListFromModel();
+    }
+
+    @Override
+    public void receiveFixtureList(List<Fixture> fixtures, int type) {
+        if (type == Type_init){
+            fixtureList = (ArrayList<Fixture>) fixtures;
+            view.showFixtureList(fixtureGroupList, fixtureList);
+        }else if (type == Type_add){
+            if (fixtures.isEmpty()){
+                model.addFixture(view.getInputTextMyDialog());
+                view.dismissMyDialog();
+                scene.setFixtureNum(scene.getFixtureNum() + 1);
+                scene.setModifiedDate(DateUtil.getTime());
+                model.updateScene(scene);
+            }else {
+                view.dismissMyDialog();
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备", "该创建设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "创建设备", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (view.getInputTextMyDialog().isEmpty()){
+                                    SnackBarUtil.show(v, "请输入地址码");
+                                }else {
+                                    model.queryFixture(view.getInputTextMyDialog(), Type_add);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+    }
+
+    @Override
+    public void receiveQueryFixtureGroup(List<FixtureGroup> fixtureGroups, int type) {
+        if (type == Type_add){
+            if (fixtureGroups.isEmpty()){
+                model.addFixtureGroup(view.getInputTextMyDialog());
+                view.dismissMyDialog();
+            }else {
+                view.dismissMyDialog();
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备群组", "该创建设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "创建设备群组", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (view.getInputTextMyDialog().isEmpty()){
+                                    SnackBarUtil.show(v, "请输入设备群组名称");
+                                }else {
+                                    model.queryFixtureGroup(view.getInputTextMyDialog(), Type_add);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
     }
 }

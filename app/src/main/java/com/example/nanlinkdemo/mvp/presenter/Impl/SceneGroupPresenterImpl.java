@@ -321,7 +321,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                 break;
             case 3:
                 view.closeDrawLayout();
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, settingArrayList.get(position).getText(), sceneGroup.getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark, settingArrayList.get(position).getText(), sceneGroup.getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
                         sceneGroup.setRemark(view.getInputTextMyDialog());

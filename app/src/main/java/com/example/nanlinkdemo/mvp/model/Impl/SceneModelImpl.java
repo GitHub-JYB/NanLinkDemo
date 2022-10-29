@@ -5,6 +5,8 @@ import static com.example.nanlinkdemo.bean.Menu.TYPE_ITEM_nav_bg;
 
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
+import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
@@ -106,7 +108,7 @@ public class SceneModelImpl implements SceneModel {
     }
 
     @Override
-    public void getSceneList(String sceneName) {
+    public void queryScene(String sceneName, int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
                 .getSceneInfoFromName(MyApplication.getOnlineUser().getEmail(), sceneName)
@@ -115,8 +117,189 @@ public class SceneModelImpl implements SceneModel {
                 .subscribe(new Consumer<List<Scene>>() {
                     @Override
                     public void accept(List<Scene> scenes) throws Exception {
-                        presenter.receiveSceneList(scenes);
+                        presenter.receiveSceneList(scenes, type);
 
+                    }
+                });
+    }
+
+    @Override
+    public void deleteScene(Scene scene) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getSceneDao()
+                .deleteInfo(scene)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+
+                    }
+                });
+    }
+
+    @Override
+    public void queryAllFixture(int type) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .getAllFixtureInfo(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Fixture>>() {
+                    @Override
+                    public void accept(List<Fixture> fixtures) throws Exception {
+                        presenter.receiveAllFixture(fixtures, type);
+                    }
+                });
+    }
+
+    @Override
+    public void queryAllFixtureGroup(int type) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureGroupDao()
+                .getAllFixtureGroupInfo(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<FixtureGroup>>() {
+                    @Override
+                    public void accept(List<FixtureGroup> fixtureGroups) throws Exception {
+                        presenter.receiveAllFixtureGroup(fixtureGroups, type);
+                    }
+                });
+
+    }
+
+    @Override
+    public void deleteFixture(Fixture fixture) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .deleteInfo(fixture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        presenter.updateFixtureList();
+                    }
+                });
+    }
+
+    @Override
+    public void deleteFixtureGroup(FixtureGroup fixtureGroup) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureGroupDao()
+                .deleteInfo(fixtureGroup)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        presenter.updateFixtureList();
+                    }
+                });
+    }
+
+    @Override
+    public void queryFixtureFromFixtureGroupName(String fixtureGroupName, int type) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .getFixtureInfoFromFixtureGroup(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureGroupName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Fixture>>() {
+                    @Override
+                    public void accept(List<Fixture> fixtures) throws Exception {
+                        presenter.receiveFixtureList(fixtures, type);
+                    }
+                });
+    }
+
+    @Override
+    public void addFixtureGroup(String fixtureGroupName) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureGroupDao()
+                .insert(new FixtureGroup(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureGroupName, 0))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        presenter.updateFixtureList();
+                    }
+                });
+    }
+
+    @Override
+    public void addFixture(String fixtureCH) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .insert(new Fixture(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureCH, Integer.parseInt(fixtureCH) ,"000010", "蓝牙", ""))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        presenter.updateFixtureList();
+                    }
+                });
+    }
+
+    @Override
+    public void queryFixtureGroup(String fixtureGroupName, int type) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureGroupDao()
+                .getFixtureGroupInfoFromName(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureGroupName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<FixtureGroup>>() {
+                    @Override
+                    public void accept(List<FixtureGroup> fixtureGroups) throws Exception {
+                        presenter.receiveQueryFixtureGroup(fixtureGroups, type);
+                    }
+                });
+    }
+
+    @Override
+    public void queryFixture(String fixtureCH, int type) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .getFixtureInfoFromName(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), Integer.parseInt(fixtureCH))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Fixture>>() {
+                    @Override
+                    public void accept(List<Fixture> fixtures) throws Exception {
+                        presenter.receiveFixtureList(fixtures, type);
+                    }
+                });
+    }
+
+    @Override
+    public void updateFixture(Fixture fixture) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .updateFixtureInfo(fixture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        presenter.updateFixtureList();
+                    }
+                });
+    }
+
+    @Override
+    public void updateFixtureGroup(FixtureGroup fixtureGroup) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureGroupDao()
+                .updateFixtureGroupInfo(fixtureGroup)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        presenter.updateFixtureList();
                     }
                 });
     }

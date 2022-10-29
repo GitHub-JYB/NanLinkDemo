@@ -10,6 +10,8 @@ public class Fixture {
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo
+    private String email;
+    @ColumnInfo
     private String sceneName;
     @ColumnInfo
     private String name;
@@ -35,7 +37,8 @@ public class Fixture {
 
 
 
-    public Fixture(String sceneName, String fixTureName, int CH, String DEVICE_ID, String connectType, String fixtureGroupName){
+    public Fixture(String email, String sceneName, String fixTureName, int CH, String DEVICE_ID, String connectType, String fixtureGroupName){
+        this.email = email;
         this.sceneName = sceneName;
         this.name = this.fixTureName = fixTureName;
         this.CH = CH;
@@ -139,5 +142,13 @@ public class Fixture {
 
     public void setOnlineType(int onlineType) {
         OnlineType = onlineType;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

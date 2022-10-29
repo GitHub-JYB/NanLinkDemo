@@ -118,7 +118,11 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
 
     public String getInputTextMyDialog(){
-        return myDialog.getInputText();
+        if (myDialog.getType() == MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark){
+            return myDialog.getInputTextRemark();
+        }else {
+            return myDialog.getInputText();
+        }
     }
 
     public void dismissMyDialog(){

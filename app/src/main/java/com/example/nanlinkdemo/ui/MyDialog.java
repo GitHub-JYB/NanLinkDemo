@@ -514,13 +514,17 @@ public class MyDialog extends DialogFragment {
         this.isCanceledOnTouchOutside = isCanceledOnTouchOutside;
     }
 
-    // 设置dialog的类型
-    public void setType(int type){
-        this.type = type;
+    // 获取dialog的类型
+    public int getType(){
+        return type;
     }
 
     // 获取输入框文本
     public String getInputText(){
         return binding.myDialogInputText.getText().toString().trim();
+    }
+
+    public String getInputTextRemark(){
+        return binding.myDialogInputTextRemark.getText().toString().trim();
     }
 }

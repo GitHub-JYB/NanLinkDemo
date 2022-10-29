@@ -60,18 +60,18 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderFixtureList){
-            ((ViewHolderFixtureList) holder).name.setText(fixtureList.get(position - 1).getName());
-            ((ViewHolderFixtureList) holder).number.setText("CH: " + fixtureList.get(position - 1).getCH());
-            ((ViewHolderFixtureList) holder).connectType.setText(fixtureList.get(position - 1).getConnectType());
-        }else if (holder instanceof ViewHolderFixtureGroupList){
-            if (fixtureList.isEmpty()){
-                ((ViewHolderFixtureGroupList) holder).name.setText(fixtureGroupList.get(position - 1).getName());
-                ((ViewHolderFixtureGroupList) holder).sceneNum.setText("设备数量: " + fixtureGroupList.get(position  - 1).getFixtureNum());
-
+            if (fixtureGroupList.isEmpty()){
+                ((ViewHolderFixtureList) holder).name.setText(fixtureList.get(position - 1).getName());
+                ((ViewHolderFixtureList) holder).number.setText("CH: " + fixtureList.get(position - 1).getCH());
+                ((ViewHolderFixtureList) holder).connectType.setText(fixtureList.get(position - 1).getConnectType());
             }else {
-                ((ViewHolderFixtureGroupList) holder).name.setText(fixtureGroupList.get(position - fixtureList.size() - 2).getName());
-                ((ViewHolderFixtureGroupList) holder).sceneNum.setText("设备数量: " + fixtureGroupList.get(position - fixtureList.size() - 2).getFixtureNum());
+                ((ViewHolderFixtureList) holder).name.setText(fixtureList.get(position - fixtureGroupList.size() - 2).getName());
+                ((ViewHolderFixtureList) holder).number.setText("CH: " + fixtureList.get(position - fixtureGroupList.size() - 2).getCH());
+                ((ViewHolderFixtureList) holder).connectType.setText(fixtureList.get(position - fixtureGroupList.size() - 2).getConnectType());
             }
+        }else if (holder instanceof ViewHolderFixtureGroupList){
+            ((ViewHolderFixtureGroupList) holder).name.setText(fixtureGroupList.get(position - 1).getName());
+            ((ViewHolderFixtureGroupList) holder).sceneNum.setText("设备数量: " + fixtureGroupList.get(position  - 1).getFixtureNum());
         }else if (holder instanceof ViewHolderDecorationFixture){
             ((ViewHolderDecorationFixture) holder).name.setText("灯光设备");
         }else if (holder instanceof ViewHolderDecorationFixtureGroup){
@@ -81,13 +81,18 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        if (fixtureList.isEmpty()){
-            return fixtureGroupList.size() + 1;
-        }else if (fixtureGroupList.isEmpty()){
-            return fixtureList.size() + 1;
+        if (fixtureList.isEmpty() && fixtureGroupList.isEmpty()){
+            return 0;
         }else {
-            return fixtureList.size() + fixtureGroupList.size() + 2;
+            if (fixtureList.isEmpty()){
+                return fixtureGroupList.size() + 1;
+            }else if (fixtureGroupList.isEmpty()){
+                return fixtureList.size() + 1;
+            }else {
+                return fixtureList.size() + fixtureGroupList.size() + 2;
+            }
         }
+
     }
 
     @Override

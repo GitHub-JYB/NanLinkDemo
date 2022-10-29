@@ -41,7 +41,6 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         setPresenter();
         initToolbar();
         initRecycleView();
-        initScene();
         initAddNewFixtureLogo();
     }
 
@@ -56,12 +55,12 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
     @Override
     protected void onStart() {
         super.onStart();
-        updateRecycleView();
+        initScene();
     }
 
     @Override
     public void updateRecycleView() {
-        presenter.getFixtureListFromModel(sceneName);
+        presenter.getFixtureListFromModel();
     }
 
 

@@ -17,8 +17,11 @@ import io.reactivex.Single;
 public interface FixtureGroupDao {
 
 
-    @Query("select * from fixturegroup where sceneName = :sceneName AND name = :name")
-    Single<List<FixtureGroup>> getFixtureGroupInfoFromName(String sceneName, String name);
+    @Query("select * from fixturegroup where email = :email AND sceneName = :sceneName")
+    Single<List<FixtureGroup>> getAllFixtureGroupInfo(String email, String sceneName);
+
+    @Query("select * from fixturegroup where email = :email AND sceneName = :sceneName AND name = :name")
+    Single<List<FixtureGroup>> getFixtureGroupInfoFromName(String email, String sceneName, String name);
 
     @Insert
     Single<Long> insert(FixtureGroup fixtureGroups);

@@ -194,7 +194,7 @@ public class MainPresenterImpl implements MainPresenter {
                             });
                         }
                         if (sceneList.size() != 0 & scenePosition < sceneList.size()){
-                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, threePointList.get(position), sceneList.get(scenePosition).getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark, threePointList.get(position), sceneList.get(scenePosition).getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     sceneList.get(scenePosition).setRemark(view.getInputTextMyDialog());

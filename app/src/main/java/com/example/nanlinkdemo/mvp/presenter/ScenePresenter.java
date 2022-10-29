@@ -2,6 +2,8 @@ package com.example.nanlinkdemo.mvp.presenter;
 
 import android.view.View;
 
+import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.bean.Menu;
 
@@ -17,7 +19,7 @@ public interface ScenePresenter {
 
     void settingSwitch(int position);
 
-    void getFixtureListFromModel(String sceneName);
+    void getFixtureListFromModel();
 
     void getMenuFromModel();
 
@@ -31,7 +33,17 @@ public interface ScenePresenter {
 
     void showSortListToView(ArrayList<Menu> sortArrayList);
 
-    void receiveSceneList(List<Scene> scenes);
+    void receiveSceneList(List<Scene> scenes, int type);
 
     void showSettingListToView(ArrayList<Menu> settingArrayList);
+
+    void receiveAllFixture(List<Fixture> fixtures, int type);
+
+    void receiveAllFixtureGroup(List<FixtureGroup> fixtureGroups, int type);
+
+    void updateFixtureList();
+
+    void receiveFixtureList(List<Fixture> fixtures,  int type);
+
+    void receiveQueryFixtureGroup(List<FixtureGroup> fixtureGroups, int type);
 }
