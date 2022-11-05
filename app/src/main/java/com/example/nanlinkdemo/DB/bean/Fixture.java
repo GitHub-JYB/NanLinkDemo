@@ -32,7 +32,7 @@ public class Fixture {
     @ColumnInfo
     private String powerType;
     @ColumnInfo
-    private int OnlineType;
+    private int onlineType;
 
 
 
@@ -117,7 +117,7 @@ public class Fixture {
     }
 
     public void setSceneName(String sceneName) {
-        sceneName = sceneName;
+        this.sceneName = sceneName;
     }
 
     public String getFixtureGroupName() {
@@ -137,11 +137,11 @@ public class Fixture {
     }
 
     public int getOnlineType() {
-        return OnlineType;
+        return onlineType;
     }
 
     public void setOnlineType(int onlineType) {
-        OnlineType = onlineType;
+        this.onlineType = onlineType;
     }
 
     public String getEmail() {

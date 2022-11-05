@@ -32,6 +32,8 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     private Scene scene;
     private ArrayList<Menu> sortArrayList;
+    private ArrayList<ArrayList<Fixture>> fixtureListInGroup;
+
     private ArrayList<Fixture> fixtureList;
     private ArrayList<FixtureGroup> fixtureGroupList;
 
@@ -40,8 +42,8 @@ public class ScenePresenterImpl implements ScenePresenter {
     private static final int Type_add = 0;
     private static final int Type_rename = 1;
     private static final int Type_init = 2;
-    private static final int Type_delete = 3;
-    private static final int Type_update = 4;
+    private static final int Type_init_noGroup = 3;
+    private static final int Type_init_inGroup = 4;
 
 
 
@@ -130,8 +132,14 @@ public class ScenePresenterImpl implements ScenePresenter {
                     @Override
                     public void onClick(View v) {
                         model.deleteScene(scene);
-                        model.queryAllFixture(Type_delete);
-                        model.queryAllFixtureGroup(Type_delete);
+                        for (FixtureGroup fixtureGroup : fixtureGroupList){
+                            model.deleteFixtureGroup(fixtureGroup);
+                        }
+                        fixtureGroupList = new ArrayList<FixtureGroup>();
+                        for (Fixture fixture : fixtureList){
+                            model.deleteFixture(fixture);
+                        }
+                        fixtureList = new ArrayList<Fixture>();
                         view.dismissMyDialog();
                         view.finish();
                     }
@@ -233,15 +241,21 @@ public class ScenePresenterImpl implements ScenePresenter {
     public void receiveSceneList(List<Scene> scenes, int type) {
         if (type == Type_init){
             setScene(scenes.get(0));
-            view.updateRecycleView();
+            getFixtureListFromModel();
         }else if (type == Type_rename){
             if (scenes.isEmpty()){
-                model.queryAllFixture(Type_rename);
-                model.queryAllFixtureGroup(Type_rename);
                 scene.setName(view.getInputTextMyDialog());
                 scene.setModifiedDate(DateUtil.getTime());
                 model.updateScene(scene);
                 view.setTitle(scene.getName());
+                for (FixtureGroup fixtureGroup : fixtureGroupList){
+                    fixtureGroup.setSceneName(scene.getName());
+                    model.updateFixtureGroup(fixtureGroup);
+                }
+                for (Fixture fixture : fixtureList){
+                    fixture.setSceneName(scene.getName());
+                    model.updateFixture(fixture);
+                }
                 view.dismissMyDialog();
             }else {
                 view.dismissMyDialog();
@@ -267,38 +281,42 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void receiveAllFixture(List<Fixture> fixtures, int type) {
-        if (type == Type_delete){
-            for (Fixture fixture : fixtures){
-                model.deleteFixture(fixture);
-            }
+        if (type == Type_init){
+            fixtureList = (ArrayList<Fixture>) fixtures;
         }
-        if (type == Type_rename){
-            for (Fixture fixture : fixtures){
-                fixture.setSceneName(view.getInputTextMyDialog());
-                model.updateFixture(fixture);
-            }
-        }
-
+        view.showFixtureList(fixtureGroupList, fixtureList);
     }
 
     @Override
-    public void receiveAllFixtureGroup(List<FixtureGroup> fixtureGroups, int type) {
+    public void receiveFixtureGroup(List<FixtureGroup> fixtureGroups, int type) {
         if (type == Type_init){
             fixtureGroupList = (ArrayList<FixtureGroup>) fixtureGroups;
-            model.queryFixtureFromFixtureGroupName("", Type_init);
+            model.queryAllFixture(type);
         }
-        if (type == Type_delete){
-            for (FixtureGroup fixtureGroup : fixtureGroups){
-                model.deleteFixtureGroup(fixtureGroup);
+        if (type == Type_add){
+            if (fixtureGroups.isEmpty()){
+                model.addFixtureGroup(view.getInputTextMyDialog());
+                view.dismissMyDialog();
+            }else {
+                view.dismissMyDialog();
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备群组", "该创建设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "创建设备群组", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (view.getInputTextMyDialog().isEmpty()){
+                                    SnackBarUtil.show(v, "请输入设备群组名称");
+                                }else {
+                                    model.queryFixtureGroup(view.getInputTextMyDialog(), Type_add);
+                                }
+                            }
+                        });
+                    }
+                });
             }
         }
-        if (type == Type_rename){
-            for (FixtureGroup fixtureGroup : fixtureGroups){
-                fixtureGroup.setSceneName(view.getInputTextMyDialog());
-                model.updateFixtureGroup(fixtureGroup);
-            }
-        }
-
     }
 
     @Override
@@ -308,10 +326,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void receiveFixtureList(List<Fixture> fixtures, int type) {
-        if (type == Type_init){
-            fixtureList = (ArrayList<Fixture>) fixtures;
-            view.showFixtureList(fixtureGroupList, fixtureList);
-        }else if (type == Type_add){
+        if (type == Type_add){
             if (fixtures.isEmpty()){
                 model.addFixture(view.getInputTextMyDialog());
                 view.dismissMyDialog();
@@ -341,31 +356,4 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     }
 
-    @Override
-    public void receiveQueryFixtureGroup(List<FixtureGroup> fixtureGroups, int type) {
-        if (type == Type_add){
-            if (fixtureGroups.isEmpty()){
-                model.addFixtureGroup(view.getInputTextMyDialog());
-                view.dismissMyDialog();
-            }else {
-                view.dismissMyDialog();
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备群组", "该创建设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        view.dismissMyDialog();
-                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "创建设备群组", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (view.getInputTextMyDialog().isEmpty()){
-                                    SnackBarUtil.show(v, "请输入设备群组名称");
-                                }else {
-                                    model.queryFixtureGroup(view.getInputTextMyDialog(), Type_add);
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    }
 }

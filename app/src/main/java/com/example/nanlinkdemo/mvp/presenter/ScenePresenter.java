@@ -39,11 +39,10 @@ public interface ScenePresenter {
 
     void receiveAllFixture(List<Fixture> fixtures, int type);
 
-    void receiveAllFixtureGroup(List<FixtureGroup> fixtureGroups, int type);
+    void receiveFixtureGroup(List<FixtureGroup> fixtureGroups, int type);
 
     void updateFixtureList();
 
     void receiveFixtureList(List<Fixture> fixtures,  int type);
 
-    void receiveQueryFixtureGroup(List<FixtureGroup> fixtureGroups, int type);
 }

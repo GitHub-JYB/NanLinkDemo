@@ -163,7 +163,7 @@ public class SceneModelImpl implements SceneModel {
                 .subscribe(new Consumer<List<FixtureGroup>>() {
                     @Override
                     public void accept(List<FixtureGroup> fixtureGroups) throws Exception {
-                        presenter.receiveAllFixtureGroup(fixtureGroups, type);
+                        presenter.receiveFixtureGroup(fixtureGroups, type);
                     }
                 });
 
@@ -254,7 +254,7 @@ public class SceneModelImpl implements SceneModel {
                 .subscribe(new Consumer<List<FixtureGroup>>() {
                     @Override
                     public void accept(List<FixtureGroup> fixtureGroups) throws Exception {
-                        presenter.receiveQueryFixtureGroup(fixtureGroups, type);
+                        presenter.receiveFixtureGroup(fixtureGroups, type);
                     }
                 });
     }

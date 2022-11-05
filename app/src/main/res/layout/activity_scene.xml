@@ -22,6 +22,7 @@
             android:id="@+id/add_fixture"
             android:layout_width="170dp"
             android:layout_height="170dp"
+            android:visibility="gone"
             android:layout_marginTop="69dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/toolbar"

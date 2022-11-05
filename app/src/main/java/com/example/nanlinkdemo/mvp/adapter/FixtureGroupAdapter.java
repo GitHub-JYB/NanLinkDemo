@@ -1,7 +1,6 @@
 package com.example.nanlinkdemo.mvp.adapter;
 
 
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,25 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.DB.bean.FixtureGroup;
-
 import com.example.nanlinkdemo.databinding.VpDecorationFixtureListBinding;
 import com.example.nanlinkdemo.databinding.VpItemFixtureBinding;
 import com.example.nanlinkdemo.databinding.VpItemFixtureGroupBinding;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FixtureGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_DECORATION_FIXTURE = 1;
-    public static final int TYPE_FIXTURE = 2;
-    private static final int TYPE_DECORATION_FIXTURE_GROUP = 3;
-    public static final int TYPE_FIXTURE_GROUP = 4;
+    private static final int TYPE_FIRST_FIXTURE = 1;
+    public static final int TYPE_BETWEEN_FIXTURE = 2;
+    private static final int TYPE_LAST_FIXTURE = 3;
     private List<Fixture> fixtureList = new ArrayList<Fixture>();
-    private List<Fixture> fixtureListNoGroup;
-    private List<Fixture> fixtureListInGroup;
-    private List<FixtureGroup> fixtureGroupList = new ArrayList<FixtureGroup>();
     private OnClickListener onClickListener;
     private MenuOnClickListener menuOnClickListener;
     private RightSecondIconOnClickListener rightSecondOnClickListener;
@@ -90,56 +83,32 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        if (fixtureListNoGroup.isEmpty() && fixtureGroupList.isEmpty()){
-            return 0;
-        }else {
-            if (fixtureListNoGroup.isEmpty()){
-                return fixtureGroupList.size() + 1;
-            }else if (fixtureGroupList.isEmpty()){
-                return fixtureListNoGroup.size() + 1;
-            }else {
-                return fixtureListNoGroup.size() + fixtureGroupList.size() + 2;
-            }
-        }
-
+        return fixtureList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (fixtureListNoGroup.isEmpty()) {
+        if (fixtureList.size() > 2) {
             if (position == 0) {
-                return TYPE_DECORATION_FIXTURE_GROUP;
+                return TYPE_FIRST_FIXTURE;
+            } else if (position == fixtureList.size() - 1) {
+                return TYPE_LAST_FIXTURE;
             } else {
-                return TYPE_FIXTURE_GROUP;
+                return TYPE_BETWEEN_FIXTURE;
             }
-        } else if (fixtureGroupList.isEmpty()) {
-            if (position == 0) {
-                return TYPE_DECORATION_FIXTURE;
-            } else {
-                return TYPE_FIXTURE;
+        }else if (fixtureList.size() == 2){
+            if (position == 0){
+                return TYPE_FIRST_FIXTURE;
+            }else {
+                return TYPE_LAST_FIXTURE;
             }
-        } else {
-            if (position == 0) {
-                return TYPE_DECORATION_FIXTURE_GROUP;
-            } else if (position <= fixtureGroupList.size()) {
-                return TYPE_FIXTURE_GROUP;
-            } else if (position == fixtureGroupList.size() + 1) {
-                return TYPE_DECORATION_FIXTURE;
-            } else {
-                return TYPE_FIXTURE;
-            }
+        }else {
+            return TYPE_FIRST_FIXTURE;
         }
     }
 
-    public void setData(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList) {
+    public void setData(List<Fixture> fixtureList) {
         this.fixtureList = fixtureList;
-        this.fixtureGroupList = fixtureGroupList;
-        this.fixtureListNoGroup = new ArrayList<Fixture>();
-        for (Fixture fixture : fixtureList){
-            if(fixture.getFixtureGroupName() == ""){
-                fixtureListNoGroup.add(fixture);
-            }
-        }
         notifyDataSetChanged();
     }
 
