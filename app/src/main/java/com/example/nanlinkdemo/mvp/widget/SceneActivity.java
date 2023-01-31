@@ -76,12 +76,14 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         fixtureAdapter.setMenuOnClickListener(new FixtureAdapter.MenuOnClickListener() {
             @Override
             public void onClick(int position) {
+                presenter.FixtureMenuSwitch(position);
 
             }
         });
         fixtureAdapter.setOnClickListener(new FixtureAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
+//                presenter.FixtureListSwitch(position);
 
             }
         });
@@ -148,6 +150,7 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
     public void showFixtureList(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList) {
         if (fixtureGroupList.isEmpty() && fixtureList.isEmpty()){
             binding.addFixture.setVisibility(View.VISIBLE);
+            binding.addFixture.setOnClickListener(this);
             binding.recycleView.setVisibility(View.GONE);
         }else {
             binding.addFixture.setVisibility(View.GONE);

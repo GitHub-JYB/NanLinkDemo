@@ -3,6 +3,7 @@ package com.example.nanlinkdemo.mvp.view;
 import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.bean.Menu;
+import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 import com.example.nanlinkdemo.ui.MyDialog;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public interface SceneView {
 
     void showSettingList(ArrayList<Menu> settingArrayList);
 
+    void showSettingDialog(ArrayList<String> settingList, ThreePointAdapter.OnClickListener listener);
+
     void showMyDialog(int type, String title, String bigSizeMessage, String smallSizeMessage, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
 
     void showMyDialog(int type, String title, String bigSizeMessageOne, String smallSizeMessageOne, MyDialog.MessageOneOnClickListener messageOneListener, String bigSizeMessageTwo, String smallSizeMessageTwo, MyDialog.MessageTwoOnClickListener messageTwoListener, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
@@ -41,4 +44,6 @@ public interface SceneView {
     void finish();
 
     String getInputTextMyDialog();
+
+    void dismissSettingDialog();
 }

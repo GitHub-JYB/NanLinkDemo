@@ -136,7 +136,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.fixtureGroupList = fixtureGroupList;
         this.fixtureListNoGroup = new ArrayList<Fixture>();
         for (Fixture fixture : fixtureList){
-            if(fixture.getFixtureGroupName() == ""){
+            if(fixture.getFixtureGroupName().equals("")){
                 fixtureListNoGroup.add(fixture);
             }
         }

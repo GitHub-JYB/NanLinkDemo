@@ -45,4 +45,7 @@ public interface ScenePresenter {
 
     void receiveFixtureList(List<Fixture> fixtures,  int type);
 
+    void receiveFixtureGroupMenu(ArrayList<String> fixtureGroupMenuList, int fixtureGroupPosition);
+
+    void receiveFixtureMenu(ArrayList<String> fixtureMenuList, int fixturePosition);
 }

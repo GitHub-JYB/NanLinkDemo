@@ -38,6 +38,10 @@ public class MyDialog extends DialogFragment {
     public static final int Write_TwoBtn_WarningTitle_WarningTwoBtn = 16;
     public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark = 17;
     public static final int Read_OneBtn_WarningTitle_WhiteOneBtn_TwoMessage = 18;
+    public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_textForWrite = 19;
+
+
+
 
 
     private CharSequence title, bigSizeMessage, smallSizeMessage, bigSizeMessageOne, smallSizeMessageOne, bigSizeMessageTwo, smallSizeMessageTwo, neutralText, positiveText, negativeText;
@@ -285,6 +289,11 @@ public class MyDialog extends DialogFragment {
                 setWarningTitle();
                 setWhiteOneBtn();
                 break;
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_textForWrite:
+                setTextForWrite();
+                setTwoBtn();
+                setNormalTitle();
+                setBlueTwoBtn();
         }
 
 
@@ -294,6 +303,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogSmallSize.setText(smallSizeMessage);
 
         binding.myDialogInputText.setText(bigSizeMessage);
+        binding.myDialogInputDescription.setText(smallSizeMessage);
 
         binding.myDialogInputTextRemark.setText(bigSizeMessage);
 
@@ -365,6 +375,7 @@ public class MyDialog extends DialogFragment {
 
     private void setRead() {
         binding.myDialogInput.setVisibility(View.GONE);
+        binding.myDialogInputDescription.setVisibility(View.GONE);
         binding.myDialogMessage.setVisibility(View.VISIBLE);
         binding.myDialogSmallSize.setVisibility(View.VISIBLE);
         binding.myDialogTwoMessage.setVisibility(View.GONE);
@@ -373,6 +384,7 @@ public class MyDialog extends DialogFragment {
 
     private void setReadTwoMessage() {
         binding.myDialogInput.setVisibility(View.GONE);
+        binding.myDialogInputDescription.setVisibility(View.GONE);
         binding.myDialogMessage.setVisibility(View.GONE);
         binding.myDialogTwoMessage.setVisibility(View.VISIBLE);
         binding.myDialogInputRemark.setVisibility(View.GONE);
@@ -380,6 +392,15 @@ public class MyDialog extends DialogFragment {
 
     private void setWrite() {
         binding.myDialogInput.setVisibility(View.VISIBLE);
+        binding.myDialogInputDescription.setVisibility(View.GONE);
+        binding.myDialogMessage.setVisibility(View.GONE);
+        binding.myDialogTwoMessage.setVisibility(View.GONE);
+        binding.myDialogInputRemark.setVisibility(View.GONE);
+    }
+
+    private void setTextForWrite() {
+        binding.myDialogInput.setVisibility(View.VISIBLE);
+        binding.myDialogInputDescription.setVisibility(View.VISIBLE);
         binding.myDialogMessage.setVisibility(View.GONE);
         binding.myDialogTwoMessage.setVisibility(View.GONE);
         binding.myDialogInputRemark.setVisibility(View.GONE);
@@ -387,6 +408,7 @@ public class MyDialog extends DialogFragment {
 
     private void setWriteRemark() {
         binding.myDialogInput.setVisibility(View.GONE);
+        binding.myDialogInputDescription.setVisibility(View.GONE);
         binding.myDialogMessage.setVisibility(View.GONE);
         binding.myDialogTwoMessage.setVisibility(View.GONE);
         binding.myDialogInputRemark.setVisibility(View.VISIBLE);

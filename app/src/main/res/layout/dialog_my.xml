@@ -26,7 +26,7 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:id="@+id/my_dialog__two_message"
+            android:id="@+id/my_dialog_two_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -36,7 +36,7 @@
                 android:layout_height="1dp"/>
 
             <RelativeLayout
-                android:id="@+id/my_dialog__two_message_one"
+                android:id="@+id/my_dialog_two_message_one"
                 android:layout_width="match_parent"
                 android:layout_marginStart="26dp"
                 android:layout_marginEnd="26dp"
@@ -69,7 +69,7 @@
                 android:layout_height="1dp"/>
 
             <RelativeLayout
-                android:id="@+id/my_dialog__two_message_two"
+                android:id="@+id/my_dialog_two_message_two"
                 android:layout_width="match_parent"
                 android:layout_marginStart="26dp"
                 android:layout_marginEnd="26dp"
@@ -136,6 +136,17 @@
             android:background="@drawable/bg_unable_btn_login"
             android:layout_centerHorizontal="true">
 
+            <TextView
+                android:id="@+id/my_dialog_input_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/my_dialog_inputText"
+                android:textSize="17sp"
+                android:textColor="@color/nav"
+                android:text="1111"
+                android:gravity="center"/>
+
+
             <EditText
                 android:id="@+id/my_dialog_inputText"
                 android:textColor="@color/white"
@@ -143,6 +154,7 @@
                 android:gravity="start"
                 android:layout_centerVertical="true"
                 android:inputType="text"
+                android:text="11111"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:paddingTop="7dp"

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.collection.CircularArray;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nanlinkdemo.DB.bean.Fixture;
@@ -23,11 +24,18 @@ public class FixtureGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_FIRST_FIXTURE = 1;
     public static final int TYPE_BETWEEN_FIXTURE = 2;
     private static final int TYPE_LAST_FIXTURE = 3;
+    private static final int TYPE_DECORATION_FIXTURE = 4;
+    private static final int TYPE_FIXTURE = 5;
+    private static final int TYPE_DECORATION_FIXTURE_GROUP = 6;
+
     private List<Fixture> fixtureList = new ArrayList<Fixture>();
     private OnClickListener onClickListener;
     private MenuOnClickListener menuOnClickListener;
     private RightSecondIconOnClickListener rightSecondOnClickListener;
     private SpreadIconOnClickListener spreadOnClickListener;
+    private ArrayList<FixtureGroup> fixtureGroupList;
+    private ArrayList<Fixture> fixtureListNoGroup;
+    private ArrayList<Fixture> fixtureListInGroup;
 
 
     @NonNull

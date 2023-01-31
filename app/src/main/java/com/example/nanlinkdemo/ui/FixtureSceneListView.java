@@ -4,10 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.PopupRecycleviewBinding;
@@ -68,7 +71,23 @@ public class FixtureSceneListView extends LinearLayout {
         popupWindow.setOutsideTouchable(false);
         popupWindow.showAsDropDown(this);
 
-        binding1.recycleView.setAdapter();
+        binding1.recycleView.setAdapter(new RecyclerView.Adapter() {
+            @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return null;
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+            }
+
+            @Override
+            public int getItemCount() {
+                return 0;
+            }
+        });
     }
 
 

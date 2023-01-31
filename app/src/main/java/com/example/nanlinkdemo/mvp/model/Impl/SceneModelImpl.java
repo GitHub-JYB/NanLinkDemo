@@ -303,4 +303,27 @@ public class SceneModelImpl implements SceneModel {
                     }
                 });
     }
+
+    @Override
+    public void getFixtureGroupMenu(int fixtureGroupPosition) {
+        ArrayList<String> fixtureGroupMenuList = new ArrayList<>();
+        fixtureGroupMenuList.add("设置");
+        fixtureGroupMenuList.add("重命名");
+        fixtureGroupMenuList.add("管理群组");
+        fixtureGroupMenuList.add("删除");
+        fixtureGroupMenuList.add("取消");
+        presenter.receiveFixtureGroupMenu(fixtureGroupMenuList, fixtureGroupPosition);
+    }
+
+    @Override
+    public void getFixtureMenu(int fixturePosition) {
+        ArrayList<String> fixtureMenuList = new ArrayList<>();
+        fixtureMenuList.add("设置");
+        fixtureMenuList.add("重命名");
+        fixtureMenuList.add("重置名称");
+        fixtureMenuList.add("更改地址码");
+        fixtureMenuList.add("删除");
+        fixtureMenuList.add("取消");
+        presenter.receiveFixtureMenu(fixtureMenuList, fixturePosition);
+    }
 }

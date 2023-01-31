@@ -7,6 +7,7 @@ import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
+import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 import com.example.nanlinkdemo.mvp.model.Impl.SceneModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.ScenePresenter;
 import com.example.nanlinkdemo.mvp.view.SceneView;
@@ -71,6 +72,16 @@ public class ScenePresenterImpl implements ScenePresenter {
                 });
                 break;
             case R.id.add_fixture:
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "添加设备", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (view.getInputTextMyDialog().isEmpty()){
+                            SnackBarUtil.show(v, "请输入地址码");
+                        }else {
+                            model.queryFixture(view.getInputTextMyDialog(), Type_add);
+                        }
+                    }
+                });
                 break;
             case R.id.toolbar_right_btn:
                 view.initMenu();
@@ -221,7 +232,15 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void FixtureMenuSwitch(int position) {
-
+        if (fixtureGroupList.size() > 0){
+            if (position < fixtureGroupList.size() + 1){
+                model.getFixtureGroupMenu(position - 1);
+            }else {
+                model.getFixtureMenu(position - fixtureGroupList.size() - 2);
+            }
+        }else {
+            model.getFixtureMenu(position - 1);
+        }
     }
 
     @Override
@@ -299,7 +318,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                 view.dismissMyDialog();
             }else {
                 view.dismissMyDialog();
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备群组", "该创建设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备群组", "该设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
                     @Override
                     public void onClick(View v) {
                         view.dismissMyDialog();
@@ -335,7 +354,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                 model.updateScene(scene);
             }else {
                 view.dismissMyDialog();
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备", "该创建设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备", "该设备名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
                     @Override
                     public void onClick(View v) {
                         view.dismissMyDialog();
@@ -354,6 +373,90 @@ public class ScenePresenterImpl implements ScenePresenter {
             }
         }
 
+    }
+
+    @Override
+    public void receiveFixtureGroupMenu(ArrayList<String> fixtureGroupMenuList, int fixtureGroupPosition) {
+        fixtureGroupMenuList.set(0, fixtureGroupList.get(fixtureGroupPosition).getName());
+        view.showSettingDialog(fixtureGroupMenuList, new ThreePointAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position) {
+                switch (position){
+                    case 1:
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, fixtureGroupMenuList.get(position), fixtureGroupList.get(fixtureGroupPosition).getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        });
+                        view.dismissSettingDialog();
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureGroupMenuList.get(position), "是否确定要删除该设备群组?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        });
+                        view.dismissSettingDialog();
+                        break;
+                    case 4:
+                        view.dismissSettingDialog();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void receiveFixtureMenu(ArrayList<String> fixtureMenuList, int fixturePosition) {
+        fixtureMenuList.set(0, fixtureGroupList.get(fixturePosition).getName());
+        view.showSettingDialog(fixtureMenuList, new ThreePointAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position) {
+                switch (position){
+                    case 1:
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, fixtureMenuList.get(position), fixtureList.get(fixturePosition).getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        });
+                        view.dismissSettingDialog();
+                        break;
+                    case 2:
+                        view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_BlueTwoBtn, fixtureMenuList.get(position), "是否确定要重置该设备名称?", "该设备原始名称:\n" + fixtureList.get(fixturePosition).getFixTureName(), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        });
+                        view.dismissSettingDialog();
+                        break;
+                    case 3:
+                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_textForWrite, fixtureMenuList.get(position), String.valueOf(fixtureList.get(fixturePosition).getCH()), "请输入一个介于1和512之间的数值" ,"取消", null, "确定", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        });
+                        view.dismissSettingDialog();
+                        break;
+                    case 4:
+                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureMenuList.get(position), "是否确定要删除该设备?", fixtureList.get(fixturePosition).getName() + "\nCH: " + String.valueOf(fixtureList.get(fixturePosition).getCH()), "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        });
+                        view.dismissSettingDialog();
+                        break;
+                    case 5:
+                        view.dismissSettingDialog();
+                }
+            }
+        });
     }
 
 }

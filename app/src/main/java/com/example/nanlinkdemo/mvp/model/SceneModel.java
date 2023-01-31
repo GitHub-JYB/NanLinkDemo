@@ -38,4 +38,8 @@ public interface SceneModel {
     void updateFixture(Fixture fixture);
 
     void updateFixtureGroup(FixtureGroup fixtureGroup);
+
+    void getFixtureGroupMenu(int fixtureGroupPosition);
+
+    void getFixtureMenu(int fixturePosition);
 }
