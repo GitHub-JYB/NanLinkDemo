@@ -2,6 +2,7 @@ package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.DB.bean.Scene;
@@ -12,6 +13,7 @@ import com.example.nanlinkdemo.mvp.model.Impl.SceneModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.ScenePresenter;
 import com.example.nanlinkdemo.mvp.view.SceneView;
 import com.example.nanlinkdemo.ui.MyDialog;
+import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.DateUtil;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
@@ -72,16 +74,17 @@ public class ScenePresenterImpl implements ScenePresenter {
                 });
                 break;
             case R.id.add_fixture:
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "添加设备", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (view.getInputTextMyDialog().isEmpty()){
-                            SnackBarUtil.show(v, "请输入地址码");
-                        }else {
-                            model.queryFixture(view.getInputTextMyDialog(), Type_add);
-                        }
-                    }
-                });
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
+//                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "添加设备", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if (view.getInputTextMyDialog().isEmpty()){
+//                            SnackBarUtil.show(v, "请输入地址码");
+//                        }else {
+//                            model.queryFixture(view.getInputTextMyDialog(), Type_add);
+//                        }
+//                    }
+//                });
                 break;
             case R.id.toolbar_right_btn:
                 view.initMenu();
@@ -175,16 +178,17 @@ public class ScenePresenterImpl implements ScenePresenter {
         switch (position){
             case 1:
                 view.closeDrawLayout();
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, menuArrayList.get(position).getText(), "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (view.getInputTextMyDialog().isEmpty()){
-                            SnackBarUtil.show(v, "请输入地址码");
-                        }else {
-                            model.queryFixture(view.getInputTextMyDialog(), Type_add);
-                        }
-                    }
-                });
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
+//                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, menuArrayList.get(position).getText(), "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if (view.getInputTextMyDialog().isEmpty()){
+//                            SnackBarUtil.show(v, "请输入地址码");
+//                        }else {
+//                            model.queryFixture(view.getInputTextMyDialog(), Type_add);
+//                        }
+//                    }
+//                });
                 break;
             case 2:
                 view.closeDrawLayout();

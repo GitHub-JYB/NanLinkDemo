@@ -45,6 +45,7 @@
         <activity android:name=".mvp.widget.SceneGroupActivity" />
         <activity android:name=".mvp.widget.ManageSceneActivity" />
         <activity android:name=".mvp.widget.SceneActivity" />
+        <activity android:name=".mvp.widget.AddNewFixtureActivity" />
     </application>
 
 </manifest>

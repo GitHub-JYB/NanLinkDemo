@@ -21,6 +21,9 @@ public class Constant {
     public static final String ACTIVITY_URL_ManageScene = "/widget/ManageSceneActivity";
     public static final String ACTIVITY_URL_Scene = "/widget/SceneActivity";
 
+    public static final String ACTIVITY_URL_AddNewFixture = "/widget/AddNewFixtureActivity";
+
+
 
 
 
