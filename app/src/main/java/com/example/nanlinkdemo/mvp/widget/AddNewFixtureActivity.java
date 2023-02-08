@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.AddFixtureType;
-import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.databinding.ActivityRecycleviewBinding;
+import com.example.nanlinkdemo.databinding.ActivityRecycleviewMarginTopBinding;
 import com.example.nanlinkdemo.mvp.adapter.AddNewFixtureAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.AddNewFixturePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.AddNewFixtureView;
@@ -19,7 +18,7 @@ import com.example.nanlinkdemo.util.Constant;
 import java.util.ArrayList;
 
 @Route(path = Constant.ACTIVITY_URL_AddNewFixture)
-public class AddNewFixtureActivity extends BaseActivity<ActivityRecycleviewBinding> implements AddNewFixtureView, View.OnClickListener {
+public class AddNewFixtureActivity extends BaseActivity<ActivityRecycleviewMarginTopBinding> implements AddNewFixtureView, View.OnClickListener {
 
 
     private AddNewFixturePresenterImpl presenter;
@@ -58,8 +57,8 @@ public class AddNewFixtureActivity extends BaseActivity<ActivityRecycleviewBindi
         binding.recycleView.setAdapter(adapter);
         adapter.setOnClickListener(new AddNewFixtureAdapter.OnClickListener() {
             @Override
-            public void onClick(String settingText) {
-                presenter.onClickSwitch(settingText);
+            public void onClick(int position) {
+                presenter.onClickSwitch(position);
             }
         });
     }

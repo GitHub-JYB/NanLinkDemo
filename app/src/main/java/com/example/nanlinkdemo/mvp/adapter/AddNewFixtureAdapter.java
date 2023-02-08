@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nanlinkdemo.bean.AddFixtureType;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.bean.RegisterUser;
+import com.example.nanlinkdemo.databinding.VpItemAddTypeBinding;
 import com.example.nanlinkdemo.databinding.VpItemSettingBinding;
 import com.example.nanlinkdemo.databinding.VpItemUserSettingBinding;
 
@@ -23,36 +24,24 @@ public class AddNewFixtureAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
     private OnClickListener onClickListener;
-    private int userListLength;
+    private ArrayList<AddFixtureType> typeList;
 
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        VpItemSettingBinding vpItemSettingBinding = VpItemSettingBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolderItemSetting(vpItemSettingBinding);
+        VpItemAddTypeBinding vpItemAddTypeBinding = VpItemAddTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolderItemAddType(vpItemAddTypeBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ViewHolderUserSetting){
-            if (userList.get(position).getEmail() != null){
-                ((ViewHolderUserSetting) holder).email.setText(userList.get(position).getEmail());
+        if (holder instanceof ViewHolderItemAddType){
+            if (typeList.get(position).getType() != null){
+                ((ViewHolderItemAddType) holder).type.setText(typeList.get(position).getType());
             }
-            if (userList.get(position).getNickName() != null){
-                ((ViewHolderUserSetting) holder).nickName.setText(userList.get(position).getNickName());
-            }
-        }else if (holder instanceof ViewHolderItemSetting){
-            if (userList == null){
-                userListLength = 0;
-            }else {
-                userListLength = userList.size();
-            }
-            if (settingList.get(position - userListLength).getStateResId() != 0){
-                ((ViewHolderItemSetting) holder).iconSetting.setImageResource(settingList.get(position - userListLength).getStateResId());
-            }
-            if (settingList.get(position - userListLength).getText() != null){
-                ((ViewHolderItemSetting) holder).textSetting.setText(settingList.get(position - userListLength).getText());
+            if (typeList.get(position).getTypeRemark() != null){
+                ((ViewHolderItemAddType) holder).type_remark.setText(typeList.get(position).getTypeRemark());
             }
         }
     }
@@ -60,42 +49,30 @@ public class AddNewFixtureAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return userList == null? settingList.size() : userList.size() + settingList.size();
+        return typeList == null? 0 : typeList.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (userList == null || position >= userList.size()){
-            return TYPE_SETTING;
-        } else {
-            return TYPE_USER;
-
-        }
-
-
-    }
 
     public void setData(ArrayList<AddFixtureType> arrayList) {
-//        this.settingList = arrayList;
-//        this.userList = arrayList;
+        this.typeList = arrayList;
         notifyDataSetChanged();
     }
 
-    class ViewHolderItemSetting extends RecyclerView.ViewHolder {
+    class ViewHolderItemAddType extends RecyclerView.ViewHolder {
 
 
-        ImageView iconSetting;
-        TextView textSetting;
+        TextView type;
+        TextView type_remark;
 
-        public ViewHolderItemSetting(@NonNull VpItemSettingBinding binding) {
+        public ViewHolderItemAddType(@NonNull VpItemAddTypeBinding binding) {
             super(binding.getRoot());
-            iconSetting = binding.iconSetting;
-            textSetting = binding.textSetting;
+            type = binding.textType;
+            type_remark = binding.textTypeRemark;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickListener != null){
-                        onClickListener.onClick(settingList.get(getAdapterPosition() - userListLength).getText());
+                        onClickListener.onClick(getAdapterPosition());
                     }
                 }
             });
@@ -103,7 +80,7 @@ public class AddNewFixtureAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public interface OnClickListener {
-        void onClick(String settingText);
+        void onClick(int position);
     }
 
     public void setOnClickListener(OnClickListener onClickListener){

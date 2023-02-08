@@ -24,8 +24,8 @@ public class FeasyDevice {
         }else {
             setCH((uuid[6] + 1) * 256 + uuid[7]);
         }
-        setCH(Integer.parseInt(stringBuilder.toString()));
-        stringBuilder.delete(0, 5);
+//        setCH(Integer.parseInt(stringBuilder.toString()));
+        stringBuilder.delete(0, 12);
         stringBuilder.append(String.format("%02X", uuid[10]));
         stringBuilder.append(String.format("%02X", uuid[11]));
         stringBuilder.append(String.format("%02X", uuid[12]));

@@ -1,14 +1,11 @@
 package com.example.nanlinkdemo.mvp.widget;
 
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.View;
 
 
@@ -22,10 +19,7 @@ import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityLoginBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.LoginPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.LoginView;
-import com.example.nanlinkdemo.ui.LoadingDialog;
-import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
-import com.example.nanlinkdemo.util.SpUtil;
 
 @Route(path = Constant.ACTIVITY_URL_Login)
 public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements LoginView, View.OnClickListener {

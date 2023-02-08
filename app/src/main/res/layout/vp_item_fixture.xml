@@ -46,6 +46,7 @@
         android:layout_height="50dp"
         android:layout_toStartOf="@+id/right_second_icon"
         android:layout_marginTop="6dp"
+        android:visibility="gone"
         android:src="@drawable/ic_full_battery"
         android:background="@android:color/transparent"/>
 

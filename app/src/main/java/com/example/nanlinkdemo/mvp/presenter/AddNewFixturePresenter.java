@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public interface AddNewFixturePresenter {
     void getListDataFromView();
 
-    void onClickSwitch(String settingText);
+    void onClickSwitch(int position);
 
     void receiveListData(ArrayList<AddFixtureType> arrayList);
 }
