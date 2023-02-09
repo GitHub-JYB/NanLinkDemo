@@ -8,6 +8,7 @@ import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.Impl.SplashModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.SplashPresenter;
 import com.example.nanlinkdemo.mvp.view.SplashView;
+import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
 
 import java.util.HashMap;
@@ -80,7 +81,12 @@ public class SplashPresenterImpl implements SplashPresenter {
 
     @Override
     public void getDeviceListFromModel() {
-        model.getDeviceList();
+        if (!MyApplication.getInstance().isOpenNetwork()){
+            this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "无法连接服务器","重试", null);
+
+        }else {
+            model.getDeviceList();
+        }
     }
 
     @Override
