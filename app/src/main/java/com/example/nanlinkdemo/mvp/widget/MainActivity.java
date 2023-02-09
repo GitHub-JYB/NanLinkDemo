@@ -1,8 +1,12 @@
 package com.example.nanlinkdemo.mvp.widget;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -38,7 +42,29 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         setPresenter();
         initToolbar();
         initRecycleView();
+        initPermission();
+
     }
+
+
+
+    private void initPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+//            }
+
+        }
+    }
+
 
     @Override
     protected void onStart() {
@@ -86,6 +112,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     private void setPresenter() {
         presenter = new MainPresenterImpl(this);
+        presenter.getDeviceListFromModel();
     }
 
     @Override

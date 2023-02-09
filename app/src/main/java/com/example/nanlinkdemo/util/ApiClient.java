@@ -1,5 +1,6 @@
 package com.example.nanlinkdemo.util;
 
+import com.example.nanlinkdemo.bean.DeviceMessage;
 import com.example.nanlinkdemo.bean.EditUser;
 import com.example.nanlinkdemo.bean.Feedback;
 import com.example.nanlinkdemo.bean.LoginUser;
@@ -60,6 +61,9 @@ public class ApiClient {
 
         @POST("/nanlinkUser/v1/feedback/submit")
         Single<Message> submitFeedback(@Header("token") String token, @Body Feedback feedback);
+
+        @GET("/nanlinkDevice/v1/device/listDevice")
+        Single<DeviceMessage> getDeviceLIst();
     }
 
     private static Retrofit getClient(String url){

@@ -1,5 +1,6 @@
 package com.example.nanlinkdemo.mvp.presenter;
 
+import com.example.nanlinkdemo.DB.bean.Device;
 import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.bean.Message;
 
@@ -15,4 +16,8 @@ public interface SplashPresenter {
     void sendMesToView(Message message);
 
     void receiveLastUser(List<User> users);
+
+    void getDeviceListFromModel();
+
+    void receiveDeviceList(List<Device> devices);
 }

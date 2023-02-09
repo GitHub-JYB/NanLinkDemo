@@ -4,6 +4,7 @@ package com.example.nanlinkdemo.mvp.model.Impl;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
 import com.example.nanlinkdemo.DB.bean.User;
+import com.example.nanlinkdemo.bean.DeviceMessage;
 import com.example.nanlinkdemo.bean.LoginUser;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.LoginModel;

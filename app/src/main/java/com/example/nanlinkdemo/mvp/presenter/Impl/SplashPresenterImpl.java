@@ -2,6 +2,7 @@ package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
+import com.example.nanlinkdemo.DB.bean.Device;
 import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.Impl.SplashModelImpl;
@@ -9,6 +10,7 @@ import com.example.nanlinkdemo.mvp.presenter.SplashPresenter;
 import com.example.nanlinkdemo.mvp.view.SplashView;
 import com.example.nanlinkdemo.util.Constant;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class SplashPresenterImpl implements SplashPresenter {
@@ -74,5 +76,21 @@ public class SplashPresenterImpl implements SplashPresenter {
         }
         model.getOnlineUser();
 
+    }
+
+    @Override
+    public void getDeviceListFromModel() {
+        model.getDeviceList();
+    }
+
+    @Override
+    public void receiveDeviceList(List<Device> devices) {
+        if (!devices.isEmpty()){
+            HashMap<String, Device> deviceHashMap = new HashMap<String, Device>();
+            for (Device device: devices){
+                deviceHashMap.put(device.getDeviceId(), device);
+            }
+            MyApplication.setDeviceHashMap(deviceHashMap);
+        }
     }
 }

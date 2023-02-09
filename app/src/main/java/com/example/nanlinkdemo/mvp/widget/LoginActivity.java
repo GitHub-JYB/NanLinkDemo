@@ -1,16 +1,22 @@
 package com.example.nanlinkdemo.mvp.widget;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -20,6 +26,9 @@ import com.example.nanlinkdemo.databinding.ActivityLoginBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.LoginPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.LoginView;
 import com.example.nanlinkdemo.util.Constant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Route(path = Constant.ACTIVITY_URL_Login)
 public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements LoginView, View.OnClickListener {
@@ -47,6 +56,28 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         initToolbar();
         initUserAgreement();
         initForgetPassword();
+        initPermission();
+    }
+
+
+    private void initPermission() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        Log.i("TAG", requestCode + " onRequestPermissionsResult: " + grantResults.length + "--" + grantResults[0]);
+        for (String permission: permissions){
+            boolean b = ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
+            Log.i("TAG", "onRequestPermissionsResult: " + permission + " ---" + b);
+        }
     }
 
     private void initForgetPassword() {

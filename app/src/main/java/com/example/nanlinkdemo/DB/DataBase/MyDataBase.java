@@ -6,18 +6,20 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.example.nanlinkdemo.DB.bean.Device;
 import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.DB.bean.User;
+import com.example.nanlinkdemo.DB.dao.DeviceDao;
 import com.example.nanlinkdemo.DB.dao.FixtureDao;
 import com.example.nanlinkdemo.DB.dao.FixtureGroupDao;
 import com.example.nanlinkdemo.DB.dao.SceneDao;
 import com.example.nanlinkdemo.DB.dao.SceneGroupDao;
 import com.example.nanlinkdemo.DB.dao.UserDao;
 
-@Database(entities = {Scene.class, SceneGroup.class, User.class, Fixture.class, FixtureGroup.class}, version = 1, exportSchema = false)
+@Database(entities = {Scene.class, SceneGroup.class, User.class, Fixture.class, FixtureGroup.class, Device.class}, version = 1, exportSchema = false)
 public abstract class MyDataBase extends RoomDatabase {
 
     private static final String DB_NAME = "NanLinkDemo.db";
@@ -44,5 +46,7 @@ public abstract class MyDataBase extends RoomDatabase {
     public abstract FixtureDao getFixtureDao();
 
     public abstract FixtureGroupDao getFixtureGroupDao();
+
+    public abstract DeviceDao getDeviceListDao();
 
 }

@@ -22,6 +22,11 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> implemen
         setContentView(R.layout.activity_splash);
         setPresenter();
         startCountDown();
+        getDeviceList();
+    }
+
+    private void getDeviceList() {
+        presenter.getDeviceListFromModel();
     }
 
     private void startCountDown() {

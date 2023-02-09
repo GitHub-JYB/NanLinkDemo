@@ -7,16 +7,20 @@ import static com.example.nanlinkdemo.bean.Menu.TYPE_LOGO;
 
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
+import com.example.nanlinkdemo.DB.bean.Device;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
+import com.example.nanlinkdemo.bean.DeviceMessage;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.model.MainModel;
 import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
+import com.example.nanlinkdemo.util.ApiClient;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -330,6 +334,35 @@ public class MainModelImpl implements MainModel {
                     @Override
                     public void accept(List<Scene> scenes) throws Exception {
                         presenter.receiveQuerySceneFromSceneGroup(scenes, type);
+
+                    }
+                });
+    }
+
+    @Override
+    public void getDeviceList() {
+        ApiClient.getService(ApiClient.BASE_URL)
+                .getDeviceLIst()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<DeviceMessage>() {
+                    @Override
+                    public void accept(DeviceMessage deviceMessage) throws Exception {
+                        presenter.receiveDeviceList(deviceMessage);
+                    }
+                });
+    }
+
+    @Override
+    public void updateDevice(Device device) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getDeviceListDao()
+                .updateInfo(device)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
 
                     }
                 });

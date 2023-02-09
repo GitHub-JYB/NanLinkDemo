@@ -35,7 +35,14 @@ public class ScanBleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderItemFixture){
                 ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
-                ((ViewHolderItemFixture) holder).number.setText(String.valueOf(fixtureList.get(position).getCH()));
+                int CH = fixtureList.get(position).getCH();
+                if (CH < 10){
+                    ((ViewHolderItemFixture) holder).number.setText("CH: 00" + CH);
+                }else if (CH < 100){
+                    ((ViewHolderItemFixture) holder).number.setText("CH: 0" + CH);
+                }else {
+                    ((ViewHolderItemFixture) holder).number.setText("CH: " + CH);
+                }
         }
     }
 

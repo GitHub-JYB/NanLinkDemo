@@ -2,6 +2,7 @@ package com.example.nanlinkdemo.mvp.model.Impl;
 
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
+import com.example.nanlinkdemo.DB.bean.Device;
 import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.SplashModel;
@@ -97,6 +98,21 @@ public class SplashModelImpl implements SplashModel {
                     @Override
                     public void accept(List<User> users) throws Exception {
                         presenter.receiveLastUser(users);
+                    }
+                });
+    }
+
+    @Override
+    public void getDeviceList() {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getDeviceListDao()
+                .getDeviceListInfo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Device>>() {
+                    @Override
+                    public void accept(List<Device> deviceLists) throws Exception {
+                        presenter.receiveDeviceList(deviceLists);
                     }
                 });
     }

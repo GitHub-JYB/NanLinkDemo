@@ -6,6 +6,7 @@ import android.view.View;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.DB.bean.User;
+import com.example.nanlinkdemo.bean.DeviceMessage;
 import com.example.nanlinkdemo.bean.Menu;
 
 import java.util.ArrayList;
@@ -47,4 +48,8 @@ public interface MainPresenter {
     void sortSwitch(int position);
 
     void receiveQuerySceneFromSceneGroup(List<Scene> scenes, int type);
+
+    void getDeviceListFromModel();
+
+    void receiveDeviceList(DeviceMessage deviceMessage);
 }

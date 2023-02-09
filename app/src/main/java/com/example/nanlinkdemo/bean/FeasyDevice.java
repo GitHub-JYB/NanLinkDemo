@@ -1,6 +1,7 @@
 package com.example.nanlinkdemo.bean;
 
 
+import com.example.nanlinkdemo.Application.MyApplication;
 
 public class FeasyDevice {
 
@@ -30,6 +31,9 @@ public class FeasyDevice {
         stringBuilder.append(String.format("%02X", uuid[11]));
         stringBuilder.append(String.format("%02X", uuid[12]));
         setDEVICE_ID(stringBuilder.toString());
+        if (!MyApplication.getDeviceHashMap().isEmpty()){
+            setNAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
+        }
         setTYPE(uuid[13]);
         setManufacturer_ID(String.valueOf(uuid[14]));
     }

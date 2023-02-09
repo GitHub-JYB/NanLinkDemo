@@ -1,13 +1,17 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
+import com.example.nanlinkdemo.DB.bean.Device;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
+import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
+import com.example.nanlinkdemo.bean.DeviceMessage;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 import com.example.nanlinkdemo.mvp.model.Impl.MainModelImpl;
@@ -19,6 +23,7 @@ import com.example.nanlinkdemo.util.DateUtil;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainPresenterImpl implements MainPresenter {
@@ -422,6 +427,41 @@ public class MainPresenterImpl implements MainPresenter {
                 scene.setSceneGroup("");
                 model.updateScene(scene);
             }
+        }
+    }
+
+    @Override
+    public void getDeviceListFromModel() {
+        model.getDeviceList();
+    }
+
+    @Override
+    public void receiveDeviceList(DeviceMessage deviceMessage) {
+        switch (deviceMessage.getCode()){
+            case 200:
+                if (deviceMessage.getData().getContentVersion() > MyApplication.getInstance().getDeviceListVersion()){
+                    MyApplication.getInstance().setDeviceListVersion(deviceMessage.getData().getContentVersion());
+                    HashMap<String, Device> deviceHashMap = new HashMap<String, Device>();
+                    for (Device device: deviceMessage.getData().getDeviceList()){
+                        deviceHashMap.put(device.getDeviceId(), device);
+                        model.updateDevice(device);
+                    }
+                    MyApplication.setDeviceHashMap(deviceHashMap);
+                }
+                break;
+            case 1001:
+            case 1002:
+            case 1003:
+            case 1004:
+            case 1005:
+            case 1006:
+            case 1007:
+            case 1008:
+            case 1009:
+            case 1010:
+            case 1011:
+                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", deviceMessage.getMsg().toString(),"重试", null);
+                break;
         }
     }
 

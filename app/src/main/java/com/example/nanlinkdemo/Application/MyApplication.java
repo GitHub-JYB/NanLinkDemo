@@ -8,7 +8,11 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.DB.bean.Device;
 import com.example.nanlinkdemo.DB.bean.User;
+import com.example.nanlinkdemo.bean.DeviceMessage;
+
+import java.util.HashMap;
 
 
 public class MyApplication extends Application {
@@ -20,6 +24,10 @@ public class MyApplication extends Application {
     private static float scale;
     private static String versionName;
     private static User onlineUser, lastUser;
+
+    private static HashMap<String, Device> deviceHashMap= new HashMap<String, Device>();
+
+    private static int deviceListVersion;
 
     public static User getOnlineUser() {
         return onlineUser;
@@ -35,6 +43,14 @@ public class MyApplication extends Application {
 
     public static void setLastUser(User lastUser) {
         MyApplication.lastUser = lastUser;
+    }
+
+    public static HashMap<String, Device> getDeviceHashMap() {
+        return deviceHashMap;
+    }
+
+    public static void setDeviceHashMap(HashMap<String, Device> deviceHashMap) {
+        MyApplication.deviceHashMap = deviceHashMap;
     }
 
 
@@ -85,5 +101,13 @@ public class MyApplication extends Application {
             return manager.getActiveNetworkInfo().isAvailable();
         }
         return false;
+    }
+
+    public int getDeviceListVersion() {
+        return deviceListVersion;
+    }
+
+    public void setDeviceListVersion(int deviceListVersion) {
+        this.deviceListVersion = deviceListVersion;
     }
 }

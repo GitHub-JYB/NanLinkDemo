@@ -1,8 +1,12 @@
 package com.example.nanlinkdemo.mvp.model;
 
+import com.example.nanlinkdemo.DB.bean.Device;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.DB.bean.User;
+import com.example.nanlinkdemo.bean.DeviceMessage;
+
+import java.util.HashMap;
 
 public interface MainModel {
     void getMenu(String nickName);
@@ -34,4 +38,8 @@ public interface MainModel {
     void updateUser(User user);
 
     void querySceneFromGroup(String sceneGroupName, int type);
+
+    void getDeviceList();
+
+    void updateDevice(Device device);
 }

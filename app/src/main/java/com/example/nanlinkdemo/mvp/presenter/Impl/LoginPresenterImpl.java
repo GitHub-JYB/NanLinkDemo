@@ -2,20 +2,29 @@ package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 import static com.example.nanlinkdemo.util.Constant.ACTIVITY_URL_Main;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.view.View;
+
+import androidx.core.app.ActivityCompat;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.R;
+import com.example.nanlinkdemo.bean.DeviceMessage;
 import com.example.nanlinkdemo.bean.Message;
 import com.example.nanlinkdemo.mvp.model.Impl.LoginModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.LoginPresenter;
 import com.example.nanlinkdemo.mvp.view.LoginView;
+import com.example.nanlinkdemo.mvp.widget.LoginActivity;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
 import com.example.nanlinkdemo.util.SnackBarUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,12 +34,6 @@ public class LoginPresenterImpl implements LoginPresenter {
     private final LoginModelImpl model;
     private boolean checked = false;
     private String email, password;
-
-
-    public LoginPresenterImpl(LoginView loginView) {
-        this.view = loginView;
-        this.model = new LoginModelImpl(this);
-    }
 
     @Override
     public void sendMesToView(Message mes) {
@@ -54,6 +57,12 @@ public class LoginPresenterImpl implements LoginPresenter {
                 view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", mes.getMsg().toString(),"重试", null);
                 break;
         }
+    }
+
+
+    public LoginPresenterImpl(LoginView loginView) {
+        this.view = loginView;
+        this.model = new LoginModelImpl(this);
     }
 
     @Override
@@ -83,9 +92,12 @@ public class LoginPresenterImpl implements LoginPresenter {
                 }else if (checked){
                     if (!MyApplication.getInstance().isOpenNetwork()){
                         this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "无法连接服务器","重试", null);
-
-
                     }else {
+                        if (ActivityCompat.checkSelfPermission((Context) this.view, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                ActivityCompat.requestPermissions((LoginActivity) this.view, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                            }
+                        }
                         this.view.startLoading();
                         model.login(email, password);
                     }

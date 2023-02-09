@@ -22,6 +22,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.FeasyDevice;
 import com.example.nanlinkdemo.databinding.ActivityRecycleviewMarginTopBinding;
+import com.example.nanlinkdemo.databinding.ActivityRecycleviewScanBinding;
 import com.example.nanlinkdemo.mvp.adapter.ScanBleAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ScanBlePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.ScanBleView;
@@ -33,7 +34,7 @@ import java.util.Arrays;
 
 
 @Route(path = Constant.ACTIVITY_URL_ScanBle)
-public class ScanBleActivity extends BaseActivity<ActivityRecycleviewMarginTopBinding> implements ScanBleView, View.OnClickListener{
+public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ScanBleView, View.OnClickListener{
 
 
     private ScanBleAdapter adapter;
@@ -51,7 +52,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewMarginTopBi
         initToolbar();
         initRecyclerView();
         initBtn();
-        initPermission();
+//        initPermission();
         initBle();
 
 
@@ -110,9 +111,9 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewMarginTopBi
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
 //            return;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
-            }
+//            }
 
         }
 
@@ -124,42 +125,44 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewMarginTopBi
 
                 if (result.getScanRecord().getServiceData() != null & result.getScanRecord().getServiceUuids() != null) {
                     byte[] uuid = result.getScanRecord().getServiceData().get(result.getScanRecord().getServiceUuids().get(0));
-                    if (uuid[14] != 78) {
-                        return;
-                    }
-                    StringBuilder sb = new StringBuilder();
-                    byte checknum = 0;
-                    for (int i = 6; i < 15; i++) {
-                        checknum = (byte) (checknum + uuid[i]);
-                    }
-                    if (checknum != uuid[15]) {
-                        return;
-                    }
-                    if (uuidlist.size() != 0) {
-                        for (int i = 0; i < uuidlist.size(); i++) {
-                            if (Arrays.equals(uuidlist.get(i), uuid)) {
-                                return;
-                            }
-                            if (Arrays.equals(Arrays.copyOfRange(uuid, 0, 5), Arrays.copyOfRange(uuidlist.get(i), 0, 5))) {
-                                uuidlist.set(i, uuid);
-                                deviceList.set(i, new FeasyDevice(uuid));
-                                showBle(deviceList);
-
-                                break;
-                            }
-                            if (i == uuidlist.size() - 1) {
-                                uuidlist.add(uuid);
-                                deviceList.add(new FeasyDevice(uuid));
-                                showBle(deviceList);
-                            }
+                    if ((uuid != null ? uuid.length : 0) > 14){
+                        if (uuid[14] != 78) {
+                            return;
                         }
-                    } else {
-                        uuidlist.add(uuid);
-                        deviceList.add(new FeasyDevice(uuid));
-                        showBle(deviceList);
+                        StringBuilder sb = new StringBuilder();
+                        byte checknum = 0;
+                        for (int i = 6; i < 15; i++) {
+                            checknum = (byte) (checknum + uuid[i]);
+                        }
+                        if (checknum != uuid[15]) {
+                            return;
+                        }
+                        if (uuidlist.size() != 0) {
+                            for (int i = 0; i < uuidlist.size(); i++) {
+                                if (Arrays.equals(uuidlist.get(i), uuid)) {
+                                    return;
+                                }
+                                if (Arrays.equals(Arrays.copyOfRange(uuid, 0, 5), Arrays.copyOfRange(uuidlist.get(i), 0, 5))) {
+                                    uuidlist.set(i, uuid);
+                                    deviceList.set(i, new FeasyDevice(uuid));
+                                    showBle(deviceList);
 
+                                    break;
+                                }
+                                if (i == uuidlist.size() - 1) {
+                                    uuidlist.add(uuid);
+                                    deviceList.add(new FeasyDevice(uuid));
+                                    showBle(deviceList);
+                                }
+                            }
+                        } else {
+                            uuidlist.add(uuid);
+                            deviceList.add(new FeasyDevice(uuid));
+                            showBle(deviceList);
+
+                        }
                     }
-
+                    Log.d("TAG", "onScan:" + uuidlist.size());
 
                 }
             }
@@ -177,12 +180,11 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewMarginTopBi
                     // to handle the case where the user grants the permission. See the documentation
                     // for ActivityCompat#requestPermissions for more details.
 //                    return;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
-                    }
+//                    }
                 }
                 scanner.stopScan(scanCallback);
-//                showBle(deviceList);
 
                 Log.d("TAG", "onStopScan:");
 
