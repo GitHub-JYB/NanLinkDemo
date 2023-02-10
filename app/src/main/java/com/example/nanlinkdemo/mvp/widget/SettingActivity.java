@@ -10,17 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.databinding.ActivityRecycleviewBinding;
+import com.example.nanlinkdemo.databinding.ActivityRecycleviewSettingBinding;
 import com.example.nanlinkdemo.mvp.adapter.SettingAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.SettingPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.SettingView;
-import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
 
 @Route(path = Constant.ACTIVITY_URL_Setting)
-public class SettingActivity extends BaseActivity<ActivityRecycleviewBinding> implements SettingView, View.OnClickListener {
+public class SettingActivity extends BaseActivity<ActivityRecycleviewSettingBinding> implements SettingView, View.OnClickListener {
 
 
     private SettingPresenterImpl presenter;

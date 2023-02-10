@@ -42,4 +42,6 @@ public interface MainModel {
     void getDeviceList();
 
     void updateDevice(Device device);
+
+    void addDevice(Device device);
 }

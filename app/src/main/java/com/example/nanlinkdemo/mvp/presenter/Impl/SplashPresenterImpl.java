@@ -37,7 +37,12 @@ public class SplashPresenterImpl implements SplashPresenter {
     public void receiveOnlineUser(List<User> users) {
         if (!users.isEmpty()){
             MyApplication.setOnlineUser(users.get(0));
-            model.getUserInfo(MyApplication.getOnlineUser().getToken());
+            if (MyApplication.getInstance().isOpenNetwork()){
+                model.getUserInfo(MyApplication.getOnlineUser().getToken());
+            }else {
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
+                view.finish();
+            }
         }else {
             ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
             view.finish();
@@ -66,6 +71,7 @@ public class SplashPresenterImpl implements SplashPresenter {
             case 1010:
             case 1011:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
+                view.finish();
                 break;
         }
     }
@@ -81,12 +87,7 @@ public class SplashPresenterImpl implements SplashPresenter {
 
     @Override
     public void getDeviceListFromModel() {
-        if (!MyApplication.getInstance().isOpenNetwork()){
-            this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "无法连接服务器","重试", null);
-
-        }else {
-            model.getDeviceList();
-        }
+        model.getDeviceList();
     }
 
     @Override

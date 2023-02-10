@@ -14,6 +14,9 @@ public class Menu {
     private String text;
     private int stateResId = 0;
 
+    private int endStateResId = 0;
+
+
     public Menu(){
 
     }
@@ -23,6 +26,14 @@ public class Menu {
         setText(text);
         setType(type);
         setStateResId(stateResId);
+    }
+
+    public Menu(int iconResId, String text, int stateResId, int endStateResId, int type){
+        setIconResId(iconResId);
+        setText(text);
+        setType(type);
+        setStateResId(stateResId);
+        setEndStateResId(endStateResId);
     }
 
     public Menu(String text, int stateResId){
@@ -60,5 +71,13 @@ public class Menu {
 
     public void setStateResId(int stateResId) {
         this.stateResId = stateResId;
+    }
+
+    public int getEndStateResId() {
+        return endStateResId;
+    }
+
+    public void setEndStateResId(int endStateResId) {
+        this.endStateResId = endStateResId;
     }
 }

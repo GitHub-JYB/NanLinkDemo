@@ -18,6 +18,9 @@ import android.view.View;
 import androidx.core.app.ActivityCompat;
 
 import com.example.nanlinkdemo.Application.MyApplication;
+import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
+import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.bean.FeasyDevice;
 import com.example.nanlinkdemo.mvp.model.ScanBleModel;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ScanBlePresenterImpl;
@@ -25,6 +28,11 @@ import com.example.nanlinkdemo.mvp.widget.ScanBleActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class ScanBleModelImpl implements ScanBleModel {
     private final ScanBlePresenterImpl presenter;
@@ -38,7 +46,35 @@ public class ScanBleModelImpl implements ScanBleModel {
     @Override
     public void getListData() {
 
+    }
 
+    @Override
+    public void addBleFixture(FeasyDevice device) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .insert(new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), device.getNAME(), device.getCH(),device.getDEVICE_ID(), "蓝牙", ""))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        presenter.updateScene();
+                    }
+                });
+    }
 
+    @Override
+    public void updateScene(Scene scene) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getSceneDao()
+                .updateSceneInfo(scene)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+
+                    }
+                });
     }
 }

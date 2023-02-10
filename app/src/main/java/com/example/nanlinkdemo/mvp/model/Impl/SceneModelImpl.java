@@ -36,7 +36,7 @@ public class SceneModelImpl implements SceneModel {
         menuArrayList.add(new Menu(R.drawable.ic_add,"添加设备群组", 0, TYPE_ITEM_gray_bg));
         menuArrayList.add(new Menu(R.drawable.ic_sort,"排序", 0, TYPE_ITEM_gray_bg));
         menuArrayList.add(new Menu());
-        menuArrayList.add(new Menu(R.drawable.ic_controller,"信号控制器", R.drawable.ic_full_battery, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_controller,"信号控制器", 0, R.drawable.ic_full_battery, TYPE_ITEM_gray_bg));
         menuArrayList.add(new Menu());
         menuArrayList.add(new Menu(R.drawable.ic_console,"控台模式", 0, TYPE_ITEM_gray_bg));
         menuArrayList.add(new Menu(R.drawable.ic_preset,"预设", 0, TYPE_ITEM_gray_bg));
@@ -233,7 +233,7 @@ public class SceneModelImpl implements SceneModel {
     public void addFixture(String fixtureCH) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureDao()
-                .insert(new Fixture(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureCH, Integer.parseInt(fixtureCH) ,"000010", "蓝牙", ""))
+                .insert(new Fixture(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureCH, fixtureCH ,"000010", "蓝牙", ""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {

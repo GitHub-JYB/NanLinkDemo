@@ -10,9 +10,11 @@ public class FeasyDevice {
     private String UUID;
     private String DEVICE_ID;
     private String NAME = "unknow";
-    private int CH;
+    private String CH;
     private int TYPE;
     private String manufacturer_ID;
+
+    private boolean selected = false;
 
     public FeasyDevice(byte[] uuid){
         StringBuilder stringBuilder = new StringBuilder();
@@ -20,10 +22,18 @@ public class FeasyDevice {
             stringBuilder.append(String.format("%02X", uuid[i]));
         }
         setUUID(stringBuilder.toString());
+        int CH;
         if (uuid[7] >=0){
-            setCH(uuid[6] * 256 + uuid[7]);
+            CH = uuid[6] * 256 + uuid[7];
         }else {
-            setCH((uuid[6] + 1) * 256 + uuid[7]);
+            CH = (uuid[6] + 1) * 256 + uuid[7];
+        }
+        if (CH < 10){
+            setCH("00" + CH);
+        }else if (CH < 100){
+            setCH("0" + CH);
+        }else {
+            setCH(String.valueOf(CH));
         }
 //        setCH(Integer.parseInt(stringBuilder.toString()));
         stringBuilder.delete(0, 12);
@@ -65,13 +75,7 @@ public class FeasyDevice {
         this.NAME = NAME;
     }
 
-    public int getCH() {
-        return CH;
-    }
 
-    public void setCH(int CH) {
-        this.CH = CH;
-    }
 
     public int getTYPE() {
         return TYPE;
@@ -87,5 +91,21 @@ public class FeasyDevice {
 
     public void setManufacturer_ID(String manufacturer_ID) {
         this.manufacturer_ID = manufacturer_ID;
+    }
+
+    public String getCH() {
+        return CH;
+    }
+
+    public void setCH(String CH) {
+        this.CH = CH;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

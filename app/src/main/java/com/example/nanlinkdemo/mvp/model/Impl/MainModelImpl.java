@@ -368,4 +368,19 @@ public class MainModelImpl implements MainModel {
                 });
     }
 
+    @Override
+    public void addDevice(Device device) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getDeviceListDao()
+                .insert(device)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+
+                    }
+                });
+    }
+
 }

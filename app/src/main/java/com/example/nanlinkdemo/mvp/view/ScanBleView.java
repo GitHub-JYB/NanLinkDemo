@@ -10,4 +10,14 @@ public interface ScanBleView {
     void showBle(ArrayList<FeasyDevice> arrayList);
 
     void finish();
+
+    void updateAllSelectedBtn(ArrayList<FeasyDevice> arrayList);
+
+    void updateFinishBtn(ArrayList<FeasyDevice> arrayList);
+
+    void updateAllSelectedText(boolean allSelected);
+
+    void startLoading();
+
+    void stopLoading();
 }

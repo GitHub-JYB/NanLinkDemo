@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.R;
@@ -26,9 +27,6 @@ import java.util.List;
 @Route(path = Constant.ACTIVITY_URL_Scene)
 public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements SceneView, View.OnClickListener {
 
-
-    @Autowired(name = "sceneName")
-    String sceneName;
 
     private ScenePresenterImpl presenter;
     private FixtureAdapter fixtureAdapter;
@@ -49,7 +47,7 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
     }
 
     private void initScene() {
-        presenter.getSceneFromModel(sceneName);
+        presenter.getSceneFromModel(MyApplication.getScene().getName());
     }
 
     @Override
@@ -102,7 +100,7 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
     }
 
     private void initToolbar() {
-        setTitle(sceneName);
+        setTitle(MyApplication.getScene().getName());
         binding.toolbar.setLeftBtnIcon(R.drawable.ic_exit);
         binding.toolbar.setRightBtnIcon(R.drawable.ic_menu);
         binding.toolbar.setLeftBtnOnClickListener(this);

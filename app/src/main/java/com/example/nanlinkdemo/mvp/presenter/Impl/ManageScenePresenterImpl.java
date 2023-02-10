@@ -37,7 +37,7 @@ public class ManageScenePresenterImpl implements ManageScenePresenter {
             case R.id.toolbar_left_btn:
                 view.finish();
                 break;
-            case R.id.complete:
+            case R.id.finish:
                 for (Scene scene : sceneList){
                     model.updateScene(scene);
                 }

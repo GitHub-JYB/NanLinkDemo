@@ -4,6 +4,7 @@ package com.example.nanlinkdemo.mvp.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,14 +36,13 @@ public class ScanBleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderItemFixture){
                 ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
-                int CH = fixtureList.get(position).getCH();
-                if (CH < 10){
-                    ((ViewHolderItemFixture) holder).number.setText("CH: 00" + CH);
-                }else if (CH < 100){
-                    ((ViewHolderItemFixture) holder).number.setText("CH: 0" + CH);
+                ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getCH());
+                if (fixtureList.get(position).isSelected()){
+                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_checked);
                 }else {
-                    ((ViewHolderItemFixture) holder).number.setText("CH: " + CH);
+                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_unselected);
                 }
+
         }
     }
 
@@ -64,11 +64,13 @@ public class ScanBleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView name;
         TextView number;
 
+        ImageView menu;
+
         public ViewHolderItemFixture(@NonNull VpItemFixtureBinding binding) {
             super(binding.getRoot());
             binding.rightSecondIcon.setVisibility(View.GONE);
             binding.connectType.setVisibility(View.GONE);
-            binding.menu.setImageResource(R.drawable.ic_unselected);
+            menu = binding.menu;
             name = binding.name;
             number = binding.number;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {

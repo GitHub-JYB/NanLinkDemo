@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.R;
@@ -27,9 +28,6 @@ import java.util.List;
 public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> implements SceneGroupView, View.OnClickListener {
 
 
-    @Autowired(name = "sceneGroupName")
-    String sceneGroupName;
-
     private SceneGroupPresenterImpl presenter;
     private SceneAdapter sceneAdapter;
 
@@ -45,7 +43,7 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     }
 
     private void initSceneGroup() {
-        presenter.getSceneGroupFromModel(sceneGroupName);
+        presenter.getSceneGroupFromModel(MyApplication.getSceneGroup().getName());
     }
 
     @Override
@@ -56,7 +54,7 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
 
     @Override
     public void updateRecycleView() {
-        presenter.getSceneListFromModel(sceneGroupName);
+        presenter.getSceneListFromModel(MyApplication.getSceneGroup().getName());
     }
 
 
@@ -84,7 +82,7 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     }
 
     private void initToolbar() {
-        setTitle(sceneGroupName);
+        setTitle(MyApplication.getSceneGroup().getName());
         binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
         binding.toolbar.setRightSecondBtnIcon(R.drawable.ic_search);
         binding.toolbar.setRightBtnIcon(R.drawable.ic_menu);

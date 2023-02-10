@@ -415,7 +415,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void receiveFixtureMenu(ArrayList<String> fixtureMenuList, int fixturePosition) {
-        fixtureMenuList.set(0, fixtureGroupList.get(fixturePosition).getName());
+        fixtureMenuList.set(0, fixtureList.get(fixturePosition).getName());
         view.showSettingDialog(fixtureMenuList, new ThreePointAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {

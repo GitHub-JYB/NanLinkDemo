@@ -17,8 +17,8 @@ public class Fixture {
     private String name;
     @ColumnInfo
     private String fixTureName;
-    @ColumnInfo(name = "CH",typeAffinity = ColumnInfo.INTEGER)
-    private int CH;
+    @ColumnInfo(name = "CH")
+    private String CH;
     @ColumnInfo
     private String DEVICE_ID;
     @ColumnInfo
@@ -37,7 +37,7 @@ public class Fixture {
 
 
 
-    public Fixture(String email, String sceneName, String fixTureName, int CH, String DEVICE_ID, String connectType, String fixtureGroupName){
+    public Fixture(String email, String sceneName, String fixTureName, String CH, String DEVICE_ID, String connectType, String fixtureGroupName){
         this.email = email;
         this.sceneName = sceneName;
         this.name = this.fixTureName = fixTureName;
@@ -72,11 +72,11 @@ public class Fixture {
         this.fixTureName = fixTureName;
     }
 
-    public int getCH() {
+    public String getCH() {
         return CH;
     }
 
-    public void setCH(int CH) {
+    public void setCH(String CH) {
         this.CH = CH;
     }
 

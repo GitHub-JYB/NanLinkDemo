@@ -11,7 +11,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Menu;
 import com.example.nanlinkdemo.bean.RegisterUser;
-import com.example.nanlinkdemo.databinding.ActivityRecycleviewBinding;
+import com.example.nanlinkdemo.databinding.ActivityRecycleviewSettingBinding;
 import com.example.nanlinkdemo.mvp.adapter.SettingAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.UserSettingPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.UserSettingView;
@@ -20,7 +20,7 @@ import com.example.nanlinkdemo.util.Constant;
 import java.util.ArrayList;
 
 @Route(path = Constant.ACTIVITY_URL_UserSetting)
-public class UserSettingActivity extends BaseActivity<ActivityRecycleviewBinding> implements UserSettingView, View.OnClickListener {
+public class UserSettingActivity extends BaseActivity<ActivityRecycleviewSettingBinding> implements UserSettingView, View.OnClickListener {
 
 
     private UserSettingPresenterImpl presenter;

@@ -69,6 +69,12 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ((ViewHolderItemMenuGrayBg) holder).stateMenu.setVisibility(View.VISIBLE);
                 ((ViewHolderItemMenuGrayBg) holder).stateMenu.setImageResource(menuList.get(position).getStateResId());
             }
+            if (menuList.get(position).getEndStateResId() == 0){
+                ((ViewHolderItemMenuGrayBg) holder).endStateMenu.setVisibility(View.INVISIBLE);
+            }else {
+                ((ViewHolderItemMenuGrayBg) holder).endStateMenu.setVisibility(View.VISIBLE);
+                ((ViewHolderItemMenuGrayBg) holder).endStateMenu.setImageResource(menuList.get(position).getEndStateResId());
+            }
             if (menuList.get(position).getText() != null){
                 ((ViewHolderItemMenuGrayBg) holder).textMenu.setText(menuList.get(position).getText());
             }
@@ -118,7 +124,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class ViewHolderItemMenuGrayBg extends RecyclerView.ViewHolder {
 
 
-        ImageView iconMenu, stateMenu;
+        ImageView iconMenu, stateMenu, endStateMenu;
         TextView textMenu;
 
         public ViewHolderItemMenuGrayBg(@NonNull VpItemMenuGrayBgBinding binding) {
@@ -126,6 +132,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             iconMenu = binding.iconMenu;
             stateMenu = binding.stateMenu;
             textMenu = binding.textMenu;
+            endStateMenu = binding.endStateMenu;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

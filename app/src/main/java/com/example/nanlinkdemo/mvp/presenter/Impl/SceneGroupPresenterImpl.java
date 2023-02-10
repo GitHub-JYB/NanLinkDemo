@@ -61,7 +61,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
     public void menuSwitch(int position) {
         switch (position) {
             case 1:
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_ManageScene).withString("sceneGroupName", sceneGroup.getName()).navigation();
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_ManageScene).navigation();
                 view.closeDrawLayout();
                 break;
             case 3:
@@ -88,7 +88,8 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
 
     @Override
     public void sceneListSwitch(int position) {
-        ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withString("sceneName", sceneList.get(position).getName()).navigation();
+        MyApplication.setScene(sceneList.get(position));
+        ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).navigation();
     }
 
     @Override

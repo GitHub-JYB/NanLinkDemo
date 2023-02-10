@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.DB.bean.Device;
+import com.example.nanlinkdemo.DB.bean.Scene;
+import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.bean.DeviceMessage;
 
@@ -24,6 +26,9 @@ public class MyApplication extends Application {
     private static float scale;
     private static String versionName;
     private static User onlineUser, lastUser;
+
+    private static Scene scene;
+    private static SceneGroup sceneGroup;
 
     private static HashMap<String, Device> deviceHashMap= new HashMap<String, Device>();
 
@@ -51,6 +56,22 @@ public class MyApplication extends Application {
 
     public static void setDeviceHashMap(HashMap<String, Device> deviceHashMap) {
         MyApplication.deviceHashMap = deviceHashMap;
+    }
+
+    public static Scene getScene() {
+        return scene;
+    }
+
+    public static void setScene(Scene scene) {
+        MyApplication.scene = scene;
+    }
+
+    public static SceneGroup getSceneGroup() {
+        return sceneGroup;
+    }
+
+    public static void setSceneGroup(SceneGroup sceneGroup) {
+        MyApplication.sceneGroup = sceneGroup;
     }
 
 
@@ -103,11 +124,11 @@ public class MyApplication extends Application {
         return false;
     }
 
-    public int getDeviceListVersion() {
+    public static int getDeviceListVersion() {
         return deviceListVersion;
     }
 
-    public void setDeviceListVersion(int deviceListVersion) {
-        this.deviceListVersion = deviceListVersion;
+    public static void setDeviceListVersion(int deviceListVersion) {
+        MyApplication.deviceListVersion = deviceListVersion;
     }
 }

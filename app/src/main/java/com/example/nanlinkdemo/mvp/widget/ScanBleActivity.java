@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.FeasyDevice;
-import com.example.nanlinkdemo.databinding.ActivityRecycleviewMarginTopBinding;
 import com.example.nanlinkdemo.databinding.ActivityRecycleviewScanBinding;
 import com.example.nanlinkdemo.mvp.adapter.ScanBleAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ScanBlePresenterImpl;
@@ -30,7 +29,6 @@ import com.example.nanlinkdemo.util.Constant;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 @Route(path = Constant.ACTIVITY_URL_ScanBle)
@@ -40,8 +38,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     private ScanBleAdapter adapter;
     private ScanBlePresenterImpl presenter;
 
-    ArrayList<byte[]> uuidlist = new ArrayList<byte[]>();
-    ArrayList<FeasyDevice> deviceList = new ArrayList<FeasyDevice>();
+
 
 
 
@@ -53,7 +50,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         initRecyclerView();
         initBtn();
 //        initPermission();
-        initBle();
+//        initBle();
 
 
 
@@ -93,7 +90,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
 
 
 
-    private void initBle() {
+    private void StartScan() {
 
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter adapter = bluetoothManager.getAdapter();
@@ -122,49 +119,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
-
-                if (result.getScanRecord().getServiceData() != null & result.getScanRecord().getServiceUuids() != null) {
-                    byte[] uuid = result.getScanRecord().getServiceData().get(result.getScanRecord().getServiceUuids().get(0));
-                    if ((uuid != null ? uuid.length : 0) > 14){
-                        if (uuid[14] != 78) {
-                            return;
-                        }
-                        StringBuilder sb = new StringBuilder();
-                        byte checknum = 0;
-                        for (int i = 6; i < 15; i++) {
-                            checknum = (byte) (checknum + uuid[i]);
-                        }
-                        if (checknum != uuid[15]) {
-                            return;
-                        }
-                        if (uuidlist.size() != 0) {
-                            for (int i = 0; i < uuidlist.size(); i++) {
-                                if (Arrays.equals(uuidlist.get(i), uuid)) {
-                                    return;
-                                }
-                                if (Arrays.equals(Arrays.copyOfRange(uuid, 0, 5), Arrays.copyOfRange(uuidlist.get(i), 0, 5))) {
-                                    uuidlist.set(i, uuid);
-                                    deviceList.set(i, new FeasyDevice(uuid));
-                                    showBle(deviceList);
-
-                                    break;
-                                }
-                                if (i == uuidlist.size() - 1) {
-                                    uuidlist.add(uuid);
-                                    deviceList.add(new FeasyDevice(uuid));
-                                    showBle(deviceList);
-                                }
-                            }
-                        } else {
-                            uuidlist.add(uuid);
-                            deviceList.add(new FeasyDevice(uuid));
-                            showBle(deviceList);
-
-                        }
-                    }
-                    Log.d("TAG", "onScan:" + uuidlist.size());
-
-                }
+                presenter.handleResult(result);
             }
         };
         scanner.startScan(scanCallback);
@@ -214,15 +169,50 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
 
     @Override
     public void showBle(ArrayList<FeasyDevice> arrayList) {
+        updateAllSelectedBtn(arrayList);
+        updateFinishBtn(arrayList);
         adapter.setData(arrayList);
+    }
 
+    @Override
+    public void updateAllSelectedBtn(ArrayList<FeasyDevice> arrayList) {
+        binding.allSelected.setClickable(!arrayList.isEmpty());
+        if (arrayList.isEmpty()){
+            binding.allSelected.setBackgroundResource(R.drawable.bg_unable_btn_selected);
+        }else {
+            binding.allSelected.setBackgroundResource(R.drawable.bg_able_btn_selected);
+        }
+    }
+
+    @Override
+    public void updateFinishBtn(ArrayList<FeasyDevice> arrayList) {
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (arrayList.get(i).isSelected()){
+                binding.complete.setClickable(true);
+                binding.complete.setBackgroundResource(R.drawable.bg_able_btn_selected);
+                return;
+            }
+            if (i >= arrayList.size() - 1){
+                binding.complete.setClickable(false);
+                binding.complete.setBackgroundResource(R.drawable.bg_unable_btn_selected);
+            }
+        }
+    }
+
+    @Override
+    public void updateAllSelectedText(boolean allSelected) {
+        if (allSelected){
+            binding.allSelected.setText("取消全选");
+        }else {
+            binding.allSelected.setText("全选");
+        }
     }
 
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
         adapter = new ScanBleAdapter();
-        presenter.getListDataFromView();
+        StartScan();
         binding.recycleView.setAdapter(adapter);
         adapter.setOnClickListener(new ScanBleAdapter.OnClickListener() {
             @Override

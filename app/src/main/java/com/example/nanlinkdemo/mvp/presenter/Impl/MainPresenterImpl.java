@@ -123,10 +123,12 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void sceneListSwitch(int position) {
         if ((sceneList.size() == 0 & position != 0) || (sceneList.size() != 0 & position > sceneList.size())){
-            ARouter.getInstance().build(Constant.ACTIVITY_URL_SceneGroup).withString("sceneGroupName", sceneGroupList.get(position - sceneList.size() - 1).getName()).navigation();
+            MyApplication.setSceneGroup(sceneGroupList.get(position - sceneList.size() - 1));
+            ARouter.getInstance().build(Constant.ACTIVITY_URL_SceneGroup).navigation();
         }
         if (sceneList.size() != 0 & position < sceneList.size()){
-            ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withString("sceneName", sceneList.get(position).getName()).navigation();
+            MyApplication.setScene(sceneList.get(position));
+            ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).navigation();
         }
     }
 
@@ -444,7 +446,11 @@ public class MainPresenterImpl implements MainPresenter {
                     HashMap<String, Device> deviceHashMap = new HashMap<String, Device>();
                     for (Device device: deviceMessage.getData().getDeviceList()){
                         deviceHashMap.put(device.getDeviceId(), device);
-                        model.updateDevice(device);
+                        if (MyApplication.getDeviceHashMap().isEmpty()){
+                            model.addDevice(device);
+                        }else {
+                            model.updateDevice(device);
+                        }
                     }
                     MyApplication.setDeviceHashMap(deviceHashMap);
                 }
