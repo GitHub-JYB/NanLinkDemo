@@ -7,7 +7,7 @@ import com.example.nanlinkdemo.DB.bean.Scene;
 public interface SceneModel {
     void getMenu();
 
-    void getSortList(int position);
+    void getSortList();
 
     void getSettingList();
 

@@ -38,7 +38,7 @@ public class ScanBleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
                 ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getCH());
                 if (fixtureList.get(position).isSelected()){
-                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_checked);
+                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_selected);
                 }else {
                     ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_unselected);
                 }

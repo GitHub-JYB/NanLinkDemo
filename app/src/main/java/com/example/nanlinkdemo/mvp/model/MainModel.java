@@ -33,7 +33,7 @@ public interface MainModel {
 
     void updateSceneGroup(SceneGroup sceneGroup);
 
-    void getSortList(int position);
+    void getSortList();
 
     void updateUser(User user);
 

@@ -52,6 +52,7 @@
         <activity android:name=".mvp.widget.ManageSceneActivity" />
         <activity android:name=".mvp.widget.SceneActivity" />
         <activity android:name=".mvp.widget.AddNewFixtureActivity" />
+        <activity android:name=".mvp.widget.ManageFixtureActivity" />
     </application>
 
 </manifest>

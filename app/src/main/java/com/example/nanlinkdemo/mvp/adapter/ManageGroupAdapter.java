@@ -39,9 +39,9 @@ public class ManageGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ViewHolderManageSceneList) holder).name.setText(sceneList.get(position).getName());
             ((ViewHolderManageSceneList) holder).number.setText("设备数量: " + sceneList.get(position).getFixtureNum());
             if (sceneList.get(position).getSceneGroup().isEmpty()){
-                ((ViewHolderManageSceneList) holder).rightIcon.setImageResource(R.drawable.ic_unchecked);
+                ((ViewHolderManageSceneList) holder).rightIcon.setImageResource(R.drawable.ic_unselected);
             }else {
-                ((ViewHolderManageSceneList) holder).rightIcon.setImageResource(R.drawable.ic_checked);
+                ((ViewHolderManageSceneList) holder).rightIcon.setImageResource(R.drawable.ic_selected);
             }
         }
     }

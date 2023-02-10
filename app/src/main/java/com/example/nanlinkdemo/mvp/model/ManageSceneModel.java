@@ -4,9 +4,7 @@ import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 
 public interface ManageSceneModel {
-    void queryScene(String sceneGroupName, int type);
-
-    void querySceneGroup(String sceneGroupName);
+    void queryScene();
 
     void updateScene(Scene scene);
 

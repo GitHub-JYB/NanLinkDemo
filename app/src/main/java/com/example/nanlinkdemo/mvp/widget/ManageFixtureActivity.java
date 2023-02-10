@@ -18,8 +18,8 @@ import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
 
-@Route(path = Constant.ACTIVITY_URL_ManageScene)
-public class ManageSceneActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ManageSceneView, View.OnClickListener {
+@Route(path = Constant.ACTIVITY_URL_ManageFixture)
+public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ManageSceneView, View.OnClickListener {
 
     private ManageScenePresenterImpl presenter;
     private ManageGroupAdapter adapter;

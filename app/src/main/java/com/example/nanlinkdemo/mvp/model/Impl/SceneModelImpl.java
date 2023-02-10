@@ -48,37 +48,14 @@ public class SceneModelImpl implements SceneModel {
     }
 
     @Override
-    public void getSortList(int position) {
+    public void getSortList() {
         ArrayList<Menu> menuArrayList = new ArrayList<>();
         menuArrayList.add(new Menu(R.drawable.ic_back,"", 0, TYPE_ITEM_nav_bg));
         menuArrayList.add(new Menu(R.drawable.ic_sort, "排序", 0, TYPE_ITEM_nav_bg));
-        switch (position){
-            case 0:
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"地址码", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"地址码", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 1:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"地址码", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"地址码", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 2:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"地址码", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"地址码", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 3:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"地址码", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"地址码", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-        }
-
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"地址码", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"地址码", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
         presenter.showSortListToView(menuArrayList);
     }
 
@@ -142,7 +119,7 @@ public class SceneModelImpl implements SceneModel {
     public void queryAllFixture(int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureDao()
-                .getAllFixtureInfo(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName())
+                .getAllFixtureInfo(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Fixture>>() {
@@ -157,7 +134,7 @@ public class SceneModelImpl implements SceneModel {
     public void queryAllFixtureGroup(int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureGroupDao()
-                .getAllFixtureGroupInfo(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName())
+                .getAllFixtureGroupInfo(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<FixtureGroup>>() {
@@ -203,7 +180,7 @@ public class SceneModelImpl implements SceneModel {
     public void queryFixtureFromFixtureGroupName(String fixtureGroupName, int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureDao()
-                .getFixtureInfoFromFixtureGroup(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureGroupName)
+                .getFixtureInfoFromFixtureGroup(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), fixtureGroupName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Fixture>>() {
@@ -218,7 +195,7 @@ public class SceneModelImpl implements SceneModel {
     public void addFixtureGroup(String fixtureGroupName) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureGroupDao()
-                .insert(new FixtureGroup(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureGroupName, 0))
+                .insert(new FixtureGroup(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), fixtureGroupName, 0))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -233,7 +210,7 @@ public class SceneModelImpl implements SceneModel {
     public void addFixture(String fixtureCH) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureDao()
-                .insert(new Fixture(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureCH, fixtureCH ,"000010", "蓝牙", ""))
+                .insert(new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), fixtureCH, fixtureCH ,"000010", "蓝牙", ""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -248,7 +225,7 @@ public class SceneModelImpl implements SceneModel {
     public void queryFixtureGroup(String fixtureGroupName, int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureGroupDao()
-                .getFixtureGroupInfoFromName(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), fixtureGroupName)
+                .getFixtureGroupInfoFromName(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), fixtureGroupName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<FixtureGroup>>() {
@@ -263,7 +240,7 @@ public class SceneModelImpl implements SceneModel {
     public void queryFixture(String fixtureCH, int type) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureDao()
-                .getFixtureInfoFromName(MyApplication.getOnlineUser().getEmail(), presenter.getScene().getName(), Integer.parseInt(fixtureCH))
+                .getFixtureInfoFromName(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), Integer.parseInt(fixtureCH))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Fixture>>() {

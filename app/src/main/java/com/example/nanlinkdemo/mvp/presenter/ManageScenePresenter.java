@@ -14,11 +14,7 @@ public interface ManageScenePresenter {
 
     void switchSceneList(int position);
 
-    void receiveQueryScene(List<Scene> scenes, int type);
+    void receiveQueryScene(List<Scene> scenes);
 
-    void updateSceneList();
 
-    void receiveQuerySceneGroup(List<SceneGroup> sceneGroups);
-
-    void getSceneGroupFromModel(String sceneGroupName);
 }

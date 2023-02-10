@@ -78,7 +78,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                 view.closeDrawLayout();
                 break;
             case 4:
-                model.getSortList(MyApplication.getOnlineUser().getSortPosition());
+                model.getSortList();
                 break;
             case 6:
                 model.getSettingList();
@@ -274,6 +274,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
 
     @Override
     public void showSortListToView(ArrayList<Menu> sortArrayList) {
+        sortArrayList.get(MyApplication.getOnlineUser().getSortPosition() + 2).setIconResId(R.drawable.ic_selected);
         this.sortArrayList = sortArrayList;
         view.showSortList(sortArrayList);
     }
@@ -287,10 +288,13 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
             case 1:
                 break;
             default:
-                MyApplication.getOnlineUser().setSortPosition(position - 2);
-                model.updateUser(MyApplication.getOnlineUser());
-                model.getSortList(position - 2);
-                view.initMenu();
+                if (MyApplication.getOnlineUser().getSortPosition() != position - 2){
+                    sortArrayList.get(MyApplication.getOnlineUser().getSortPosition() + 2).setIconResId(R.drawable.ic_unselected);
+                    MyApplication.getOnlineUser().setSortPosition(position - 2);
+                    sortArrayList.get(position).setIconResId(R.drawable.ic_selected);
+                    model.updateUser(MyApplication.getOnlineUser());
+                    view.showMenu(sortArrayList);
+                }
                 break;
         }
     }

@@ -36,7 +36,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_checked"
+        android:src="@drawable/ic_unselected"
         android:background="@android:color/transparent"/>
 
 </RelativeLayout>

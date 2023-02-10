@@ -23,34 +23,18 @@ public class ManageSceneModelImpl implements ManageSceneModel {
     }
 
     @Override
-    public void queryScene(String sceneGroupName, int type) {
+    public void queryScene() {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .getSceneInfoFromSceneGroup(MyApplication.getOnlineUser().getEmail(), sceneGroupName)
+                .getSceneInfoFromSceneGroup(MyApplication.getOnlineUser().getEmail(), "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Scene>>() {
                     @Override
                     public void accept(List<Scene> scenes) throws Exception {
-                        presenter.receiveQueryScene(scenes, type);
+                        presenter.receiveQueryScene(scenes);
                     }
                 });
-    }
-
-    @Override
-    public void querySceneGroup(String sceneGroupName) {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getSceneGroupDao()
-                .getSceneGroupInfo(MyApplication.getOnlineUser().getEmail(), sceneGroupName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<SceneGroup>>() {
-                    @Override
-                    public void accept(List<SceneGroup> sceneGroups) throws Exception {
-                        presenter.receiveQuerySceneGroup(sceneGroups);
-                    }
-                });
-
     }
 
     @Override

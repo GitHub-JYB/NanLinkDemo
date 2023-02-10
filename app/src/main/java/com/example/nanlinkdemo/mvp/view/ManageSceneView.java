@@ -5,7 +5,6 @@ import com.example.nanlinkdemo.DB.bean.Scene;
 import java.util.ArrayList;
 
 public interface ManageSceneView {
-    void updateRecyclerView();
 
     void setPresenter();
 

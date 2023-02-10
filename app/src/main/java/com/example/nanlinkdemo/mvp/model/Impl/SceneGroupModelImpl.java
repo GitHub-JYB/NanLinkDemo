@@ -161,92 +161,20 @@ public class SceneGroupModelImpl implements SceneGroupModel {
     }
 
     @Override
-    public void getSortList(int position) {
+    public void getSortList() {
         ArrayList<Menu> menuArrayList = new ArrayList<>();
         menuArrayList.add(new Menu(R.drawable.ic_back,"", 0, TYPE_ITEM_nav_bg));
         menuArrayList.add(new Menu(R.drawable.ic_sort, "排序", 0, TYPE_ITEM_nav_bg));
-        switch (position){
-            case 0:
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"创建时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 1:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"创建时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 2:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"最后编辑时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 3:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"最后编辑时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 4:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"设备数量", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 5:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"设备数量", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 6:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-            case 7:
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"创建时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"最后编辑时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"设备数量", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_unchecked,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
-                menuArrayList.add(new Menu(R.drawable.ic_checked,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
-                break;
-        }
+
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"创建时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"创建时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"最后编辑时间", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"最后编辑时间", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"设备数量", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"设备数量", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"名称", R.drawable.ic_sort_up, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_unselected,"名称", R.drawable.ic_sort_down, TYPE_ITEM_gray_bg));
+
 
         presenter.showSortListToView(menuArrayList);
     }

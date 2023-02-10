@@ -23,7 +23,7 @@ public interface SceneGroupModel {
 
     void updateScene(Scene scene);
 
-    void getSortList(int position);
+    void getSortList();
 
     void updateUser(User user);
 

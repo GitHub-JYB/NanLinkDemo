@@ -3,6 +3,7 @@ package com.example.nanlinkdemo.mvp.presenter.Impl;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.DB.bean.Scene;
@@ -25,15 +26,6 @@ public class ScenePresenterImpl implements ScenePresenter {
     private final SceneModelImpl model;
     private ArrayList<Menu> menuArrayList;
 
-    public Scene getScene() {
-        return scene;
-    }
-
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
-
-    private Scene scene;
     private ArrayList<Menu> sortArrayList;
     private ArrayList<ArrayList<Fixture>> fixtureListInGroup;
 
@@ -45,8 +37,6 @@ public class ScenePresenterImpl implements ScenePresenter {
     private static final int Type_add = 0;
     private static final int Type_rename = 1;
     private static final int Type_init = 2;
-    private static final int Type_init_noGroup = 3;
-    private static final int Type_init_inGroup = 4;
 
 
 
@@ -101,10 +91,13 @@ public class ScenePresenterImpl implements ScenePresenter {
             case 1:
                 break;
             default:
-                scene.setSortPosition(position - 2);
-                model.updateScene(scene);
-                model.getSortList(position - 2);
-                view.initMenu();
+                if (MyApplication.getScene().getSortPosition() != position - 2){
+                    sortArrayList.get(MyApplication.getScene().getSortPosition() + 2).setIconResId(R.drawable.ic_unselected);
+                    MyApplication.getScene().setSortPosition(position - 2);
+                    sortArrayList.get(position).setIconResId(R.drawable.ic_selected);
+                    model.updateScene(MyApplication.getScene());
+                    view.showMenu(sortArrayList);
+                }
                 break;
         }
     }
@@ -117,7 +110,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                 break;
             case 2:
                 view.closeDrawLayout();
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, settingArrayList.get(position).getText(), scene.getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, settingArrayList.get(position).getText(), MyApplication.getScene().getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (view.getInputTextMyDialog().isEmpty()){
@@ -130,12 +123,12 @@ public class ScenePresenterImpl implements ScenePresenter {
                 break;
             case 3:
                 view.closeDrawLayout();
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark, settingArrayList.get(position).getText(), scene.getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark, settingArrayList.get(position).getText(), MyApplication.getScene().getRemark(), "取消", null, "完成", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        scene.setRemark(view.getInputTextMyDialog());
-                        scene.setModifiedDate(DateUtil.getTime());
-                        model.updateScene(scene);
+                        MyApplication.getScene().setRemark(view.getInputTextMyDialog());
+                        MyApplication.getScene().setModifiedDate(DateUtil.getTime());
+                        model.updateScene(MyApplication.getScene());
                         view.dismissMyDialog();
                     }
                 });
@@ -145,7 +138,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                 view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, settingArrayList.get(position).getText(), "是否要删除该场景?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        model.deleteScene(scene);
+                        model.deleteScene(MyApplication.getScene());
                         for (FixtureGroup fixtureGroup : fixtureGroupList){
                             model.deleteFixtureGroup(fixtureGroup);
                         }
@@ -179,16 +172,6 @@ public class ScenePresenterImpl implements ScenePresenter {
             case 1:
                 view.closeDrawLayout();
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
-//                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, menuArrayList.get(position).getText(), "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (view.getInputTextMyDialog().isEmpty()){
-//                            SnackBarUtil.show(v, "请输入地址码");
-//                        }else {
-//                            model.queryFixture(view.getInputTextMyDialog(), Type_add);
-//                        }
-//                    }
-//                });
                 break;
             case 2:
                 view.closeDrawLayout();
@@ -198,13 +181,14 @@ public class ScenePresenterImpl implements ScenePresenter {
                         if (view.getInputTextMyDialog().isEmpty()){
                             SnackBarUtil.show(v, "请输入设备群组名称");
                         }else {
+                            ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
                             model.queryFixtureGroup(view.getInputTextMyDialog(), Type_add);
                         }
                     }
                 });
                 break;
             case 3:
-                model.getSortList(scene.getSortPosition());
+                model.getSortList();
                 break;
             case 5:
             case 7:
@@ -256,6 +240,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void showSortListToView(ArrayList<Menu> sortArrayList) {
+        sortArrayList.get(MyApplication.getScene().getSortPosition() + 2).setIconResId(R.drawable.ic_selected);
         this.sortArrayList = sortArrayList;
         view.showSortList(sortArrayList);
     }
@@ -263,26 +248,26 @@ public class ScenePresenterImpl implements ScenePresenter {
     @Override
     public void receiveSceneList(List<Scene> scenes, int type) {
         if (type == Type_init){
-            setScene(scenes.get(0));
+            MyApplication.setScene(scenes.get(0));
             getFixtureListFromModel();
         }else if (type == Type_rename){
             if (scenes.isEmpty()){
-                scene.setName(view.getInputTextMyDialog());
-                scene.setModifiedDate(DateUtil.getTime());
-                model.updateScene(scene);
-                view.setTitle(scene.getName());
+                MyApplication.getScene().setName(view.getInputTextMyDialog());
+                MyApplication.getScene().setModifiedDate(DateUtil.getTime());
+                model.updateScene(MyApplication.getScene());
+                view.setTitle(MyApplication.getScene().getName());
                 for (FixtureGroup fixtureGroup : fixtureGroupList){
-                    fixtureGroup.setSceneName(scene.getName());
+                    fixtureGroup.setSceneName(MyApplication.getScene().getName());
                     model.updateFixtureGroup(fixtureGroup);
                 }
                 for (Fixture fixture : fixtureList){
-                    fixture.setSceneName(scene.getName());
+                    fixture.setSceneName(MyApplication.getScene().getName());
                     model.updateFixture(fixture);
                 }
                 view.dismissMyDialog();
             }else {
                 view.dismissMyDialog();
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "重命名", scene.getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "重命名", MyApplication.getScene().getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (view.getInputTextMyDialog().isEmpty()){
@@ -353,9 +338,9 @@ public class ScenePresenterImpl implements ScenePresenter {
             if (fixtures.isEmpty()){
                 model.addFixture(view.getInputTextMyDialog());
                 view.dismissMyDialog();
-                scene.setFixtureNum(scene.getFixtureNum() + 1);
-                scene.setModifiedDate(DateUtil.getTime());
-                model.updateScene(scene);
+                MyApplication.getScene().setFixtureNum(MyApplication.getScene().getFixtureNum() + 1);
+                MyApplication.getScene().setModifiedDate(DateUtil.getTime());
+                model.updateScene(MyApplication.getScene());
             }else {
                 view.dismissMyDialog();
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备", "该设备名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
