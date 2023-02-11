@@ -29,11 +29,11 @@ public class FeasyDevice {
             CH = (uuid[6] + 1) * 256 + uuid[7];
         }
         if (CH < 10){
-            setCH("00" + CH);
+            setCH("CH: 00" + CH);
         }else if (CH < 100){
-            setCH("0" + CH);
+            setCH("CH: 0" + CH);
         }else {
-            setCH(String.valueOf(CH));
+            setCH("CH: " + CH);
         }
 //        setCH(Integer.parseInt(stringBuilder.toString()));
         stringBuilder.delete(0, 12);
@@ -44,7 +44,11 @@ public class FeasyDevice {
         if (!MyApplication.getDeviceHashMap().isEmpty()){
             setNAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
         }
-        setTYPE(uuid[13]);
+        if (String.format("%08X", uuid[13]).charAt(String.format("%08X", uuid[13]).length() - 1) == '1'){
+            setTYPE(1);
+        }else {
+            setTYPE(0);
+        }
         setManufacturer_ID(String.valueOf(uuid[14]));
     }
 

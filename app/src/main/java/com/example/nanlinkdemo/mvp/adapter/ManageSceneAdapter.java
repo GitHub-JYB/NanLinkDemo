@@ -18,7 +18,7 @@ import com.example.nanlinkdemo.databinding.VpItemSceneManageBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ManageSceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     public static final int TYPE_MANAGE_SCENE = 1;

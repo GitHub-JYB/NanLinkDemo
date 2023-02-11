@@ -11,7 +11,7 @@ import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityRecycleviewScanBinding;
-import com.example.nanlinkdemo.mvp.adapter.ManageGroupAdapter;
+import com.example.nanlinkdemo.mvp.adapter.ManageSceneAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ManageScenePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.ManageSceneView;
 import com.example.nanlinkdemo.util.Constant;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class ManageSceneActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ManageSceneView, View.OnClickListener {
 
     private ManageScenePresenterImpl presenter;
-    private ManageGroupAdapter adapter;
+    private ManageSceneAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,9 +59,9 @@ public class ManageSceneActivity extends BaseActivity<ActivityRecycleviewScanBin
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         presenter.getSceneListFromModel();
-        adapter = new ManageGroupAdapter();
+        adapter = new ManageSceneAdapter();
         binding.recycleView.setAdapter(adapter);
-        adapter.setOnClickListener(new ManageGroupAdapter.OnClickListener() {
+        adapter.setOnClickListener(new ManageSceneAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
                 presenter.switchSceneList(position);

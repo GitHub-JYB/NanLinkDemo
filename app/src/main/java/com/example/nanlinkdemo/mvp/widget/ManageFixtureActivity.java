@@ -8,21 +8,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.Application.MyApplication;
-import com.example.nanlinkdemo.DB.bean.Scene;
+import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityRecycleviewScanBinding;
-import com.example.nanlinkdemo.mvp.adapter.ManageGroupAdapter;
-import com.example.nanlinkdemo.mvp.presenter.Impl.ManageScenePresenterImpl;
-import com.example.nanlinkdemo.mvp.view.ManageSceneView;
+import com.example.nanlinkdemo.mvp.adapter.ManageFixtureAdapter;
+import com.example.nanlinkdemo.mvp.presenter.Impl.ManageFixturePresenterImpl;
+import com.example.nanlinkdemo.mvp.view.ManageFixtureView;
 import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
 
 @Route(path = Constant.ACTIVITY_URL_ManageFixture)
-public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ManageSceneView, View.OnClickListener {
+public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ManageFixtureView, View.OnClickListener {
 
-    private ManageScenePresenterImpl presenter;
-    private ManageGroupAdapter adapter;
+    private ManageFixturePresenterImpl presenter;
+    private ManageFixtureAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,24 +47,40 @@ public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanB
 
     @Override
     public void setPresenter() {
-        presenter = new ManageScenePresenterImpl(this);
+        presenter = new ManageFixturePresenterImpl(this);
     }
 
     @Override
-    public void showScene(ArrayList<Scene> sceneList) {
-        adapter.setData(sceneList);
+    public void showFixture(ArrayList<Fixture> fixtureList) {
+        updateFinishBtn(fixtureList);
+        adapter.setData(fixtureList);
+
+    }
+
+    @Override
+    public void updateFinishBtn(ArrayList<Fixture> fixtureList) {
+        for (int i = 0; i < fixtureList.size(); i++ ){
+            if (!fixtureList.get(i).getFixtureGroupName().equals("")){
+                binding.finish.setClickable(true);
+                binding.finish.setBackgroundResource(R.drawable.bg_able_btn_selected);
+            }
+            if (i >= fixtureList.size() - 1){
+                binding.finish.setClickable(false);
+                binding.finish.setBackgroundResource(R.drawable.bg_unable_btn_selected);
+            }
+        }
 
     }
 
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        presenter.getSceneListFromModel();
-        adapter = new ManageGroupAdapter();
+        presenter.getFixtureListFromModel();
+        adapter = new ManageFixtureAdapter();
         binding.recycleView.setAdapter(adapter);
-        adapter.setOnClickListener(new ManageGroupAdapter.OnClickListener() {
+        adapter.setOnClickListener(new ManageFixtureAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
-                presenter.switchSceneList(position);
+                presenter.switchFixtureList(position);
             }
         });
     }

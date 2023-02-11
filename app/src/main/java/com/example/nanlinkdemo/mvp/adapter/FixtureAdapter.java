@@ -20,6 +20,7 @@ import com.example.nanlinkdemo.databinding.VpItemFixtureGroupBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -74,9 +75,9 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }else if (holder instanceof ViewHolderFixtureGroupList){
             ((ViewHolderFixtureGroupList) holder).name.setText(fixtureGroupList.get(position - 1).getName());
             ((ViewHolderFixtureGroupList) holder).sceneNum.setText("设备数量: " + fixtureGroupList.get(position  - 1).getFixtureNum());
-            fixtureListInGroup = new ArrayList<Fixture>();
+            fixtureListInGroup = new ArrayList<>();
             for (Fixture fixture : fixtureList){
-                if (fixture.getFixtureGroupName() == fixtureGroupList.get(position - 1).getName()){
+                if (Objects.equals(fixture.getFixtureGroupName(), fixtureGroupList.get(position - 1).getName())){
                     fixtureListInGroup.add(fixture);
                 }
             }
@@ -134,7 +135,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void setData(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList) {
         this.fixtureList = fixtureList;
         this.fixtureGroupList = fixtureGroupList;
-        this.fixtureListNoGroup = new ArrayList<Fixture>();
+        this.fixtureListNoGroup = new ArrayList<>();
         for (Fixture fixture : fixtureList){
             if(fixture.getFixtureGroupName().equals("")){
                 fixtureListNoGroup.add(fixture);

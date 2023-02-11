@@ -1,7 +1,5 @@
 package com.example.nanlinkdemo.mvp.model;
 
-public interface AddNewFixtureModel {
+public interface ControllerModel {
     void getListData();
-
-    void getControllerList();
 }

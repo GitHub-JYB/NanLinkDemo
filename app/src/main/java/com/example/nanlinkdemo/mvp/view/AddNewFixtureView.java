@@ -17,4 +17,5 @@ public interface AddNewFixtureView {
 
     void showMyDialog(int type, String title, String message, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
 
+    void dismissMyDialog();
 }

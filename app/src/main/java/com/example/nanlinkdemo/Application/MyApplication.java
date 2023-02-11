@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.DB.bean.Device;
+import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.DB.bean.User;
@@ -29,6 +30,9 @@ public class MyApplication extends Application {
 
     private static Scene scene;
     private static SceneGroup sceneGroup;
+
+    private static FixtureGroup fixtureGroup;
+
 
     private static HashMap<String, Device> deviceHashMap= new HashMap<String, Device>();
 
@@ -72,6 +76,14 @@ public class MyApplication extends Application {
 
     public static void setSceneGroup(SceneGroup sceneGroup) {
         MyApplication.sceneGroup = sceneGroup;
+    }
+
+    public static FixtureGroup getFixtureGroup() {
+        return fixtureGroup;
+    }
+
+    public static void setFixtureGroup(FixtureGroup fixtureGroup) {
+        MyApplication.fixtureGroup = fixtureGroup;
     }
 
 

@@ -23,20 +23,19 @@ import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.FeasyDevice;
 import com.example.nanlinkdemo.databinding.ActivityRecycleviewScanBinding;
 import com.example.nanlinkdemo.mvp.adapter.ScanAdapter;
-import com.example.nanlinkdemo.mvp.presenter.Impl.ScanBlePresenterImpl;
-import com.example.nanlinkdemo.mvp.view.ScanBleView;
+import com.example.nanlinkdemo.mvp.presenter.Impl.ScanControllerPresenterImpl;
+import com.example.nanlinkdemo.mvp.view.ScanControllerView;
 import com.example.nanlinkdemo.util.Constant;
-
 
 import java.util.ArrayList;
 
 
-@Route(path = Constant.ACTIVITY_URL_ScanBle)
-public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ScanBleView, View.OnClickListener{
+@Route(path = Constant.ACTIVITY_URL_ScanController)
+public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ScanControllerView, View.OnClickListener{
 
 
     private ScanAdapter adapter;
-    private ScanBlePresenterImpl presenter;
+    private ScanControllerPresenterImpl presenter;
 
 
 
@@ -67,7 +66,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
             // for ActivityCompat#requestPermissions for more details.
 //            return;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
+                ActivityCompat.requestPermissions(ScanControllerActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
             }
 
         }
@@ -81,7 +80,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
             // for ActivityCompat#requestPermissions for more details.
 //            return;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                ActivityCompat.requestPermissions(ScanControllerActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
 
         }
@@ -109,7 +108,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
             // for ActivityCompat#requestPermissions for more details.
 //            return;
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+                ActivityCompat.requestPermissions(ScanControllerActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
 //            }
 
         }
@@ -126,7 +125,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (ActivityCompat.checkSelfPermission(ScanBleActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(ScanControllerActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -136,7 +135,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
                     // for ActivityCompat#requestPermissions for more details.
 //                    return;
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+                        ActivityCompat.requestPermissions(ScanControllerActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
 //                    }
                 }
                 scanner.stopScan(scanCallback);
@@ -149,9 +148,8 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     }
 
     private void initBtn() {
-        binding.twoBtn.setVisibility(View.VISIBLE);
-        binding.allSelected.setOnClickListener(this);
-        binding.complete.setOnClickListener(this);
+        binding.oneBtn.setVisibility(View.VISIBLE);
+        binding.finish.setOnClickListener(this);
     }
 
     private void initToolbar() {
@@ -164,50 +162,29 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
 
     @Override
     public void setPresenter() {
-        presenter = new ScanBlePresenterImpl(this);
+        presenter = new ScanControllerPresenterImpl(this);
     }
 
     @Override
-    public void showBle(ArrayList<FeasyDevice> arrayList) {
-        updateAllSelectedBtn(arrayList);
+    public void showController(ArrayList<FeasyDevice> arrayList) {
         updateFinishBtn(arrayList);
         adapter.setData(arrayList);
-    }
-
-    @Override
-    public void updateAllSelectedBtn(ArrayList<FeasyDevice> arrayList) {
-        binding.allSelected.setClickable(!arrayList.isEmpty());
-        if (arrayList.isEmpty()){
-            binding.allSelected.setBackgroundResource(R.drawable.bg_unable_btn_selected);
-        }else {
-            binding.allSelected.setBackgroundResource(R.drawable.bg_able_btn_selected);
-        }
     }
 
     @Override
     public void updateFinishBtn(ArrayList<FeasyDevice> arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
             if (arrayList.get(i).isSelected()){
-                binding.complete.setClickable(true);
-                binding.complete.setBackgroundResource(R.drawable.bg_able_btn_selected);
+                binding.finish.setClickable(true);
+                binding.finish.setBackgroundResource(R.drawable.bg_able_btn_selected);
                 return;
             }
             if (i >= arrayList.size() - 1){
-                binding.complete.setClickable(false);
-                binding.complete.setBackgroundResource(R.drawable.bg_unable_btn_selected);
+                binding.finish.setClickable(false);
+                binding.finish.setBackgroundResource(R.drawable.bg_unable_btn_selected);
             }
         }
     }
-
-    @Override
-    public void updateAllSelectedText(boolean allSelected) {
-        if (allSelected){
-            binding.allSelected.setText("取消全选");
-        }else {
-            binding.allSelected.setText("全选");
-        }
-    }
-
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
@@ -226,6 +203,5 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     @Override
     public void onClick(View view) {
         presenter.onClickSwitch(view);
-
     }
 }

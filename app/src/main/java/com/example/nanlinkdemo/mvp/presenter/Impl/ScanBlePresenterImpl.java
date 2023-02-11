@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
-import com.example.nanlinkdemo.DB.bean.Device;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.FeasyDevice;
 import com.example.nanlinkdemo.mvp.model.Impl.ScanBleModelImpl;
@@ -26,8 +25,8 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
 
     private boolean allSelected = false;
 
-    ArrayList<byte[]> uuidlist = new ArrayList<byte[]>();
-    ArrayList<FeasyDevice> deviceList = new ArrayList<FeasyDevice>();
+    ArrayList<byte[]> uuidList = new ArrayList<>();
+    ArrayList<FeasyDevice> deviceList = new ArrayList<>();
 
     public ScanBlePresenterImpl(ScanBleView view) {
         this.view = view;
@@ -81,33 +80,35 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 if (uuid[14] != 78) {
                     return;
                 }
-                StringBuilder sb = new StringBuilder();
-                byte checknum = 0;
+                byte checkNum = 0;
                 for (int i = 6; i < 15; i++) {
-                    checknum = (byte) (checknum + uuid[i]);
+                    checkNum = (byte) (checkNum + uuid[i]);
                 }
-                if (checknum != uuid[15]) {
+                if (checkNum != uuid[15]) {
                     return;
                 }
-                if (uuidlist.size() != 0) {
-                    for (int i = 0; i < uuidlist.size(); i++) {
-                        if (Arrays.equals(uuidlist.get(i), uuid)) {
+                if (String.format("%08X", uuid[13]).charAt(String.format("%08X", uuid[13]).length() - 1) == '1'){
+                    return;
+                }
+                if (uuidList.size() != 0) {
+                    for (int i = 0; i < uuidList.size(); i++) {
+                        if (Arrays.equals(uuidList.get(i), uuid)) {
                             return;
                         }
-                        if (Arrays.equals(Arrays.copyOfRange(uuid, 0, 6), Arrays.copyOfRange(uuidlist.get(i), 0, 6))) {
-                            uuidlist.set(i, uuid);
+                        if (Arrays.equals(Arrays.copyOfRange(uuid, 0, 6), Arrays.copyOfRange(uuidList.get(i), 0, 6))) {
+                            uuidList.set(i, uuid);
                             deviceList.set(i, new FeasyDevice(uuid));
                             view.showBle(deviceList);
                             break;
                         }
-                        if (i == uuidlist.size() - 1) {
-                            uuidlist.add(uuid);
+                        if (i == uuidList.size() - 1) {
+                            uuidList.add(uuid);
                             deviceList.add(new FeasyDevice(uuid));
                             view.showBle(deviceList);
                         }
                     }
                 } else {
-                    uuidlist.add(uuid);
+                    uuidList.add(uuid);
                     deviceList.add(new FeasyDevice(uuid));
                     view.showBle(deviceList);
                 }

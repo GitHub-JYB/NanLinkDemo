@@ -27,7 +27,6 @@ public class ScenePresenterImpl implements ScenePresenter {
     private ArrayList<Menu> menuArrayList;
 
     private ArrayList<Menu> sortArrayList;
-    private ArrayList<ArrayList<Fixture>> fixtureListInGroup;
 
     private ArrayList<Fixture> fixtureList;
     private ArrayList<FixtureGroup> fixtureGroupList;
@@ -65,16 +64,6 @@ public class ScenePresenterImpl implements ScenePresenter {
                 break;
             case R.id.add_fixture:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
-//                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "添加设备", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (view.getInputTextMyDialog().isEmpty()){
-//                            SnackBarUtil.show(v, "请输入地址码");
-//                        }else {
-//                            model.queryFixture(view.getInputTextMyDialog(), Type_add);
-//                        }
-//                    }
-//                });
                 break;
             case R.id.toolbar_right_btn:
                 view.initMenu();
@@ -142,11 +131,11 @@ public class ScenePresenterImpl implements ScenePresenter {
                         for (FixtureGroup fixtureGroup : fixtureGroupList){
                             model.deleteFixtureGroup(fixtureGroup);
                         }
-                        fixtureGroupList = new ArrayList<FixtureGroup>();
+                        fixtureGroupList = new ArrayList<>();
                         for (Fixture fixture : fixtureList){
                             model.deleteFixture(fixture);
                         }
-                        fixtureList = new ArrayList<Fixture>();
+                        fixtureList = new ArrayList<>();
                         view.dismissMyDialog();
                         view.finish();
                     }
@@ -191,6 +180,8 @@ public class ScenePresenterImpl implements ScenePresenter {
                 model.getSortList();
                 break;
             case 5:
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Controller).navigation();
+                break;
             case 7:
             case 8:
             case 10:
@@ -433,7 +424,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                         view.dismissSettingDialog();
                         break;
                     case 4:
-                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureMenuList.get(position), "是否确定要删除该设备?", fixtureList.get(fixturePosition).getName() + "\nCH: " + String.valueOf(fixtureList.get(fixturePosition).getCH()), "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureMenuList.get(position), "是否确定要删除该设备?", fixtureList.get(fixturePosition).getName() + "\nCH: " + fixtureList.get(fixturePosition).getCH(), "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                             @Override
                             public void onClick(View view) {
 

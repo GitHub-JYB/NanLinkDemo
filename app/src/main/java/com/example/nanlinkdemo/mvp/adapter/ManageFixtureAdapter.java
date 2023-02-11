@@ -1,6 +1,7 @@
 package com.example.nanlinkdemo.mvp.adapter;
 
 
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,73 +11,72 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.R;
-import com.example.nanlinkdemo.bean.AddFixtureType;
-import com.example.nanlinkdemo.bean.FeasyDevice;
-import com.example.nanlinkdemo.databinding.VpItemAddTypeBinding;
 import com.example.nanlinkdemo.databinding.VpItemFixtureBinding;
+import com.example.nanlinkdemo.databinding.VpItemSceneManageBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ScanBleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ManageFixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
+    private List<Fixture> fixtureList = new ArrayList<>();
     private OnClickListener onClickListener;
-    private ArrayList<FeasyDevice> fixtureList;
 
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         VpItemFixtureBinding vpItemFixtureBinding = VpItemFixtureBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolderItemFixture(vpItemFixtureBinding);
+        return new ViewHolderManageFixtureList(vpItemFixtureBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ViewHolderItemFixture){
-                ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
-                ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getCH());
-                if (fixtureList.get(position).isSelected()){
-                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_selected);
-                }else {
-                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_unselected);
-                }
-
+        ((ViewHolderManageFixtureList) holder).name.setText(fixtureList.get(position).getName());
+        ((ViewHolderManageFixtureList) holder).number.setText("CH: " + fixtureList.get(position).getCH());
+        ((ViewHolderManageFixtureList) holder).connectType.setText(fixtureList.get(position).getConnectType());
+        if (fixtureList.get(position).getFixtureGroupName().isEmpty()){
+            ((ViewHolderManageFixtureList) holder).menu.setImageResource(R.drawable.ic_unselected);
+        }else {
+            ((ViewHolderManageFixtureList) holder).menu.setImageResource(R.drawable.ic_selected);
         }
     }
 
-
     @Override
     public int getItemCount() {
-        return fixtureList == null? 0 : fixtureList.size();
+        return fixtureList.size();
     }
 
 
-    public void setData(ArrayList<FeasyDevice> arrayList) {
-        this.fixtureList = arrayList;
+    public void setData(List<Fixture> fixtureList) {
+        this.fixtureList = fixtureList;
         notifyDataSetChanged();
     }
 
-    class ViewHolderItemFixture extends RecyclerView.ViewHolder {
+    class ViewHolderManageFixtureList extends RecyclerView.ViewHolder {
 
 
-        TextView name;
-        TextView number;
-
+        TextView name, number, connectType;
         ImageView menu;
 
-        public ViewHolderItemFixture(@NonNull VpItemFixtureBinding binding) {
+        public ViewHolderManageFixtureList(@NonNull VpItemFixtureBinding binding) {
             super(binding.getRoot());
             binding.rightSecondIcon.setVisibility(View.GONE);
-            binding.connectType.setVisibility(View.GONE);
             menu = binding.menu;
             name = binding.name;
             number = binding.number;
+            connectType = binding.connectType;
+
+
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickListener != null){
+
                         onClickListener.onClick(getAdapterPosition());
                     }
                 }

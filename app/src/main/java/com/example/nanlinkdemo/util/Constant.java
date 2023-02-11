@@ -23,9 +23,8 @@ public class Constant {
     public static final String ACTIVITY_URL_AddNewFixture = "/widget/AddNewFixtureActivity";
     public static final String ACTIVITY_URL_ScanBle = "/widget/ScanBleActivity";
     public static final String ACTIVITY_URL_ManageFixture = "/widget/ManageFixtureActivity";
-
-
-
+    public static final String ACTIVITY_URL_Controller = "/widget/ControllerActivity";
+    public static final String ACTIVITY_URL_ScanController = "/widget/ScanControllerActivity";
 
 
 
