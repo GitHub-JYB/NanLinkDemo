@@ -54,19 +54,19 @@ public class ScanControllerPresenterImpl implements ScanControllerPresenter {
                         }
                         if (Arrays.equals(Arrays.copyOfRange(uuid, 0, 6), Arrays.copyOfRange(uuidList.get(i), 0, 6))) {
                             uuidList.set(i, uuid);
-                            deviceList.set(i, new FeasyDevice(uuid));
+                            deviceList.set(i, new FeasyDevice(result.getDevice().getAddress(), uuid));
                             view.showController(deviceList);
                             break;
                         }
                         if (i == uuidList.size() - 1) {
                             uuidList.add(uuid);
-                            deviceList.add(new FeasyDevice(uuid));
+                            deviceList.add(new FeasyDevice(result.getDevice().getAddress(), uuid));
                             view.showController(deviceList);
                         }
                     }
                 } else {
                     uuidList.add(uuid);
-                    deviceList.add(new FeasyDevice(uuid));
+                    deviceList.add(new FeasyDevice(result.getDevice().getAddress(), uuid));
                     view.showController(deviceList);
                 }
             }

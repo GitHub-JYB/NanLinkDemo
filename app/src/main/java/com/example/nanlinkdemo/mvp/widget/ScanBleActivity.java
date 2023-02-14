@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,14 +35,13 @@ import java.util.ArrayList;
 
 
 @Route(path = Constant.ACTIVITY_URL_ScanBle)
-public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ScanBleView, View.OnClickListener{
+public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ScanBleView, View.OnClickListener {
 
 
     private ScanAdapter adapter;
     private ScanBlePresenterImpl presenter;
-
-
-
+    private BluetoothLeScanner scanner;
+    private ScanCallback scanCallback;
 
 
     @Override
@@ -51,7 +53,6 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         initBtn();
 //        initPermission();
 //        initBle();
-
 
 
     }
@@ -89,8 +90,8 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     }
 
 
-
-    private void StartScan() {
+    @Override
+    public void StartScan() {
 
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter adapter = bluetoothManager.getAdapter();
@@ -100,22 +101,11 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
-//            }
-
+            ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
         }
 
-        BluetoothLeScanner scanner = adapter.getBluetoothLeScanner();
-        ScanCallback scanCallback = new ScanCallback() {
+        scanner = adapter.getBluetoothLeScanner();
+        scanCallback = new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
@@ -123,24 +113,17 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
             }
         };
         scanner.startScan(scanCallback);
+        updateRightBtnClickable(false);
+        startScanAnimation();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (ActivityCompat.checkSelfPermission(ScanBleActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-//                    return;
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
-//                    }
+                    ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
                 }
                 scanner.stopScan(scanCallback);
-
+                stopScanAnimation();
+                updateRightBtnClickable(true);
                 Log.d("TAG", "onStopScan:");
 
             }
@@ -160,6 +143,8 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         binding.toolbar.setLeftBtnOnClickListener(this);
         binding.toolbar.setRightBtnIcon(R.drawable.ic_rescan);
         binding.toolbar.setRightBtnOnClickListener(this);
+        binding.toolbar.setRightBtnClickable(false);
+
     }
 
     @Override
@@ -177,9 +162,9 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     @Override
     public void updateAllSelectedBtn(ArrayList<FeasyDevice> arrayList) {
         binding.allSelected.setClickable(!arrayList.isEmpty());
-        if (arrayList.isEmpty()){
+        if (arrayList.isEmpty()) {
             binding.allSelected.setBackgroundResource(R.drawable.bg_unable_btn_selected);
-        }else {
+        } else {
             binding.allSelected.setBackgroundResource(R.drawable.bg_able_btn_selected);
         }
     }
@@ -187,12 +172,12 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     @Override
     public void updateFinishBtn(ArrayList<FeasyDevice> arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
-            if (arrayList.get(i).isSelected()){
+            if (arrayList.get(i).isSelected()) {
                 binding.complete.setClickable(true);
                 binding.complete.setBackgroundResource(R.drawable.bg_able_btn_selected);
                 return;
             }
-            if (i >= arrayList.size() - 1){
+            if (i >= arrayList.size() - 1) {
                 binding.complete.setClickable(false);
                 binding.complete.setBackgroundResource(R.drawable.bg_unable_btn_selected);
             }
@@ -201,9 +186,9 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
 
     @Override
     public void updateAllSelectedText(boolean allSelected) {
-        if (allSelected){
+        if (allSelected) {
             binding.allSelected.setText("取消全选");
-        }else {
+        } else {
             binding.allSelected.setText("全选");
         }
     }
@@ -227,5 +212,37 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     public void onClick(View view) {
         presenter.onClickSwitch(view);
 
+    }
+
+    @Override
+    public void startScanAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(getBaseContext(), R.anim.anim_loading);
+
+        // 动画循环不卡顿
+        animation.setInterpolator(new LinearInterpolator());
+
+        // 无限循环
+        animation.setRepeatCount(-1);
+
+        binding.toolbar.startRightBtnAnimation(animation);
+    }
+
+    @Override
+    public void stopScanAnimation() {
+        binding.toolbar.stopRightBtnAnimation();
+    }
+
+    @Override
+    public void updateRightBtnClickable(boolean able) {
+        binding.toolbar.setRightBtnClickable(able);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+        }
+        scanner.stopScan(scanCallback);
     }
 }

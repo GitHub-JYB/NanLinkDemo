@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -40,7 +42,6 @@ public class MyToolbar extends RelativeLayout {
     private void initView() {
 
         binding = MtoolbarBinding.inflate(LayoutInflater.from(getContext()),this, true);
-
         // 动态设置statusBar的高度
         LinearLayout.LayoutParams lp= (LinearLayout.LayoutParams) binding.statusBar.getLayoutParams();
         lp.height= MyApplication.statusHigh;
@@ -55,6 +56,16 @@ public class MyToolbar extends RelativeLayout {
     // 设置右侧按键点击事件
     public void setRightBtnOnClickListener(OnClickListener li){
         binding.toolbarRightBtn.setOnClickListener(li);
+    }
+
+    //设置右侧按键开始动画
+    public void startRightBtnAnimation(Animation animation){
+        binding.toolbarRightBtn.startAnimation(animation);
+    }
+
+    //设置右侧按键结束动画
+    public void stopRightBtnAnimation(){
+        binding.toolbarRightBtn.clearAnimation();
     }
 
     // 设置右侧第二个按键点击事件
@@ -92,6 +103,11 @@ public class MyToolbar extends RelativeLayout {
     public void setRightBtnIcon(int resId){
         binding.toolbarRightBtn.setImageResource(resId);
         binding.toolbarRightBtn.setVisibility(VISIBLE);
+    }
+
+    // 设置右侧按键是否可以点击
+    public void setRightBtnClickable(boolean able){
+        binding.toolbarRightBtn.setClickable(able);
     }
 
     // 隐藏右侧按键图标

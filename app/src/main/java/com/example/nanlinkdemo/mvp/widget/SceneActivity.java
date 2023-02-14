@@ -46,14 +46,11 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         binding.addFixture.setOnClickListener(this);
     }
 
-    private void initScene() {
-        presenter.getSceneFromModel(MyApplication.getScene().getName());
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
-        initScene();
+        updateRecycleView();
+        setTitle(MyApplication.getScene().getName());
     }
 
     @Override
@@ -100,7 +97,6 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
     }
 
     private void initToolbar() {
-        setTitle(MyApplication.getScene().getName());
         binding.toolbar.setLeftBtnIcon(R.drawable.ic_exit);
         binding.toolbar.setRightBtnIcon(R.drawable.ic_menu);
         binding.toolbar.setLeftBtnOnClickListener(this);
