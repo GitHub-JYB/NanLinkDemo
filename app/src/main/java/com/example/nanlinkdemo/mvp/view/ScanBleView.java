@@ -5,6 +5,8 @@ import com.example.nanlinkdemo.bean.FeasyDevice;
 import java.util.ArrayList;
 
 public interface ScanBleView {
+    void StartScan();
+
     void setPresenter();
 
     void showBle(ArrayList<FeasyDevice> arrayList);
@@ -20,4 +22,10 @@ public interface ScanBleView {
     void startLoading();
 
     void stopLoading();
+
+    void startScanAnimation();
+
+    void stopScanAnimation();
+
+    void updateRightBtnClickable(boolean able);
 }

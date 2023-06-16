@@ -11,24 +11,40 @@ public class FeasyDevice {
     private String DEVICE_ID;
     private String NAME = "unknow";
     private String CH;
-    private int TYPE;
-    private String manufacturer_ID;
+    private int TYPE = 0;
+    private String manufacturer_ID = "78";
+
+    private String manufacturer = "feasy";
 
     private boolean selected = false;
 
-    public FeasyDevice(byte[] uuid){
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 6; i++){
-            stringBuilder.append(String.format("%02X", uuid[i]));
+    public FeasyDevice(String address, String name){
+        setUUID(address);
+        setCH("CH: " + name.substring(5,8));
+        setDEVICE_ID(name.substring(9, 15));
+        if (!MyApplication.getDeviceHashMap().isEmpty()){
+            setNAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
         }
-        setUUID(stringBuilder.toString());
+        setManufacturer("man");
+    }
+
+
+    public FeasyDevice(String address, byte[] uuid){
+//        StringBuilder stringBuilder = new StringBuilder();
+//        for (int i = 0; i < 6; i++){
+//            stringBuilder.append(String.format("%02X", uuid[i]));
+//        }
+//        setUUID(stringBuilder.toString());
+        setUUID(address);
         int CH;
         if (uuid[7] >=0){
             CH = uuid[6] * 256 + uuid[7];
         }else {
             CH = (uuid[6] + 1) * 256 + uuid[7];
         }
-        if (CH < 10){
+        if (CH == 0){
+            setCH("CH: 未设置");
+        }else if (CH < 10){
             setCH("CH: 00" + CH);
         }else if (CH < 100){
             setCH("CH: 0" + CH);
@@ -36,7 +52,7 @@ public class FeasyDevice {
             setCH("CH: " + CH);
         }
 //        setCH(Integer.parseInt(stringBuilder.toString()));
-        stringBuilder.delete(0, 12);
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("%02X", uuid[10]));
         stringBuilder.append(String.format("%02X", uuid[11]));
         stringBuilder.append(String.format("%02X", uuid[12]));
@@ -111,5 +127,13 @@ public class FeasyDevice {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 }

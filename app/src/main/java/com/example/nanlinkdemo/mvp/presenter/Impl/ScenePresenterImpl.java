@@ -45,10 +45,6 @@ public class ScenePresenterImpl implements ScenePresenter {
         model = new SceneModelImpl(this);
     }
 
-    @Override
-    public void getSceneFromModel(String sceneName) {
-        model.queryScene(sceneName, Type_init);
-    }
 
     @Override
     public void switchOnclick(View v) {

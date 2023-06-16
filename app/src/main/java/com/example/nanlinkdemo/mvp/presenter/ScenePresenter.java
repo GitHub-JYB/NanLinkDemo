@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ScenePresenter {
-    void getSceneFromModel(String sceneName);
 
     void switchOnclick(View v);
 

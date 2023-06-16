@@ -1,10 +1,14 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
 
+import android.Manifest;
 import android.bluetooth.le.ScanResult;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.view.View;
 
+
+import androidx.core.app.ActivityCompat;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
@@ -13,6 +17,7 @@ import com.example.nanlinkdemo.bean.FeasyDevice;
 import com.example.nanlinkdemo.mvp.model.Impl.ScanBleModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.ScanBlePresenter;
 import com.example.nanlinkdemo.mvp.view.ScanBleView;
+import com.example.nanlinkdemo.mvp.widget.ScanBleActivity;
 import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
@@ -25,8 +30,8 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
 
     private boolean allSelected = false;
 
-    ArrayList<byte[]> uuidList = new ArrayList<>();
     ArrayList<FeasyDevice> deviceList = new ArrayList<>();
+    private ArrayList<byte[]> uuidList = new ArrayList<>();
 
     public ScanBlePresenterImpl(ScanBleView view) {
         this.view = view;
@@ -46,13 +51,13 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
 
     @Override
     public void onClickSwitch(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.toolbar_left_btn:
                 view.finish();
                 break;
             case R.id.all_selected:
                 view.updateAllSelectedText(!allSelected);
-                for (FeasyDevice device:deviceList){
+                for (FeasyDevice device : deviceList) {
                     device.setSelected(!allSelected);
                 }
                 allSelected = !allSelected;
@@ -61,7 +66,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
             case R.id.complete:
                 view.startLoading();
                 for (FeasyDevice device : deviceList) {
-                    if (device.isSelected()){
+                    if (device.isSelected()) {
                         model.addBleFixture(device);
                     }
                 }
@@ -69,6 +74,8 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
                 view.finish();
                 break;
+            case R.id.toolbar_right_btn:
+                view.StartScan();
         }
     }
 
@@ -76,7 +83,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
     public void handleResult(ScanResult result) {
         if (result.getScanRecord().getServiceData() != null & result.getScanRecord().getServiceUuids() != null) {
             byte[] uuid = result.getScanRecord().getServiceData().get(result.getScanRecord().getServiceUuids().get(0));
-            if ((uuid != null ? uuid.length : 0) > 14){
+            if ((uuid != null ? uuid.length : 0) > 14) {
                 if (uuid[14] != 78) {
                     return;
                 }
@@ -87,30 +94,47 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 if (checkNum != uuid[15]) {
                     return;
                 }
-                if (String.format("%08X", uuid[13]).charAt(String.format("%08X", uuid[13]).length() - 1) == '1'){
+                if (String.format("%08X", uuid[13]).charAt(String.format("%08X", uuid[13]).length() - 1) == '1') {
                     return;
                 }
-                if (uuidList.size() != 0) {
-                    for (int i = 0; i < uuidList.size(); i++) {
-                        if (Arrays.equals(uuidList.get(i), uuid)) {
-                            return;
-                        }
-                        if (Arrays.equals(Arrays.copyOfRange(uuid, 0, 6), Arrays.copyOfRange(uuidList.get(i), 0, 6))) {
-                            uuidList.set(i, uuid);
-                            deviceList.set(i, new FeasyDevice(uuid));
+                if (!deviceList.isEmpty()) {
+                    for (int i = 0; i < deviceList.size(); i++) {
+                        if (result.getDevice().getAddress().equals(deviceList.get(i).getUUID())) {
+                            deviceList.set(i, new FeasyDevice(result.getDevice().getAddress(), result.getScanRecord().getServiceData(result.getScanRecord().getServiceUuids().get(0))));
                             view.showBle(deviceList);
                             break;
                         }
-                        if (i == uuidList.size() - 1) {
-                            uuidList.add(uuid);
-                            deviceList.add(new FeasyDevice(uuid));
+                        if (i >= deviceList.size() - 1) {
+                            deviceList.add(new FeasyDevice(result.getDevice().getAddress(), result.getScanRecord().getServiceData(result.getScanRecord().getServiceUuids().get(0))));
                             view.showBle(deviceList);
                         }
                     }
                 } else {
-                    uuidList.add(uuid);
-                    deviceList.add(new FeasyDevice(uuid));
+                    deviceList.add(new FeasyDevice(result.getDevice().getAddress(), result.getScanRecord().getServiceData(result.getScanRecord().getServiceUuids().get(0))));
                     view.showBle(deviceList);
+                }
+            }
+        }
+        else {
+            if (ActivityCompat.checkSelfPermission((ScanBleActivity) this.view, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((ScanBleActivity) this.view, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
+            }
+            if (result.getScanRecord().getDeviceName() != null && result.getScanRecord().getDeviceName().startsWith("``NL")) {
+                if (deviceList.isEmpty()) {
+                    deviceList.add(new FeasyDevice(result.getDevice().getAddress(), result.getScanRecord().getDeviceName()));
+                    view.showBle(deviceList);
+                } else {
+                    for (int i = 0; i < deviceList.size(); i++) {
+                        if (result.getDevice().getAddress().equals(deviceList.get(i).getUUID())) {
+                            deviceList.set(i, new FeasyDevice(result.getDevice().getAddress(), result.getScanRecord().getDeviceName()));
+                            view.showBle(deviceList);
+                            break;
+                        }
+                        if (i == deviceList.size() - 1) {
+                            deviceList.add(i, new FeasyDevice(result.getDevice().getAddress(), result.getScanRecord().getDeviceName()));
+                            view.showBle(deviceList);
+                        }
+                    }
                 }
             }
         }
