@@ -166,7 +166,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                         if (view.getInputTextMyDialog().isEmpty()){
                             SnackBarUtil.show(v, "请输入设备群组名称");
                         }else {
-                            ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
+//                            ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
                             model.queryFixtureGroup(view.getInputTextMyDialog(), Type_add);
                         }
                     }
