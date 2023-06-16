@@ -58,7 +58,7 @@ public class AddNewFixturePresenterImpl implements AddNewFixturePresenter {
             });
         }else {
             // 跳转到2.4G添加界面
-            ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
+            ARouter.getInstance().build(Constant.ACTIVITY_URL_Add24GFixture).navigation();
         }
     }
 }

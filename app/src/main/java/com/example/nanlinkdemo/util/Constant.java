@@ -26,6 +26,8 @@ public class Constant {
     public static final String ACTIVITY_URL_Controller = "/widget/ControllerActivity";
     public static final String ACTIVITY_URL_ScanController = "/widget/ScanControllerActivity";
 
+    public static final String ACTIVITY_URL_Add24GFixture = "/widget/Add24GFixtureActivity";
+
 
 
 
