@@ -55,6 +55,7 @@
         <activity android:name=".mvp.widget.ManageFixtureActivity" />
         <activity android:name=".mvp.widget.ControllerActivity" />
         <activity android:name=".mvp.widget.ScanControllerActivity" />
+        <activity android:name=".mvp.widget.Add24GFixtureActivity"/>
     </application>
 
 </manifest>

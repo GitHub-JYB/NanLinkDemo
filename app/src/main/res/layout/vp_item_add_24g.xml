@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:paddingEnd="6dp">
+
+        <TextView
+            android:id="@+id/index"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="#1"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/delete"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_delete_24g"
+            android:layout_alignParentEnd="true"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_centerVertical="true"
+            android:text="地址码"
+            android:textColor="@color/login_hintText"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/CH"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="75dp"
+            android:layout_marginEnd="14dp"
+            android:paddingStart="12dp"
+            android:textColor="@color/login_hintText"
+            android:textSize="12sp"
+            android:background="@drawable/bg_type_unseleted" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_centerVertical="true"
+            android:text="名称"
+            android:textColor="@color/login_hintText"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginStart="75dp"
+            android:layout_marginEnd="14dp"
+            android:paddingStart="12dp"
+            android:textColor="@color/login_hintText"
+            android:textSize="12sp"
+            android:background="@drawable/bg_type_unseleted" />
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/dialog_input_text" />
+
+</LinearLayout>
+
