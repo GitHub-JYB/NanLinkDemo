@@ -50,6 +50,7 @@
             android:paddingStart="12dp"
             android:textColor="@color/login_hintText"
             android:textSize="12sp"
+            android:inputType="number"
             android:background="@drawable/bg_type_unseleted" />
 
 
