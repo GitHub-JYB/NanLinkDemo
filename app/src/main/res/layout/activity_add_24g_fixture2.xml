@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme">
+
+    <com.example.nanlinkdemo.ui.MyToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginBottom="72dp"
+        android:orientation="vertical">
+
+       <com.example.nanlinkdemo.ui.BoxView
+           android:id="@+id/type"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
+
+        <com.example.nanlinkdemo.ui.BoxView
+            android:id="@+id/cctRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.example.nanlinkdemo.ui.BoxView
+            android:id="@+id/GM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/add"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_add"
+                android:layout_width="168dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_able_btn_selected"
+                android:text="增加一台设备"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/finish"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_finish"
+            android:layout_width="168dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_unable_btn_selected"
+            android:text="完成"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</RelativeLayout>

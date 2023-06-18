@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:text="灯具类型"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+
+    <RadioGroup
+        android:id="@+id/group"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="6dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+
+        />
+</LinearLayout>

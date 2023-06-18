@@ -47,7 +47,7 @@
                     android:text="单色温"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:background="@drawable/bg_type_seleted"
+                    android:background="@drawable/bg_type_selected"
                     />
 
                 <Button
@@ -58,7 +58,7 @@
                     android:layout_marginStart="-1dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:background="@drawable/bg_type_unseleted"
+                    android:background="@drawable/bg_type_unselected"
                     />
 
                 <Button
@@ -69,7 +69,7 @@
                     android:layout_marginStart="-1dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:background="@drawable/bg_type_unseleted"
+                    android:background="@drawable/bg_type_unselected"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -102,7 +102,7 @@
                     android:text="3200K\n-\n5600K"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:background="@drawable/bg_type_seleted"
+                    android:background="@drawable/bg_type_selected"
                     />
 
                 <Button
@@ -113,7 +113,7 @@
                     android:layout_marginStart="-1dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:background="@drawable/bg_type_unseleted"
+                    android:background="@drawable/bg_type_unselected"
                     />
 
                 <Button
@@ -124,7 +124,7 @@
                     android:layout_marginStart="-1dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:background="@drawable/bg_type_unseleted"
+                    android:background="@drawable/bg_type_unselected"
                     />
                 <Button
                     android:id="@+id/btn_27to75CCT"
@@ -134,7 +134,7 @@
                     android:layout_marginStart="-1dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:background="@drawable/bg_type_unseleted"
+                    android:background="@drawable/bg_type_unselected"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -168,7 +168,7 @@
                     android:text="可调"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:background="@drawable/bg_type_seleted"
+                    android:background="@drawable/bg_type_selected"
                     />
 
                 <Button
@@ -179,7 +179,7 @@
                     android:layout_marginStart="-1dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:background="@drawable/bg_type_unseleted"
+                    android:background="@drawable/bg_type_unselected"
                     />
             </LinearLayout>
         </LinearLayout>
