@@ -1,20 +1,26 @@
 package com.example.nanlinkdemo.mvp.adapter;
 
 
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.bean.Add24GFixture;
 import com.example.nanlinkdemo.databinding.VpItemAdd24gBinding;
 import com.example.nanlinkdemo.databinding.VpItemAdd24gBtnBinding;
+import com.example.nanlinkdemo.ui.MyDialog;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 
@@ -44,8 +50,16 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((ViewHolderAdd24g) holder).CH.setText(fixtureArrayList.get(position).getCH());
             ((ViewHolderAdd24g) holder).CH.setTag(position);
             ((ViewHolderAdd24g) holder).index.setText("#" + (position + 1));
+            ((ViewHolderAdd24g) holder).index.setFocusable(true);
+            ((ViewHolderAdd24g) holder).index.setFocusableInTouchMode(true);
+            ((ViewHolderAdd24g) holder).index.requestFocus();
+            ((ViewHolderAdd24g) holder).index.findFocus();
+
+            ((ViewHolderAdd24g) holder).delete.setTag(position);
             if (position == 0) {
                 ((ViewHolderAdd24g) holder).delete.setVisibility(View.GONE);
+            } else {
+                ((ViewHolderAdd24g) holder).delete.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -101,7 +115,7 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             binding.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fixtureArrayList.remove(getAdapterPosition());
+                    fixtureArrayList.remove(fixtureArrayList.get((Integer) binding.delete.getTag()));
                     notifyDataSetChanged();
                 }
             });
@@ -116,6 +130,11 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                             } else {
                                 Add24GFixture fixture = fixtureArrayList.get((Integer) binding.CH.getTag());
+                                if (Integer.parseInt(CH) < 10) {
+                                    CH = "00" + Integer.parseInt(CH);
+                                } else if (Integer.parseInt(CH) < 100) {
+                                    CH = "0" + Integer.parseInt(CH);
+                                }
                                 fixture.setCH(CH);
                                 fixtureArrayList.set((Integer) binding.CH.getTag(), fixture);
                             }
