@@ -40,7 +40,9 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderAdd24g) {
             ((ViewHolderAdd24g) holder).name.setText(fixtureArrayList.get(position).getName());
+            ((ViewHolderAdd24g) holder).name.setTag(position);
             ((ViewHolderAdd24g) holder).CH.setText(fixtureArrayList.get(position).getCH());
+            ((ViewHolderAdd24g) holder).CH.setTag(position);
             ((ViewHolderAdd24g) holder).index.setText("#" + (position + 1));
             if (position == 0) {
                 ((ViewHolderAdd24g) holder).delete.setVisibility(View.GONE);
@@ -107,17 +109,15 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             binding.CH.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    String TAG ="tag";
-                    Log.d(TAG, "onFocusChange: " + getAdapterPosition());
                     if (!hasFocus) {
                         String CH = binding.CH.getText().toString().trim();
                         if (!CH.isEmpty()) {
                             if (Integer.parseInt(CH) <= 0 || Integer.parseInt(CH) > 512) {
 
                             } else {
-                                Add24GFixture fixture = fixtureArrayList.get(getAdapterPosition());
+                                Add24GFixture fixture = fixtureArrayList.get((Integer) binding.CH.getTag());
                                 fixture.setCH(CH);
-                                fixtureArrayList.set(getAdapterPosition(), fixture);
+                                fixtureArrayList.set((Integer) binding.CH.getTag(), fixture);
                             }
                         }
                     }
@@ -130,9 +130,9 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     if (!hasFocus) {
                         String name = binding.name.getText().toString().trim();
                         if (!name.isEmpty()) {
-                            Add24GFixture fixture = fixtureArrayList.get(getAdapterPosition());
+                            Add24GFixture fixture = fixtureArrayList.get((Integer) binding.name.getTag());
                             fixture.setName(name);
-                            fixtureArrayList.set(getAdapterPosition(), fixture);
+                            fixtureArrayList.set((Integer) binding.name.getTag(), fixture);
                         }
                     }
                 }
