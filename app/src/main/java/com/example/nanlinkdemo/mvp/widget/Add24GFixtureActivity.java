@@ -10,14 +10,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Add24GFixture;
 import com.example.nanlinkdemo.databinding.ActivityAdd24gFixtureBinding;
 import com.example.nanlinkdemo.mvp.adapter.Add24GAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.Add24GFixturePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.Add24GFixtureView;
-import com.example.nanlinkdemo.util.Constant;
+import com.example.nanlinkdemo.ui.BoxView;
 
 import java.util.ArrayList;
 
@@ -33,31 +33,29 @@ public class Add24GFixtureActivity extends BaseActivity<ActivityAdd24gFixtureBin
         super.onCreate(savedInstanceState);
         setPresenter();
         initToolbar();
-//        initBoxView();
+        initBoxView();
         initRecyclerView();
-        initButton();
+        initFinishBtn();
 
     }
 
-    private void initButton() {
-        binding.btnAdd.setOnClickListener(new View.OnClickListener() {
+    private void initFinishBtn() {
+        binding.btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Test).navigation();
+                presenter.onClick();
             }
         });
     }
 
     private void initBoxView() {
-//        binding.type.setTitle("灯具类型");
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("单色温");
-        arrayList.add("双色温");
-        arrayList.add("全彩");
-//        binding.type.setData(arrayList);
-//        binding.cctRange.setVisibility(View.GONE);
-//        binding.GM.setVisibility(View.GONE);
+        presenter.getBoxViewDataFromModel(binding.type);
+        binding.cctRange.setWidth(MyApplication.dip2px(68));
+        binding.cctRange.setHeight(MyApplication.dip2px(50));
+        binding.cctRange.setVisibility(View.GONE);
+        presenter.getBoxViewDataFromModel(binding.cctRange);
+        binding.GM.setVisibility(View.GONE);
+        presenter.getBoxViewDataFromModel(binding.GM);
     }
 
     private void initToolbar() {
@@ -93,6 +91,23 @@ public class Add24GFixtureActivity extends BaseActivity<ActivityAdd24gFixtureBin
     @Override
     public void setData(ArrayList<Add24GFixture> add24GFixtures) {
         adapter.setData(add24GFixtures);
+    }
+
+    @Override
+    public void updateBoxView(BoxView boxView, String title, ArrayList<String> dataList, int checkIndex){
+        boxView.setTitle(title);
+        boxView.check(checkIndex);
+        boxView.setData(dataList);
+    }
+
+    @Override
+    public void setBoxViewOnCheckedChangeListener(BoxView boxView, BoxView.OnCheckedChangeListener listener){
+        boxView.setOnCheckedChangeListener(listener);
+    }
+
+    @Override
+    public void setBoxViewVisibility(int boxViewId, int visibility) {
+        findViewById(boxViewId).setVisibility(visibility);
     }
 
     @Override

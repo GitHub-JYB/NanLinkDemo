@@ -25,6 +25,9 @@ public class MyApplication extends Application {
     public static int heightPixels;
     public static int statusHigh;
     private static float scale;
+
+    private static float fontScale;
+
     private static String versionName;
     private static User onlineUser, lastUser;
 
@@ -98,6 +101,7 @@ public class MyApplication extends Application {
         widthPixels = density.widthPixels;
         heightPixels = density.heightPixels;
         scale = density.density;
+        fontScale = density.scaledDensity;
         statusHigh = getResources().getDimensionPixelSize(getResources().getIdentifier("status_bar_height","dimen","android"));
         try {
             versionName = instance.getPackageManager().getPackageInfo("com.example.nanlinkdemo", 0).versionName;
@@ -119,10 +123,17 @@ public class MyApplication extends Application {
     public static int px2dip(float px){
         return (int)(px/scale + 0.5f);
     }
+    public static int px2sp(float px){
+        return (int)(px/fontScale + 0.5f);
+    }
 
     public static int dip2px(float dip){
         return (int)(dip * scale + 0.5f);
     }
+    public static int sp2px(float sp){
+        return (int)(sp * fontScale + 0.5f);
+    }
+
 
     public static CharSequence getVersion() {
         return versionName;

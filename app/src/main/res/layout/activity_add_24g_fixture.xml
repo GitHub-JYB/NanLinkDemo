@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/theme"
-    android:orientation="vertical">
+    android:background="@color/theme">
 
     <com.example.nanlinkdemo.ui.MyToolbar
         android:id="@+id/toolbar"
@@ -17,172 +16,20 @@
         android:layout_marginBottom="72dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/fixtureType"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
+       <com.example.nanlinkdemo.ui.BoxView
+           android:id="@+id/type"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="灯具类型"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="14dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_singleCCT"
-                    android:layout_width="84dp"
-                    android:layout_height="40dp"
-                    android:text="单色温"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/bg_type_selected"
-                    />
-
-                <Button
-                    android:id="@+id/btn_doubleCCT"
-                    android:layout_width="84dp"
-                    android:layout_height="40dp"
-                    android:text="双色温"
-                    android:layout_marginStart="-1dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/bg_type_unselected"
-                    />
-
-                <Button
-                    android:id="@+id/btn_fullColor"
-                    android:layout_width="84dp"
-                    android:layout_height="40dp"
-                    android:text="全彩"
-                    android:layout_marginStart="-1dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/bg_type_unselected"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
+        <com.example.nanlinkdemo.ui.BoxView
             android:id="@+id/cctRange"
             android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="色温范围"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="14dp"
-                android:orientation="horizontal">
+            android:layout_height="wrap_content"/>
 
-                <Button
-                    android:id="@+id/btn_32to56CCT"
-                    android:layout_width="68dp"
-                    android:layout_height="50dp"
-                    android:text="3200K\n-\n5600K"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/bg_type_selected"
-                    />
-
-                <Button
-                    android:id="@+id/btn_27to65CCT"
-                    android:layout_width="68dp"
-                    android:layout_height="50dp"
-                    android:text="2700K\n-\n6500K"
-                    android:layout_marginStart="-1dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/bg_type_unselected"
-                    />
-
-                <Button
-                    android:id="@+id/btn_32to75CCT"
-                    android:layout_width="68dp"
-                    android:layout_height="50dp"
-                    android:text="3200K\n-\n7500K"
-                    android:layout_marginStart="-1dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/bg_type_unselected"
-                    />
-                <Button
-                    android:id="@+id/btn_27to75CCT"
-                    android:layout_width="68dp"
-                    android:layout_height="50dp"
-                    android:text="2700K\n-\n7500K"
-                    android:layout_marginStart="-1dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/bg_type_unselected"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
+        <com.example.nanlinkdemo.ui.BoxView
             android:id="@+id/GM"
             android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="红绿平衡"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="14dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_GM_able"
-                    android:layout_width="84dp"
-                    android:layout_height="40dp"
-                    android:text="可调"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/bg_type_selected"
-                    />
-
-                <Button
-                    android:id="@+id/btn_GM_unable"
-                    android:layout_width="84dp"
-                    android:layout_height="40dp"
-                    android:text="不可调"
-                    android:layout_marginStart="-1dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:background="@drawable/bg_type_unselected"
-                    />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="wrap_content"/>
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -193,23 +40,7 @@
             android:paddingEnd="16dp"
             />
 
-        <LinearLayout
-            android:id="@+id/add"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:gravity="center"
-            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_add"
-                android:layout_width="168dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/bg_able_btn_selected"
-                android:text="增加一台设备"
-                android:textColor="@color/white" />
-        </LinearLayout>
 
     </LinearLayout>
 

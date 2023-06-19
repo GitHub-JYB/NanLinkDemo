@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:gravity="center_horizontal">
+
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_width="168dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_able_btn_selected"
+        android:text="增加一台设备"
+        android:textColor="@color/white" />
+
+</LinearLayout>
+

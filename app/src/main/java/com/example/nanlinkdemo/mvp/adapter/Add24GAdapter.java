@@ -1,6 +1,7 @@
 package com.example.nanlinkdemo.mvp.adapter;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,49 +12,74 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.nanlinkdemo.DB.bean.Controller;
-import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.bean.Add24GFixture;
-import com.example.nanlinkdemo.bean.Menu;
-import com.example.nanlinkdemo.bean.RegisterUser;
 import com.example.nanlinkdemo.databinding.VpItemAdd24gBinding;
-import com.example.nanlinkdemo.databinding.VpItemFixtureBinding;
+import com.example.nanlinkdemo.databinding.VpItemAdd24gBtnBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private OnClickListener onClickListener;
-    private ArrayList<Add24GFixture> fixtureArrayList ;
+    private ArrayList<Add24GFixture> fixtureArrayList;
+    private int Type_Item = 0;
+    private int Type_Btn = 1;
 
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        VpItemAdd24gBinding vpItemAdd24gBinding = VpItemAdd24gBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolderAdd24g(vpItemAdd24gBinding);
+        if (viewType == Type_Item) {
+            VpItemAdd24gBinding vpItemAdd24gBinding = VpItemAdd24gBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new ViewHolderAdd24g(vpItemAdd24gBinding);
+        }
+        VpItemAdd24gBtnBinding vpItemAdd24gBtnBinding = VpItemAdd24gBtnBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolderAddBtn(vpItemAdd24gBtnBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolderAdd24g) holder).name.setText(fixtureArrayList.get(position).getName());
-        ((ViewHolderAdd24g) holder).CH.setText(fixtureArrayList.get(position).getCH());
-        ((ViewHolderAdd24g) holder).index.setText("#" + (position + 1));
-        if (position == 0){
-            ((ViewHolderAdd24g) holder).delete.setVisibility(View.GONE);
+        if (holder instanceof ViewHolderAdd24g) {
+            ((ViewHolderAdd24g) holder).name.setText(fixtureArrayList.get(position).getName());
+            ((ViewHolderAdd24g) holder).CH.setText(fixtureArrayList.get(position).getCH());
+            ((ViewHolderAdd24g) holder).index.setText("#" + (position + 1));
+            if (position == 0) {
+                ((ViewHolderAdd24g) holder).delete.setVisibility(View.GONE);
+            }
         }
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return fixtureArrayList != null && position < fixtureArrayList.size() ? Type_Item : Type_Btn;
+    }
+
+    @Override
     public int getItemCount() {
-        return fixtureArrayList == null? 0 : fixtureArrayList.size();
+        return fixtureArrayList == null ? 1 : fixtureArrayList.size() + 1;
     }
 
     public void setData(ArrayList<Add24GFixture> fixtureArrayList) {
         this.fixtureArrayList = fixtureArrayList;
         notifyDataSetChanged();
     }
+
+    class ViewHolderAddBtn extends RecyclerView.ViewHolder {
+
+
+        public ViewHolderAddBtn(@NonNull VpItemAdd24gBtnBinding binding) {
+            super(binding.getRoot());
+
+            binding.btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fixtureArrayList.add(new Add24GFixture("", ""));
+                    notifyDataSetChanged();
+                }
+            });
+
+        }
+    }
+
     class ViewHolderAdd24g extends RecyclerView.ViewHolder {
 
 
@@ -70,12 +96,44 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             delete = binding.delete;
 
 
-            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+            binding.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onClickListener != null){
+                    fixtureArrayList.remove(getAdapterPosition());
+                    notifyDataSetChanged();
+                }
+            });
 
-                        onClickListener.onClick(getAdapterPosition());
+            binding.CH.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    String TAG ="tag";
+                    Log.d(TAG, "onFocusChange: " + getAdapterPosition());
+                    if (!hasFocus) {
+                        String CH = binding.CH.getText().toString().trim();
+                        if (!CH.isEmpty()) {
+                            if (Integer.parseInt(CH) <= 0 || Integer.parseInt(CH) > 512) {
+
+                            } else {
+                                Add24GFixture fixture = fixtureArrayList.get(getAdapterPosition());
+                                fixture.setCH(CH);
+                                fixtureArrayList.set(getAdapterPosition(), fixture);
+                            }
+                        }
+                    }
+                }
+            });
+
+            binding.name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        String name = binding.name.getText().toString().trim();
+                        if (!name.isEmpty()) {
+                            Add24GFixture fixture = fixtureArrayList.get(getAdapterPosition());
+                            fixture.setName(name);
+                            fixtureArrayList.set(getAdapterPosition(), fixture);
+                        }
                     }
                 }
             });
@@ -83,35 +141,4 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public interface OnClickListener {
-        void onClick(int position);
-    }
-
-    public void setOnClickListener(OnClickListener onClickListener){
-        this.onClickListener = onClickListener;
-    }
-
-    public interface MenuOnClickListener {
-        void onClick(int position);
-    }
-
-    public void setMenuOnClickListener(MenuOnClickListener menuOnClickListener){
-//        this.menuOnClickListener = menuOnClickListener;
-    }
-
-    public interface RightSecondIconOnClickListener {
-        void onClick(int position);
-    }
-
-    public void setRightSecondIconOnClickListener(RightSecondIconOnClickListener rightSecondOnClickListener){
-//        this.rightSecondOnClickListener = rightSecondOnClickListener;
-    }
-
-    public interface SpreadIconOnClickListener {
-        void onClick(int position);
-    }
-
-    public void setSpreadIconOnClickListener(SpreadIconOnClickListener spreadOnClickListener){
-//        this.spreadOnClickListener = spreadOnClickListener;
-    }
 }
