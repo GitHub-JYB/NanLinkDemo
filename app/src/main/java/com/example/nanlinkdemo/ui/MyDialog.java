@@ -296,7 +296,9 @@ public class MyDialog extends DialogFragment {
                 setBlueTwoBtn();
         }
 
-
+        if (title.length() == 0){
+            binding.myDialogTitle.setVisibility(View.INVISIBLE);
+        }
         binding.myDialogTitle.setText(title);
 
         binding.myDialogBigSize.setText(bigSizeMessage);

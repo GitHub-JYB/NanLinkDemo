@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.BoxviewBinding;
-import com.example.nanlinkdemo.mvp.adapter.BoxViewAdapter;
 
 import java.util.ArrayList;
 
@@ -86,7 +85,7 @@ public class BoxView extends RelativeLayout {
             for (int i = 0; i < dataList.size(); i++) {
                 RadioButton radioButton = new RadioButton(getContext());
                 radioButton.setLayoutParams(new ViewGroup.LayoutParams(width, height));
-                radioButton.setBackgroundResource(R.drawable.bg_btn_boxview);
+                radioButton.setBackgroundResource(R.drawable.bg_selector_btn_boxview);
                 radioButton.setGravity(Gravity.CENTER);
                 radioButton.setText(dataList.get(i));
                 radioButton.setTextColor(getResources().getColor(R.color.white));

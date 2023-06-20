@@ -4,10 +4,12 @@ import android.view.View;
 
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Add24GFixture;
+import com.example.nanlinkdemo.mvp.adapter.Add24GAdapter;
 import com.example.nanlinkdemo.mvp.model.Impl.Add24GFixtureModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.Add24GFixturePresenter;
 import com.example.nanlinkdemo.mvp.view.Add24GFixtureView;
 import com.example.nanlinkdemo.ui.BoxView;
+import com.example.nanlinkdemo.ui.MyDialog;
 
 import java.util.ArrayList;
 
@@ -22,7 +24,8 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
     }
 
     @Override
-    public void getListDataFromView() {
+    public void getDataFromView() {
+        model.getBoxViewData();
         model.getListData();
     }
 
@@ -33,10 +36,10 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
     }
 
     @Override
-    public void setDataToBoxView(BoxView boxView, String title, ArrayList<String> dataList, int checkIndex) {
-        switch (boxView.getId()) {
+    public void setDataToBoxView(Integer boxViewId, String title, ArrayList<String> dataList, int checkIndex) {
+        switch (boxViewId) {
             case R.id.type:
-                view.setBoxViewOnCheckedChangeListener(boxView, new BoxView.OnCheckedChangeListener() {
+                view.setBoxViewOnCheckedChangeListener(boxViewId, new BoxView.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(int index) {
                         switch (index) {
@@ -57,7 +60,7 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
                 });
                 break;
             case R.id.cctRange:
-                view.setBoxViewOnCheckedChangeListener(boxView, new BoxView.OnCheckedChangeListener() {
+                view.setBoxViewOnCheckedChangeListener(boxViewId, new BoxView.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(int index) {
                         switch (index) {
@@ -67,7 +70,7 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
                 });
                 break;
             case R.id.GM:
-                view.setBoxViewOnCheckedChangeListener(boxView, new BoxView.OnCheckedChangeListener() {
+                view.setBoxViewOnCheckedChangeListener(boxViewId, new BoxView.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(int index) {
                         switch (index) {
@@ -77,17 +80,30 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
                 });
                 break;
         }
-        view.updateBoxView(boxView, title, dataList, checkIndex);
+        view.updateBoxView(boxViewId, title, dataList, checkIndex);
     }
 
-    @Override
-    public void getBoxViewDataFromModel(BoxView boxView) {
-        model.getBoxViewData(boxView);
-    }
+
 
     @Override
     public void onClick() {
         view.finish();
+    }
+
+    @Override
+    public void setListener() {
+        view.setListViewOnOutRangeListener(new Add24GAdapter.OnOutRangeListener() {
+            @Override
+            public void onOutRange() {
+                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "确定", null);
+            }
+        });
+        view.setListViewOnCheckCompleteListener(new Add24GAdapter.OnCheckCompleteListener() {
+            @Override
+            public void CheckComplete(boolean complete) {
+                view.setFinishBtn(complete);
+            }
+        });
     }
 
 

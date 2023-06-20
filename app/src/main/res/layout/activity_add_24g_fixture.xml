@@ -9,40 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:layout_marginBottom="72dp"
-        android:orientation="vertical">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="72dp"/>
 
-       <com.example.nanlinkdemo.ui.BoxView
-           android:id="@+id/type"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"/>
-
-        <com.example.nanlinkdemo.ui.BoxView
-            android:id="@+id/cctRange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <com.example.nanlinkdemo.ui.BoxView
-            android:id="@+id/GM"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            />
-
-
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/finish"
@@ -59,6 +34,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_unable_btn_selected"
+            android:clickable="false"
             android:text="完成"
             android:textColor="@color/white" />
     </LinearLayout>

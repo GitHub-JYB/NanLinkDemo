@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Add24GFixture;
 import com.example.nanlinkdemo.databinding.ActivityAdd24gFixtureBinding;
@@ -33,10 +32,8 @@ public class Add24GFixtureActivity extends BaseActivity<ActivityAdd24gFixtureBin
         super.onCreate(savedInstanceState);
         setPresenter();
         initToolbar();
-        initBoxView();
         initRecyclerView();
         initFinishBtn();
-
     }
 
     private void initFinishBtn() {
@@ -46,16 +43,6 @@ public class Add24GFixtureActivity extends BaseActivity<ActivityAdd24gFixtureBin
                 presenter.onClick();
             }
         });
-    }
-
-    private void initBoxView() {
-        presenter.getBoxViewDataFromModel(binding.type);
-        binding.cctRange.setWidth(MyApplication.dip2px(68));
-        binding.cctRange.setHeight(MyApplication.dip2px(50));
-        binding.cctRange.setVisibility(View.GONE);
-        presenter.getBoxViewDataFromModel(binding.cctRange);
-        binding.GM.setVisibility(View.GONE);
-        presenter.getBoxViewDataFromModel(binding.GM);
     }
 
     private void initToolbar() {
@@ -71,16 +58,20 @@ public class Add24GFixtureActivity extends BaseActivity<ActivityAdd24gFixtureBin
         DividerItemDecoration decoration = new DividerItemDecoration(getBaseContext(), LinearLayoutManager.VERTICAL);
         decoration.setDrawable(getBaseContext().getDrawable(R.drawable.decoration_add_24g));
         binding.recycleView.addItemDecoration(decoration);
-
         adapter = new Add24GAdapter();
-        presenter.getListDataFromView();
+        presenter.getDataFromView();
         binding.recycleView.setAdapter(adapter);
-//        adapter.setOnClickListener(new Add24GAdapter.OnClickListener() {
-//            @Override
-//            public void onClick(String settingText) {
-//                presenter.onClickSwitch(settingText);
-//            }
-//        });
+        presenter.setListener();
+    }
+
+    @Override
+    public void setFinishBtn(boolean complete) {
+        binding.btnFinish.setClickable(complete);
+        if (complete) {
+            binding.btnFinish.setBackgroundResource(R.drawable.bg_able_btn_selected);
+        } else {
+            binding.btnFinish.setBackgroundResource(R.drawable.bg_unable_btn_selected);
+        }
     }
 
     @Override
@@ -94,21 +85,30 @@ public class Add24GFixtureActivity extends BaseActivity<ActivityAdd24gFixtureBin
     }
 
     @Override
-    public void updateBoxView(BoxView boxView, String title, ArrayList<String> dataList, int checkIndex){
-        boxView.setTitle(title);
-        boxView.check(checkIndex);
-        boxView.setData(dataList);
+    public void updateBoxView(Integer boxViewId, String title, ArrayList<String> dataList, int checkIndex){
+        adapter.updateBoxView(boxViewId,title,dataList,checkIndex);
     }
 
     @Override
-    public void setBoxViewOnCheckedChangeListener(BoxView boxView, BoxView.OnCheckedChangeListener listener){
-        boxView.setOnCheckedChangeListener(listener);
+    public void setBoxViewOnCheckedChangeListener(Integer boxViewId, BoxView.OnCheckedChangeListener listener){
+        adapter.setBoxViewOnCheckedChangeListener(boxViewId, listener);
     }
 
     @Override
-    public void setBoxViewVisibility(int boxViewId, int visibility) {
-        findViewById(boxViewId).setVisibility(visibility);
+    public void setBoxViewVisibility(Integer boxViewId, int visibility) {
+        adapter.setBoxViewVisibility(boxViewId, visibility);
     }
+
+    @Override
+    public void setListViewOnOutRangeListener(Add24GAdapter.OnOutRangeListener onOutRangeListener) {
+        adapter.setOnOutRangeListener(onOutRangeListener);
+    }
+
+    @Override
+    public void setListViewOnCheckCompleteListener(Add24GAdapter.OnCheckCompleteListener onCheckCompleteListener) {
+        adapter.setOnCheckCompleteListener(onCheckCompleteListener);
+    }
+
 
     @Override
     public void onClick(View v) {

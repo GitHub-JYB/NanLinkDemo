@@ -1,9 +1,11 @@
 package com.example.nanlinkdemo.mvp.model;
 
-import com.example.nanlinkdemo.ui.BoxView;
+
+
+import java.util.ArrayList;
 
 public interface Add24GFixtureModel {
     void getListData();
 
-    void getBoxViewData(BoxView boxView);
+    void getBoxViewData();
 }

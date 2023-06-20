@@ -8,13 +8,13 @@ import com.example.nanlinkdemo.ui.BoxView;
 import java.util.ArrayList;
 
 public interface Add24GFixturePresenter {
-    void getListDataFromView();
+    void getDataFromView();
 
     void setDataToView(ArrayList<Add24GFixture> add24GFixtures);
 
-    void setDataToBoxView(BoxView boxView, String title, ArrayList<String> dataList, int checkIndex);
-
-    void getBoxViewDataFromModel(BoxView boxView);
+    void setDataToBoxView(Integer boxViewId, String title, ArrayList<String> dataList, int checkIndex);
 
     void onClick();
+
+    void setListener();
 }
