@@ -90,16 +90,6 @@ public class Add24GFixtureActivity extends BaseActivity<ActivityAdd24gFixtureBin
     }
 
     @Override
-    public void setBoxViewOnCheckedChangeListener(Integer boxViewId, BoxView.OnCheckedChangeListener listener){
-        adapter.setBoxViewOnCheckedChangeListener(boxViewId, listener);
-    }
-
-    @Override
-    public void setBoxViewVisibility(Integer boxViewId, int visibility) {
-        adapter.setBoxViewVisibility(boxViewId, visibility);
-    }
-
-    @Override
     public void setListViewOnOutRangeListener(Add24GAdapter.OnOutRangeListener onOutRangeListener) {
         adapter.setOnOutRangeListener(onOutRangeListener);
     }

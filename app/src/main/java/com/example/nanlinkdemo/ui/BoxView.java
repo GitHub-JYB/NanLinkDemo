@@ -81,6 +81,7 @@ public class BoxView extends RelativeLayout {
 
     //设置控件按键列表数据,需要最后面调用
     public void setData(ArrayList<String> dataList) {
+        binding.group.removeAllViews();
         if (dataList.size() != 0) {
             for (int i = 0; i < dataList.size(); i++) {
                 RadioButton radioButton = new RadioButton(getContext());

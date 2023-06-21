@@ -16,10 +16,6 @@ public interface Add24GFixtureView {
 
     void updateBoxView(Integer boxViewId, String title, ArrayList<String> dataList, int checkIndex);
 
-    void setBoxViewOnCheckedChangeListener(Integer boxViewId, BoxView.OnCheckedChangeListener listener);
-
-    void setBoxViewVisibility(Integer boxViewId, int visibility);
-
     void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
 
     void finish();

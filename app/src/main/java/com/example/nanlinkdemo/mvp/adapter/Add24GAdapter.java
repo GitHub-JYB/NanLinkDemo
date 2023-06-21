@@ -29,14 +29,10 @@ import java.util.ArrayList;
 
 public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private String title_type, title_cctRange, title_GM = "";
-    private int checkIndex_type, checkIndex_cctRange, checkIndex_GM = 0;
-    private ArrayList<String> dataList_type, dataList_cctRange, dataList_GM = new ArrayList<String>();
-    private BoxView.OnCheckedChangeListener listener_type, listener_cctRange, listener_GM;
-    private int visibility_type = View.VISIBLE;
-    private int visibility_cctRange, visibility_GM = View.GONE;
+    private String title_type, title_cctRange, title_GM;
+    private int checkIndex_type, checkIndex_cctRange, checkIndex_GM;
 
-
+    private ArrayList<String> dataList_type, dataList_cctRange, dataList_GM;
     private ArrayList<Add24GFixture> fixtureArrayList;
     private int Type_type_boxView = 0;
 
@@ -77,27 +73,6 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 ((ViewHolderAdd24g) holder).delete.setVisibility(View.VISIBLE);
             }
         } else if (holder instanceof ViewHolderAdd24gType) {
-            ((ViewHolderAdd24gType) holder).type.setTitle(title_type);
-            ((ViewHolderAdd24gType) holder).type.check(checkIndex_type);
-            ((ViewHolderAdd24gType) holder).type.setVisibility(visibility_type);
-            if (listener_type != null) {
-                ((ViewHolderAdd24gType) holder).type.setOnCheckedChangeListener(listener_type);
-            }
-            ((ViewHolderAdd24gType) holder).type.setData(dataList_type);
-            ((ViewHolderAdd24gType) holder).cctRange.setTitle(title_cctRange);
-            ((ViewHolderAdd24gType) holder).cctRange.check(checkIndex_cctRange);
-            ((ViewHolderAdd24gType) holder).cctRange.setVisibility(visibility_cctRange);
-            if (listener_cctRange != null) {
-                ((ViewHolderAdd24gType) holder).cctRange.setOnCheckedChangeListener(listener_cctRange);
-            }
-            ((ViewHolderAdd24gType) holder).cctRange.setData(dataList_cctRange);
-            ((ViewHolderAdd24gType) holder).GM.setTitle(title_GM);
-            ((ViewHolderAdd24gType) holder).GM.check(checkIndex_GM);
-            ((ViewHolderAdd24gType) holder).GM.setVisibility(visibility_type);
-            if (listener_GM != null) {
-                ((ViewHolderAdd24gType) holder).GM.setOnCheckedChangeListener(listener_GM);
-            }
-            ((ViewHolderAdd24gType) holder).GM.setData(dataList_GM);
 
         }
     }
@@ -138,35 +113,6 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public void setBoxViewOnCheckedChangeListener(Integer boxViewId, BoxView.OnCheckedChangeListener listener) {
-        switch (boxViewId) {
-            case R.id.type:
-                listener_type = listener;
-                break;
-            case R.id.cctRange:
-                listener_cctRange = listener;
-                break;
-            case R.id.GM:
-                listener_GM = listener;
-                break;
-        }
-    }
-
-
-    public void setBoxViewVisibility(Integer boxViewId, int visibility) {
-        switch (boxViewId) {
-            case R.id.type:
-                visibility_type = visibility;
-                break;
-            case R.id.cctRange:
-                visibility_cctRange = visibility;
-                break;
-            case R.id.GM:
-                visibility_GM = visibility;
-                break;
-        }
-    }
-
     class ViewHolderAdd24gType extends RecyclerView.ViewHolder {
         BoxView type, cctRange, GM;
 
@@ -177,9 +123,48 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             GM = binding.GM;
             cctRange.setWidth(MyApplication.dip2px(68));
             cctRange.setHeight(MyApplication.dip2px(50));
+            type.setOnCheckedChangeListener(new BoxView.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(int index) {
+                    checkIndex_type = index;
+                    switch (index) {
+                        case 0:
+                            cctRange.setVisibility(View.GONE);
+                            GM.setVisibility(View.GONE);
+                            break;
+                        case 1:
+                            cctRange.setVisibility(View.VISIBLE);
+                            GM.setVisibility(View.GONE);
+                            break;
+                        case 2:
+                            cctRange.setVisibility(View.VISIBLE);
+                            GM.setVisibility(View.VISIBLE);
+                            break;
+                    }
+                }
+            });
+            cctRange.setOnCheckedChangeListener(new BoxView.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(int index) {
+                    checkIndex_cctRange = index;
+                }
+            });
+            GM.setOnCheckedChangeListener(new BoxView.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(int index) {
+                    checkIndex_GM = index;
+                }
+            });
+            type.setTitle(title_type);
+            type.check(checkIndex_type);
+            type.setData(dataList_type);
+            cctRange.setTitle(title_cctRange);
+            cctRange.check(checkIndex_cctRange);
 
-
-
+            cctRange.setData(dataList_cctRange);
+            GM.setTitle(title_GM);
+            GM.check(checkIndex_GM);
+            GM.setData(dataList_GM);
         }
     }
 
@@ -195,6 +180,7 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     closeSoftInput(v);
                     fixtureArrayList.add(new Add24GFixture("", ""));
                     notifyDataSetChanged();
+                    
                 }
             });
 
@@ -263,7 +249,7 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                     Add24GFixture fixture = fixtureArrayList.get(getAdapterPosition() - 1);
                     fixture.setCH(CH);
-                    fixtureArrayList.set(getAdapterPosition() - 1 , fixture);
+                    fixtureArrayList.set(getAdapterPosition() - 1, fixture);
                     CheckComplete();
                 }
 

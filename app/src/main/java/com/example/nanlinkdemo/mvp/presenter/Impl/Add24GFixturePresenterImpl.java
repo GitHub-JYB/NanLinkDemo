@@ -37,49 +37,6 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
 
     @Override
     public void setDataToBoxView(Integer boxViewId, String title, ArrayList<String> dataList, int checkIndex) {
-        switch (boxViewId) {
-            case R.id.type:
-                view.setBoxViewOnCheckedChangeListener(boxViewId, new BoxView.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(int index) {
-                        switch (index) {
-                            case 0:
-                                view.setBoxViewVisibility(R.id.cctRange, View.GONE);
-                                view.setBoxViewVisibility(R.id.GM, View.GONE);
-                                break;
-                            case 1:
-                                view.setBoxViewVisibility(R.id.cctRange, View.VISIBLE);
-                                view.setBoxViewVisibility(R.id.GM, View.GONE);
-                                break;
-                            case 2:
-                                view.setBoxViewVisibility(R.id.cctRange, View.VISIBLE);
-                                view.setBoxViewVisibility(R.id.GM, View.VISIBLE);
-                                break;
-                        }
-                    }
-                });
-                break;
-            case R.id.cctRange:
-                view.setBoxViewOnCheckedChangeListener(boxViewId, new BoxView.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(int index) {
-                        switch (index) {
-                            case 0:
-                        }
-                    }
-                });
-                break;
-            case R.id.GM:
-                view.setBoxViewOnCheckedChangeListener(boxViewId, new BoxView.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(int index) {
-                        switch (index) {
-
-                        }
-                    }
-                });
-                break;
-        }
         view.updateBoxView(boxViewId, title, dataList, checkIndex);
     }
 
