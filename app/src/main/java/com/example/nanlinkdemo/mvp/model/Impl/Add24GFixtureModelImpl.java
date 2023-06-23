@@ -1,5 +1,8 @@
 package com.example.nanlinkdemo.mvp.model.Impl;
 
+import com.example.nanlinkdemo.Application.MyApplication;
+import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
+import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Add24GFixture;
 import com.example.nanlinkdemo.mvp.model.Add24GFixtureModel;
@@ -7,6 +10,11 @@ import com.example.nanlinkdemo.mvp.presenter.Impl.Add24GFixturePresenterImpl;
 import com.example.nanlinkdemo.ui.BoxView;
 
 import java.util.ArrayList;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class Add24GFixtureModelImpl implements Add24GFixtureModel {
     private final Add24GFixturePresenterImpl presenter;
@@ -45,5 +53,20 @@ public class Add24GFixtureModelImpl implements Add24GFixtureModel {
                     arrayList.add("可调");
                     arrayList.add("不可调");
                     presenter.setDataToBoxView(R.id.GM, "红绿平衡", arrayList, 1);
+    }
+
+    @Override
+    public void addFixture(Fixture fixture) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .insert(fixture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+
+                    }
+                });
     }
 }

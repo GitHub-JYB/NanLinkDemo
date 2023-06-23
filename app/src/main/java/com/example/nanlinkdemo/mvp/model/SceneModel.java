@@ -13,27 +13,15 @@ public interface SceneModel {
 
     void updateScene(Scene scene);
 
-    void queryScene(String sceneName, int type);
-
     void deleteScene(Scene scene);
-
-    void queryAllFixture(int type);
-
-    void queryAllFixtureGroup(int type);
 
     void deleteFixture(Fixture fixture);
 
     void deleteFixtureGroup(FixtureGroup fixtureGroup);
 
-    void queryFixtureFromFixtureGroupName(String fixtureGroupName, int type);
-
     void addFixtureGroup(String fixtureGroupName);
 
-    void addFixture(String fixtureCH);
-
-    void queryFixtureGroup(String fixtureGroupName, int type);
-
-    void queryFixture(String fixtureCH, int type);
+    void addFixture(Fixture fixture);
 
     void updateFixture(Fixture fixture);
 
@@ -42,4 +30,10 @@ public interface SceneModel {
     void getFixtureGroupMenu(int fixtureGroupPosition);
 
     void getFixtureMenu(int fixturePosition);
+
+    void queryFixtureGroupList();
+
+    void queryFixtureList();
+
+    void queryScene(String sceneName);
 }

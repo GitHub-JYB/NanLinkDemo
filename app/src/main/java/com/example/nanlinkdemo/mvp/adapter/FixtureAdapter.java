@@ -5,17 +5,19 @@ package com.example.nanlinkdemo.mvp.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 
+import com.example.nanlinkdemo.databinding.FixtureGroupBinding;
 import com.example.nanlinkdemo.databinding.VpDecorationFixtureListBinding;
 import com.example.nanlinkdemo.databinding.VpItemFixtureBinding;
-import com.example.nanlinkdemo.databinding.VpItemFixtureGroupBinding;
 
 
 import java.util.ArrayList;
@@ -55,7 +57,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             VpDecorationFixtureListBinding vpDecorationFixtureListBinding = VpDecorationFixtureListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new ViewHolderDecorationFixtureGroup(vpDecorationFixtureListBinding);
         }else {
-            VpItemFixtureGroupBinding vpItemFixtureGroupBinding = VpItemFixtureGroupBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            FixtureGroupBinding vpItemFixtureGroupBinding = FixtureGroupBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new ViewHolderFixtureGroupList(vpItemFixtureGroupBinding);
         }
     }
@@ -154,6 +156,19 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             name = binding.name;
             number = binding.number;
             connectType = binding.connectType;
+            ViewGroup.LayoutParams layoutParams = binding.fixture.getLayoutParams();
+            layoutParams.width = MyApplication.dip2percentPx(361);
+            layoutParams.height = MyApplication.dip2percentPx(68);
+            binding.fixture.setPadding(MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(6), MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(12));
+            binding.fixture.setLayoutParams(layoutParams);
+            ViewGroup.LayoutParams layoutParams1 = binding.menu.getLayoutParams();
+            layoutParams1.width = MyApplication.dip2percentPx(40);
+            layoutParams1.height = MyApplication.dip2percentPx(50);
+            binding.menu.setLayoutParams(layoutParams1);
+            ViewGroup.LayoutParams layoutParams2 = binding.rightSecondIcon.getLayoutParams();
+            layoutParams2.width = MyApplication.dip2percentPx(40);
+            layoutParams2.height = MyApplication.dip2percentPx(50);
+            binding.rightSecondIcon.setLayoutParams(layoutParams2);
             binding.rightSecondIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -188,10 +203,36 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         TextView name, sceneNum;
 
-        public ViewHolderFixtureGroupList(@NonNull VpItemFixtureGroupBinding binding) {
+        public ViewHolderFixtureGroupList(@NonNull FixtureGroupBinding binding) {
             super(binding.getRoot());
             name = binding.name;
             sceneNum = binding.number;
+            ViewGroup.LayoutParams layoutParams = binding.fixtureGroup.getLayoutParams();
+            layoutParams.width = MyApplication.dip2percentPx(361);
+            layoutParams.height = MyApplication.dip2percentPx(68);
+            binding.fixtureGroup.setPadding(MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(6), MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(12));
+            binding.fixtureGroup.setLayoutParams(layoutParams);
+            RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) binding.recyclerView.getLayoutParams();
+            layoutParams1.width = MyApplication.dip2percentPx(343);
+            layoutParams1.topMargin = MyApplication.dip2percentPx(48);
+            layoutParams1.leftMargin = MyApplication.dip2percentPx(9);
+            layoutParams1.rightMargin = MyApplication.dip2percentPx(9);
+
+            binding.recyclerView.setPadding(0, MyApplication.dip2percentPx(8), 0, 0);
+            binding.recyclerView.setLayoutParams(layoutParams1);
+            ViewGroup.LayoutParams layoutParams2 = binding.menu.getLayoutParams();
+            layoutParams2.width = MyApplication.dip2percentPx(40);
+            layoutParams2.height = MyApplication.dip2percentPx(50);
+            binding.menu.setLayoutParams(layoutParams2);
+            ViewGroup.LayoutParams layoutParams3 = binding.rightSecondIcon.getLayoutParams();
+            layoutParams3.width = MyApplication.dip2percentPx(40);
+            layoutParams3.height = MyApplication.dip2percentPx(50);
+            binding.rightSecondIcon.setLayoutParams(layoutParams3);
+            ViewGroup.LayoutParams layoutParams4 = binding.spreadIcon.getLayoutParams();
+            layoutParams4.width = MyApplication.dip2percentPx(40);
+            layoutParams4.height = MyApplication.dip2percentPx(50);
+            binding.spreadIcon.setLayoutParams(layoutParams4);
+
             binding.spreadIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -237,6 +278,10 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ViewHolderDecorationFixture(@NonNull VpDecorationFixtureListBinding binding) {
             super(binding.getRoot());
             name = binding.name;
+            ViewGroup.LayoutParams layoutParams = binding.getRoot().getLayoutParams();
+            layoutParams.width = MyApplication.dip2percentPx(343);
+            layoutParams.height = MyApplication.dip2percentPx(40);
+            binding.getRoot().setLayoutParams(layoutParams);
         }
 
     }
@@ -249,6 +294,10 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ViewHolderDecorationFixtureGroup(@NonNull VpDecorationFixtureListBinding binding) {
             super(binding.getRoot());
             name = binding.name;
+            ViewGroup.LayoutParams layoutParams = binding.getRoot().getLayoutParams();
+            layoutParams.width = MyApplication.dip2percentPx(343);
+            layoutParams.height = MyApplication.dip2percentPx(40);
+            binding.getRoot().setLayoutParams(layoutParams);
         }
 
     }

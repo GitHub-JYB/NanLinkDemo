@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.List;
 
 public interface SceneView {
+    void updateAddNewFixtureLogo(boolean visibility);
+
     void updateRecycleView();
 
     void setTitle(String title);
@@ -23,7 +25,7 @@ public interface SceneView {
 
     void closeDrawLayout();
 
-    void showFixtureList(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList);
+    void setData(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList);
 
     void showSortList(ArrayList<Menu> sortArrayList);
 
@@ -46,4 +48,5 @@ public interface SceneView {
     String getInputTextMyDialog();
 
     void dismissSettingDialog();
+
 }

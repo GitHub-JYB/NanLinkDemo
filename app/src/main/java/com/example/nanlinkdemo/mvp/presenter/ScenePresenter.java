@@ -32,19 +32,17 @@ public interface ScenePresenter {
 
     void showSortListToView(ArrayList<Menu> sortArrayList);
 
-    void receiveSceneList(List<Scene> scenes, int type);
-
     void showSettingListToView(ArrayList<Menu> settingArrayList);
 
-    void receiveAllFixture(List<Fixture> fixtures, int type);
-
-    void receiveFixtureGroup(List<FixtureGroup> fixtureGroups, int type);
-
     void updateFixtureList();
-
-    void receiveFixtureList(List<Fixture> fixtures,  int type);
 
     void receiveFixtureGroupMenu(ArrayList<String> fixtureGroupMenuList, int fixtureGroupPosition);
 
     void receiveFixtureMenu(ArrayList<String> fixtureMenuList, int fixturePosition);
+
+    void receiveFixtureGroupList(List<FixtureGroup> fixtureGroups);
+
+    void receiveFixtureList(List<Fixture> fixtures);
+
+    void receiveSceneGroup(List<Scene> scenes);
 }

@@ -9,13 +9,16 @@ import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.DB.bean.Device;
+import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.DB.bean.SceneGroup;
 import com.example.nanlinkdemo.DB.bean.User;
 import com.example.nanlinkdemo.bean.DeviceMessage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class MyApplication extends Application {
@@ -36,6 +39,9 @@ public class MyApplication extends Application {
 
     private static FixtureGroup fixtureGroup;
 
+    private static ArrayList<FixtureGroup> fixtureGroups = new ArrayList<>();
+
+    private static ArrayList<Fixture> fixtures = new ArrayList<>();
 
     private static HashMap<String, Device> deviceHashMap= new HashMap<String, Device>();
 
@@ -89,6 +95,22 @@ public class MyApplication extends Application {
         MyApplication.fixtureGroup = fixtureGroup;
     }
 
+    public static ArrayList<FixtureGroup> getFixtureGroups() {
+        return fixtureGroups;
+    }
+
+    public static void setFixtureGroups(ArrayList<FixtureGroup> fixtureGroups) {
+        MyApplication.fixtureGroups = fixtureGroups;
+    }
+
+    public static ArrayList<Fixture> getFixtures() {
+        return fixtures;
+    }
+
+    public static void setFixtures(ArrayList<Fixture> fixtures) {
+        MyApplication.fixtures = fixtures;
+    }
+
 
     @Override
     public void onCreate() {
@@ -127,11 +149,15 @@ public class MyApplication extends Application {
         return (int)(px/fontScale + 0.5f);
     }
 
+
     public static int dip2px(float dip){
         return (int)(dip * scale + 0.5f);
     }
     public static int sp2px(float sp){
         return (int)(sp * fontScale + 0.5f);
+    }
+    public static int dip2percentPx(float dip){
+        return (int)(dip / 375 * widthPixels + 0.5f);
     }
 
 

@@ -22,16 +22,16 @@ public class ManageFixtureModelImpl implements ManageFixtureModel {
     }
 
     @Override
-    public void getFixtureList() {
+    public void getFixtureList(String fixtureGroupName) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureDao()
-                .getFixtureInfoFromFixtureGroup(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), "")
+                .getFixtureInfoFromFixtureGroup(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), fixtureGroupName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Fixture>>() {
                     @Override
                     public void accept(List<Fixture> fixtures) throws Exception {
-                        presenter.receiveFixtureList(fixtures);
+                        presenter.receiveFixtureList(fixtureGroupName, fixtures);
                     }
                 });
     }

@@ -33,11 +33,6 @@ public class ScenePresenterImpl implements ScenePresenter {
 
 
     private ArrayList<Menu> settingArrayList;
-    private static final int Type_add = 0;
-    private static final int Type_rename = 1;
-    private static final int Type_init = 2;
-
-
 
 
     public ScenePresenterImpl(SceneView view) {
@@ -48,7 +43,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void switchOnclick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.toolbar_left_btn:
                 view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, "退出场景", "是否要退出该场景?", "取消", null, "退出", new MyDialog.PositiveOnClickListener() {
                     @Override
@@ -69,14 +64,14 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void sortSwitch(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 view.initMenu();
                 break;
             case 1:
                 break;
             default:
-                if (MyApplication.getScene().getSortPosition() != position - 2){
+                if (MyApplication.getScene().getSortPosition() != position - 2) {
                     sortArrayList.get(MyApplication.getScene().getSortPosition() + 2).setIconResId(R.drawable.ic_unselected);
                     MyApplication.getScene().setSortPosition(position - 2);
                     sortArrayList.get(position).setIconResId(R.drawable.ic_selected);
@@ -89,7 +84,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void settingSwitch(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 view.initMenu();
                 break;
@@ -98,10 +93,10 @@ public class ScenePresenterImpl implements ScenePresenter {
                 view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, settingArrayList.get(position).getText(), MyApplication.getScene().getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (view.getInputTextMyDialog().isEmpty()){
+                        if (view.getInputTextMyDialog().isEmpty()) {
                             SnackBarUtil.show(v, "请输入场景名称");
-                        }else {
-                            model.queryScene(view.getInputTextMyDialog(), Type_rename);
+                        } else {
+                            model.queryScene(view.getInputTextMyDialog());
                         }
                     }
                 });
@@ -124,11 +119,11 @@ public class ScenePresenterImpl implements ScenePresenter {
                     @Override
                     public void onClick(View v) {
                         model.deleteScene(MyApplication.getScene());
-                        for (FixtureGroup fixtureGroup : fixtureGroupList){
+                        for (FixtureGroup fixtureGroup : fixtureGroupList) {
                             model.deleteFixtureGroup(fixtureGroup);
                         }
                         fixtureGroupList = new ArrayList<>();
-                        for (Fixture fixture : fixtureList){
+                        for (Fixture fixture : fixtureList) {
                             model.deleteFixture(fixture);
                         }
                         fixtureList = new ArrayList<>();
@@ -143,7 +138,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void getFixtureListFromModel() {
-        model.queryAllFixtureGroup(Type_init);
+        model.queryFixtureGroupList();
     }
 
     @Override
@@ -153,7 +148,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void menuSwitch(int position) {
-        switch (position){
+        switch (position) {
             case 1:
                 view.closeDrawLayout();
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
@@ -163,12 +158,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                 view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, menuArrayList.get(position).getText(), "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (view.getInputTextMyDialog().isEmpty()){
-                            SnackBarUtil.show(v, "请输入设备群组名称");
-                        }else {
-//                            ARouter.getInstance().build(Constant.ACTIVITY_URL_AddNewFixture).navigation();
-                            model.queryFixtureGroup(view.getInputTextMyDialog(), Type_add);
-                        }
+                        checkAddFixtureGroup(v);
                     }
                 });
                 break;
@@ -189,13 +179,41 @@ public class ScenePresenterImpl implements ScenePresenter {
         }
     }
 
+    private void checkAddFixtureGroup(View v) {
+        if (view.getInputTextMyDialog().isEmpty()) {
+            SnackBarUtil.show(v, "请输入设备群组名称");
+        } else {
+            for (FixtureGroup fixtureGroup : fixtureGroupList) {
+                if (fixtureGroup.getName().equals(view.getInputTextMyDialog())) {
+                    view.dismissMyDialog();
+                    view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备群组", "该设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            view.dismissMyDialog();
+                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "创建设备群组", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    checkAddFixtureGroup(v);
+                                }
+                            });
+                        }
+                    });
+                    break;
+                }
+            }
+//            ARouter.getInstance().build(Constant.ACTIVITY_URL_ManageFixture).withString("fixtureGroupName", view.getInputTextMyDialog()).navigation();
+            model.addFixtureGroup(view.getInputTextMyDialog());
+            view.dismissMyDialog();
+        }
+    }
+
     @Override
     public void FixtureListSwitch(int position) {
-        if (fixtureGroupList.isEmpty()){
-            if (position > 0){
+        if (fixtureGroupList.isEmpty()) {
+            if (position > 0) {
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_WhiteOneBtn, "点击设备群组: " + fixtureGroupList.get(position - 1).getName(), "该功能还没开发", "重试", null);
             }
-        }else {
+        } else {
             if (position > 0 && position <= fixtureGroupList.size()) {
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_WhiteOneBtn, "点击设备群组: " + fixtureGroupList.get(position - 1).getName(), "该功能还没开发", "重试", null);
             } else if (position > fixtureGroupList.size() + 1) {
@@ -207,13 +225,13 @@ public class ScenePresenterImpl implements ScenePresenter {
 
     @Override
     public void FixtureMenuSwitch(int position) {
-        if (fixtureGroupList.size() > 0){
-            if (position < fixtureGroupList.size() + 1){
+        if (fixtureGroupList.size() > 0) {
+            if (position < fixtureGroupList.size() + 1) {
                 model.getFixtureGroupMenu(position - 1);
-            }else {
+            } else {
                 model.getFixtureMenu(position - fixtureGroupList.size() - 2);
             }
-        }else {
+        } else {
             model.getFixtureMenu(position - 1);
         }
     }
@@ -232,41 +250,6 @@ public class ScenePresenterImpl implements ScenePresenter {
         view.showSortList(sortArrayList);
     }
 
-    @Override
-    public void receiveSceneList(List<Scene> scenes, int type) {
-        if (type == Type_init){
-            MyApplication.setScene(scenes.get(0));
-            getFixtureListFromModel();
-        }else if (type == Type_rename){
-            if (scenes.isEmpty()){
-                MyApplication.getScene().setName(view.getInputTextMyDialog());
-                MyApplication.getScene().setModifiedDate(DateUtil.getTime());
-                model.updateScene(MyApplication.getScene());
-                view.setTitle(MyApplication.getScene().getName());
-                for (FixtureGroup fixtureGroup : fixtureGroupList){
-                    fixtureGroup.setSceneName(MyApplication.getScene().getName());
-                    model.updateFixtureGroup(fixtureGroup);
-                }
-                for (Fixture fixture : fixtureList){
-                    fixture.setSceneName(MyApplication.getScene().getName());
-                    model.updateFixture(fixture);
-                }
-                view.dismissMyDialog();
-            }else {
-                view.dismissMyDialog();
-                view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "重命名", MyApplication.getScene().getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (view.getInputTextMyDialog().isEmpty()){
-                            SnackBarUtil.show(v, "请输入场景名称");
-                        }else {
-                            model.queryScene(view.getInputTextMyDialog(), Type_rename);
-                        }
-                    }
-                });
-            }
-        }
-    }
 
     @Override
     public void showSettingListToView(ArrayList<Menu> settingArrayList) {
@@ -274,90 +257,21 @@ public class ScenePresenterImpl implements ScenePresenter {
         view.showSettingList(settingArrayList);
     }
 
-    @Override
-    public void receiveAllFixture(List<Fixture> fixtures, int type) {
-        if (type == Type_init){
-            fixtureList = (ArrayList<Fixture>) fixtures;
-        }
-        view.showFixtureList(fixtureGroupList, fixtureList);
-    }
-
-    @Override
-    public void receiveFixtureGroup(List<FixtureGroup> fixtureGroups, int type) {
-        if (type == Type_init){
-            fixtureGroupList = (ArrayList<FixtureGroup>) fixtureGroups;
-            model.queryAllFixture(type);
-        }
-        if (type == Type_add){
-            if (fixtureGroups.isEmpty()){
-                model.addFixtureGroup(view.getInputTextMyDialog());
-                view.dismissMyDialog();
-            }else {
-                view.dismissMyDialog();
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备群组", "该设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        view.dismissMyDialog();
-                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "创建设备群组", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (view.getInputTextMyDialog().isEmpty()){
-                                    SnackBarUtil.show(v, "请输入设备群组名称");
-                                }else {
-                                    model.queryFixtureGroup(view.getInputTextMyDialog(), Type_add);
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    }
 
     @Override
     public void updateFixtureList() {
         getFixtureListFromModel();
     }
 
-    @Override
-    public void receiveFixtureList(List<Fixture> fixtures, int type) {
-        if (type == Type_add){
-            if (fixtures.isEmpty()){
-                model.addFixture(view.getInputTextMyDialog());
-                view.dismissMyDialog();
-                MyApplication.getScene().setFixtureNum(MyApplication.getScene().getFixtureNum() + 1);
-                MyApplication.getScene().setModifiedDate(DateUtil.getTime());
-                model.updateScene(MyApplication.getScene());
-            }else {
-                view.dismissMyDialog();
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备", "该设备名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        view.dismissMyDialog();
-                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "创建设备", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (view.getInputTextMyDialog().isEmpty()){
-                                    SnackBarUtil.show(v, "请输入地址码");
-                                }else {
-                                    model.queryFixture(view.getInputTextMyDialog(), Type_add);
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        }
-
-    }
 
     @Override
-    public void receiveFixtureGroupMenu(ArrayList<String> fixtureGroupMenuList, int fixtureGroupPosition) {
+    public void receiveFixtureGroupMenu
+            (ArrayList<String> fixtureGroupMenuList, int fixtureGroupPosition) {
         fixtureGroupMenuList.set(0, fixtureGroupList.get(fixtureGroupPosition).getName());
         view.showSettingDialog(fixtureGroupMenuList, new ThreePointAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
-                switch (position){
+                switch (position) {
                     case 1:
                         view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, fixtureGroupMenuList.get(position), fixtureGroupList.get(fixtureGroupPosition).getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
                             @Override
@@ -368,6 +282,9 @@ public class ScenePresenterImpl implements ScenePresenter {
                         view.dismissSettingDialog();
                         break;
                     case 2:
+                        ARouter.getInstance().build(Constant.ACTIVITY_URL_ManageFixture).withString(
+                                "fixtureGroupName", fixtureGroupList.get(fixtureGroupPosition).getName()).navigation();
+                        view.dismissSettingDialog();
                         break;
                     case 3:
                         view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureGroupMenuList.get(position), "是否确定要删除该设备群组?", "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
@@ -386,17 +303,27 @@ public class ScenePresenterImpl implements ScenePresenter {
     }
 
     @Override
-    public void receiveFixtureMenu(ArrayList<String> fixtureMenuList, int fixturePosition) {
+    public void receiveFixtureMenu(ArrayList<String> fixtureMenuList,
+                                   int fixturePosition) {
         fixtureMenuList.set(0, fixtureList.get(fixturePosition).getName());
         view.showSettingDialog(fixtureMenuList, new ThreePointAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
-                switch (position){
+                switch (position) {
                     case 1:
                         view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, fixtureMenuList.get(position), fixtureList.get(fixturePosition).getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
                             @Override
-                            public void onClick(View view) {
-
+                            public void onClick(View v) {
+                                if (view.getInputTextMyDialog().isEmpty()) {
+                                    SnackBarUtil.show(v, "请输入设备名称");
+                                } else {
+                                    Fixture fixture = fixtureList.get(fixturePosition);
+                                    fixture.setName(view.getInputTextMyDialog());
+                                    fixtureList.set(fixturePosition, fixture);
+                                    model.updateFixture(fixture);
+                                    MyApplication.setFixtures(fixtureList);
+                                    view.dismissMyDialog();
+                                }
                             }
                         });
                         view.dismissSettingDialog();
@@ -404,26 +331,29 @@ public class ScenePresenterImpl implements ScenePresenter {
                     case 2:
                         view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_BlueTwoBtn, fixtureMenuList.get(position), "是否确定要重置该设备名称?", "该设备原始名称:\n" + fixtureList.get(fixturePosition).getFixTureName(), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
                             @Override
-                            public void onClick(View view) {
-
+                            public void onClick(View v) {
+                                Fixture fixture = fixtureList.get(fixturePosition);
+                                fixture.setName(fixture.getFixTureName());
+                                fixtureList.set(fixturePosition, fixture);
+                                model.updateFixture(fixture);
+                                MyApplication.setFixtures(fixtureList);
+                                view.dismissMyDialog();
                             }
                         });
                         view.dismissSettingDialog();
                         break;
                     case 3:
-                        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_textForWrite, fixtureMenuList.get(position), String.valueOf(fixtureList.get(fixturePosition).getCH()), "请输入一个介于1和512之间的数值" ,"取消", null, "确定", new MyDialog.PositiveOnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+                        changeCH(position, fixtureMenuList, fixturePosition);
 
-                            }
-                        });
-                        view.dismissSettingDialog();
                         break;
                     case 4:
                         view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureMenuList.get(position), "是否确定要删除该设备?", fixtureList.get(fixturePosition).getName() + "\nCH: " + fixtureList.get(fixturePosition).getCH(), "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                             @Override
-                            public void onClick(View view) {
-
+                            public void onClick(View v) {
+                                model.deleteFixture(fixtureList.get(fixturePosition));
+                                fixtureList.remove(fixtureList.get(fixturePosition));
+                                MyApplication.setFixtures(fixtureList);
+                                view.dismissMyDialog();
                             }
                         });
                         view.dismissSettingDialog();
@@ -433,6 +363,89 @@ public class ScenePresenterImpl implements ScenePresenter {
                 }
             }
         });
+    }
+
+    private void changeCH(int position, ArrayList<String> fixtureMenuList, int fixturePosition) {
+        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_textForWrite, fixtureMenuList.get(position), String.valueOf(fixtureList.get(fixturePosition).getCH()), "请输入一个介于1和512之间的数值", "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (Fixture fixture : fixtureList) {
+                    if (fixture.getCH().equals(view.getInputTextMyDialog())) {
+                        view.dismissMyDialog();
+                        view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, fixtureMenuList.get(position), "列表中有另一台设备正在使用该\n地址码，请尝试其它地址码。", "取消", null, "重试", new MyDialog.PositiveOnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                view.dismissMyDialog();
+                                changeCH(position, fixtureMenuList, fixturePosition);
+                            }
+                        });
+                        return;
+                    }
+
+                }
+                Fixture fixture = fixtureList.get(fixturePosition);
+                fixture.setCH(view.getInputTextMyDialog());
+                fixtureList.set(fixturePosition, fixture);
+                model.updateFixture(fixture);
+                MyApplication.setFixtures(fixtureList);
+                view.dismissMyDialog();
+            }
+        });
+        view.dismissSettingDialog();
+    }
+
+    @Override
+    public void receiveFixtureGroupList
+            (List<FixtureGroup> fixtureGroups) {
+        fixtureGroupList = (ArrayList<FixtureGroup>) fixtureGroups;
+        MyApplication.setFixtureGroups(fixtureGroupList);
+        model.queryFixtureList();
+    }
+
+    @Override
+    public void receiveFixtureList(List<Fixture> fixtures) {
+        fixtureList = (ArrayList<Fixture>) fixtures;
+        MyApplication.setFixtures(fixtureList);
+        if (checkHasData()) {
+            view.setData(fixtureGroupList, fixtureList);
+        }
+        view.updateAddNewFixtureLogo(!checkHasData());
+    }
+
+    @Override
+    public void receiveSceneGroup(List<Scene> scenes) {
+        if (scenes.isEmpty()) {
+            MyApplication.getScene().setName(view.getInputTextMyDialog());
+            MyApplication.getScene().setModifiedDate(DateUtil.getTime());
+            model.updateScene(MyApplication.getScene());
+            view.setTitle(MyApplication.getScene().getName());
+            for (FixtureGroup fixtureGroup : fixtureGroupList) {
+                fixtureGroup.setSceneName(MyApplication.getScene().getName());
+                model.updateFixtureGroup(fixtureGroup);
+            }
+            for (Fixture fixture : fixtureList) {
+                fixture.setSceneName(MyApplication.getScene().getName());
+                model.updateFixture(fixture);
+            }
+            view.dismissMyDialog();
+        } else {
+            view.dismissMyDialog();
+            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "重命名", MyApplication.getScene().getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (view.getInputTextMyDialog().isEmpty()) {
+                        SnackBarUtil.show(v, "请输入场景名称");
+                    } else {
+                        model.queryScene(view.getInputTextMyDialog());
+                    }
+                }
+            });
+        }
+    }
+
+
+    public boolean checkHasData() {
+        return fixtureList != null && fixtureList.isEmpty() && fixtureGroupList != null && fixtureGroupList.isEmpty() ? false : true;
     }
 
 }

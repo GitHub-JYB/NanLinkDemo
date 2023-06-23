@@ -16,7 +16,6 @@ import com.example.nanlinkdemo.databinding.ActivityAdd24gFixtureBinding;
 import com.example.nanlinkdemo.mvp.adapter.Add24GAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.Add24GFixturePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.Add24GFixtureView;
-import com.example.nanlinkdemo.ui.BoxView;
 
 import java.util.ArrayList;
 
@@ -86,8 +85,29 @@ public class Add24GFixtureActivity extends BaseActivity<ActivityAdd24gFixtureBin
 
     @Override
     public void updateBoxView(Integer boxViewId, String title, ArrayList<String> dataList, int checkIndex){
-        adapter.updateBoxView(boxViewId,title,dataList,checkIndex);
+        adapter.updateBoxView(boxViewId, title, dataList, checkIndex);
     }
+
+    @Override
+    public ArrayList<Add24GFixture> getFixtureArrayList(){
+        return adapter.getFixtureArrayList();
+    }
+
+    @Override
+    public int getCheckIndexType(){
+        return adapter.getCheckIndex_type();
+    }
+
+    @Override
+    public int getCheckIndexCCTRange(){
+        return adapter.getCheckIndex_cctRange();
+    }
+
+    @Override
+    public int getCheckIndexGM(){
+        return adapter.getCheckIndex_GM();
+    }
+
 
     @Override
     public void setListViewOnOutRangeListener(Add24GAdapter.OnOutRangeListener onOutRangeListener) {

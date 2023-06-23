@@ -6,8 +6,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.ActivityRecycleviewScanBinding;
@@ -21,6 +21,8 @@ import java.util.ArrayList;
 @Route(path = Constant.ACTIVITY_URL_ManageFixture)
 public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ManageFixtureView, View.OnClickListener {
 
+    @Autowired(name = "fixtureGroupName")
+    String fixtureGroupName;
     private ManageFixturePresenterImpl presenter;
     private ManageFixtureAdapter adapter;
 
@@ -40,7 +42,7 @@ public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanB
     }
 
     private void initToolbar() {
-        binding.toolbar.setTitle(MyApplication.getSceneGroup().getName());
+        binding.toolbar.setTitle(fixtureGroupName);
         binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
         binding.toolbar.setLeftBtnOnClickListener(this);
     }
@@ -51,10 +53,12 @@ public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanB
     }
 
     @Override
-    public void showFixture(ArrayList<Fixture> fixtureList) {
-        updateFinishBtn(fixtureList);
-        adapter.setData(fixtureList);
-
+    public void showFixture(ArrayList<Fixture> noGroupFixtureList, ArrayList<Fixture> fixtureList) {
+        for (Fixture fixture : fixtureList){
+            noGroupFixtureList.add(fixture);
+        }
+        updateFinishBtn(noGroupFixtureList);
+        adapter.setData(noGroupFixtureList);
     }
 
     @Override
@@ -89,5 +93,10 @@ public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanB
     @Override
     public void onClick(View view) {
         presenter.switchOnclick(view);
+    }
+
+    @Override
+    public String getFixtureGroupName(){
+        return fixtureGroupName;
     }
 }

@@ -8,7 +8,6 @@ import androidx.room.Update;
 
 import com.example.nanlinkdemo.DB.bean.Scene;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -22,6 +21,9 @@ public interface SceneDao {
 
     @Query("select * from scene where email = :email AND name = :name")
     Single<List<Scene>> getSceneInfoFromName(String email, String name);
+
+    @Query("select * from scene where email = :email")
+    Single<List<Scene>> getAllSceneInfo(String email);
 
     @Insert
     Single<Long> insert(Scene scenes);

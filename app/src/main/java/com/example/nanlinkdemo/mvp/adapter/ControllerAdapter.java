@@ -10,15 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nanlinkdemo.DB.bean.Controller;
-import com.example.nanlinkdemo.DB.bean.Fixture;
-import com.example.nanlinkdemo.DB.bean.FixtureGroup;
-import com.example.nanlinkdemo.databinding.VpDecorationFixtureListBinding;
 import com.example.nanlinkdemo.databinding.VpItemFixtureBinding;
-import com.example.nanlinkdemo.databinding.VpItemFixtureGroupBinding;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class ControllerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

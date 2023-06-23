@@ -20,6 +20,14 @@ public interface Add24GFixtureView {
 
     void finish();
 
+    ArrayList<Add24GFixture> getFixtureArrayList();
+
+    int getCheckIndexType();
+
+    int getCheckIndexCCTRange();
+
+    int getCheckIndexGM();
+
     void setListViewOnOutRangeListener(Add24GAdapter.OnOutRangeListener onOutRangeListener);
 
     void setListViewOnCheckCompleteListener(Add24GAdapter.OnCheckCompleteListener onCheckCompleteListener);

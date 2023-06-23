@@ -73,7 +73,7 @@ public class MainModelImpl implements MainModel {
     public void getSceneGroupList() {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneGroupDao()
-                .getAllSceneInfo(MyApplication.getOnlineUser().getEmail())
+                .getAllSceneGroupInfo(MyApplication.getOnlineUser().getEmail())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<SceneGroup>>() {

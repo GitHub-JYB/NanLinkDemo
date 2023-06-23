@@ -6,7 +6,6 @@ import android.view.View;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Fixture;
@@ -30,7 +29,8 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
 
     private ScenePresenterImpl presenter;
     private FixtureAdapter fixtureAdapter;
-
+    private ArrayList<FixtureGroup> fixtureGroupList;
+    private ArrayList<Fixture> fixtureList;
 
 
     @Override
@@ -51,6 +51,17 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         super.onStart();
         updateRecycleView();
         setTitle(MyApplication.getScene().getName());
+    }
+
+    @Override
+    public void updateAddNewFixtureLogo(boolean visibility) {
+        if (visibility) {
+            binding.addFixture.setVisibility(View.VISIBLE);
+            binding.recycleView.setVisibility(View.GONE);
+        } else {
+            binding.addFixture.setVisibility(View.GONE);
+            binding.recycleView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -78,7 +89,7 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         fixtureAdapter.setOnClickListener(new FixtureAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
-//                presenter.FixtureListSwitch(position);
+                presenter.FixtureListSwitch(position);
 
             }
         });
@@ -104,7 +115,7 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
     }
 
     @Override
-    public void setTitle(String title){
+    public void setTitle(String title) {
         binding.toolbar.setTitle(title);
     }
 
@@ -141,17 +152,8 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
 
 
     @Override
-    public void showFixtureList(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList) {
-        if (fixtureGroupList.isEmpty() && fixtureList.isEmpty()){
-            binding.addFixture.setVisibility(View.VISIBLE);
-            binding.addFixture.setOnClickListener(this);
-            binding.recycleView.setVisibility(View.GONE);
-        }else {
-            binding.addFixture.setVisibility(View.GONE);
-            binding.recycleView.setVisibility(View.VISIBLE);
-            fixtureAdapter.setData(fixtureGroupList, fixtureList);
-
-        }
+    public void setData(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList) {
+        fixtureAdapter.setData(fixtureGroupList, fixtureList);
     }
 
     @Override
@@ -180,4 +182,5 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
             }
         });
     }
+
 }

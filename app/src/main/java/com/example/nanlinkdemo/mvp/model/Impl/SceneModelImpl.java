@@ -85,22 +85,6 @@ public class SceneModelImpl implements SceneModel {
     }
 
     @Override
-    public void queryScene(String sceneName, int type) {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getSceneDao()
-                .getSceneInfoFromName(MyApplication.getOnlineUser().getEmail(), sceneName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Scene>>() {
-                    @Override
-                    public void accept(List<Scene> scenes) throws Exception {
-                        presenter.receiveSceneList(scenes, type);
-
-                    }
-                });
-    }
-
-    @Override
     public void deleteScene(Scene scene) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
@@ -113,37 +97,6 @@ public class SceneModelImpl implements SceneModel {
 
                     }
                 });
-    }
-
-    @Override
-    public void queryAllFixture(int type) {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getFixtureDao()
-                .getAllFixtureInfo(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Fixture>>() {
-                    @Override
-                    public void accept(List<Fixture> fixtures) throws Exception {
-                        presenter.receiveAllFixture(fixtures, type);
-                    }
-                });
-    }
-
-    @Override
-    public void queryAllFixtureGroup(int type) {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getFixtureGroupDao()
-                .getAllFixtureGroupInfo(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<FixtureGroup>>() {
-                    @Override
-                    public void accept(List<FixtureGroup> fixtureGroups) throws Exception {
-                        presenter.receiveFixtureGroup(fixtureGroups, type);
-                    }
-                });
-
     }
 
     @Override
@@ -176,22 +129,7 @@ public class SceneModelImpl implements SceneModel {
                 });
     }
 
-    @Override
-    public void queryFixtureFromFixtureGroupName(String fixtureGroupName, int type) {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getFixtureDao()
-                .getFixtureInfoFromFixtureGroup(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), fixtureGroupName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Fixture>>() {
-                    @Override
-                    public void accept(List<Fixture> fixtures) throws Exception {
-                        presenter.receiveFixtureList(fixtures, type);
-                    }
-                });
-    }
-
-    @Override
+       @Override
     public void addFixtureGroup(String fixtureGroupName) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureGroupDao()
@@ -207,10 +145,10 @@ public class SceneModelImpl implements SceneModel {
     }
 
     @Override
-    public void addFixture(String fixtureCH) {
+    public void addFixture(Fixture fixture) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureDao()
-                .insert(new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), fixtureCH, fixtureCH ,"000010", "蓝牙", ""))
+                .insert(fixture)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -221,37 +159,8 @@ public class SceneModelImpl implements SceneModel {
                 });
     }
 
-    @Override
-    public void queryFixtureGroup(String fixtureGroupName, int type) {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getFixtureGroupDao()
-                .getFixtureGroupInfoFromName(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), fixtureGroupName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<FixtureGroup>>() {
-                    @Override
-                    public void accept(List<FixtureGroup> fixtureGroups) throws Exception {
-                        presenter.receiveFixtureGroup(fixtureGroups, type);
-                    }
-                });
-    }
 
-    @Override
-    public void queryFixture(String fixtureCH, int type) {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getFixtureDao()
-                .getFixtureInfoFromName(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), Integer.parseInt(fixtureCH))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Fixture>>() {
-                    @Override
-                    public void accept(List<Fixture> fixtures) throws Exception {
-                        presenter.receiveFixtureList(fixtures, type);
-                    }
-                });
-    }
-
-    @Override
+     @Override
     public void updateFixture(Fixture fixture) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureDao()
@@ -302,5 +211,50 @@ public class SceneModelImpl implements SceneModel {
         fixtureMenuList.add("删除");
         fixtureMenuList.add("取消");
         presenter.receiveFixtureMenu(fixtureMenuList, fixturePosition);
+    }
+
+    @Override
+    public void queryFixtureGroupList() {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureGroupDao()
+                .getAllFixtureGroupInfo(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<FixtureGroup>>() {
+                    @Override
+                    public void accept(List<FixtureGroup> fixtureGroups) throws Exception {
+                        presenter.receiveFixtureGroupList(fixtureGroups);
+                    }
+                });
+    }
+
+    @Override
+    public void queryFixtureList() {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .getAllFixtureInfo(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Fixture>>() {
+                    @Override
+                    public void accept(List<Fixture> fixtures) throws Exception {
+                        presenter.receiveFixtureList(fixtures);
+                    }
+                });
+    }
+
+    @Override
+    public void queryScene(String sceneName) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getSceneDao()
+                .getSceneInfoFromName(MyApplication.getScene().getEmail(), sceneName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Scene>>() {
+                    @Override
+                    public void accept(List<Scene> scenes) throws Exception {
+                        presenter.receiveSceneGroup(scenes);
+                    }
+                });
     }
 }

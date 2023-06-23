@@ -13,5 +13,5 @@ public interface ManageFixturePresenter {
 
     void switchOnclick(View view);
 
-    void receiveFixtureList(List<Fixture> fixtures);
+    void receiveFixtureList(String fixtureGroupName, List<Fixture> fixtures);
 }

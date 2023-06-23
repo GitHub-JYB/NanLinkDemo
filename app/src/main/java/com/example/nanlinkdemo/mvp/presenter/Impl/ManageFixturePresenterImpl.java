@@ -1,6 +1,5 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
-import android.content.Intent;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -19,6 +18,7 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
     private final ManageFixtureView view;
     private final ManageFixtureModelImpl model;
     private ArrayList<Fixture> fixtureList;
+    private ArrayList<Fixture> noGroupFixtureList;
 
     public ManageFixturePresenterImpl(ManageFixtureView view) {
         this.view = view;
@@ -27,13 +27,14 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
 
     @Override
     public void getFixtureListFromModel() {
-        model.getFixtureList();
+            model.getFixtureList("");
+
     }
 
     @Override
     public void switchFixtureList(int position) {
         fixtureList.get(position).setFixtureGroupName(MyApplication.getFixtureGroup().getName());
-        view.showFixture(fixtureList);
+        view.showFixture(fixtureList, fixtureList);
     }
 
     @Override
@@ -58,7 +59,18 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
     }
 
     @Override
-    public void receiveFixtureList(List<Fixture> fixtures) {
-        this.fixtureList = (ArrayList)fixtures;
+    public void receiveFixtureList(String fixtureGroupName, List<Fixture> fixtures) {
+        if (fixtureGroupName.equals("")){
+            noGroupFixtureList = (ArrayList<Fixture>) fixtures;
+            if (view.getFixtureGroupName().equals("")){
+                view.showFixture(noGroupFixtureList, fixtureList);
+            }else {
+                model.getFixtureList(view.getFixtureGroupName());
+            }
+
+        }else {
+            fixtureList = (ArrayList<Fixture>) fixtures;
+            view.showFixture(noGroupFixtureList, fixtureList);
+        }
     }
 }

@@ -245,6 +245,7 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                 binding.CH.setText("");
                             }
                         }
+
                     }
 
                     Add24GFixture fixture = fixtureArrayList.get(getAdapterPosition() - 1);
@@ -293,6 +294,22 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 checkCompleteListener.CheckComplete(true);
             }
         }
+    }
+
+    public ArrayList<Add24GFixture> getFixtureArrayList() {
+        return fixtureArrayList;
+    }
+
+    public int getCheckIndex_type(){
+        return checkIndex_type;
+    }
+
+    public int getCheckIndex_cctRange(){
+        return checkIndex_cctRange;
+    }
+
+    public int getCheckIndex_GM(){
+        return checkIndex_GM;
     }
 
     public interface OnOutRangeListener {

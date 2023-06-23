@@ -1,15 +1,17 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
-import android.view.View;
+import android.content.Intent;
 
-import com.example.nanlinkdemo.R;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.nanlinkdemo.Application.MyApplication;
+import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.bean.Add24GFixture;
 import com.example.nanlinkdemo.mvp.adapter.Add24GAdapter;
 import com.example.nanlinkdemo.mvp.model.Impl.Add24GFixtureModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.Add24GFixturePresenter;
 import com.example.nanlinkdemo.mvp.view.Add24GFixtureView;
-import com.example.nanlinkdemo.ui.BoxView;
 import com.example.nanlinkdemo.ui.MyDialog;
+import com.example.nanlinkdemo.util.Constant;
 
 import java.util.ArrayList;
 
@@ -44,7 +46,51 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
 
     @Override
     public void onClick() {
-        view.finish();
+        String deviceId = "";
+        checkFixtureList(view.getFixtureArrayList());
+        switch (view.getCheckIndexType()){
+            case 0:
+                deviceId = "FFFFFA";
+                break;
+            case 1:
+                switch (view.getCheckIndexCCTRange()){
+                    case 0:
+                        deviceId = "FFFFFB";
+                        break;
+                    case 1:
+                        deviceId = "FFFFFC";
+                        break;
+                    case 2:
+                        deviceId = "FFFFFD";
+                        break;
+                    case 3:
+                        deviceId = "FFFFFE";
+                        break;
+                }
+            case 2:
+                switch (view.getCheckIndexGM()){
+                    case 0:
+                        deviceId = "FFFFFF";
+                        break;
+                    case 1:
+                        deviceId = "FFFFFG";
+                }
+        }
+        for (Add24GFixture add24GFixture : add24GFixtures){
+            String CH = Integer.parseInt(add24GFixture.getCH()) < 10 ? "00" + add24GFixture.getCH() : Integer.parseInt(add24GFixture.getCH()) < 100 ? CH = "0" + add24GFixture.getCH() : add24GFixture.getCH();
+
+            Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), add24GFixture.getName(), CH, deviceId, "2.4G", "");
+            MyApplication.getFixtures().add(fixture);
+            model.addFixture(fixture);
+
+        }
+        ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
+
+    }
+
+    // 检查添加是设备是否重复的CH
+    private void checkFixtureList(ArrayList<Add24GFixture> fixtureArrayList) {
+
     }
 
     @Override
