@@ -395,6 +395,8 @@ public class ScenePresenterImpl implements ScenePresenter {
                                 model.deleteFixture(fixtureList.get(fixturePosition));
                                 fixtureList.remove(fixtureList.get(fixturePosition));
                                 MyApplication.setFixtures(fixtureList);
+                                MyApplication.getScene().setFixtureNum(fixtureList.size());
+                                model.updateScene(MyApplication.getScene());
                                 view.dismissMyDialog();
                             }
                         });
