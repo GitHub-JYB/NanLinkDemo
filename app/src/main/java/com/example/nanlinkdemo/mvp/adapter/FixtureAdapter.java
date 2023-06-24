@@ -2,7 +2,6 @@ package com.example.nanlinkdemo.mvp.adapter;
 
 
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +41,8 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private OnClickListener onClickListener;
     private MenuOnClickListener menuOnClickListener;
     private RightSecondIconOnClickListener rightSecondOnClickListener;
+    private MenuInGroupOnClickListener menuInGroupOnClickListener;
+    private RightSecondIconInGroupOnClickListener rightSecondIconInGroupOnClickListener;
 
 
     @NonNull
@@ -177,6 +178,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             layoutParams.height = MyApplication.dip2percentPx(68);
             binding.fixture.setPadding(MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(6), MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(12));
             binding.fixture.setLayoutParams(layoutParams);
+            binding.message.setPadding(MyApplication.dip2percentPx(16),MyApplication.dip2percentPx(7), 0, 0);
             ViewGroup.LayoutParams layoutParams1 = binding.menu.getLayoutParams();
             layoutParams1.width = MyApplication.dip2percentPx(40);
             layoutParams1.height = MyApplication.dip2percentPx(50);
@@ -237,6 +239,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             layoutParams.height = MyApplication.dip2percentPx(68);
             binding.fixtureGroup.setPadding(MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(6), MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(12));
             binding.fixtureGroup.setLayoutParams(layoutParams);
+            binding.message.setPadding(0 ,MyApplication.dip2percentPx(7), 0, 0);
             RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) binding.recyclerView.getLayoutParams();
             layoutParams1.width = MyApplication.dip2percentPx(343);
             layoutParams1.topMargin = MyApplication.dip2percentPx(48);
@@ -254,6 +257,22 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             fixtureGroupAdapter = new FixtureGroupAdapter();
             binding.recyclerView.setAdapter(fixtureGroupAdapter);
+            fixtureGroupAdapter.setMenuOnClickListener(new FixtureGroupAdapter.MenuOnClickListener() {
+                @Override
+                public void onClick(Fixture fixture) {
+                    if (menuInGroupOnClickListener != null){
+                        menuInGroupOnClickListener.onClick(fixture);
+                    }
+                }
+            });
+            fixtureGroupAdapter.setRightSecondIconOnClickListener(new FixtureGroupAdapter.RightSecondIconOnClickListener() {
+                @Override
+                public void onClick(Fixture fixture) {
+                    if (rightSecondIconInGroupOnClickListener != null){
+                        rightSecondIconInGroupOnClickListener.onClick(fixture);
+                    }
+                }
+            });
             ViewGroup.LayoutParams layoutParams2 = binding.menu.getLayoutParams();
             layoutParams2.width = MyApplication.dip2percentPx(40);
             layoutParams2.height = MyApplication.dip2percentPx(50);
@@ -357,6 +376,22 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void setRightSecondIconOnClickListener(RightSecondIconOnClickListener rightSecondOnClickListener){
         this.rightSecondOnClickListener = rightSecondOnClickListener;
+    }
+
+    public interface MenuInGroupOnClickListener {
+        void onClick(Fixture fixture);
+    }
+
+    public void setMenuInGroupOnClickListener(MenuInGroupOnClickListener menuInGroupOnClickListener){
+        this.menuInGroupOnClickListener = menuInGroupOnClickListener;
+    }
+
+    public interface RightSecondIconInGroupOnClickListener {
+        void onClick(Fixture fixture);
+    }
+
+    public void setRightSecondIconInGroupOnClickListener(RightSecondIconInGroupOnClickListener rightSecondIconInGroupOnClickListener){
+        this.rightSecondIconInGroupOnClickListener = rightSecondIconInGroupOnClickListener;
     }
 
 }

@@ -214,6 +214,19 @@ public class SceneModelImpl implements SceneModel {
     }
 
     @Override
+    public void getFixtureMenu(Fixture fixture) {
+        ArrayList<String> fixtureMenuList = new ArrayList<>();
+        fixtureMenuList.add("设置");
+        fixtureMenuList.add("重命名");
+        fixtureMenuList.add("重置名称");
+        fixtureMenuList.add("更改地址码");
+        fixtureMenuList.add("删除");
+        fixtureMenuList.add("取消");
+        presenter.receiveFixtureMenu(fixtureMenuList, fixture);
+    }
+
+
+    @Override
     public void queryFixtureGroupList() {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureGroupDao()

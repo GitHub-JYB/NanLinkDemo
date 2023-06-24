@@ -4,6 +4,8 @@ package com.example.nanlinkdemo.ui;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +41,7 @@ public class MyDialog extends DialogFragment {
     public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark = 17;
     public static final int Read_OneBtn_WarningTitle_WhiteOneBtn_TwoMessage = 18;
     public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_textForWrite = 19;
-
-
-
+    public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_CH = 20;
 
 
     private CharSequence title, bigSizeMessage, smallSizeMessage, bigSizeMessageOne, smallSizeMessageOne, bigSizeMessageTwo, smallSizeMessageTwo, neutralText, positiveText, negativeText;
@@ -77,32 +77,32 @@ public class MyDialog extends DialogFragment {
         }
     };
 
-    public MyDialog(){
+    public MyDialog() {
 
     }
 
-    public MyDialog(int type, String title, String bigSizeMessage, String neutralText, NeutralOnClickListener neutralListener){
+    public MyDialog(int type, String title, String bigSizeMessage, String neutralText, NeutralOnClickListener neutralListener) {
         this.type = type;
         this.title = title;
         this.bigSizeMessage = bigSizeMessage;
         this.neutralText = neutralText;
-        if (neutralListener != null){
-            this.neutralListener= neutralListener;
+        if (neutralListener != null) {
+            this.neutralListener = neutralListener;
         }
     }
 
-    public MyDialog(int type, String title, String bigSizeMessage, String smallSizeMessage, String neutralText, NeutralOnClickListener neutralListener){
+    public MyDialog(int type, String title, String bigSizeMessage, String smallSizeMessage, String neutralText, NeutralOnClickListener neutralListener) {
         this.type = type;
         this.title = title;
         this.bigSizeMessage = bigSizeMessage;
         this.smallSizeMessage = smallSizeMessage;
         this.neutralText = neutralText;
-        if (neutralListener != null){
-            this.neutralListener= neutralListener;
+        if (neutralListener != null) {
+            this.neutralListener = neutralListener;
         }
     }
 
-    public MyDialog(int type, String title, String bigSizeMessageOne, String smallSizeMessageOne, MessageOneOnClickListener messageOneListener, String bigSizeMessageTwo, String smallSizeMessageTwo, MessageTwoOnClickListener messageTwoListener, String neutralText, NeutralOnClickListener neutralListener){
+    public MyDialog(int type, String title, String bigSizeMessageOne, String smallSizeMessageOne, MessageOneOnClickListener messageOneListener, String bigSizeMessageTwo, String smallSizeMessageTwo, MessageTwoOnClickListener messageTwoListener, String neutralText, NeutralOnClickListener neutralListener) {
         this.type = type;
         this.title = title;
         this.bigSizeMessageOne = bigSizeMessageOne;
@@ -112,41 +112,41 @@ public class MyDialog extends DialogFragment {
         this.messageOneListener = messageOneListener;
         this.messageTwoListener = messageTwoListener;
         this.neutralText = neutralText;
-        if (neutralListener != null){
-            this.neutralListener= neutralListener;
+        if (neutralListener != null) {
+            this.neutralListener = neutralListener;
         }
     }
 
-    public MyDialog(int type, String title, String bigSizeMessage, String negativeText, NegativeOnClickListener negativeListener, String positiveText, PositiveOnClickListener positiveListener){
+    public MyDialog(int type, String title, String bigSizeMessage, String negativeText, NegativeOnClickListener negativeListener, String positiveText, PositiveOnClickListener positiveListener) {
         this.type = type;
         this.title = title;
         this.bigSizeMessage = bigSizeMessage;
         this.negativeText = negativeText;
-        if (negativeListener != null){
+        if (negativeListener != null) {
             this.negativeListener = negativeListener;
         }
         this.positiveText = positiveText;
-        if (positiveListener != null){
+        if (positiveListener != null) {
             this.positiveListener = positiveListener;
         }
     }
 
-    public MyDialog(int type, String title, String bigSizeMessage, String smallSizeMessage, String negativeText, NegativeOnClickListener negativeListener, String positiveText, PositiveOnClickListener positiveListener){
+    public MyDialog(int type, String title, String bigSizeMessage, String smallSizeMessage, String negativeText, NegativeOnClickListener negativeListener, String positiveText, PositiveOnClickListener positiveListener) {
         this.type = type;
         this.title = title;
         this.bigSizeMessage = bigSizeMessage;
         this.smallSizeMessage = smallSizeMessage;
         this.negativeText = negativeText;
-        if (negativeListener != null){
+        if (negativeListener != null) {
             this.negativeListener = negativeListener;
         }
         this.positiveText = positiveText;
-        if (positiveListener != null){
+        if (positiveListener != null) {
             this.positiveListener = positiveListener;
         }
     }
 
-    public MyDialog(int type, String title, String bigSizeMessageOne, String smallSizeMessageOne, MessageOneOnClickListener messageOneListener, String bigSizeMessageTwo, String smallSizeMessageTwo, MessageTwoOnClickListener messageTwoListener, String negativeText, NegativeOnClickListener negativeListener, String positiveText, PositiveOnClickListener positiveListener){
+    public MyDialog(int type, String title, String bigSizeMessageOne, String smallSizeMessageOne, MessageOneOnClickListener messageOneListener, String bigSizeMessageTwo, String smallSizeMessageTwo, MessageTwoOnClickListener messageTwoListener, String negativeText, NegativeOnClickListener negativeListener, String positiveText, PositiveOnClickListener positiveListener) {
         this.type = type;
         this.title = title;
         this.bigSizeMessageOne = bigSizeMessageOne;
@@ -156,11 +156,11 @@ public class MyDialog extends DialogFragment {
         this.messageOneListener = messageOneListener;
         this.messageTwoListener = messageTwoListener;
         this.negativeText = negativeText;
-        if (negativeListener != null){
+        if (negativeListener != null) {
             this.negativeListener = negativeListener;
         }
         this.positiveText = positiveText;
-        if (positiveListener != null){
+        if (positiveListener != null) {
             this.positiveListener = positiveListener;
         }
     }
@@ -180,7 +180,7 @@ public class MyDialog extends DialogFragment {
         我们在这里可以重新设定view的各个数据，但是不能修改对话框最外层的ViewGroup的布局参数。
         因为这里的view还没添加到父级中，我们需要在下面onStart生命周期里修改对话框尺寸参数
          */
-        switch (type){
+        switch (type) {
             case Read_OneBtn_NormalTitle_WhiteOneBtn:
                 setRead();
                 setOneBtn();
@@ -294,9 +294,16 @@ public class MyDialog extends DialogFragment {
                 setTwoBtn();
                 setNormalTitle();
                 setBlueTwoBtn();
+                break;
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_CH:
+                setWriteCH();
+                setTwoBtn();
+                setNormalTitle();
+                setBlueTwoBtn();
+                break;
         }
 
-        if (title.length() == 0){
+        if (title.length() == 0) {
             binding.myDialogTitle.setVisibility(View.INVISIBLE);
         }
         binding.myDialogTitle.setText(title);
@@ -306,6 +313,9 @@ public class MyDialog extends DialogFragment {
 
         binding.myDialogInputText.setText(bigSizeMessage);
         binding.myDialogInputText.setSelection(bigSizeMessage.length());
+        binding.myDialogCHInputText.setText(bigSizeMessage);
+        binding.myDialogCHInputText.setSelection(bigSizeMessage.length());
+
         binding.myDialogInputDescription.setText(smallSizeMessage);
         binding.myDialogInputTextRemark.setText(bigSizeMessage);
         binding.myDialogInputTextRemark.setSelection(bigSizeMessage.length());
@@ -330,8 +340,6 @@ public class MyDialog extends DialogFragment {
         binding.myDialogPositiveButton.setText(positiveText);
 
 
-
-
         binding.myDialogInputTextClean.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -340,7 +348,35 @@ public class MyDialog extends DialogFragment {
             }
         });
 
+        binding.myDialogCHInputTextClean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.myDialogCHInputText.setText("");
+                binding.myDialogCHInputText.setSelection(0);
+            }
+        });
 
+        binding.myDialogCHInputText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() > 0) {
+                    if (Integer.parseInt(editable.toString()) < 1 || Integer.parseInt(editable.toString()) > 512) {
+                        new MyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "重试", null).show(getFragmentManager(), "MyDialog");
+                        binding.myDialogCHInputText.setText("");
+                    }
+                }
+            }
+        });
 
 
     }
@@ -402,6 +438,15 @@ public class MyDialog extends DialogFragment {
         binding.myDialogInputRemark.setVisibility(View.GONE);
     }
 
+    private void setWriteCH() {
+        binding.myDialogInput.setVisibility(View.GONE);
+        binding.myDialogInputDescription.setVisibility(View.GONE);
+        binding.myDialogMessage.setVisibility(View.GONE);
+        binding.myDialogTwoMessage.setVisibility(View.GONE);
+        binding.myDialogInputRemark.setVisibility(View.GONE);
+        binding.myDialogCHInput.setVisibility(View.VISIBLE);
+    }
+
     private void setTextForWrite() {
         binding.myDialogInput.setVisibility(View.VISIBLE);
         binding.myDialogInputDescription.setVisibility(View.VISIBLE);
@@ -447,20 +492,20 @@ public class MyDialog extends DialogFragment {
 
         //getDialog().setCancelable(false);//这个会屏蔽掉返回键
         // 外部点击不会取消
-        if (!isCanceledOnTouchOutside){
+        if (!isCanceledOnTouchOutside) {
             getDialog().setCanceledOnTouchOutside(isCanceledOnTouchOutside);
         }
         super.onStart();
     }
 
     // 设置标题
-    public void setTitle(CharSequence title){
-         this.title = title;
+    public void setTitle(CharSequence title) {
+        this.title = title;
     }
 
 
     // 设置提示信息
-    public void setMessage(CharSequence message){
+    public void setMessage(CharSequence message) {
         this.bigSizeMessage = message;
     }
 
@@ -471,12 +516,12 @@ public class MyDialog extends DialogFragment {
     }
 
     // 设置消极按键的点击事件
-    public void setNegativeOnClickListener(NegativeOnClickListener li){
+    public void setNegativeOnClickListener(NegativeOnClickListener li) {
         this.negativeListener = li;
     }
 
     // 设置第一个按键的点击事件
-    public void setMessageOneOnClickListener(MessageOneOnClickListener li){
+    public void setMessageOneOnClickListener(MessageOneOnClickListener li) {
         this.messageOneListener = li;
     }
 
@@ -486,7 +531,7 @@ public class MyDialog extends DialogFragment {
     }
 
     // 设置第一个按键的点击事件
-    public void setMessageTwoOnClickListener(MessageTwoOnClickListener li){
+    public void setMessageTwoOnClickListener(MessageTwoOnClickListener li) {
         this.messageTwoListener = li;
     }
 
@@ -508,7 +553,7 @@ public class MyDialog extends DialogFragment {
     }
 
     // 设置积极按键的点击事件
-    public void setPositiveOnClickListener(PositiveOnClickListener li){
+    public void setPositiveOnClickListener(PositiveOnClickListener li) {
         this.positiveListener = li;
     }
 
@@ -518,14 +563,13 @@ public class MyDialog extends DialogFragment {
     }
 
 
-
     // 普通按键的点击接口
     public interface NeutralOnClickListener extends View.OnClickListener {
         void onClick(View view);
     }
 
     // 普通按键的点击事件
-    public void setNeutralOnClickListener(NeutralOnClickListener li){
+    public void setNeutralOnClickListener(NeutralOnClickListener li) {
         this.neutralListener = li;
     }
 
@@ -541,16 +585,16 @@ public class MyDialog extends DialogFragment {
     }
 
     // 获取dialog的类型
-    public int getType(){
+    public int getType() {
         return type;
     }
 
     // 获取输入框文本
-    public String getInputText(){
+    public String getInputText() {
         return binding.myDialogInputText.getText().toString().trim();
     }
 
-    public String getInputTextRemark(){
+    public String getInputTextRemark() {
         return binding.myDialogInputTextRemark.getText().toString().trim();
     }
 }

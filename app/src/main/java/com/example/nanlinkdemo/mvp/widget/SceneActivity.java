@@ -29,8 +29,6 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
 
     private ScenePresenterImpl presenter;
     private FixtureAdapter fixtureAdapter;
-    private ArrayList<FixtureGroup> fixtureGroupList;
-    private ArrayList<Fixture> fixtureList;
 
 
     @Override
@@ -96,6 +94,18 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         fixtureAdapter.setRightSecondIconOnClickListener(new FixtureAdapter.RightSecondIconOnClickListener() {
             @Override
             public void onClick(int position) {
+
+            }
+        });
+        fixtureAdapter.setMenuInGroupOnClickListener(new FixtureAdapter.MenuInGroupOnClickListener() {
+            @Override
+            public void onClick(Fixture fixture) {
+                presenter.FixtureMenuSwitch(fixture);
+            }
+        });
+        fixtureAdapter.setRightSecondIconInGroupOnClickListener(new FixtureAdapter.RightSecondIconInGroupOnClickListener() {
+            @Override
+            public void onClick(Fixture fixture) {
 
             }
         });

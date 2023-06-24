@@ -12,10 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Fixture;
-import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.VpItemFixtureBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FixtureGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -71,11 +69,19 @@ public class FixtureGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             binding.fixture.setLayoutParams(layoutParams);
             binding.fixture.setPadding(0,0,0,0);
             binding.fixture.setBackgroundColor(Color.TRANSPARENT);
+            ViewGroup.LayoutParams layoutParams1 = binding.menu.getLayoutParams();
+            layoutParams1.width = MyApplication.dip2percentPx(40);
+            layoutParams1.height = MyApplication.dip2percentPx(50);
+            binding.menu.setLayoutParams(layoutParams1);
+            ViewGroup.LayoutParams layoutParams2 = binding.rightSecondIcon.getLayoutParams();
+            layoutParams2.width = MyApplication.dip2percentPx(40);
+            layoutParams2.height = MyApplication.dip2percentPx(50);
+            binding.rightSecondIcon.setLayoutParams(layoutParams2);
             binding.rightSecondIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (rightSecondOnClickListener != null){
-                        rightSecondOnClickListener.onClick(getAdapterPosition());
+                        rightSecondOnClickListener.onClick(fixtureList.get(getAdapterPosition()));
                     }
                 }
             });
@@ -83,20 +89,11 @@ public class FixtureGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     if (menuOnClickListener != null){
-                        menuOnClickListener.onClick(getAdapterPosition());
+                        menuOnClickListener.onClick(fixtureList.get(getAdapterPosition()));
                     }
                 }
             });
 
-            binding.getRoot().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onClickListener != null){
-
-                        onClickListener.onClick(getAdapterPosition());
-                    }
-                }
-            });
         }
     }
 
@@ -109,7 +106,7 @@ public class FixtureGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public interface MenuOnClickListener {
-        void onClick(int position);
+        void onClick(Fixture fixture);
     }
 
     public void setMenuOnClickListener(MenuOnClickListener menuOnClickListener){
@@ -117,7 +114,7 @@ public class FixtureGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public interface RightSecondIconOnClickListener {
-        void onClick(int position);
+        void onClick(Fixture fixture);
     }
 
     public void setRightSecondIconOnClickListener(RightSecondIconOnClickListener rightSecondOnClickListener){

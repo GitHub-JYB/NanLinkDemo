@@ -31,6 +31,8 @@ public interface SceneModel {
 
     void getFixtureMenu(int fixturePosition);
 
+    void getFixtureMenu(Fixture fixture);
+
     void queryFixtureGroupList();
 
     void queryFixtureList();

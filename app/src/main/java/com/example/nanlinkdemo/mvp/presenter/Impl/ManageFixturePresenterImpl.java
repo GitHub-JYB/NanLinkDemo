@@ -68,7 +68,7 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
                 }
 
                 view.stopLoading();
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).navigation();
+                view.finish();
                 break;
         }
     }
