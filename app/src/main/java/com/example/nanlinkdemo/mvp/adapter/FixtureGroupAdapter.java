@@ -1,6 +1,7 @@
 package com.example.nanlinkdemo.mvp.adapter;
 
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,7 @@ public class FixtureGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             layoutParams.height = MyApplication.dip2percentPx(50);
             binding.fixture.setLayoutParams(layoutParams);
             binding.fixture.setPadding(0,0,0,0);
-            binding.fixture.setBackgroundResource(R.color.dialog_input_text);
+            binding.fixture.setBackgroundColor(Color.TRANSPARENT);
             binding.rightSecondIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

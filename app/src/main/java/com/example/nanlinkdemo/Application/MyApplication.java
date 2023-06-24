@@ -37,8 +37,6 @@ public class MyApplication extends Application {
     private static Scene scene;
     private static SceneGroup sceneGroup;
 
-    private static FixtureGroup fixtureGroup;
-
     private static ArrayList<FixtureGroup> fixtureGroups = new ArrayList<>();
 
     private static ArrayList<Fixture> fixtures = new ArrayList<>();
@@ -85,14 +83,6 @@ public class MyApplication extends Application {
 
     public static void setSceneGroup(SceneGroup sceneGroup) {
         MyApplication.sceneGroup = sceneGroup;
-    }
-
-    public static FixtureGroup getFixtureGroup() {
-        return fixtureGroup;
-    }
-
-    public static void setFixtureGroup(FixtureGroup fixtureGroup) {
-        MyApplication.fixtureGroup = fixtureGroup;
     }
 
     public static ArrayList<FixtureGroup> getFixtureGroups() {

@@ -99,12 +99,6 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
 
             }
         });
-        fixtureAdapter.setSpreadIconOnClickListener(new FixtureAdapter.SpreadIconOnClickListener() {
-            @Override
-            public void onClick(int position) {
-
-            }
-        });
     }
 
     private void initToolbar() {

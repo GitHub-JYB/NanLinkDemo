@@ -19,7 +19,7 @@ public interface SceneModel {
 
     void deleteFixtureGroup(FixtureGroup fixtureGroup);
 
-    void addFixtureGroup(String fixtureGroupName);
+    void addFixtureGroup(FixtureGroup fixtureGroup);
 
     void addFixture(Fixture fixture);
 

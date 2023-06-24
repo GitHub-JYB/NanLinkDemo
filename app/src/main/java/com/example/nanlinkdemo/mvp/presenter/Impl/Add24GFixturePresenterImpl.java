@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.bean.Add24GFixture;
 import com.example.nanlinkdemo.mvp.adapter.Add24GAdapter;
 import com.example.nanlinkdemo.mvp.model.Impl.Add24GFixtureModelImpl;
@@ -12,8 +13,10 @@ import com.example.nanlinkdemo.mvp.presenter.Add24GFixturePresenter;
 import com.example.nanlinkdemo.mvp.view.Add24GFixtureView;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
+import com.example.nanlinkdemo.util.DateUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
     private final Add24GFixtureView view;
@@ -84,6 +87,11 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
             model.addFixture(fixture);
 
         }
+        Scene scene = MyApplication.getScene();
+        scene.setFixtureNum(MyApplication.getFixtures().size());
+        scene.setModifiedDate(DateUtil.getTime());
+        MyApplication.setScene(scene);
+        model.updateScene(scene);
         ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
 
     }

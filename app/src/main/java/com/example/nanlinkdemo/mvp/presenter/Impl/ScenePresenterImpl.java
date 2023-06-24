@@ -186,7 +186,7 @@ public class ScenePresenterImpl implements ScenePresenter {
             for (FixtureGroup fixtureGroup : fixtureGroupList) {
                 if (fixtureGroup.getName().equals(view.getInputTextMyDialog())) {
                     view.dismissMyDialog();
-                    view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备群组", "该设备群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                    view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建设备群组", "该设备群组名称已存在，\n请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
                         @Override
                         public void onClick(View v) {
                             view.dismissMyDialog();
@@ -198,11 +198,53 @@ public class ScenePresenterImpl implements ScenePresenter {
                             });
                         }
                     });
-                    break;
+                    return;
                 }
             }
-//            ARouter.getInstance().build(Constant.ACTIVITY_URL_ManageFixture).withString("fixtureGroupName", view.getInputTextMyDialog()).navigation();
-            model.addFixtureGroup(view.getInputTextMyDialog());
+            FixtureGroup fixtureGroup = new FixtureGroup(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), view.getInputTextMyDialog(), 0);
+            model.addFixtureGroup(fixtureGroup);
+            MyApplication.getFixtureGroups().add(fixtureGroup);
+            MyApplication.getScene().setModifiedDate(DateUtil.getTime());
+            model.updateScene(MyApplication.getScene());
+            view.dismissMyDialog();
+            ARouter.getInstance().build(Constant.ACTIVITY_URL_ManageFixture).withString("fixtureGroupName", view.getInputTextMyDialog()).navigation();
+        }
+    }
+
+    private void checkRenameFixtureGroup(View v, int fixtureGroupPosition) {
+        if (view.getInputTextMyDialog().isEmpty()) {
+            SnackBarUtil.show(v, "请输入设备群组名称");
+        } else {
+            for (FixtureGroup fixtureGroup : fixtureGroupList) {
+                if (fixtureGroup.getName().equals(view.getInputTextMyDialog())) {
+                    view.dismissMyDialog();
+                    view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "重命名", "该设备群组名称已存在，\n请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            view.dismissMyDialog();
+                            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, "重命名", "", "取消", null, "创建", new MyDialog.PositiveOnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    checkRenameFixtureGroup(v, fixtureGroupPosition);
+                                }
+                            });
+                        }
+                    });
+                    return;
+                }
+            }
+            for (Fixture fixture : fixtureList){
+                if (fixture.getFixtureGroupName().equals(fixtureGroupList.get(fixtureGroupPosition).getName())) {
+                    fixture.setFixtureGroupName(view.getInputTextMyDialog());
+                    model.updateFixture(fixture);
+                }
+            }
+            fixtureGroupList.get(fixtureGroupPosition).setName(view.getInputTextMyDialog());
+            model.updateFixtureGroup(fixtureGroupList.get(fixtureGroupPosition));
+
+            MyApplication.getFixtureGroups().get(fixtureGroupPosition).setName(view.getInputTextMyDialog());
+            MyApplication.getScene().setModifiedDate(DateUtil.getTime());
+            model.updateScene(MyApplication.getScene());
             view.dismissMyDialog();
         }
     }
@@ -275,8 +317,8 @@ public class ScenePresenterImpl implements ScenePresenter {
                     case 1:
                         view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn, fixtureGroupMenuList.get(position), fixtureGroupList.get(fixtureGroupPosition).getName(), "取消", null, "重命名", new MyDialog.PositiveOnClickListener() {
                             @Override
-                            public void onClick(View view) {
-
+                            public void onClick(View v) {
+                                checkRenameFixtureGroup(v, fixtureGroupPosition);
                             }
                         });
                         view.dismissSettingDialog();
@@ -370,7 +412,7 @@ public class ScenePresenterImpl implements ScenePresenter {
             @Override
             public void onClick(View v) {
                 for (Fixture fixture : fixtureList) {
-                    if (fixture.getCH().equals(view.getInputTextMyDialog())) {
+                    if (Integer.parseInt(fixture.getCH()) == (Integer.parseInt(view.getInputTextMyDialog()))) {
                         view.dismissMyDialog();
                         view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, fixtureMenuList.get(position), "列表中有另一台设备正在使用该\n地址码，请尝试其它地址码。", "取消", null, "重试", new MyDialog.PositiveOnClickListener() {
                             @Override
@@ -384,7 +426,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
                 }
                 Fixture fixture = fixtureList.get(fixturePosition);
-                fixture.setCH(view.getInputTextMyDialog());
+                fixture.setCH(Integer.parseInt(view.getInputTextMyDialog()) < 10 ? "00" + Integer.parseInt(view.getInputTextMyDialog()) : Integer.parseInt(view.getInputTextMyDialog()) < 100 ? "0" + Integer.parseInt(view.getInputTextMyDialog()) : String.valueOf(Integer.parseInt(view.getInputTextMyDialog())));
                 fixtureList.set(fixturePosition, fixture);
                 model.updateFixture(fixture);
                 MyApplication.setFixtures(fixtureList);

@@ -33,7 +33,7 @@ public class SceneModelImpl implements SceneModel {
         ArrayList<Menu> menuArrayList = new ArrayList<>();
         menuArrayList.add(new Menu(0,"", 0, TYPE_ITEM_nav_bg));
         menuArrayList.add(new Menu(R.drawable.ic_add,"添加设备", 0, TYPE_ITEM_gray_bg));
-        menuArrayList.add(new Menu(R.drawable.ic_add,"添加设备群组", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(R.drawable.ic_add,"创建设备群组", 0, TYPE_ITEM_gray_bg));
         menuArrayList.add(new Menu(R.drawable.ic_sort,"排序", 0, TYPE_ITEM_gray_bg));
         menuArrayList.add(new Menu());
         menuArrayList.add(new Menu(R.drawable.ic_controller,"信号控制器", 0, R.drawable.ic_full_battery, TYPE_ITEM_gray_bg));
@@ -130,10 +130,10 @@ public class SceneModelImpl implements SceneModel {
     }
 
        @Override
-    public void addFixtureGroup(String fixtureGroupName) {
+    public void addFixtureGroup(FixtureGroup fixtureGroup) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureGroupDao()
-                .insert(new FixtureGroup(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), fixtureGroupName, 0))
+                .insert(fixtureGroup)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {

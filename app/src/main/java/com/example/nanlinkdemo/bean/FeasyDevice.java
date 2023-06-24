@@ -43,13 +43,13 @@ public class FeasyDevice {
             CH = (uuid[6] + 1) * 256 + uuid[7];
         }
         if (CH == 0){
-            setCH("CH: 未设置");
+            setCH("未设置");
         }else if (CH < 10){
-            setCH("CH: 00" + CH);
+            setCH("00" + CH);
         }else if (CH < 100){
-            setCH("CH: 0" + CH);
+            setCH("0" + CH);
         }else {
-            setCH("CH: " + CH);
+            setCH(String.valueOf(CH));
         }
 //        setCH(Integer.parseInt(stringBuilder.toString()));
         StringBuilder stringBuilder = new StringBuilder();

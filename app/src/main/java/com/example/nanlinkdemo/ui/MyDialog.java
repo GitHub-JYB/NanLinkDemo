@@ -305,9 +305,10 @@ public class MyDialog extends DialogFragment {
         binding.myDialogSmallSize.setText(smallSizeMessage);
 
         binding.myDialogInputText.setText(bigSizeMessage);
+        binding.myDialogInputText.setSelection(bigSizeMessage.length());
         binding.myDialogInputDescription.setText(smallSizeMessage);
-
         binding.myDialogInputTextRemark.setText(bigSizeMessage);
+        binding.myDialogInputTextRemark.setSelection(bigSizeMessage.length());
 
         binding.myDialogBigSizeMessageOne.setText(bigSizeMessageOne);
         binding.myDialogSmallSizeMessageOne.setText(smallSizeMessageOne);
@@ -335,6 +336,7 @@ public class MyDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 binding.myDialogInputText.setText("");
+                binding.myDialogInputText.setSelection(0);
             }
         });
 

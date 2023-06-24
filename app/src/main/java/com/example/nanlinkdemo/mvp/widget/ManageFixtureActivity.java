@@ -37,7 +37,8 @@ public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanB
 
 
     private void initBtn() {
-        binding.finish.setVisibility(View.VISIBLE);
+        binding.oneBtn.setVisibility(View.VISIBLE);
+        binding.finish.setBackgroundResource(R.drawable.bg_able_btn_selected);
         binding.finish.setOnClickListener(this);
     }
 
@@ -53,28 +54,10 @@ public class ManageFixtureActivity extends BaseActivity<ActivityRecycleviewScanB
     }
 
     @Override
-    public void showFixture(ArrayList<Fixture> noGroupFixtureList, ArrayList<Fixture> fixtureList) {
-        for (Fixture fixture : fixtureList){
-            noGroupFixtureList.add(fixture);
-        }
-        updateFinishBtn(noGroupFixtureList);
-        adapter.setData(noGroupFixtureList);
+    public void showFixture(ArrayList<Fixture> fixtureList) {
+        adapter.setData(fixtureList);
     }
 
-    @Override
-    public void updateFinishBtn(ArrayList<Fixture> fixtureList) {
-        for (int i = 0; i < fixtureList.size(); i++ ){
-            if (!fixtureList.get(i).getFixtureGroupName().equals("")){
-                binding.finish.setClickable(true);
-                binding.finish.setBackgroundResource(R.drawable.bg_able_btn_selected);
-            }
-            if (i >= fixtureList.size() - 1){
-                binding.finish.setClickable(false);
-                binding.finish.setBackgroundResource(R.drawable.bg_unable_btn_selected);
-            }
-        }
-
-    }
 
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));

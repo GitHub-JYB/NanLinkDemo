@@ -5,6 +5,7 @@ import android.view.View;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.mvp.model.Impl.ManageFixtureModelImpl;
 import com.example.nanlinkdemo.mvp.presenter.ManageFixturePresenter;
@@ -18,6 +19,9 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
     private final ManageFixtureView view;
     private final ManageFixtureModelImpl model;
     private ArrayList<Fixture> fixtureList;
+
+    private ArrayList<Fixture> hasGroupFixtureList;
+
     private ArrayList<Fixture> noGroupFixtureList;
 
     public ManageFixturePresenterImpl(ManageFixtureView view) {
@@ -33,8 +37,12 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
 
     @Override
     public void switchFixtureList(int position) {
-        fixtureList.get(position).setFixtureGroupName(MyApplication.getFixtureGroup().getName());
-        view.showFixture(fixtureList, fixtureList);
+        if (fixtureList.get(position).getFixtureGroupName().equals("")){
+            fixtureList.get(position).setFixtureGroupName(view.getFixtureGroupName());
+        }else {
+            fixtureList.get(position).setFixtureGroupName("");
+        }
+        view.showFixture(fixtureList);
     }
 
     @Override
@@ -45,15 +53,22 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
                 break;
             case R.id.finish:
                 view.startLoading();
+                int fixtureNum = 0;
                 for (Fixture fixture : fixtureList){
-                    if (!fixture.getFixtureGroupName().equals("")){
-                        model.updateFixture(fixture);
-                        MyApplication.getFixtureGroup().setFixtureNum(MyApplication.getFixtureGroup().getFixtureNum() + 1);
+                    if (fixture.getFixtureGroupName().equals(view.getFixtureGroupName())){
+                        fixtureNum++;
+                    }
+                    model.updateFixture(fixture);
+                }
+                for (FixtureGroup fixtureGroup : MyApplication.getFixtureGroups()){
+                    if(fixtureGroup.getName().equals(view.getFixtureGroupName())){
+                        fixtureGroup.setFixtureNum(fixtureNum);
+                        model.updateFixtureGroup(fixtureGroup);
                     }
                 }
-                model.updateFixtureGroup(MyApplication.getFixtureGroup());
+
                 view.stopLoading();
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).navigation();
                 break;
         }
     }
@@ -62,15 +77,17 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
     public void receiveFixtureList(String fixtureGroupName, List<Fixture> fixtures) {
         if (fixtureGroupName.equals("")){
             noGroupFixtureList = (ArrayList<Fixture>) fixtures;
-            if (view.getFixtureGroupName().equals("")){
-                view.showFixture(noGroupFixtureList, fixtureList);
-            }else {
+            fixtureList = noGroupFixtureList;
+            if (!view.getFixtureGroupName().equals("")){
                 model.getFixtureList(view.getFixtureGroupName());
             }
-
         }else {
-            fixtureList = (ArrayList<Fixture>) fixtures;
-            view.showFixture(noGroupFixtureList, fixtureList);
+            hasGroupFixtureList = (ArrayList<Fixture>) fixtures;
+            for (Fixture fixture : hasGroupFixtureList){
+                fixtureList.add(0, fixture);
+            }
         }
+        view.showFixture(fixtureList);
+
     }
 }

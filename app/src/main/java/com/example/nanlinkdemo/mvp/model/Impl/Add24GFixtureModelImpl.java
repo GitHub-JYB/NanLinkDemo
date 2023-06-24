@@ -3,6 +3,7 @@ package com.example.nanlinkdemo.mvp.model.Impl;
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.DataBase.MyDataBase;
 import com.example.nanlinkdemo.DB.bean.Fixture;
+import com.example.nanlinkdemo.DB.bean.Scene;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.Add24GFixture;
 import com.example.nanlinkdemo.mvp.model.Add24GFixtureModel;
@@ -65,6 +66,21 @@ public class Add24GFixtureModelImpl implements Add24GFixtureModel {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+
+                    }
+                });
+    }
+
+    @Override
+    public void updateScene(Scene scene) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getSceneDao()
+                .updateSceneInfo(scene)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
 
                     }
                 });

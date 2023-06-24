@@ -7,9 +7,7 @@ import java.util.ArrayList;
 public interface ManageFixtureView {
     void setPresenter();
 
-    void showFixture(ArrayList<Fixture> noGroupFixtureList, ArrayList<Fixture> fixtureList);
-
-    void updateFinishBtn(ArrayList<Fixture> fixtureList);
+    void showFixture(ArrayList<Fixture> fixtures);
 
     void finish();
 

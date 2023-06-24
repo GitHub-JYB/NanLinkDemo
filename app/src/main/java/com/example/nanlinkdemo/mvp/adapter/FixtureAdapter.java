@@ -2,22 +2,27 @@ package com.example.nanlinkdemo.mvp.adapter;
 
 
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.DB.bean.Fixture;
 import com.example.nanlinkdemo.DB.bean.FixtureGroup;
 
+import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.databinding.FixtureGroupBinding;
 import com.example.nanlinkdemo.databinding.VpDecorationFixtureListBinding;
 import com.example.nanlinkdemo.databinding.VpItemFixtureBinding;
+import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 
 
 import java.util.ArrayList;
@@ -37,7 +42,6 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private OnClickListener onClickListener;
     private MenuOnClickListener menuOnClickListener;
     private RightSecondIconOnClickListener rightSecondOnClickListener;
-    private SpreadIconOnClickListener spreadOnClickListener;
 
 
     @NonNull
@@ -75,14 +79,26 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((ViewHolderFixtureList) holder).connectType.setText(fixtureListNoGroup.get(position - fixtureGroupList.size() - 2).getConnectType());
             }
         }else if (holder instanceof ViewHolderFixtureGroupList){
-            ((ViewHolderFixtureGroupList) holder).name.setText(fixtureGroupList.get(position - 1).getName());
-            ((ViewHolderFixtureGroupList) holder).sceneNum.setText("设备数量: " + fixtureGroupList.get(position  - 1).getFixtureNum());
             fixtureListInGroup = new ArrayList<>();
             for (Fixture fixture : fixtureList){
                 if (Objects.equals(fixture.getFixtureGroupName(), fixtureGroupList.get(position - 1).getName())){
                     fixtureListInGroup.add(fixture);
                 }
             }
+
+            ((ViewHolderFixtureGroupList) holder).name.setText(fixtureGroupList.get(position - 1).getName());
+            ((ViewHolderFixtureGroupList) holder).sceneNum.setText("设备数量: " + fixtureGroupList.get(position  - 1).getFixtureNum());
+            if (((ViewHolderFixtureGroupList) holder).showList && !fixtureListInGroup.isEmpty()){
+                ((ViewHolderFixtureGroupList) holder).recyclerView.setVisibility(View.VISIBLE);
+                ((ViewHolderFixtureGroupList) holder).spreadIcon.setImageResource(R.drawable.ic_spread);
+            }else {
+                ((ViewHolderFixtureGroupList) holder).recyclerView.setVisibility(View.GONE);
+                ((ViewHolderFixtureGroupList) holder).spreadIcon.setImageResource(R.drawable.ic_close);
+            }
+            ((ViewHolderFixtureGroupList) holder).fixtureGroupAdapter.setData(fixtureListInGroup);
+
+
+
 
         }else if (holder instanceof ViewHolderDecorationFixture){
             ((ViewHolderDecorationFixture) holder).name.setText("灯光设备");
@@ -201,12 +217,21 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     class ViewHolderFixtureGroupList extends RecyclerView.ViewHolder {
 
 
+        FixtureGroupAdapter fixtureGroupAdapter;
         TextView name, sceneNum;
+
+        ImageView spreadIcon;
+        RecyclerView recyclerView;
+
+        boolean showList = false;
+
 
         public ViewHolderFixtureGroupList(@NonNull FixtureGroupBinding binding) {
             super(binding.getRoot());
             name = binding.name;
             sceneNum = binding.number;
+            recyclerView = binding.recyclerView;
+            spreadIcon = binding.spreadIcon;
             ViewGroup.LayoutParams layoutParams = binding.fixtureGroup.getLayoutParams();
             layoutParams.width = MyApplication.dip2percentPx(361);
             layoutParams.height = MyApplication.dip2percentPx(68);
@@ -220,6 +245,15 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             binding.recyclerView.setPadding(0, MyApplication.dip2percentPx(8), 0, 0);
             binding.recyclerView.setLayoutParams(layoutParams1);
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+
+            // 设置分割线格式并添加
+            UnlessLastItemDecoration decoration = new UnlessLastItemDecoration(recyclerView.getContext(), LinearLayoutManager.VERTICAL);
+            decoration.setDrawable(recyclerView.getContext().getResources().getDrawable(R.drawable.decoration_fixture));
+            binding.recyclerView.addItemDecoration(decoration);
+
+            fixtureGroupAdapter = new FixtureGroupAdapter();
+            binding.recyclerView.setAdapter(fixtureGroupAdapter);
             ViewGroup.LayoutParams layoutParams2 = binding.menu.getLayoutParams();
             layoutParams2.width = MyApplication.dip2percentPx(40);
             layoutParams2.height = MyApplication.dip2percentPx(50);
@@ -236,9 +270,8 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.spreadIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (spreadOnClickListener != null){
-                        spreadOnClickListener.onClick(getAdapterPosition());
-                    }
+                    showList = !showList;
+                    notifyDataSetChanged();
                 }
             });
             binding.rightSecondIcon.setOnClickListener(new View.OnClickListener() {
@@ -326,11 +359,4 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.rightSecondOnClickListener = rightSecondOnClickListener;
     }
 
-    public interface SpreadIconOnClickListener {
-        void onClick(int position);
-    }
-
-    public void setSpreadIconOnClickListener(SpreadIconOnClickListener spreadOnClickListener){
-        this.spreadOnClickListener = spreadOnClickListener;
-    }
 }
