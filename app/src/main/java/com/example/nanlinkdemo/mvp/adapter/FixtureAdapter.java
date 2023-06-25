@@ -178,7 +178,6 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             layoutParams.height = MyApplication.dip2percentPx(68);
             binding.fixture.setPadding(MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(6), MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(12));
             binding.fixture.setLayoutParams(layoutParams);
-            binding.message.setPadding(MyApplication.dip2percentPx(16),MyApplication.dip2percentPx(7), 0, 0);
             ViewGroup.LayoutParams layoutParams1 = binding.menu.getLayoutParams();
             layoutParams1.width = MyApplication.dip2percentPx(40);
             layoutParams1.height = MyApplication.dip2percentPx(50);
@@ -239,7 +238,6 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             layoutParams.height = MyApplication.dip2percentPx(68);
             binding.fixtureGroup.setPadding(MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(6), MyApplication.dip2percentPx(9), MyApplication.dip2percentPx(12));
             binding.fixtureGroup.setLayoutParams(layoutParams);
-            binding.message.setPadding(0 ,MyApplication.dip2percentPx(7), 0, 0);
             RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) binding.recyclerView.getLayoutParams();
             layoutParams1.width = MyApplication.dip2percentPx(343);
             layoutParams1.topMargin = MyApplication.dip2percentPx(48);
