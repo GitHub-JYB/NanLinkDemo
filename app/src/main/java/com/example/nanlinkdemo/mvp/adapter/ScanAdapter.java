@@ -35,7 +35,7 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof ViewHolderItemFixture){
                 ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
                 if (fixtureList.get(position).getTYPE() == 0){
-                    ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getCH());
+                    ((ViewHolderItemFixture) holder).number.setText("CH: " + fixtureList.get(position).getCH());
                 }else {
                     ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getUUID());
                 }
