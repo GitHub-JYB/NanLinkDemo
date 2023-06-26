@@ -36,6 +36,9 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!checkPermission()){
+            agreePermission();
+        }
         setPresenter();
         initToolbar();
         initRecycleView();

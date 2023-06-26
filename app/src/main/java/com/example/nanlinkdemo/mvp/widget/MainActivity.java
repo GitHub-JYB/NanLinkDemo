@@ -35,35 +35,19 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     private SceneAdapter sceneAdapter;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!checkPermission()){
+            agreePermission();
+        }
         setPresenter();
         initToolbar();
         initRecycleView();
-        initPermission();
-
     }
 
 
 
-    private void initPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
-//            }
-
-        }
-    }
 
 
     @Override
@@ -112,7 +96,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     private void setPresenter() {
         presenter = new MainPresenterImpl(this);
-        if(MyApplication.getInstance().isOpenNetwork()){
+        if (MyApplication.getInstance().isOpenNetwork()) {
             presenter.getDeviceListFromModel();
         }
     }

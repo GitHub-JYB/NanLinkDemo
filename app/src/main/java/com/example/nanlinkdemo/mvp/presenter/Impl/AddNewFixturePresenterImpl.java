@@ -1,6 +1,15 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
+import android.Manifest;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.view.View;
+
+import androidx.core.app.ActivityCompat;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.nanlinkdemo.DB.bean.Controller;
@@ -30,8 +39,20 @@ public class AddNewFixturePresenterImpl implements AddNewFixturePresenter {
 
     @Override
     public void onClickSwitch(int position) {
-        switch (position){
+        switch (position) {
             case 0:
+                if (!view.checkPermission()) {
+                    view.agreePermission();
+                    break;
+                }
+                if (!view.checkBle()) {
+                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    (Activity)view.startActivityForResult(intent, 1);
+                    break;
+                }
+                if (!view.checkLocation()) {
+                    break;
+                }
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_ScanBle).navigation();
                 break;
             case 1:
@@ -49,7 +70,7 @@ public class AddNewFixturePresenterImpl implements AddNewFixturePresenter {
 
     @Override
     public void receiveControllerList(List<Controller> controllers) {
-        if (controllers.isEmpty()){
+        if (controllers.isEmpty()) {
             view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, "信号控制器", "需要连接信号控制器才能\n使用该选项", "取消", null, "连接", new MyDialog.PositiveOnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -58,7 +79,7 @@ public class AddNewFixturePresenterImpl implements AddNewFixturePresenter {
                     ARouter.getInstance().build(Constant.ACTIVITY_URL_Controller).navigation();
                 }
             });
-        }else {
+        } else {
             // 跳转到2.4G添加界面
             ARouter.getInstance().build(Constant.ACTIVITY_URL_Add24GFixture).navigation();
         }

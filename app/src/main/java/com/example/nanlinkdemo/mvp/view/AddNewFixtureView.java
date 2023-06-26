@@ -10,6 +10,15 @@ public interface AddNewFixtureView {
 
     void setPresenter();
 
+    boolean checkBle();
+
+    boolean checkLocation();
+
+
+
+    boolean checkPermission();
+
+    void agreePermission();
 
     void finish();
 

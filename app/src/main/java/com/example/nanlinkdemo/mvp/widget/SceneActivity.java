@@ -34,6 +34,9 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!checkPermission()){
+            agreePermission();
+        }
         setPresenter();
         initToolbar();
         initRecycleView();
