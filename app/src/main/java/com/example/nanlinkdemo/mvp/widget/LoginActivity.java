@@ -56,28 +56,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         initToolbar();
         initUserAgreement();
         initForgetPassword();
-        initPermission();
-    }
-
-
-    private void initPermission() {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        Log.i("TAG", requestCode + " onRequestPermissionsResult: " + grantResults.length + "--" + grantResults[0]);
-        for (String permission: permissions){
-            boolean b = ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
-            Log.i("TAG", "onRequestPermissionsResult: " + permission + " ---" + b);
-        }
     }
 
     private void initForgetPassword() {

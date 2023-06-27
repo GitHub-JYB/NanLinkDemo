@@ -93,11 +93,6 @@ public class LoginPresenterImpl implements LoginPresenter {
                     if (!MyApplication.getInstance().isOpenNetwork()){
                         this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "无法连接服务器","重试", null);
                     }else {
-                        if (ActivityCompat.checkSelfPermission((Context) this.view, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                ActivityCompat.requestPermissions((LoginActivity) this.view, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                            }
-                        }
                         this.view.startLoading();
                         model.login(email, password);
                     }

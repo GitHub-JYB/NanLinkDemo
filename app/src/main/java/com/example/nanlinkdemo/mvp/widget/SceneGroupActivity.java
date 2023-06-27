@@ -20,6 +20,7 @@ import com.example.nanlinkdemo.mvp.presenter.Impl.SceneGroupPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.SceneGroupView;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 import com.example.nanlinkdemo.util.Constant;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +37,6 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!checkPermission()){
-            agreePermission();
-        }
         setPresenter();
         initToolbar();
         initRecycleView();
@@ -52,6 +50,9 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
     @Override
     protected void onStart() {
         super.onStart();
+        if (!checkPermission()){
+            agreePermission();
+        }
         updateRecycleView();
     }
 
@@ -79,6 +80,18 @@ public class SceneGroupActivity extends BaseActivity<ActivitySceneGroupBinding> 
         sceneAdapter.setOnClickListener(new SceneAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
+                if (!checkPermission()){
+                    agreePermission();
+                    return;
+                }
+                if (!checkBle()){
+                    SnackBarUtil.show(binding.recycleView,"NANLINK需要使用蓝牙连接灯具，请打开蓝牙");
+                    return;
+                }
+                if (!checkLocation()){
+                    SnackBarUtil.show(binding.recycleView,"NANLINK需要使用位置信息连接灯具，请打开位置信息");
+                    return;
+                }
                 presenter.sceneListSwitch(position);
             }
         });

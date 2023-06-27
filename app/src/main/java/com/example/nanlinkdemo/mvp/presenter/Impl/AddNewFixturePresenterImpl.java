@@ -19,6 +19,7 @@ import com.example.nanlinkdemo.mvp.presenter.AddNewFixturePresenter;
 import com.example.nanlinkdemo.mvp.view.AddNewFixtureView;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.util.Constant;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,18 +42,6 @@ public class AddNewFixturePresenterImpl implements AddNewFixturePresenter {
     public void onClickSwitch(int position) {
         switch (position) {
             case 0:
-                if (!view.checkPermission()) {
-                    view.agreePermission();
-                    break;
-                }
-                if (!view.checkBle()) {
-                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                    (Activity)view.startActivityForResult(intent, 1);
-                    break;
-                }
-                if (!view.checkLocation()) {
-                    break;
-                }
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_ScanBle).navigation();
                 break;
             case 1:

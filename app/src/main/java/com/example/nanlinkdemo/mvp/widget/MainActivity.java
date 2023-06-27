@@ -4,6 +4,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -23,6 +24,7 @@ import com.example.nanlinkdemo.mvp.presenter.Impl.MainPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.MainView;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 import com.example.nanlinkdemo.util.Constant;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +40,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!checkPermission()){
-            agreePermission();
-        }
         setPresenter();
         initToolbar();
         initRecycleView();
@@ -54,7 +53,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     protected void onStart() {
         super.onStart();
         updateRecycleView();
-
+        if (!checkPermission()){
+            agreePermission();
+        }
     }
 
     @Override
@@ -81,6 +82,18 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         sceneAdapter.setOnClickListener(new SceneAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
+                if (!checkPermission()){
+                    agreePermission();
+                    return;
+                }
+                if (!checkBle()){
+                    SnackBarUtil.show(binding.recycleView,"NANLINK需要使用蓝牙连接灯具，请打开蓝牙");
+                    return;
+                }
+                if (!checkLocation()){
+                    SnackBarUtil.show(binding.recycleView,"NANLINK需要使用位置信息连接灯具，请打开位置信息");
+                    return;
+                }
                 presenter.sceneListSwitch(position);
             }
         });

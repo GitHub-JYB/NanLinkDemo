@@ -16,9 +16,9 @@ public interface AddNewFixtureView {
 
 
 
-    boolean checkPermission();
+//    boolean checkPermission();
 
-    void agreePermission();
+//    void agreePermission();
 
     void finish();
 

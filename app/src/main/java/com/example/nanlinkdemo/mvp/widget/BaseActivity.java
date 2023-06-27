@@ -2,6 +2,8 @@ package com.example.nanlinkdemo.mvp.widget;
 
 import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.viewbinding.ViewBinding;
@@ -17,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -27,10 +30,12 @@ import com.example.nanlinkdemo.mvp.adapter.ThreePointAdapter;
 import com.example.nanlinkdemo.ui.LoadingDialog;
 import com.example.nanlinkdemo.ui.MyDialog;
 import com.example.nanlinkdemo.ui.SettingDialog;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
 
@@ -38,6 +43,10 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     private LoadingDialog loadingDialog;
     private MyDialog myDialog;
     private SettingDialog settingDialog;
+
+    private ArrayList<String> permissionList;
+    private static final int PERMISSION_REQUEST_CODE = 1;
+
 
     @Override
     protected void onStart() {
@@ -142,75 +151,51 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     }
 
     public void agreePermission() {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-//            return;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(BaseActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-
-        }
-
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-//            return;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(BaseActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
-            }
-
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-//            return;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(BaseActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
-            }
-
-        }
+        ActivityCompat.requestPermissions(this, permissionList.toArray(new String[]{}), PERMISSION_REQUEST_CODE);
     }
 
     public boolean checkPermission() {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return false;
-        } else {
-            return true;
+        permissionList = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+            }
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
         }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//            }
+//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(Manifest.permission.BLUETOOTH_SCAN);
+            }
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+
+                permissionList.add(Manifest.permission.BLUETOOTH_ADVERTISE);
+
+            }
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+
+                permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
+
+            }
+        }
+        return permissionList.isEmpty();
     }
 
 
     public boolean checkBle() {
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter adapter = bluetoothManager.getAdapter();
-        return adapter.isEnabled();
+        if (adapter.isEnabled()) {
+            return true;
+        }
+        tipBle();
+        return false;
     }
 
     public boolean checkLocation() {
@@ -220,7 +205,39 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         if (gps || network) {
             return true;
         }
+        tipLocation();
         return false;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            for (int i = permissions.length - 1; i >= 0; i--) {
+                if (grantResults[i] == -1) {
+                    switch (permissions[i]) {
+                        case Manifest.permission.BLUETOOTH_SCAN:
+                        case Manifest.permission.BLUETOOTH_ADVERTISE:
+                        case Manifest.permission.BLUETOOTH_CONNECT:
+                            tipBle();
+                            return;
+                        case Manifest.permission.ACCESS_COARSE_LOCATION:
+                        case Manifest.permission.ACCESS_FINE_LOCATION:
+                            tipLocation();
+                            return;
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    private void tipBle() {
+        SnackBarUtil.show(binding.getRoot(), "NANLINK需要使用蓝牙连接灯具，请打开蓝牙权限");
+    }
+
+    private void tipLocation() {
+        SnackBarUtil.show(binding.getRoot(), "NANLINK需要使用位置信息连接灯具，请打开位置信息权限");
+    }
 }

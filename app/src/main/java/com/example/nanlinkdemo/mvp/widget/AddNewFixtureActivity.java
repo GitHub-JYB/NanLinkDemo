@@ -14,6 +14,7 @@ import com.example.nanlinkdemo.mvp.adapter.AddNewFixtureAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.AddNewFixturePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.AddNewFixtureView;
 import com.example.nanlinkdemo.util.Constant;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 
@@ -58,6 +59,16 @@ public class AddNewFixtureActivity extends BaseActivity<ActivityRecycleviewScanB
         adapter.setOnClickListener(new AddNewFixtureAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
+                if (!checkPermission()){
+                    agreePermission();
+                    return;
+                }
+                if (!checkBle()){
+                    return;
+                }
+                if (!checkLocation()){
+                    return;
+                }
                 presenter.onClickSwitch(position);
             }
         });

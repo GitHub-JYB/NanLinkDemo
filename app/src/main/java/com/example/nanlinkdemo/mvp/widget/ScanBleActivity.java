@@ -29,6 +29,7 @@ import com.example.nanlinkdemo.mvp.adapter.ScanAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ScanBlePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.ScanBleView;
 import com.example.nanlinkdemo.util.Constant;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 
 import java.util.ArrayList;
@@ -51,44 +52,12 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         initToolbar();
         initRecyclerView();
         initBtn();
-//        initPermission();
-//        initBle();
+        if (!checkPermission()) {
+            agreePermission();
+        }
 
 
     }
-
-    private void initPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-//            return;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
-            }
-
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-//            return;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-
-        }
-
-    }
-
 
     @Override
     public void StartScan() {

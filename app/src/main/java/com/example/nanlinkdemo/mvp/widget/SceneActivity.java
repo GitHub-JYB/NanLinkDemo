@@ -19,6 +19,7 @@ import com.example.nanlinkdemo.mvp.presenter.Impl.ScenePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.SceneView;
 import com.example.nanlinkdemo.ui.UnlessLastItemDecoration;
 import com.example.nanlinkdemo.util.Constant;
+import com.example.nanlinkdemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +35,6 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!checkPermission()){
-            agreePermission();
-        }
         setPresenter();
         initToolbar();
         initRecycleView();
@@ -52,6 +50,9 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         super.onStart();
         updateRecycleView();
         setTitle(MyApplication.getScene().getName());
+        if (!checkPermission()){
+            agreePermission();
+        }
     }
 
     @Override
