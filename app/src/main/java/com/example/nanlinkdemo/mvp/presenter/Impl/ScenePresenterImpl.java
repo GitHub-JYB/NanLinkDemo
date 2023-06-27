@@ -166,6 +166,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                 model.getSortList();
                 break;
             case 5:
+                view.closeDrawLayout();
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Controller).navigation();
                 break;
             case 7:

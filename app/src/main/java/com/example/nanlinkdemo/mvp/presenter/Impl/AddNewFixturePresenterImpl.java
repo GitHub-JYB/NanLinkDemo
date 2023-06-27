@@ -45,9 +45,9 @@ public class AddNewFixturePresenterImpl implements AddNewFixturePresenter {
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_ScanBle).navigation();
                 break;
             case 1:
-//                model.getControllerList();
+                model.getControllerList();
                 //测试，所以先跳过控制器的检测直接添加2.4G设备
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Add24GFixture).navigation();
+//                ARouter.getInstance().build(Constant.ACTIVITY_URL_Add24GFixture).navigation();
                 break;
         }
     }
