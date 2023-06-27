@@ -41,6 +41,14 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
     @Override
     public void onClickSwitch(int position) {
         deviceList.get(position).setSelected(!deviceList.get(position).isSelected());
+        for (FeasyDevice device : deviceList) {
+            if(!device.isSelected()){
+                allSelected = false;
+                break;
+            }
+            allSelected = true;
+        }
+        view.updateAllSelectedText(allSelected);
         view.showBle(deviceList);
     }
 
@@ -100,7 +108,9 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 if (!deviceList.isEmpty()) {
                     for (int i = 0; i < deviceList.size(); i++) {
                         if (result.getDevice().getAddress().equals(deviceList.get(i).getUUID())) {
+                            boolean selected = deviceList.get(i).isSelected();
                             deviceList.set(i, new FeasyDevice(result.getDevice().getAddress(), result.getScanRecord().getServiceData(result.getScanRecord().getServiceUuids().get(0))));
+                            deviceList.get(i).setSelected(selected);
                             view.showBle(deviceList);
                             break;
                         }
@@ -116,9 +126,6 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
             }
         }
         else {
-            if (ActivityCompat.checkSelfPermission((ScanBleActivity) this.view, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions((ScanBleActivity) this.view, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 1);
-            }
             if (result.getScanRecord().getDeviceName() != null && result.getScanRecord().getDeviceName().startsWith("``NL")) {
                 if (deviceList.isEmpty()) {
                     deviceList.add(new FeasyDevice(result.getDevice().getAddress(), result.getScanRecord().getDeviceName()));

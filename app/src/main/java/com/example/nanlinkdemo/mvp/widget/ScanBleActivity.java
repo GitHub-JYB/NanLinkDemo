@@ -49,6 +49,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setPresenter();
+        initBle();
         initToolbar();
         initRecyclerView();
         initBtn();
@@ -59,18 +60,17 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
 
     }
 
-    @Override
-    public void StartScan() {
-
+    private void initBle() {
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter adapter = bluetoothManager.getAdapter();
         if (!adapter.isEnabled()) {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, 1);
         }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+            }
         }
 
         scanner = adapter.getBluetoothLeScanner();
@@ -81,14 +81,33 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
                 presenter.handleResult(result);
             }
         };
+    }
+
+    @Override
+    public void StartScan() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+        }
         scanner.startScan(scanCallback);
         updateRightBtnClickable(false);
         startScanAnimation();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (ActivityCompat.checkSelfPermission(ScanBleActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (ActivityCompat.checkSelfPermission(ScanBleActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+                    }
                 }
                 scanner.stopScan(scanCallback);
                 stopScanAnimation();
@@ -209,8 +228,10 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     @Override
     protected void onStop() {
         super.onStop();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+            }
         }
         scanner.stopScan(scanCallback);
     }

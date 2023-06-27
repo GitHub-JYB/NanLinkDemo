@@ -31,14 +31,11 @@ import java.util.ArrayList;
 
 
 @Route(path = Constant.ACTIVITY_URL_ScanController)
-public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ScanControllerView, View.OnClickListener{
+public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScanBinding> implements ScanControllerView, View.OnClickListener {
 
 
     private ScanAdapter adapter;
     private ScanControllerPresenterImpl presenter;
-
-
-
 
 
     @Override
@@ -50,7 +47,6 @@ public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScan
         initBtn();
 //        initPermission();
 //        initBle();
-
 
 
     }
@@ -88,7 +84,6 @@ public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScan
     }
 
 
-
     private void StartScan() {
 
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -97,18 +92,19 @@ public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScan
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, 1);
         }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
 //            return;
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 ActivityCompat.requestPermissions(ScanControllerActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+            }
 //            }
 
         }
@@ -125,18 +121,18 @@ public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScan
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (ActivityCompat.checkSelfPermission(ScanControllerActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (ActivityCompat.checkSelfPermission(ScanControllerActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
 //                    return;
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         ActivityCompat.requestPermissions(ScanControllerActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
-//                    }
+                    }
                 }
                 scanner.stopScan(scanCallback);
 
@@ -174,17 +170,18 @@ public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScan
     @Override
     public void updateFinishBtn(ArrayList<FeasyDevice> arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
-            if (arrayList.get(i).isSelected()){
+            if (arrayList.get(i).isSelected()) {
                 binding.finish.setClickable(true);
                 binding.finish.setBackgroundResource(R.drawable.bg_able_btn_selected);
                 return;
             }
-            if (i >= arrayList.size() - 1){
+            if (i >= arrayList.size() - 1) {
                 binding.finish.setClickable(false);
                 binding.finish.setBackgroundResource(R.drawable.bg_unable_btn_selected);
             }
         }
     }
+
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
