@@ -5,12 +5,12 @@
     android:background="@color/theme"
     android:orientation="vertical">
 
-    <com.example.nanlinkdemo.ui.MyToolbar
+    <com.example.NanLinkDemo.ui.MyToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.example.nanlinkdemo.ui.BoxView
+    <com.example.NanLinkDemo.ui.BoxView
         android:id="@+id/box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

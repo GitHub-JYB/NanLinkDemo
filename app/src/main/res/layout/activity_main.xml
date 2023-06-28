@@ -15,7 +15,7 @@
         android:background="@color/theme"
         android:orientation="vertical">
 
-        <com.example.nanlinkdemo.ui.MyToolbar
+        <com.example.NanLinkDemo.ui.MyToolbar
             android:id="@+id/toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent" />
@@ -34,7 +34,7 @@
 
     </LinearLayout>
 
-    <com.example.nanlinkdemo.ui.MyNavigation
+    <com.example.NanLinkDemo.ui.MyNavigation
         android:id="@+id/navigation"
         android:layout_gravity="start"
         android:layout_width="280dp"
