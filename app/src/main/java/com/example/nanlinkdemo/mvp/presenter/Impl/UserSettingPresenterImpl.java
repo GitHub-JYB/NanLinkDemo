@@ -1,5 +1,6 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
+import android.content.Intent;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -45,21 +46,37 @@ public class UserSettingPresenterImpl implements UserSettingPresenter {
                 view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, settingText, "是否要退出登录?", "取消", null, "退出登录", new MyDialog.PositiveOnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (MyApplication.getLastUser() != null){
-                            MyApplication.getLastUser().setType("normal");
-                            model.updateUser(MyApplication.getLastUser());
-                        }
-                        MyApplication.getOnlineUser().setType("lastUser");
-                        MyApplication.setLastUser(MyApplication.getOnlineUser());
-                        MyApplication.setOnlineUser(null);
-                        model.updateUser(MyApplication.getLastUser());
-
+                        clearLoginRecord();
                         ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
                         view.finish();
                         }
                 });
                 break;
+            case "注册":
+                clearLoginRecord();
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Register).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
+                view.finish();
+                break;
+            case "登录":
+                clearLoginRecord();
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).navigation();
+                view.finish();
+                break;
         }
+    }
+
+    private void clearLoginRecord() {
+        if (MyApplication.getLastUser() != null){
+            MyApplication.getLastUser().setType("normal");
+            model.updateUser(MyApplication.getLastUser());
+        }
+        MyApplication.getOnlineUser().setType("lastUser");
+        if (MyApplication.getOnlineUser().getEmail().equals("Guest")){
+            MyApplication.getOnlineUser().setEmail(MyApplication.getLastUser().getEmail());
+        }
+        MyApplication.setLastUser(MyApplication.getOnlineUser());
+        MyApplication.setOnlineUser(null);
+        model.updateUser(MyApplication.getLastUser());
     }
 
     @Override

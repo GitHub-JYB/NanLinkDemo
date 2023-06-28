@@ -1,22 +1,16 @@
 package com.example.nanlinkdemo.mvp.widget;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -26,9 +20,6 @@ import com.example.nanlinkdemo.databinding.ActivityLoginBinding;
 import com.example.nanlinkdemo.mvp.presenter.Impl.LoginPresenterImpl;
 import com.example.nanlinkdemo.mvp.view.LoginView;
 import com.example.nanlinkdemo.util.Constant;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Route(path = Constant.ACTIVITY_URL_Login)
 public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements LoginView, View.OnClickListener {
@@ -58,7 +49,8 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
         initForgetPassword();
     }
 
-    private void initForgetPassword() {
+    @Override
+    public void initForgetPassword() {
         SpannableStringBuilder builder = new SpannableStringBuilder("忘记密码? 或 访客模式");
         builder.setSpan(new ClickableSpan() {
             @Override
@@ -67,13 +59,19 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
 
             }
         }, 0, 5, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        builder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.login_hintText)), 0, 12, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        builder.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                presenter.switchOnclick(widget);
 
+            }
+        }, 8, 12, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        builder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.login_hintText)), 0, 12, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         binding.tvForgetPassword.setText(builder);
         binding.tvForgetPassword.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    private void initUserAgreement() {
+    public void initUserAgreement() {
         SpannableStringBuilder builder = new SpannableStringBuilder("我已阅读并同意NANLINK用户协议及NANLINK隐私条款");
         builder.setSpan(new ClickableSpan() {
             @Override

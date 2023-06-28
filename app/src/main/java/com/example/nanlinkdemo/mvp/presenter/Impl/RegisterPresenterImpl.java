@@ -1,5 +1,6 @@
 package com.example.nanlinkdemo.mvp.presenter.Impl;
 
+import android.content.Intent;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -81,6 +82,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
         switch (view.getId()){
 
             case R.id.toolbar_left_btn:
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Login).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
                 this.view.finish();
                 break;
             case R.id.login_check:

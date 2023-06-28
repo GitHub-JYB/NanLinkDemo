@@ -100,6 +100,15 @@ public class LoginPresenterImpl implements LoginPresenter {
                     SnackBarUtil.show(view,"请勾选用户协议");
                 }
                 break;
+            case R.id.tv_forgetPassword:
+                if (checked){
+                    MyApplication.setOnlineUser(new User("Guest", "访客模式", "", "online", ""));
+                    model.queryEmail(MyApplication.getOnlineUser().getEmail());
+                }else {
+                    SnackBarUtil.show(view,"请勾选用户协议");
+                    this.view.initForgetPassword();
+                }
+                break;
         }
     }
 

@@ -1,11 +1,13 @@
 package com.example.nanlinkdemo.mvp.widget;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.nanlinkdemo.Application.MyApplication;
 import com.example.nanlinkdemo.R;
 import com.example.nanlinkdemo.bean.FeasyDevice;
 import com.example.nanlinkdemo.databinding.ActivityRecycleviewScanBinding;
@@ -29,10 +32,16 @@ import com.example.nanlinkdemo.mvp.adapter.ScanAdapter;
 import com.example.nanlinkdemo.mvp.presenter.Impl.ScanBlePresenterImpl;
 import com.example.nanlinkdemo.mvp.view.ScanBleView;
 import com.example.nanlinkdemo.util.Constant;
-import com.example.nanlinkdemo.util.SnackBarUtil;
 
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 
 @Route(path = Constant.ACTIVITY_URL_ScanBle)
@@ -43,7 +52,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     private ScanBlePresenterImpl presenter;
     private BluetoothLeScanner scanner;
     private ScanCallback scanCallback;
-
+    private Disposable subscribe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,36 +65,27 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         if (!checkPermission()) {
             agreePermission();
         }
+    }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        StartScan();
     }
 
     private void initBle() {
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter adapter = bluetoothManager.getAdapter();
         if (!adapter.isEnabled()) {
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, 1);
+            return;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
-            }
-        }
-
         scanner = adapter.getBluetoothLeScanner();
-        scanCallback = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, ScanResult result) {
-                super.onScanResult(callbackType, result);
-                presenter.handleResult(result);
-            }
-        };
     }
 
     @Override
     public void StartScan() {
-
+//        removeHandler();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -98,25 +98,43 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
                 return;
             }
         }
+
+        scanCallback = new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                super.onScanResult(callbackType, result);
+                presenter.handleResult(result);
+            }
+        };
         scanner.startScan(scanCallback);
         updateRightBtnClickable(false);
         startScanAnimation();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (ActivityCompat.checkSelfPermission(ScanBleActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+
+         subscribe = Observable.timer(20000, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            if (ActivityCompat.checkSelfPermission(ScanBleActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
+                            }
+                        }
+                        scanner.stopScan(scanCallback);
+                        stopScanAnimation();
+                        updateRightBtnClickable(true);
+                        Log.d("TAG", "onStopScan:");
                     }
-                }
-                scanner.stopScan(scanCallback);
-                stopScanAnimation();
-                updateRightBtnClickable(true);
-                Log.d("TAG", "onStopScan:");
+                });
+    }
 
-            }
-        }, 20000);
-
+    @Override
+    public void removeHandler() {
+        if (subscribe != null) {
+            subscribe.dispose();
+            subscribe = null;
+        }
     }
 
     private void initBtn() {
@@ -154,6 +172,15 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
             binding.allSelected.setBackgroundResource(R.drawable.bg_unable_btn_selected);
         } else {
             binding.allSelected.setBackgroundResource(R.drawable.bg_able_btn_selected);
+            boolean allSelected = false;
+            for (FeasyDevice device : arrayList) {
+                if (!device.isSelected()) {
+                    allSelected = false;
+                    break;
+                }
+                allSelected = true;
+            }
+            updateAllSelectedText(allSelected);
         }
     }
 
@@ -183,9 +210,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
 
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-
         adapter = new ScanAdapter();
-        StartScan();
         binding.recycleView.setAdapter(adapter);
         adapter.setOnClickListener(new ScanAdapter.OnClickListener() {
             @Override
@@ -233,6 +258,8 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
                 ActivityCompat.requestPermissions(ScanBleActivity.this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 1);
             }
         }
-        scanner.stopScan(scanCallback);
+//        scanner.stopScan(scanCallback);
+        removeHandler();
     }
+
 }

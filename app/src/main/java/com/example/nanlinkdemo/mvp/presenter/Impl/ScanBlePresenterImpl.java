@@ -41,14 +41,6 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
     @Override
     public void onClickSwitch(int position) {
         deviceList.get(position).setSelected(!deviceList.get(position).isSelected());
-        for (FeasyDevice device : deviceList) {
-            if(!device.isSelected()){
-                allSelected = false;
-                break;
-            }
-            allSelected = true;
-        }
-        view.updateAllSelectedText(allSelected);
         view.showBle(deviceList);
     }
 
@@ -64,11 +56,10 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 view.finish();
                 break;
             case R.id.all_selected:
-                view.updateAllSelectedText(!allSelected);
+                allSelected = !allSelected;
                 for (FeasyDevice device : deviceList) {
                     device.setSelected(!allSelected);
                 }
-                allSelected = !allSelected;
                 view.showBle(deviceList);
                 break;
             case R.id.complete:
@@ -133,7 +124,9 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 } else {
                     for (int i = 0; i < deviceList.size(); i++) {
                         if (result.getDevice().getAddress().equals(deviceList.get(i).getUUID())) {
+                            boolean selected = deviceList.get(i).isSelected();
                             deviceList.set(i, new FeasyDevice(result.getDevice().getAddress(), result.getScanRecord().getDeviceName()));
+                            deviceList.get(i).setSelected(selected);
                             view.showBle(deviceList);
                             break;
                         }

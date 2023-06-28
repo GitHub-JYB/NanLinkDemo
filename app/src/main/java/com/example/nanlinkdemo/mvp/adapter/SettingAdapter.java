@@ -46,7 +46,11 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderUserSetting){
             if (userList.get(position).getEmail() != null){
-                ((ViewHolderUserSetting) holder).email.setText(userList.get(position).getEmail());
+                if (userList.get(position).getEmail().equals("Guest")){
+                    ((ViewHolderUserSetting) holder).email.setVisibility(View.GONE);
+                }else {
+                    ((ViewHolderUserSetting) holder).email.setText(userList.get(position).getEmail());
+                }
             }
             if (userList.get(position).getNickName() != null){
                 ((ViewHolderUserSetting) holder).nickName.setText(userList.get(position).getNickName());

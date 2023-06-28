@@ -32,10 +32,15 @@ public class UserSettingModelImpl implements UserSettingModel {
     @Override
     public void getSettingList() {
         settingArrayList = new ArrayList<>();
-        settingArrayList.add(new Menu("编辑账号信息", R.drawable.ic_setting_expand));
-        settingArrayList.add(new Menu("修改密码", R.drawable.ic_setting_expand));
-        settingArrayList.add(new Menu("退出登录", R.drawable.ic_setting_expand));
 
+        if (MyApplication.getOnlineUser().getEmail().equals("Guest")){
+            settingArrayList.add(new Menu("注册", R.drawable.ic_setting_expand));
+            settingArrayList.add(new Menu("登录", R.drawable.ic_setting_expand));
+        }else {
+            settingArrayList.add(new Menu("编辑账号信息", R.drawable.ic_setting_expand));
+            settingArrayList.add(new Menu("修改密码", R.drawable.ic_setting_expand));
+            settingArrayList.add(new Menu("退出登录", R.drawable.ic_setting_expand));
+        }
         userArrayList = new ArrayList<>();
         userArrayList.add(new RegisterUser(MyApplication.getOnlineUser().getNickName(), MyApplication.getOnlineUser().getEmail()));
         presenter.showSettingListToView(settingArrayList, userArrayList);

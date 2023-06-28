@@ -20,7 +20,7 @@ public class FeasyDevice {
 
     public FeasyDevice(String address, String name){
         setUUID(address);
-        setCH("CH: " + name.substring(5,8));
+        setCH(name.substring(5,8));
         setDEVICE_ID(name.substring(9, 15));
         if (!MyApplication.getDeviceHashMap().isEmpty()){
             setNAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());

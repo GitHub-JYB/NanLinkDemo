@@ -13,13 +13,17 @@
         android:src="@drawable/ic_user"
         android:layout_height="match_parent"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_toEndOf="@+id/icon_user_setting"
+        android:orientation="vertical">
     <TextView
         android:id="@+id/nickName_user_setting"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:text="测试者"
-        android:layout_marginTop="15dp"
-        android:layout_toEndOf="@+id/icon_user_setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -28,11 +32,11 @@
         android:textColor="@color/login_hintText"
         android:textSize="12sp"
         android:text="1234567abcd@gamil.com"
-        android:layout_toEndOf="@+id/icon_user_setting"
         android:layout_below="@+id/nickName_user_setting"
         android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 </RelativeLayout>
 

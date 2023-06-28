@@ -5,6 +5,8 @@ import com.example.nanlinkdemo.ui.MyDialog;
 
 public interface LoginView {
 
+    void initForgetPassword();
+
     void setPresenter();
 
     void setCheckImage(int resId);

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 public interface ScanBleView {
     void StartScan();
 
+    void removeHandler();
+
     void setPresenter();
 
     void showBle(ArrayList<FeasyDevice> arrayList);
