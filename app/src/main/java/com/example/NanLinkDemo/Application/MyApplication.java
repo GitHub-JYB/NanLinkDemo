@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.NanLinkDemo.DB.bean.Device;
@@ -16,6 +17,7 @@ import com.example.NanLinkDemo.DB.bean.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 
 public class MyApplication extends Application {
@@ -145,6 +147,21 @@ public class MyApplication extends Application {
     }
     public static int dip2percentPx(float dip){
         return (int)(dip / 375 * widthPixels + 0.5f);
+    }
+
+    public static String byte2uuid(byte[] bytes){
+        if (bytes == null || bytes.length < 16){
+            return "";
+        }
+        StringBuffer buffer = new StringBuffer();
+        for (int i=0; i < 16; i++){
+            String s = String.format("%02x", bytes[i] & 0xFF);
+            buffer.append(s);
+            if (i == 3 || i == 5 || i == 7 || i == 9){
+                buffer.append("-");
+            }
+        }
+        return buffer.toString();
     }
 
 

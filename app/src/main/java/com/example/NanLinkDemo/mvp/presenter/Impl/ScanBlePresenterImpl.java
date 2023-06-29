@@ -1,10 +1,14 @@
 package com.example.NanLinkDemo.mvp.presenter.Impl;
 
 
+import android.Manifest;
 import android.bluetooth.le.ScanResult;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.view.View;
 
+
+import androidx.core.app.ActivityCompat;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.NanLinkDemo.Application.MyApplication;
@@ -13,9 +17,11 @@ import com.example.NanLinkDemo.bean.FeasyDevice;
 import com.example.NanLinkDemo.mvp.model.Impl.ScanBleModelImpl;
 import com.example.NanLinkDemo.mvp.presenter.ScanBlePresenter;
 import com.example.NanLinkDemo.mvp.view.ScanBleView;
+import com.example.NanLinkDemo.mvp.widget.ScanBleActivity;
 import com.example.NanLinkDemo.util.Constant;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ScanBlePresenterImpl implements ScanBlePresenter {

@@ -1,5 +1,21 @@
 package com.example.NanLinkDemo.mvp.model.Impl;
 
+import static android.content.Context.BLUETOOTH_SERVICE;
+
+
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+
+import androidx.core.app.ActivityCompat;
 
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.DataBase.MyDataBase;
@@ -8,6 +24,10 @@ import com.example.NanLinkDemo.DB.bean.Scene;
 import com.example.NanLinkDemo.bean.FeasyDevice;
 import com.example.NanLinkDemo.mvp.model.ScanBleModel;
 import com.example.NanLinkDemo.mvp.presenter.Impl.ScanBlePresenterImpl;
+import com.example.NanLinkDemo.mvp.widget.ScanBleActivity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;

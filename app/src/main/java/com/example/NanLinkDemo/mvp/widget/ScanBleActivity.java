@@ -36,8 +36,8 @@ import com.example.NanLinkDemo.mvp.presenter.Impl.ScanBlePresenterImpl;
 import com.example.NanLinkDemo.mvp.view.ScanBleView;
 import com.example.NanLinkDemo.util.Constant;
 import com.example.NanLinkDemo.util.SnackBarUtil;
-import com.example.nanlinkdemo.R;
-import com.example.nanlinkdemo.databinding.ActivityRecycleviewScanBinding;
+import com.example.NanLinkDemo.R;
+import com.example.NanLinkDemo.databinding.ActivityRecycleviewScanBinding;
 
 
 import java.util.ArrayList;
@@ -145,10 +145,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         private void gatt() {
         // 参数mac地址
         device = bluetoothAdapter.getRemoteDevice("");
-        handlerThread = new HandlerThread("test");
-        handlerThread.start();
 
-        handler = new Handler(handlerThread.getLooper());
 
         mBluetoothGattCallback = new mBluetoothGattCallback();
 
