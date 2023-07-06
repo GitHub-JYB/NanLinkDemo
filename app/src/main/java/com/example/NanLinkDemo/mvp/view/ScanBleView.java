@@ -1,23 +1,21 @@
 package com.example.NanLinkDemo.mvp.view;
 
-import com.example.NanLinkDemo.bean.FeasyDevice;
+import com.example.NanLinkDemo.bean.Device;
 
 import java.util.ArrayList;
 
 public interface ScanBleView {
-    void StartScan();
-
-    void removeHandler();
+    void startScan();
 
     void setPresenter();
 
-    void showBle(ArrayList<FeasyDevice> arrayList);
+    void showBle(ArrayList<Device> arrayList);
 
     void finish();
 
-    void updateAllSelectedBtn(ArrayList<FeasyDevice> arrayList);
+    void updateAllSelectedBtn(ArrayList<Device> arrayList);
 
-    void updateFinishBtn(ArrayList<FeasyDevice> arrayList);
+    void updateFinishBtn(ArrayList<Device> arrayList);
 
     void updateAllSelectedText(boolean allSelected);
 

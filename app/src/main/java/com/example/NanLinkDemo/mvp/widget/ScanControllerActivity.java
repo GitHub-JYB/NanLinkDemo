@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.NanLinkDemo.R;
-import com.example.NanLinkDemo.bean.FeasyDevice;
+import com.example.NanLinkDemo.bean.Device;
 import com.example.NanLinkDemo.databinding.ActivityRecycleviewScanBinding;
 import com.example.NanLinkDemo.mvp.adapter.ScanAdapter;
 import com.example.NanLinkDemo.mvp.presenter.Impl.ScanControllerPresenterImpl;
@@ -162,13 +162,13 @@ public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScan
     }
 
     @Override
-    public void showController(ArrayList<FeasyDevice> arrayList) {
+    public void showController(ArrayList<Device> arrayList) {
         updateFinishBtn(arrayList);
         adapter.setData(arrayList);
     }
 
     @Override
-    public void updateFinishBtn(ArrayList<FeasyDevice> arrayList) {
+    public void updateFinishBtn(ArrayList<Device> arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
             if (arrayList.get(i).isSelected()) {
                 binding.finish.setClickable(true);

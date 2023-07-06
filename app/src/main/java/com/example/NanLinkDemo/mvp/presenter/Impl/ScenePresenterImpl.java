@@ -604,7 +604,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
 
     public boolean checkHasData() {
-        return fixtureList != null && fixtureList.isEmpty() && fixtureGroupList != null && fixtureGroupList.isEmpty() ? false : true;
+        return fixtureList == null || !fixtureList.isEmpty() || fixtureGroupList == null || !fixtureGroupList.isEmpty();
     }
 
 }

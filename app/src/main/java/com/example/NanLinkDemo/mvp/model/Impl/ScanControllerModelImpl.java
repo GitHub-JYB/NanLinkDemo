@@ -3,7 +3,7 @@ package com.example.NanLinkDemo.mvp.model.Impl;
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.DataBase.MyDataBase;
 import com.example.NanLinkDemo.DB.bean.Controller;
-import com.example.NanLinkDemo.bean.FeasyDevice;
+import com.example.NanLinkDemo.bean.Device;
 import com.example.NanLinkDemo.mvp.model.ScanControllerModel;
 import com.example.NanLinkDemo.mvp.presenter.Impl.ScanControllerPresenterImpl;
 
@@ -20,7 +20,7 @@ public class ScanControllerModelImpl implements ScanControllerModel {
     }
 
     @Override
-    public void addController(FeasyDevice device) {
+    public void addController(Device device) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getControllerDao()
                 .insert(new Controller(MyApplication.getOnlineUser().getEmail(), device.getNAME(), device.getUUID(),device.getDEVICE_ID(), "蓝牙"))

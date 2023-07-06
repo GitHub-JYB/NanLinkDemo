@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.NanLinkDemo.R;
-import com.example.NanLinkDemo.bean.FeasyDevice;
+import com.example.NanLinkDemo.bean.Device;
 import com.example.NanLinkDemo.mvp.model.Impl.ScanControllerModelImpl;
 
 import com.example.NanLinkDemo.mvp.presenter.ScanControllerPresenter;
@@ -22,7 +22,7 @@ public class ScanControllerPresenterImpl implements ScanControllerPresenter {
 
 
     ArrayList<byte[]> uuidList = new ArrayList<>();
-    ArrayList<FeasyDevice> deviceList = new ArrayList<>();
+    ArrayList<Device> deviceList = new ArrayList<>();
 
     public ScanControllerPresenterImpl(ScanControllerView view) {
         this.view = view;
@@ -54,19 +54,19 @@ public class ScanControllerPresenterImpl implements ScanControllerPresenter {
                         }
                         if (Arrays.equals(Arrays.copyOfRange(uuid, 0, 6), Arrays.copyOfRange(uuidList.get(i), 0, 6))) {
                             uuidList.set(i, uuid);
-                            deviceList.set(i, new FeasyDevice(result.getDevice().getAddress(), uuid));
+                            deviceList.set(i, new Device(result.getDevice().getAddress(), uuid));
                             view.showController(deviceList);
                             break;
                         }
                         if (i == uuidList.size() - 1) {
                             uuidList.add(uuid);
-                            deviceList.add(new FeasyDevice(result.getDevice().getAddress(), uuid));
+                            deviceList.add(new Device(result.getDevice().getAddress(), uuid));
                             view.showController(deviceList);
                         }
                     }
                 } else {
                     uuidList.add(uuid);
-                    deviceList.add(new FeasyDevice(result.getDevice().getAddress(), uuid));
+                    deviceList.add(new Device(result.getDevice().getAddress(), uuid));
                     view.showController(deviceList);
                 }
             }
@@ -87,7 +87,7 @@ public class ScanControllerPresenterImpl implements ScanControllerPresenter {
                 break;
             case R.id.finish:
                 view.startLoading();
-                for (FeasyDevice device: deviceList) {
+                for (Device device: deviceList) {
                     if (device.isSelected()){
                         model.addController(device);
                     }

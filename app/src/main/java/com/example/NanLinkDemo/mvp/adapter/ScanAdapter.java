@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.NanLinkDemo.R;
-import com.example.NanLinkDemo.bean.FeasyDevice;
+import com.example.NanLinkDemo.bean.Device;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private OnClickListener onClickListener;
-    private ArrayList<FeasyDevice> fixtureList;
+    private ArrayList<Device> fixtureList;
 
 
     @NonNull
@@ -55,7 +55,7 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-    public void setData(ArrayList<FeasyDevice> arrayList) {
+    public void setData(ArrayList<Device> arrayList) {
         this.fixtureList = arrayList;
         notifyDataSetChanged();
     }

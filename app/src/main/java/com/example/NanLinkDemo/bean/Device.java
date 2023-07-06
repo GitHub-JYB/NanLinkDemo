@@ -3,7 +3,7 @@ package com.example.NanLinkDemo.bean;
 
 import com.example.NanLinkDemo.Application.MyApplication;
 
-public class FeasyDevice {
+public class Device {
 
 
 
@@ -14,22 +14,22 @@ public class FeasyDevice {
     private int TYPE = 0;
     private String manufacturer_ID = "78";
 
-    private String manufacturer = "feasy";
+    private String manufacturer = "FEASY";
 
     private boolean selected = false;
 
-    public FeasyDevice(String address, String name){
+    public Device(String address, String name){
         setUUID(address);
         setCH(name.substring(5,8));
         setDEVICE_ID(name.substring(9, 15));
         if (!MyApplication.getDeviceHashMap().isEmpty()){
             setNAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
         }
-        setManufacturer("man");
+        setManufacturer("USER");
     }
 
 
-    public FeasyDevice(String address, byte[] uuid){
+    public Device(String address, byte[] uuid){
 //        StringBuilder stringBuilder = new StringBuilder();
 //        for (int i = 0; i < 6; i++){
 //            stringBuilder.append(String.format("%02X", uuid[i]));

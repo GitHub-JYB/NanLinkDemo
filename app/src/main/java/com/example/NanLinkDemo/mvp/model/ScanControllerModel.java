@@ -1,7 +1,7 @@
 package com.example.NanLinkDemo.mvp.model;
 
-import com.example.NanLinkDemo.bean.FeasyDevice;
+import com.example.NanLinkDemo.bean.Device;
 
 public interface ScanControllerModel {
-    void addController(FeasyDevice device);
+    void addController(Device device);
 }
