@@ -69,6 +69,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 view.finish();
                 break;
             case R.id.toolbar_right_btn:
+                deviceList.clear();
                 view.startScan();
         }
     }

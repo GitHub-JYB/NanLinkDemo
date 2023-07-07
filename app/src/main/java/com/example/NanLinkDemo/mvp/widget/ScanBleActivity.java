@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.NanLinkDemo.bean.Device;
+import com.example.NanLinkDemo.ble.BleManager;
 import com.example.NanLinkDemo.mvp.adapter.ScanAdapter;
 import com.example.NanLinkDemo.mvp.presenter.Impl.ScanBlePresenterImpl;
 import com.example.NanLinkDemo.mvp.view.ScanBleView;
@@ -35,12 +37,8 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
 
 
     private ScanAdapter adapter;
-    private BluetoothAdapter bluetoothAdapter;
     private ScanBlePresenterImpl presenter;
-    private BluetoothLeScanner scanner;
     private ScanCallback scanCallback;
-    private boolean isScanning = false;
-    private ScanSettings scanSettings;
     private Handler handler;
     private Runnable runnable;
 
@@ -49,37 +47,13 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         super.onCreate(savedInstanceState);
         setPresenter();
         checkPermission();
-        initBle();
         initToolbar();
         initRecyclerView();
         initBtn();
-        if (!checkPermission()) {
-            agreePermission();
-        }
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startScan();
+        initBle();
     }
 
     private void initBle() {
-        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        bluetoothAdapter = bluetoothManager.getAdapter();
-        scanner = bluetoothAdapter.getBluetoothLeScanner();
-        ScanSettings.Builder builder = new ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            builder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES);
-            builder.setMatchMode(ScanSettings.MATCH_MODE_STICKY);
-        }
-        if (bluetoothAdapter.isOffloadedScanBatchingSupported()) {
-            builder.setReportDelay(0L);
-        }
-        scanSettings = builder.build();
-
         scanCallback = new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
@@ -87,33 +61,23 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
                 presenter.handleResult(result);
             }
         };
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                checkPermission();
-                isScanning = false;
+        BleManager.getScanner(getBaseContext()).isScanning().observe(this, isScanning -> {
+            updateRightBtnClickable(!isScanning);
+            if (isScanning){
+                startScanAnimation();
+            }else {
                 stopScanAnimation();
-                updateRightBtnClickable(true);
-                scanner.stopScan(scanCallback);
             }
-        };
-        startScan();
+        });
+        updateRightBtnClickable(false);
+        startScanAnimation();
+//        startScan();
     }
 
     @Override
     public void startScan() {
-        if (isScanning) {
-            return;
-        }
-        checkPermission();
-        isScanning = true;
 
-        scanner.startScan(null, scanSettings, scanCallback);
-        updateRightBtnClickable(false);
-        startScanAnimation();
-        handler.postDelayed(runnable, 20000);
-
+        BleManager.getScanner(getBaseContext()).startScan(scanCallback);
     }
 
 

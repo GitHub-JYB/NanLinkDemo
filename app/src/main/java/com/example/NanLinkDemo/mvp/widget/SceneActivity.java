@@ -49,9 +49,7 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         super.onStart();
         updateRecycleView();
         setTitle(MyApplication.getScene().getName());
-        if (!checkPermission()){
-            agreePermission();
-        }
+        checkPermission();
     }
 
     @Override

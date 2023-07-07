@@ -58,17 +58,13 @@ public class AddNewFixtureActivity extends BaseActivity<ActivityRecycleviewScanB
         adapter.setOnClickListener(new AddNewFixtureAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
-                if (!checkPermission()){
-                    agreePermission();
-                    return;
+                if (checkPermission()){
+                    if (checkBle()){
+                        if (checkLocation()){
+                            presenter.onClickSwitch(position);
+                        }
+                    }
                 }
-                if (!checkBle()){
-                    return;
-                }
-                if (!checkLocation()){
-                    return;
-                }
-                presenter.onClickSwitch(position);
             }
         });
     }

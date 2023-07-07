@@ -7,6 +7,7 @@ public class Constant {
     public static final int USER_AGREEMENT = 2;
     public static final int ABOUT = 3;
 
+    public static final int PERMISSION_REQUEST_CODE = 1;
     public static final String ACTIVITY_URL_WebView = "/widget/WebViewActivity";
     public static final String ACTIVITY_URL_Main = "/widget/MainActivity";
     public static final String ACTIVITY_URL_Login = "/widget/LoginActivity";

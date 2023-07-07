@@ -49,9 +49,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     protected void onStart() {
         super.onStart();
         updateRecycleView();
-        if (!checkPermission()){
-            agreePermission();
-        }
+        checkPermission();
     }
 
     @Override
@@ -78,19 +76,17 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
         sceneAdapter.setOnClickListener(new SceneAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
-                if (!checkPermission()){
-                    agreePermission();
-                    return;
+                if (checkPermission()){
+                    if (checkBle()){
+                        if (checkLocation()){
+                            presenter.sceneListSwitch(position);
+                        }else {
+                            SnackBarUtil.show(binding.recycleView,"NANLINK需要使用位置信息连接灯具，请打开位置信息");
+                        }
+                    }else {
+                        SnackBarUtil.show(binding.recycleView,"NANLINK需要使用蓝牙连接灯具，请打开蓝牙");
+                    }
                 }
-                if (!checkBle()){
-                    SnackBarUtil.show(binding.recycleView,"NANLINK需要使用蓝牙连接灯具，请打开蓝牙");
-                    return;
-                }
-                if (!checkLocation()){
-                    SnackBarUtil.show(binding.recycleView,"NANLINK需要使用位置信息连接灯具，请打开位置信息");
-                    return;
-                }
-                presenter.sceneListSwitch(position);
             }
         });
     }

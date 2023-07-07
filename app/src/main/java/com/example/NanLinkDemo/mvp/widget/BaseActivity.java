@@ -3,6 +3,8 @@ package com.example.NanLinkDemo.mvp.widget;
 import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 
 
+import static com.example.NanLinkDemo.util.Constant.PERMISSION_REQUEST_CODE;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -42,7 +44,6 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     private SettingDialog settingDialog;
 
     private ArrayList<String> permissionList;
-    private static final int PERMISSION_REQUEST_CODE = 1;
 
 
     @Override
@@ -147,10 +148,6 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         settingDialog.dismiss();
     }
 
-    public void agreePermission() {
-        ActivityCompat.requestPermissions(this, permissionList.toArray(new String[]{}), PERMISSION_REQUEST_CODE);
-    }
-
     public boolean checkPermission() {
         permissionList = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -181,7 +178,12 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
             }
         }
-        return permissionList.isEmpty();
+        if (permissionList.isEmpty()){
+            return true;
+        }else {
+            ActivityCompat.requestPermissions(this, permissionList.toArray(new String[]{}), PERMISSION_REQUEST_CODE);
+            return false;
+        }
     }
 
 
