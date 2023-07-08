@@ -3,27 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.NanLinkDemo">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
     <uses-feature
         android:name="android.hardware.bluetooth_le"
-        android:required="true"/>
+        android:required="true" />
 
-
-
-
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".Application.MyApplication"
@@ -37,6 +33,11 @@
         android:theme="@style/Theme.NanLinkDemo"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <service
+            android:name=".service.BleScanService"
+            android:enabled="true"
+            android:exported="false"/>
+
         <activity
             android:name=".mvp.widget.SplashActivity"
             android:exported="true">
@@ -64,7 +65,7 @@
         <activity android:name=".mvp.widget.ManageFixtureActivity" />
         <activity android:name=".mvp.widget.ControllerActivity" />
         <activity android:name=".mvp.widget.ScanControllerActivity" />
-        <activity android:name=".mvp.widget.Add24GFixtureActivity"/>
+        <activity android:name=".mvp.widget.Add24GFixtureActivity" />
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ import com.example.NanLinkDemo.ui.MyDialog;
 import com.example.NanLinkDemo.util.Constant;
 import com.example.NanLinkDemo.util.DateUtil;
 import com.example.NanLinkDemo.util.SnackBarUtil;
+import com.example.NanLinkDemo.util.TransformUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -395,7 +396,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
                         break;
                     case 4:
-                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureMenuList.get(position), "是否确定要删除该设备?", fixtureList.get(fixturePosition).getName() + "\nCH: " + fixtureList.get(fixturePosition).getCH(), "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureMenuList.get(position), "是否确定要删除该设备?", fixtureList.get(fixturePosition).getName() + "\nCH: " + TransformUtil.updateCH(fixtureList.get(fixturePosition).getCH()), "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 model.deleteFixture(fixtureList.get(fixturePosition));
@@ -466,7 +467,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
                         break;
                     case 4:
-                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureMenuList.get(position), "是否确定要删除该设备?", fixture.getName() + "\nCH: " + fixture.getCH(), "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
+                        view.showMyDialog(MyDialog.Read_TwoBtn_WarningTitle_WarningTwoBtn, fixtureMenuList.get(position), "是否确定要删除该设备?", fixture.getName() + "\nCH: " + TransformUtil.updateCH(fixture.getCH()), "取消", null, "删除", new MyDialog.PositiveOnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 for (FixtureGroup fixtureGroup : fixtureGroupList){
@@ -493,11 +494,11 @@ public class ScenePresenterImpl implements ScenePresenter {
     }
 
     private void changeCH(int position, ArrayList<String> fixtureMenuList, Fixture fixture) {
-        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_CH, fixtureMenuList.get(position), fixture.getCH(), "请输入一个介于1和512之间的数值", "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
+        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_CH, fixtureMenuList.get(position), TransformUtil.updateCH(fixture.getCH()), "请输入一个介于1和512之间的数值", "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
             @Override
             public void onClick(View v) {
                 for (Fixture fixture : fixtureList) {
-                    if (Integer.parseInt(fixture.getCH()) == (Integer.parseInt(view.getInputTextMyDialog()))) {
+                    if (fixture.getCH() == (Integer.parseInt(view.getInputTextMyDialog()))) {
                         view.dismissMyDialog();
                         view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, fixtureMenuList.get(position), "列表中有另一台设备正在使用该\n地址码，请尝试其它地址码。", "取消", null, "重试", new MyDialog.PositiveOnClickListener() {
                             @Override
@@ -512,7 +513,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                 }
                 for (int i = 0; i < fixtureList.size(); i++){
                     if (fixture.getId() == fixtureList.get(i).getId()){
-                        fixture.setCH(Integer.parseInt(view.getInputTextMyDialog()) < 10 ? "00" + Integer.parseInt(view.getInputTextMyDialog()) : Integer.parseInt(view.getInputTextMyDialog()) < 100 ? "0" + Integer.parseInt(view.getInputTextMyDialog()) : String.valueOf(Integer.parseInt(view.getInputTextMyDialog())));
+                        fixture.setCH(Integer.parseInt(view.getInputTextMyDialog()));
                         fixtureList.set(i, fixture);
                     }
                 }
@@ -525,11 +526,11 @@ public class ScenePresenterImpl implements ScenePresenter {
     }
 
     private void changeCH(int position, ArrayList<String> fixtureMenuList, int fixturePosition) {
-        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_CH, fixtureMenuList.get(position), String.valueOf(fixtureList.get(fixturePosition).getCH()), "请输入一个介于1和512之间的数值", "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
+        view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_CH, fixtureMenuList.get(position), TransformUtil.updateCH(fixtureList.get(fixturePosition).getCH()), "请输入一个介于1和512之间的数值", "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
             @Override
             public void onClick(View v) {
                 for (Fixture fixture : fixtureList) {
-                    if (Integer.parseInt(fixture.getCH()) == (Integer.parseInt(view.getInputTextMyDialog()))) {
+                    if (fixture.getCH() == (Integer.parseInt(view.getInputTextMyDialog()))) {
                         view.dismissMyDialog();
                         view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, fixtureMenuList.get(position), "列表中有另一台设备正在使用该\n地址码，请尝试其它地址码。", "取消", null, "重试", new MyDialog.PositiveOnClickListener() {
                             @Override
@@ -543,7 +544,7 @@ public class ScenePresenterImpl implements ScenePresenter {
 
                 }
                 Fixture fixture = fixtureList.get(fixturePosition);
-                fixture.setCH(Integer.parseInt(view.getInputTextMyDialog()) < 10 ? "00" + Integer.parseInt(view.getInputTextMyDialog()) : Integer.parseInt(view.getInputTextMyDialog()) < 100 ? "0" + Integer.parseInt(view.getInputTextMyDialog()) : String.valueOf(Integer.parseInt(view.getInputTextMyDialog())));
+                fixture.setCH(Integer.parseInt(view.getInputTextMyDialog()));
                 fixtureList.set(fixturePosition, fixture);
                 model.updateFixture(fixture);
                 MyApplication.setFixtures(fixtureList);

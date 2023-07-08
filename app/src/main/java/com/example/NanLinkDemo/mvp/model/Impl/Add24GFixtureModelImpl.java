@@ -29,7 +29,7 @@ public class Add24GFixtureModelImpl implements Add24GFixtureModel {
     @Override
     public void getListData() {
         ArrayList<Add24GFixture> add24GFixtures = new ArrayList<>();
-        add24GFixtures.add(new Add24GFixture("", ""));
+        add24GFixtures.add(new Add24GFixture(-1, ""));
         presenter.setDataToView(add24GFixtures);
     }
 

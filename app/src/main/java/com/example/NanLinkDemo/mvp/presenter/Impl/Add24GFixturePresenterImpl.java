@@ -79,9 +79,7 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
                 }
         }
         for (Add24GFixture add24GFixture : add24GFixtures){
-            String CH = Integer.parseInt(add24GFixture.getCH()) < 10 ? "00" + add24GFixture.getCH() : Integer.parseInt(add24GFixture.getCH()) < 100 ? CH = "0" + add24GFixture.getCH() : add24GFixture.getCH();
-
-            Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), add24GFixture.getName(), CH, deviceId, "2.4G", "");
+            Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), add24GFixture.getName(), add24GFixture.getCH(), deviceId, "2.4G", "");
             MyApplication.getFixtures().add(fixture);
             model.addFixture(fixture);
 

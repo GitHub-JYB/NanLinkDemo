@@ -3,9 +3,9 @@ package com.example.NanLinkDemo.bean;
 public class Add24GFixture {
 
     private String name;
-    private String CH;
+    private int CH;
 
-    public Add24GFixture(String CH, String name){
+    public Add24GFixture(int CH, String name){
         this.name = name;
         this.CH = CH;
     }
@@ -19,11 +19,11 @@ public class Add24GFixture {
         this.name = name;
     }
 
-    public String getCH() {
+    public int getCH() {
         return CH;
     }
 
-    public void setCH(String CH) {
+    public void setCH(int CH) {
         this.CH = CH;
     }
 }

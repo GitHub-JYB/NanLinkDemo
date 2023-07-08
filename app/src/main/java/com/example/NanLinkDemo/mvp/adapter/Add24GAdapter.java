@@ -22,6 +22,7 @@ import com.example.NanLinkDemo.databinding.VpItemAdd24gBinding;
 import com.example.NanLinkDemo.databinding.VpItemAdd24gBtnBinding;
 import com.example.NanLinkDemo.databinding.VpItemAdd24gTypeBinding;
 import com.example.NanLinkDemo.ui.BoxView;
+import com.example.NanLinkDemo.util.TransformUtil;
 
 import java.util.ArrayList;
 
@@ -59,7 +60,7 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderAdd24g) {
             ((ViewHolderAdd24g) holder).name.setText(fixtureArrayList.get(position - 1).getName());
-            ((ViewHolderAdd24g) holder).CH.setText(fixtureArrayList.get(position - 1).getCH());
+            ((ViewHolderAdd24g) holder).CH.setText(TransformUtil.updateCH(fixtureArrayList.get(position - 1).getCH()));
             ((ViewHolderAdd24g) holder).index.setText("#" + (position));
             ((ViewHolderAdd24g) holder).index.setFocusable(true);
             ((ViewHolderAdd24g) holder).index.setFocusableInTouchMode(true);
@@ -176,7 +177,7 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View v) {
                     closeSoftInput(v);
-                    fixtureArrayList.add(new Add24GFixture("", ""));
+                    fixtureArrayList.add(new Add24GFixture(-1, ""));
                     notifyDataSetChanged();
                     
                 }
@@ -234,16 +235,20 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    String CH = s.toString().trim();
 
-                    if (CH.length() > 0) {
-                        if (Integer.parseInt(CH) <= 0 || Integer.parseInt(CH) > 512) {
+                    int CH;
+
+                    if (s.toString().trim().length() > 0) {
+                        CH = Integer.parseInt(s.toString().trim());
+                        if (CH > 512) {
                             if (outRangeListener != null) {
                                 outRangeListener.onOutRange();
                                 binding.CH.setText("");
                             }
                         }
 
+                    }else {
+                        CH = -1;
                     }
 
                     Add24GFixture fixture = fixtureArrayList.get(getAdapterPosition() - 1);
@@ -284,7 +289,7 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (checkCompleteListener != null) {
             if (!fixtureArrayList.isEmpty()) {
                 for (Add24GFixture fixture : fixtureArrayList) {
-                    if (fixture.getCH().isEmpty() || fixture.getName().isEmpty()) {
+                    if (fixture.getCH() == -1 || fixture.getName().isEmpty()) {
                         checkCompleteListener.CheckComplete(false);
                         return;
                     }

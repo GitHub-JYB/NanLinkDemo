@@ -10,7 +10,7 @@ public class Device {
     private String UUID;
     private String DEVICE_ID;
     private String NAME = "unknow";
-    private String CH;
+    private int CH;
     private int TYPE = 0;
     private String manufacturer_ID = "78";
 
@@ -20,7 +20,7 @@ public class Device {
 
     public Device(String address, String name){
         setUUID(address);
-        setCH(name.substring(5,8));
+        setCH(Integer.parseInt(name.substring(5,8)));
         setDEVICE_ID(name.substring(9, 15));
         if (!MyApplication.getDeviceHashMap().isEmpty()){
             setNAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
@@ -42,15 +42,7 @@ public class Device {
         }else {
             CH = (uuid[6] + 1) * 256 + uuid[7];
         }
-        if (CH == 0){
-            setCH("未设置");
-        }else if (CH < 10){
-            setCH("00" + CH);
-        }else if (CH < 100){
-            setCH("0" + CH);
-        }else {
-            setCH(String.valueOf(CH));
-        }
+        setCH(CH);
 //        setCH(Integer.parseInt(stringBuilder.toString()));
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("%02X", uuid[10]));
@@ -113,11 +105,11 @@ public class Device {
         this.manufacturer_ID = manufacturer_ID;
     }
 
-    public String getCH() {
+    public int getCH() {
         return CH;
     }
 
-    public void setCH(String CH) {
+    public void setCH(int CH) {
         this.CH = CH;
     }
 

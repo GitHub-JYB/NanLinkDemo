@@ -15,6 +15,7 @@ import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
 import com.example.NanLinkDemo.databinding.VpItemSceneManageBinding;
+import com.example.NanLinkDemo.util.TransformUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class ManageFixtureAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((ViewHolderManageFixtureList) holder).name.setText(fixtureList.get(position).getName());
-        ((ViewHolderManageFixtureList) holder).number.setText("CH: " + fixtureList.get(position).getCH());
+        ((ViewHolderManageFixtureList) holder).number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
         ((ViewHolderManageFixtureList) holder).connectType.setText(fixtureList.get(position).getConnectType());
         if (fixtureList.get(position).getFixtureGroupName().isEmpty()){
             ((ViewHolderManageFixtureList) holder).menu.setImageResource(R.drawable.ic_unselected);

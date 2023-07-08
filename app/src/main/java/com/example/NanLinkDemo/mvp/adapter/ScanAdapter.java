@@ -1,6 +1,8 @@
 package com.example.NanLinkDemo.mvp.adapter;
 
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.NanLinkDemo.Application.MyApplication;
+import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.Device;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
+import com.example.NanLinkDemo.util.TransformUtil;
 
 import java.util.ArrayList;
 
@@ -35,7 +40,16 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof ViewHolderItemFixture){
                 ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
                 if (fixtureList.get(position).getTYPE() == 0){
-                    ((ViewHolderItemFixture) holder).number.setText("CH: " + fixtureList.get(position).getCH());
+                    ((ViewHolderItemFixture) holder).number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
+                    ((ViewHolderItemFixture) holder).number.setTextColor(Color.parseColor("#8E8E8E"));
+                    if (fixtureList.get(position).getCH() == 0){
+                        ((ViewHolderItemFixture) holder).number.setTextColor(Color.parseColor("#FFFF33"));
+                    }
+                    for (Fixture fixture : MyApplication.getFixtures()){
+                        if (fixtureList.get(position).getCH() == fixture.getCH()){
+                            ((ViewHolderItemFixture) holder).number.setTextColor(Color.parseColor("#FFFF33"));
+                        }
+                    }
                 }else {
                     ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getUUID());
                 }

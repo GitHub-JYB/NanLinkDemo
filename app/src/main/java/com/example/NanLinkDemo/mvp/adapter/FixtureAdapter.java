@@ -22,6 +22,7 @@ import com.example.NanLinkDemo.databinding.FixtureGroupBinding;
 import com.example.NanLinkDemo.databinding.VpDecorationFixtureListBinding;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
 import com.example.NanLinkDemo.ui.UnlessLastItemDecoration;
+import com.example.NanLinkDemo.util.TransformUtil;
 
 
 import java.util.ArrayList;
@@ -72,11 +73,11 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (holder instanceof ViewHolderFixtureList){
             if (fixtureGroupList.isEmpty()){
                 ((ViewHolderFixtureList) holder).name.setText(fixtureListNoGroup.get(position - 1).getName());
-                ((ViewHolderFixtureList) holder).number.setText("CH: " + fixtureListNoGroup.get(position - 1).getCH());
+                ((ViewHolderFixtureList) holder).number.setText("CH: " + TransformUtil.updateCH(fixtureListNoGroup.get(position - 1).getCH()));
                 ((ViewHolderFixtureList) holder).connectType.setText(fixtureListNoGroup.get(position - 1).getConnectType());
             }else {
                 ((ViewHolderFixtureList) holder).name.setText(fixtureListNoGroup.get(position - fixtureGroupList.size() - 2).getName());
-                ((ViewHolderFixtureList) holder).number.setText("CH: " + fixtureListNoGroup.get(position - fixtureGroupList.size() - 2).getCH());
+                ((ViewHolderFixtureList) holder).number.setText("CH: " + TransformUtil.updateCH(fixtureListNoGroup.get(position - fixtureGroupList.size() - 2).getCH()));
                 ((ViewHolderFixtureList) holder).connectType.setText(fixtureListNoGroup.get(position - fixtureGroupList.size() - 2).getConnectType());
             }
         }else if (holder instanceof ViewHolderFixtureGroupList){

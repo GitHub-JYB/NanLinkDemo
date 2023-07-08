@@ -1,15 +1,11 @@
 package com.example.NanLinkDemo.mvp.widget;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.os.Build;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -20,10 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.NanLinkDemo.bean.Device;
-import com.example.NanLinkDemo.ble.BleManager;
 import com.example.NanLinkDemo.mvp.adapter.ScanAdapter;
 import com.example.NanLinkDemo.mvp.presenter.Impl.ScanBlePresenterImpl;
+import com.example.NanLinkDemo.mvp.presenter.ScanBlePresenter;
 import com.example.NanLinkDemo.mvp.view.ScanBleView;
+import com.example.NanLinkDemo.service.BleScanService;
 import com.example.NanLinkDemo.util.Constant;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.ActivityRecycleviewScanBinding;
@@ -38,9 +35,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
 
     private ScanAdapter adapter;
     private ScanBlePresenterImpl presenter;
-    private ScanCallback scanCallback;
-    private Handler handler;
-    private Runnable runnable;
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,30 +49,33 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     }
 
     private void initBle() {
-        scanCallback = new ScanCallback() {
+        broadcastReceiver  = new BroadcastReceiver() {
             @Override
-            public void onScanResult(int callbackType, ScanResult result) {
-                super.onScanResult(callbackType, result);
-                presenter.handleResult(result);
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals(BleScanService.scanStateAction)) {
+                    boolean isScanning = intent.getBooleanExtra("isScanning", false);
+                    updateRightBtn(!isScanning);
+                } else if (action.equals(BleScanService.resultAction)) {
+                    Bundle bundle = intent.getExtras();
+                    ScanResult result = (ScanResult) bundle.get("result");
+                    presenter.handleResult(result);
+                }
             }
         };
-        BleManager.getScanner(getBaseContext()).isScanning().observe(this, isScanning -> {
-            updateRightBtnClickable(!isScanning);
-            if (isScanning){
-                startScanAnimation();
-            }else {
-                stopScanAnimation();
-            }
-        });
-        updateRightBtnClickable(false);
-        startScanAnimation();
-//        startScan();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BleScanService.scanStateAction);
+        intentFilter.addAction(BleScanService.resultAction);
+        registerReceiver(broadcastReceiver, intentFilter);
+        startScan();
     }
+
+
 
     @Override
     public void startScan() {
-
-        BleManager.getScanner(getBaseContext()).startScan(scanCallback);
+        Intent intent = new Intent(this, BleScanService.class);
+        startService(intent);
     }
 
 
@@ -190,8 +188,18 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     }
 
     @Override
-    public void updateRightBtnClickable(boolean able) {
+    public void updateRightBtn(boolean able) {
         binding.toolbar.setRightBtnClickable(able);
+        if (able){
+            stopScanAnimation();
+        }else {
+            startScanAnimation();
+        }
     }
 
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(broadcastReceiver);
+        super.onDestroy();
+    }
 }
