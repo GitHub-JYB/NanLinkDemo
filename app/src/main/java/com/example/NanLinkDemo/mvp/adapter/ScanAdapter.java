@@ -44,6 +44,7 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((ViewHolderItemFixture) holder).number.setTextColor(Color.parseColor("#8E8E8E"));
                     if (fixtureList.get(position).getCH() == 0){
                         ((ViewHolderItemFixture) holder).number.setTextColor(Color.parseColor("#FFFF33"));
+                        ((ViewHolderItemFixture) holder).number.setText("CH: 未设置");
                     }
                     for (Fixture fixture : MyApplication.getFixtures()){
                         if (fixtureList.get(position).getCH() == fixture.getCH()){

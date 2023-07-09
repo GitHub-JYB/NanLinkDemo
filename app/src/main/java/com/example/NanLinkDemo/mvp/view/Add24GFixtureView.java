@@ -17,6 +17,14 @@ public interface Add24GFixtureView {
 
     void showMyDialog(int type, String title, String message, String neutralText, MyDialog.NeutralOnClickListener neutralListener);
 
+    void showMyDialog(int type, String title, String message, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
+
+    void showMyDialog(int type, String title, String bigSizeMessage, String smallSizeMessage, String negativeText, MyDialog.NegativeOnClickListener negativeListener, String positiveText, MyDialog.PositiveOnClickListener positiveListener);
+
+    void dismissMyDialog();
+
+    String getInputTextMyDialog();
+
     void finish();
 
     ArrayList<Add24GFixture> getFixtureArrayList();

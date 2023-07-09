@@ -386,11 +386,37 @@ public class MyDialog extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.length() > 0) {
-                    if (Integer.parseInt(editable.toString()) < 1 || Integer.parseInt(editable.toString()) > 512) {
-                        new MyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "重试", null).show(getFragmentManager(), "MyDialog");
-                        binding.myDialogCHInputText.setText("");
-                    }
+                if (editable.toString().trim().isEmpty()){
+                    return;
+                }
+                int CH = Integer.parseInt(editable.toString().trim());
+                if (CH > 512) {
+                    new MyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "重试", null).show(getFragmentManager(), "MyDialog");
+                    binding.myDialogCHInputText.setText("");
+                }
+            }
+        });
+
+        binding.myDialogAddFixtureCHInputText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()){
+                    return;
+                }
+                int CH = Integer.parseInt(editable.toString().trim());
+                if (CH > 512) {
+                    new MyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "重试", null).show(getFragmentManager(), "MyDialog");
+                    binding.myDialogAddFixtureCHInputText.setText("");
                 }
             }
         });
@@ -628,10 +654,15 @@ public class MyDialog extends DialogFragment {
 
     // 获取输入框文本
     public String getInputText() {
-        return binding.myDialogInputText.getText().toString().trim();
-    }
-
-    public String getInputTextRemark() {
-        return binding.myDialogInputTextRemark.getText().toString().trim();
+        switch (type) {
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark:
+                return binding.myDialogInputTextRemark.getText().toString().trim();
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_CH:
+                return binding.myDialogCHInputText.getText().toString().trim();
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH:
+                return binding.myDialogAddFixtureCHInputText.getText().toString().trim();
+            default:
+                return binding.myDialogInputText.getText().toString().trim();
+        }
     }
 }

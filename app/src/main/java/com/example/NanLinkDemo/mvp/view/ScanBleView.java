@@ -36,4 +36,6 @@ public interface ScanBleView {
 
     void dismissMyDialog();
 
+    String getInputTextMyDialog();
+
 }

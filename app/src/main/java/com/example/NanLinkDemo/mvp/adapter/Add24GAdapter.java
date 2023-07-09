@@ -177,9 +177,9 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View v) {
                     closeSoftInput(v);
-                    fixtureArrayList.add(new Add24GFixture(-1, ""));
+                    fixtureArrayList.add(new Add24GFixture(0, ""));
                     notifyDataSetChanged();
-                    
+
                 }
             });
 
@@ -235,22 +235,16 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
-                    int CH;
-
-                    if (s.toString().trim().length() > 0) {
-                        CH = Integer.parseInt(s.toString().trim());
-                        if (CH > 512) {
-                            if (outRangeListener != null) {
-                                outRangeListener.onOutRange();
-                                binding.CH.setText("");
-                            }
-                        }
-
-                    }else {
-                        CH = -1;
+                    if (s.toString().trim().isEmpty()){
+                        return;
                     }
-
+                    int CH = Integer.parseInt(s.toString().trim());
+                    if (CH > 512) {
+                        if (outRangeListener != null) {
+                            outRangeListener.onOutRange();
+                            binding.CH.setText("");
+                        }
+                    }
                     Add24GFixture fixture = fixtureArrayList.get(getAdapterPosition() - 1);
                     fixture.setCH(CH);
                     fixtureArrayList.set(getAdapterPosition() - 1, fixture);
@@ -303,15 +297,15 @@ public class Add24GAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return fixtureArrayList;
     }
 
-    public int getCheckIndex_type(){
+    public int getCheckIndex_type() {
         return checkIndex_type;
     }
 
-    public int getCheckIndex_cctRange(){
+    public int getCheckIndex_cctRange() {
         return checkIndex_cctRange;
     }
 
-    public int getCheckIndex_GM(){
+    public int getCheckIndex_GM() {
         return checkIndex_GM;
     }
 
