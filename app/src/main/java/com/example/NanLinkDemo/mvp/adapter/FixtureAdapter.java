@@ -22,6 +22,7 @@ import com.example.NanLinkDemo.databinding.FixtureGroupBinding;
 import com.example.NanLinkDemo.databinding.VpDecorationFixtureListBinding;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
 import com.example.NanLinkDemo.ui.UnlessLastItemDecoration;
+import com.example.NanLinkDemo.util.SortUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
 
 
@@ -153,7 +154,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void setData(List<FixtureGroup> fixtureGroupList, List<Fixture> fixtureList) {
-        this.fixtureList = fixtureList;
+        this.fixtureList = SortUtil.sortFixtureList((ArrayList<Fixture>) fixtureList, MyApplication.getScene().getSortPosition());
         this.fixtureGroupList = fixtureGroupList;
         this.fixtureListNoGroup = new ArrayList<>();
         for (Fixture fixture : fixtureList){

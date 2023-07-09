@@ -295,6 +295,7 @@ public class SceneGroupPresenterImpl implements SceneGroupPresenter {
                     model.updateUser(MyApplication.getOnlineUser());
                     view.showMenu(sortArrayList);
                 }
+                view.updateRecycleView();
                 break;
         }
     }

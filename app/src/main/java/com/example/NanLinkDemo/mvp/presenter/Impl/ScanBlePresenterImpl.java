@@ -19,6 +19,7 @@ import com.example.NanLinkDemo.mvp.presenter.ScanBlePresenter;
 import com.example.NanLinkDemo.mvp.view.ScanBleView;
 import com.example.NanLinkDemo.ui.MyDialog;
 import com.example.NanLinkDemo.util.Constant;
+import com.example.NanLinkDemo.util.DateUtil;
 import com.example.NanLinkDemo.util.SnackBarUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
 
@@ -243,6 +244,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
     @Override
     public void updateScene() {
         MyApplication.getScene().setFixtureNum(MyApplication.getScene().getFixtureNum() + 1);
+        MyApplication.getScene().setModifiedDate(DateUtil.getTime());
         model.updateScene(MyApplication.getScene());
     }
 

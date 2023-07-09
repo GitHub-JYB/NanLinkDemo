@@ -17,6 +17,7 @@ import com.example.NanLinkDemo.ui.MyDialog;
 import com.example.NanLinkDemo.util.Constant;
 import com.example.NanLinkDemo.util.DateUtil;
 import com.example.NanLinkDemo.util.SnackBarUtil;
+import com.example.NanLinkDemo.util.SortUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
 
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ public class ScenePresenterImpl implements ScenePresenter {
                     model.updateScene(MyApplication.getScene());
                     view.showMenu(sortArrayList);
                 }
+                view.setData(fixtureGroupList, fixtureList);
                 break;
         }
     }

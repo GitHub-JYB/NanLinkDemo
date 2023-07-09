@@ -10,12 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.bean.Scene;
 import com.example.NanLinkDemo.DB.bean.SceneGroup;
 import com.example.NanLinkDemo.databinding.VpDecorationSceneListBinding;
 import com.example.NanLinkDemo.databinding.VpSceneScenelistBinding;
 import com.example.NanLinkDemo.databinding.VpScenegroupScenelistBinding;
 import com.example.NanLinkDemo.util.DateUtil;
+import com.example.NanLinkDemo.util.SortUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,8 +106,8 @@ public class SceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void setData(List<Scene> sceneList, List<SceneGroup> sceneGroupList) {
-        this.sceneList = sceneList;
-        this.sceneGroupList = sceneGroupList;
+        this.sceneList = SortUtil.sortSceneList((ArrayList<Scene>) sceneList, MyApplication.getOnlineUser().getSortPosition());
+        this.sceneGroupList = SortUtil.sortSceneGroupList((ArrayList<SceneGroup>) sceneGroupList, MyApplication.getOnlineUser().getSortPosition());
         notifyDataSetChanged();
     }
 

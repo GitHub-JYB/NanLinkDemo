@@ -416,6 +416,7 @@ public class MainPresenterImpl implements MainPresenter {
                     model.updateUser(MyApplication.getOnlineUser());
                     view.showMenu(sortArrayList);
                 }
+                view.updateRecycleView();
                 break;
         }
     }
