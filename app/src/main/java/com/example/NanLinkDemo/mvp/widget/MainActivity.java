@@ -48,7 +48,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     @Override
     protected void onStart() {
         super.onStart();
-        updateRecycleView();
+        presenter.getOnlineUserFromModel();
         checkPermission();
     }
 

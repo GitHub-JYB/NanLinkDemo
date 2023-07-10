@@ -9,6 +9,7 @@ import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.mvp.model.Impl.ManageFixtureModelImpl;
 import com.example.NanLinkDemo.mvp.presenter.ManageFixturePresenter;
 import com.example.NanLinkDemo.mvp.view.ManageFixtureView;
+import com.example.NanLinkDemo.util.SortUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,14 +76,14 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
     public void receiveFixtureList(String fixtureGroupName, List<Fixture> fixtures) {
         if (fixtureGroupName.equals("")){
             noGroupFixtureList = (ArrayList<Fixture>) fixtures;
-            fixtureList = noGroupFixtureList;
+            fixtureList = SortUtil.sortFixtureList(noGroupFixtureList, MyApplication.getScene().getSortPosition());
             if (!view.getFixtureGroupName().equals("")){
                 model.getFixtureList(view.getFixtureGroupName());
             }
         }else {
-            hasGroupFixtureList = (ArrayList<Fixture>) fixtures;
-            for (Fixture fixture : hasGroupFixtureList){
-                fixtureList.add(0, fixture);
+            hasGroupFixtureList = SortUtil.sortFixtureList((ArrayList<Fixture>) fixtures, MyApplication.getScene().getSortPosition());
+            for (int i = hasGroupFixtureList.size() - 1; i >= 0; i--){
+                fixtureList.add(0, hasGroupFixtureList.get(i));
             }
         }
         view.showFixture(fixtureList);

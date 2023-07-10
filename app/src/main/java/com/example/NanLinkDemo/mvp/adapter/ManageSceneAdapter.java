@@ -38,7 +38,7 @@ public class ManageSceneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof ViewHolderManageSceneList){
             ((ViewHolderManageSceneList) holder).name.setText(sceneList.get(position).getName());
             ((ViewHolderManageSceneList) holder).number.setText("设备数量: " + sceneList.get(position).getFixtureNum());
-            if (sceneList.get(position).getSceneGroup().isEmpty()){
+            if (sceneList.get(position).getSceneGroupName().isEmpty()){
                 ((ViewHolderManageSceneList) holder).rightIcon.setImageResource(R.drawable.ic_unselected);
             }else {
                 ((ViewHolderManageSceneList) holder).rightIcon.setImageResource(R.drawable.ic_selected);

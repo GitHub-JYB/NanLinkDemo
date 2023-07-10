@@ -25,14 +25,15 @@ public class LoginPresenterImpl implements LoginPresenter {
     private final LoginModelImpl model;
     private boolean checked = false;
     private String email, password;
+    private Message.Data loginData;
 
     @Override
     public void sendMesToView(Message mes) {
         view.stopLoading();
-        switch (mes.getCode()){
+        switch (mes.getCode()) {
             case 200:
-                MyApplication.setOnlineUser(new User(mes.getData().getEmail(), mes.getData().getNickName(), mes.getData().getVocation(), "online", mes.getData().getToken()));
-                model.queryEmail(MyApplication.getOnlineUser().getEmail());
+                loginData = mes.getData();
+                model.queryEmail(mes.getData().getEmail());
                 break;
             case 1001:
             case 1002:
@@ -45,7 +46,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             case 1009:
             case 1010:
             case 1011:
-                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", mes.getMsg().toString(),"重试", null);
+                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", mes.getMsg().toString(), "重试", null);
                 break;
         }
     }
@@ -58,15 +59,15 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void switchOnclick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_register:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Register).navigation();
                 break;
             case R.id.login_check:
-                if (checked){
+                if (checked) {
                     this.view.setCheckImage(R.drawable.unchecked);
                     checked = false;
-                }else {
+                } else {
                     this.view.setCheckImage(R.drawable.checked);
                     checked = true;
                 }
@@ -74,29 +75,28 @@ public class LoginPresenterImpl implements LoginPresenter {
             case R.id.btn_login:
                 email = this.view.getEmail();
                 password = this.view.getPassword();
-                if (email.isEmpty()){
+                if (email.isEmpty()) {
                     SnackBarUtil.show(view, "请输入邮箱");
-                }else if (password.isEmpty()){
-                    SnackBarUtil.show(view,"请输入密码");
-                }else if (password.length() < 6 || password.length() > 20){
+                } else if (password.isEmpty()) {
+                    SnackBarUtil.show(view, "请输入密码");
+                } else if (password.length() < 6 || password.length() > 20) {
                     SnackBarUtil.show(view, "请输入6-20位密码");
-                }else if (checked){
-                    if (!MyApplication.getInstance().isOpenNetwork()){
-                        this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "无法连接服务器","重试", null);
-                    }else {
+                } else if (checked) {
+                    if (!MyApplication.getInstance().isOpenNetwork()) {
+                        this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器", "重试", null);
+                    } else {
                         this.view.startLoading();
                         model.login(email, password);
                     }
-                }else {
-                    SnackBarUtil.show(view,"请勾选用户协议");
+                } else {
+                    SnackBarUtil.show(view, "请勾选用户协议");
                 }
                 break;
             case R.id.tv_forgetPassword:
-                if (checked){
-                    MyApplication.setOnlineUser(new User("Guest", "访客模式", "", "online", ""));
-                    model.queryEmail(MyApplication.getOnlineUser().getEmail());
-                }else {
-                    SnackBarUtil.show(view,"请勾选用户协议");
+                if (checked) {
+                    model.queryEmail("Guest");
+                } else {
+                    SnackBarUtil.show(view, "请勾选用户协议");
                     this.view.initForgetPassword();
                 }
                 break;
@@ -106,15 +106,37 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void receiveUser(List<User> users) {
-        if (!users.isEmpty()){
-            MyApplication.getOnlineUser().setId(users.get(0).getId());
-            MyApplication.getOnlineUser().setKeepScreenOn(users.get(0).isKeepScreenOn());
-            model.updateUser(MyApplication.getOnlineUser());
-        }else {
-            model.addUser(MyApplication.getOnlineUser());
+        if (!users.isEmpty()) {
+            User user = users.get(0);
+            MyApplication.setOnlineUser(users.get(0));
+            if (!user.getEmail().equals("Guest")){
+                user.setNickName(loginData.getNickName());
+                user.setVocation(loginData.getVocation());
+                user.setToken(loginData.getToken());
+            }
+            user.setType("online");
+            MyApplication.setOnlineUser(user);
+            model.updateUser(user);
+        } else {
+            model.addUser(new User("Guest", "访客模式", "", "online", ""));
         }
         ARouter.getInstance().build(ACTIVITY_URL_Main).navigation();
         view.finish();
+    }
+
+    @Override
+    public void getLastUserFromModel() {
+        model.getLastUser();
+    }
+
+    @Override
+    public void receiveLastUser(List<User> users) {
+        if (!users.isEmpty()) {
+            MyApplication.setLastUser(users.get(0));
+            if (!users.get(0).getEmail().equals("Guest")) {
+                view.updateEmail(users.get(0).getEmail());
+            }
+        }
     }
 
 

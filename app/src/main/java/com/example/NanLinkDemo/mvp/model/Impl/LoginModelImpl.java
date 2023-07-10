@@ -89,5 +89,20 @@ public class LoginModelImpl implements LoginModel {
                 });
     }
 
+    @Override
+    public void getLastUser() {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getUserDao()
+                .getUserFromTypeInfo("lastUser")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<User>>() {
+                    @Override
+                    public void accept(List<User> users) throws Exception {
+                        presenter.receiveLastUser(users);
+                    }
+                });
+    }
+
 
 }

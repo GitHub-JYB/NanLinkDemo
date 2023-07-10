@@ -67,11 +67,11 @@ public class UserSettingPresenterImpl implements UserSettingPresenter {
         if (MyApplication.getLastUser() != null){
             MyApplication.getLastUser().setType("normal");
             model.updateUser(MyApplication.getLastUser());
+            if (MyApplication.getOnlineUser().getEmail().equals("Guest")){
+                MyApplication.getOnlineUser().setEmail(MyApplication.getLastUser().getEmail());
+            }
         }
         MyApplication.getOnlineUser().setType("lastUser");
-        if (MyApplication.getOnlineUser().getEmail().equals("Guest")){
-            MyApplication.getOnlineUser().setEmail(MyApplication.getLastUser().getEmail());
-        }
         MyApplication.setLastUser(MyApplication.getOnlineUser());
         MyApplication.setOnlineUser(null);
         model.updateUser(MyApplication.getLastUser());

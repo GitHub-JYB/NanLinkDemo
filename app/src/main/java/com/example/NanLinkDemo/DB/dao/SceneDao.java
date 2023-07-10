@@ -16,8 +16,8 @@ import io.reactivex.Single;
 public interface SceneDao {
 
 
-    @Query("select * from scene where email = :email AND sceneGroup = :sceneGroup")
-    Single<List<Scene>> getSceneInfoFromSceneGroup(String email, String sceneGroup);
+    @Query("select * from scene where email = :email AND sceneGroupName = :sceneGroupName")
+    Single<List<Scene>> getSceneInfoFromSceneGroup(String email, String sceneGroupName);
 
     @Query("select * from scene where email = :email AND name = :name")
     Single<List<Scene>> getSceneInfoFromName(String email, String name);

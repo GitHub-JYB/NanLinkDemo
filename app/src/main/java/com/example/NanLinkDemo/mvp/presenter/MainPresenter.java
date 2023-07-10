@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.example.NanLinkDemo.DB.bean.Scene;
 import com.example.NanLinkDemo.DB.bean.SceneGroup;
+import com.example.NanLinkDemo.DB.bean.User;
 import com.example.NanLinkDemo.bean.DeviceMessage;
 import com.example.NanLinkDemo.bean.Menu;
 
@@ -51,4 +52,8 @@ public interface MainPresenter {
     void getDeviceListFromModel();
 
     void receiveDeviceList(DeviceMessage deviceMessage);
+
+    void getOnlineUserFromModel();
+
+    void receiveOnlineUser(List<User> users);
 }

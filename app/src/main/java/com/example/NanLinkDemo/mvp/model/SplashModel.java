@@ -11,7 +11,5 @@ public interface SplashModel {
 
     void updateUser(User user);
 
-    void getLastUser();
-
     void getDeviceList();
 }

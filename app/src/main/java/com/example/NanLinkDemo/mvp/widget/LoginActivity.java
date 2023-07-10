@@ -34,9 +34,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> implements
     }
 
     private void initEmail() {
-        if (MyApplication.getLastUser() != null){
-            updateEmail(MyApplication.getLastUser().getEmail());
-        }
+        presenter.getLastUserFromModel();
     }
 
     @Override

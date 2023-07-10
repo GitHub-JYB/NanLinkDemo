@@ -41,4 +41,6 @@ public interface MainModel {
     void updateDevice(Device device);
 
     void addDevice(Device device);
+
+    void getOnlineUser();
 }

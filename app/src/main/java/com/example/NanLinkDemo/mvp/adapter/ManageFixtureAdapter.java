@@ -11,10 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
 import com.example.NanLinkDemo.databinding.VpItemSceneManageBinding;
+import com.example.NanLinkDemo.util.SortUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
 
 import java.util.ArrayList;

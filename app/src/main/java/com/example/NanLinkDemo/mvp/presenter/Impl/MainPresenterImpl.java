@@ -8,6 +8,7 @@ import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.bean.Device;
 import com.example.NanLinkDemo.DB.bean.Scene;
 import com.example.NanLinkDemo.DB.bean.SceneGroup;
+import com.example.NanLinkDemo.DB.bean.User;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.DeviceMessage;
 import com.example.NanLinkDemo.bean.Menu;
@@ -338,7 +339,9 @@ public class MainPresenterImpl implements MainPresenter {
     public void switchQuerySceneGroupResult(List<SceneGroup> sceneGroups, int type) {
         if (type == Type_add) {
             if (sceneGroups.size() == 0) {
-                model.addSceneGroup(new SceneGroup(MyApplication.getOnlineUser().getEmail(), view.getInputTextMyDialog(), 0, "", DateUtil.getTime(), DateUtil.getTime()));
+                SceneGroup sceneGroup = new SceneGroup(MyApplication.getOnlineUser().getEmail(), view.getInputTextMyDialog(), 0, "", DateUtil.getTime(), DateUtil.getTime());
+                model.addSceneGroup(sceneGroup);
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_ManageScene).withString("sceneGroupName", view.getInputTextMyDialog()).navigation();
             } else {
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "创建场景群组", "该场景群组名称已存在，请尝试使用其它名称。", "重试", new MyDialog.NeutralOnClickListener() {
                     @Override
@@ -429,7 +432,7 @@ public class MainPresenterImpl implements MainPresenter {
             }
         }else if (type == Type_update){
             for (Scene scene : scenes){
-                scene.setSceneGroup("");
+                scene.setSceneGroupName("");
                 model.updateScene(scene);
             }
         }
@@ -471,6 +474,19 @@ public class MainPresenterImpl implements MainPresenter {
             case 1011:
                 view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", deviceMessage.getMsg().toString(),"重试", null);
                 break;
+        }
+    }
+
+    @Override
+    public void getOnlineUserFromModel() {
+        model.getOnlineUser();
+    }
+
+    @Override
+    public void receiveOnlineUser(List<User> users) {
+        if (!users.isEmpty()){
+            MyApplication.setOnlineUser(users.get(0));
+            view.updateRecycleView();
         }
     }
 

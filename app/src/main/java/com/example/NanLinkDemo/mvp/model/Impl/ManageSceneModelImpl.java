@@ -1,5 +1,7 @@
 package com.example.NanLinkDemo.mvp.model.Impl;
 
+import android.util.Log;
+
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.DataBase.MyDataBase;
 import com.example.NanLinkDemo.DB.bean.Scene;
@@ -23,16 +25,16 @@ public class ManageSceneModelImpl implements ManageSceneModel {
     }
 
     @Override
-    public void queryScene() {
+    public void queryScene(String sceneGroupName) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getSceneDao()
-                .getSceneInfoFromSceneGroup(MyApplication.getOnlineUser().getEmail(), "")
+                .getSceneInfoFromSceneGroup(MyApplication.getOnlineUser().getEmail(), sceneGroupName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Scene>>() {
                     @Override
                     public void accept(List<Scene> scenes) throws Exception {
-                        presenter.receiveQueryScene(scenes);
+                        presenter.receiveQueryScene(scenes, sceneGroupName);
                     }
                 });
     }
@@ -64,4 +66,20 @@ public class ManageSceneModelImpl implements ManageSceneModel {
                     }
                 });
     }
+
+    @Override
+    public void getSceneGroup(String sceneGroupName) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getSceneGroupDao()
+                .getSceneGroupInfo(MyApplication.getOnlineUser().getEmail(), sceneGroupName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<SceneGroup>>() {
+                    @Override
+                    public void accept(List<SceneGroup> sceneGroups) throws Exception {
+                        presenter.receiveSceneGroup(sceneGroups);
+                    }
+                });
+    }
+
 }

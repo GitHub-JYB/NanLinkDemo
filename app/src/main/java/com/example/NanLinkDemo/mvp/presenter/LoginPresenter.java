@@ -16,4 +16,7 @@ public interface LoginPresenter {
 
     void receiveUser(List<User> users);
 
+    void getLastUserFromModel();
+
+    void receiveLastUser(List<User> users);
 }

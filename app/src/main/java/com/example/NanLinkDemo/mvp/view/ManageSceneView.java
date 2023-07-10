@@ -12,4 +12,10 @@ public interface ManageSceneView {
 
     void finish();
 
+    String getSceneGroupName();
+
+    void startLoading();
+
+    void stopLoading();
+
 }

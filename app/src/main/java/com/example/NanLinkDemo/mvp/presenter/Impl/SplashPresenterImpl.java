@@ -29,7 +29,7 @@ public class SplashPresenterImpl implements SplashPresenter {
 
     @Override
     public void endCountDown() {
-        model.getLastUser();
+        model.getOnlineUser();
     }
 
     @Override
@@ -75,14 +75,6 @@ public class SplashPresenterImpl implements SplashPresenter {
         }
     }
 
-    @Override
-    public void receiveLastUser(List<User> users) {
-        if (!users.isEmpty()){
-            MyApplication.setLastUser(users.get(0));
-        }
-        model.getOnlineUser();
-
-    }
 
     @Override
     public void getDeviceListFromModel() {

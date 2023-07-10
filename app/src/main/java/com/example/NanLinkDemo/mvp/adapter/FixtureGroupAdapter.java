@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
+import com.example.NanLinkDemo.util.TransformUtil;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class FixtureGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderFixtureList){
             ((ViewHolderFixtureList) holder).name.setText(fixtureList.get(position).getName());
-            ((ViewHolderFixtureList) holder).number.setText("CH: " + fixtureList.get(position).getCH());
+            ((ViewHolderFixtureList) holder).number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
             ((ViewHolderFixtureList) holder).connectType.setText(fixtureList.get(position).getConnectType());
         }
     }

@@ -64,6 +64,9 @@ public class ApiClient {
 
         @GET("/nanlinkDevice/v1/device/listDevice")
         Single<DeviceMessage> getDeviceLIst();
+
+        @GET("/nanlinkDevice/v1/device/queryConfig")
+        Single<String> getDeviceData(@Query("deviceId") String deviceId);
     }
 
     private static Retrofit getClient(String url){

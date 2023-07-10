@@ -77,6 +77,9 @@ public class SortUtil {
     }
 
     public static ArrayList<Fixture> sortFixtureList(ArrayList<Fixture> fixtures, int type){
+        if (fixtures == null){
+            return new ArrayList<>();
+        }
         switch (type){
             case 1:
                 return downCHFixtureList(fixtures);
@@ -219,6 +222,9 @@ public class SortUtil {
     }
 
     public static ArrayList<SceneGroup> sortSceneGroupList(ArrayList<SceneGroup> sceneGroups, int type){
+        if (sceneGroups == null){
+            return new ArrayList<>();
+        }
         switch (type){
             case 1:
                 return downCreatedDataSceneGroupList(sceneGroups);
@@ -368,6 +374,9 @@ public class SortUtil {
     }
 
     public static ArrayList<Scene> sortSceneList(ArrayList<Scene> scenes, int type){
+        if (scenes == null){
+            return new ArrayList<>();
+        }
         switch (type){
             case 1:
                 return downCreatedDataSceneList(scenes);

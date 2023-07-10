@@ -22,19 +22,19 @@ public class Scene {
     @ColumnInfo
     private Long modifiedDate;
     @ColumnInfo
-    private String sceneGroup;
+    private String sceneGroupName;
     @ColumnInfo
     private int sortPosition;
 
 
-    public Scene(String email, String name, int fixtureNum, String remark, Long createdDate, Long modifiedDate, String sceneGroup){
+    public Scene(String email, String name, int fixtureNum, String remark, Long createdDate, Long modifiedDate, String sceneGroupName){
         this.email = email;
         this.name = name;
         this.fixtureNum = fixtureNum;
         this.remark = remark;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
-        this.sceneGroup = sceneGroup;
+        this.sceneGroupName = sceneGroupName;
         this.sortPosition = 0;
     }
 
@@ -86,12 +86,12 @@ public class Scene {
         this.remark = remark;
     }
 
-    public String getSceneGroup() {
-        return sceneGroup;
+    public String getSceneGroupName() {
+        return sceneGroupName;
     }
 
-    public void setSceneGroup(String sceneGroup) {
-        this.sceneGroup = sceneGroup;
+    public void setSceneGroupName(String sceneGroupName) {
+        this.sceneGroupName = sceneGroupName;
     }
 
     public String getEmail() {

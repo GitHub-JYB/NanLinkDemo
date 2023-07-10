@@ -267,7 +267,7 @@ public class MainModelImpl implements MainModel {
 
     @Override
     public void getDeviceList() {
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .getDeviceLIst()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -304,6 +304,22 @@ public class MainModelImpl implements MainModel {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getOnlineUser() {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getUserDao()
+                .getUserFromTypeInfo("online")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<User>>() {
+                    @Override
+                    public void accept(List<User> users) throws Exception {
+                        presenter.receiveOnlineUser(users);
 
                     }
                 });
