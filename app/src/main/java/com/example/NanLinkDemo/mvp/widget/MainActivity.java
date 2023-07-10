@@ -20,6 +20,7 @@ import com.example.NanLinkDemo.mvp.presenter.Impl.MainPresenterImpl;
 import com.example.NanLinkDemo.mvp.view.MainView;
 import com.example.NanLinkDemo.ui.UnlessLastItemDecoration;
 import com.example.NanLinkDemo.util.Constant;
+import com.example.NanLinkDemo.util.DataUtil;
 import com.example.NanLinkDemo.util.SnackBarUtil;
 
 import java.util.ArrayList;
