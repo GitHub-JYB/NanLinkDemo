@@ -12,6 +12,8 @@ public interface LoginPresenter {
 
     void sendMesToView(Message mes);
 
+    void showWarnToView();
+
     void switchOnclick(View view);
 
     void receiveUser(List<User> users);

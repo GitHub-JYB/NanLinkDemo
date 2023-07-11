@@ -1,5 +1,8 @@
 package com.example.NanLinkDemo.util;
 
+import com.example.NanLinkDemo.DB.bean.DeviceData;
+import com.example.NanLinkDemo.JsonTypeAdapter.StringDefault0Adapter;
+import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.bean.DeviceMessage;
 import com.example.NanLinkDemo.bean.EditUser;
 import com.example.NanLinkDemo.bean.Feedback;
@@ -7,9 +10,15 @@ import com.example.NanLinkDemo.bean.LoginUser;
 import com.example.NanLinkDemo.bean.Message;
 import com.example.NanLinkDemo.bean.RegisterUser;
 import com.example.NanLinkDemo.bean.ResetPasswordUser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Single;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -29,8 +38,8 @@ public class ApiClient {
     public static final String Function_Register = "register";
     public static final String Function_GetCode = "getCode";
     public static final String Function_VerifyCode = "verifyCode";
-
-
+    private static final int CONN_TIME_OUT = 5*1000;
+    private static final int READ_TIME_OUT = 5*1000;
 
 
     private static Retrofit retrofit = null;
@@ -66,14 +75,15 @@ public class ApiClient {
         Single<DeviceMessage> getDeviceLIst();
 
         @GET("/nanlinkDevice/v1/device/queryConfig")
-        Single<String> getDeviceData(@Query("deviceId") String deviceId);
+        Single<DeviceDataMessage> getDeviceData(@Query("deviceId") String deviceId, @Query("contentVersion") String contentVersion);
     }
 
     private static Retrofit getClient(String url){
         if (url.equals(BASE_URL)){
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(getOkHttpClient())
+                        .addConverterFactory(GsonConverterFactory.create(buildGson()))
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                         .build();
         }
@@ -82,6 +92,27 @@ public class ApiClient {
 
     public static ApiService getService(String url){
         return getClient(url).create(ApiService.class);
+    }
+
+    private static OkHttpClient getOkHttpClient(){
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        //超时设置
+        builder.connectTimeout(CONN_TIME_OUT, TimeUnit.MILLISECONDS);
+        builder.readTimeout(READ_TIME_OUT, TimeUnit.MILLISECONDS);
+
+        return builder.build();
+    }
+
+    public static Gson buildGson() {
+        Gson gson = new GsonBuilder().serializeNulls()
+                    .registerTypeAdapter(String.class, new StringDefault0Adapter())
+                    .registerTypeAdapter(Double.class, new DoubleDefault0Adapter())
+                    .registerTypeAdapter(double.class, new DoubleDefault0Adapter())
+                    .registerTypeAdapter(Long.class, new LongDefault0Adapter())
+                    .registerTypeAdapter(long.class, new LongDefault0Adapter())
+                    .create();
+        return gson;
     }
 
 }

@@ -266,50 +266,6 @@ public class MainModelImpl implements MainModel {
     }
 
     @Override
-    public void getDeviceList() {
-        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
-                .getDeviceLIst()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DeviceMessage>() {
-                    @Override
-                    public void accept(DeviceMessage deviceMessage) throws Exception {
-                        presenter.receiveDeviceList(deviceMessage);
-                    }
-                });
-    }
-
-    @Override
-    public void updateDevice(Device device) {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getDeviceListDao()
-                .updateInfo(device)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer integer) throws Exception {
-
-                    }
-                });
-    }
-
-    @Override
-    public void addDevice(Device device) {
-        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getDeviceListDao()
-                .insert(device)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-
-                    }
-                });
-    }
-
-    @Override
     public void getOnlineUser() {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getUserDao()

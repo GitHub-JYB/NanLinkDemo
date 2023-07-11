@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -32,7 +33,7 @@ public class RegisterModelImpl implements RegisterModel {
         registerUser.setPassword(password);
         registerUser.setCode(code);
         registerUser.setNickName(nickName);
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .register(registerUser)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -41,13 +42,18 @@ public class RegisterModelImpl implements RegisterModel {
                     public void accept(Message message) throws Exception {
                         presenter.sendMesToView(message, ApiClient.Function_Register);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        presenter.showWarnToView();
+                    }
                 });
     }
 
     @Override
     public void getCode(String email, int code_register) {
 
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .getCode(email, code_register)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -56,6 +62,11 @@ public class RegisterModelImpl implements RegisterModel {
                     public void accept(Message message) throws Exception {
                         presenter.sendMesToView(message, ApiClient.Function_GetCode);
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        presenter.showWarnToView();
                     }
                 });
     }

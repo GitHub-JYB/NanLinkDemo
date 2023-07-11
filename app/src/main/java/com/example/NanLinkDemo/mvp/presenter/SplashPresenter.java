@@ -15,6 +15,8 @@ public interface SplashPresenter {
 
     void sendMesToView(Message message);
 
+    void gotoMainActivity();
+
     void getDeviceListFromModel();
 
     void receiveDeviceList(List<Device> devices);

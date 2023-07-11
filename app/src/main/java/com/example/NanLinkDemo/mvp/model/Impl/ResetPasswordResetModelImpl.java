@@ -6,6 +6,7 @@ import com.example.NanLinkDemo.mvp.presenter.Impl.ResetPasswordResetPresenterImp
 import com.example.NanLinkDemo.util.ApiClient;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -21,7 +22,7 @@ public class ResetPasswordResetModelImpl {
         resetPasswordUser.setEmail(email);
         resetPasswordUser.setPassword(password);
         resetPasswordUser.setCode(code);
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .resetPassword(resetPasswordUser)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -29,6 +30,11 @@ public class ResetPasswordResetModelImpl {
                     @Override
                     public void accept(Message message) throws Exception {
                         presenter.sendMesToView(message);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        presenter.showWarnToView();
                     }
                 });
     }

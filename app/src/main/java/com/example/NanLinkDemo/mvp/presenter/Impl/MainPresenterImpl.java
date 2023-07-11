@@ -438,44 +438,6 @@ public class MainPresenterImpl implements MainPresenter {
         }
     }
 
-    @Override
-    public void getDeviceListFromModel() {
-        model.getDeviceList();
-    }
-
-    @Override
-    public void receiveDeviceList(DeviceMessage deviceMessage) {
-        switch (deviceMessage.getCode()){
-            case 200:
-                if (deviceMessage.getData().getContentVersion() > MyApplication.getInstance().getDeviceListVersion()){
-                    MyApplication.getInstance().setDeviceListVersion(deviceMessage.getData().getContentVersion());
-                    HashMap<String, Device> deviceHashMap = new HashMap<String, Device>();
-                    for (Device device: deviceMessage.getData().getDeviceList()){
-                        deviceHashMap.put(device.getDeviceId(), device);
-                        if (MyApplication.getDeviceHashMap().isEmpty()){
-                            model.addDevice(device);
-                        }else {
-                            model.updateDevice(device);
-                        }
-                    }
-                    MyApplication.setDeviceHashMap(deviceHashMap);
-                }
-                break;
-            case 1001:
-            case 1002:
-            case 1003:
-            case 1004:
-            case 1005:
-            case 1006:
-            case 1007:
-            case 1008:
-            case 1009:
-            case 1010:
-            case 1011:
-                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", deviceMessage.getMsg().toString(),"重试", null);
-                break;
-        }
-    }
 
     @Override
     public void getOnlineUserFromModel() {

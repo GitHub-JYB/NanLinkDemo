@@ -10,4 +10,6 @@ public interface FeedbackPresenter {
     void checkText();
 
     void sendMesToView(Message message);
+
+    void showWarnToView();
 }

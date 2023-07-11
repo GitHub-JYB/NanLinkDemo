@@ -8,6 +8,7 @@ import com.example.NanLinkDemo.mvp.presenter.Impl.FeedbackPresenterImpl;
 import com.example.NanLinkDemo.util.ApiClient;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -22,7 +23,7 @@ public class FeedbackModelImpl implements FeedbackModel {
     public void submitFeedback(String feedback) {
         Feedback fb = new Feedback();
         fb.setContent(feedback);
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .submitFeedback(MyApplication.getOnlineUser().getToken(), fb)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -30,6 +31,11 @@ public class FeedbackModelImpl implements FeedbackModel {
                     @Override
                     public void accept(Message message) throws Exception {
                         presenter.sendMesToView(message);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        presenter.showWarnToView();
                     }
                 });
 

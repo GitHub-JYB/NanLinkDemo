@@ -31,7 +31,7 @@ public class SplashModelImpl implements SplashModel {
         /**
          * 定时1秒结束欢迎界面
          */
-        Observable.timer(1000, TimeUnit.MILLISECONDS)
+        Disposable disposable = Observable.timer(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -60,7 +60,7 @@ public class SplashModelImpl implements SplashModel {
 
     @Override
     public void getUserInfo(String token) {
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .getUserInfo(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,6 +68,11 @@ public class SplashModelImpl implements SplashModel {
                     @Override
                     public void accept(Message message) throws Exception {
                         presenter.sendMesToView(message);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        presenter.gotoMainActivity();
                     }
                 });
     }

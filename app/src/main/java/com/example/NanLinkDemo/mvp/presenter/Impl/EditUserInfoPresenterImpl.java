@@ -27,10 +27,10 @@ public class EditUserInfoPresenterImpl implements EditUserInfoPresenter {
                 this.view.finish();
                 break;
             case R.id.btn_edit_user:
+                view.startLoading();
                 if (!MyApplication.getInstance().isOpenNetwork()){
-                    view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器", "重试", null);
+                    showWarnToView();
                 }else {
-                    view.startLoading();
                     EditUser user = new EditUser();
                     user.setNickName(view.getNickName());
                     user.setVocation(view.getVocation());
@@ -44,9 +44,9 @@ public class EditUserInfoPresenterImpl implements EditUserInfoPresenter {
 
     @Override
     public void sendMesToView(Message message) {
-        view.stopLoading();
         switch (message.getCode()) {
             case 200:
+                view.stopLoading();
                 MyApplication.getOnlineUser().setNickName(view.getNickName());
                 MyApplication.getOnlineUser().setVocation(view.getVocation());
                 model.updateUser(MyApplication.getOnlineUser());
@@ -69,8 +69,14 @@ public class EditUserInfoPresenterImpl implements EditUserInfoPresenter {
             case 1009:
             case 1010:
             case 1011:
-                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", message.getMsg().toString(),"重试", null);
+                showWarnToView();
                 break;
         }
+    }
+
+    @Override
+    public void showWarnToView(){
+        view.stopLoading();
+        view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器", "重试", null);
     }
 }

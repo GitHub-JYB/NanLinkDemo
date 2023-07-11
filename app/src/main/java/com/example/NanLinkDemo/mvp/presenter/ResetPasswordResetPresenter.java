@@ -8,4 +8,6 @@ public interface ResetPasswordResetPresenter {
     void switchOnclick(View v);
 
     void sendMesToView(Message message);
+
+    void showWarnToView();
 }

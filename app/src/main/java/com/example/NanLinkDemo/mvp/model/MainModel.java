@@ -36,11 +36,5 @@ public interface MainModel {
 
     void querySceneFromGroup(String sceneGroupName, int type);
 
-    void getDeviceList();
-
-    void updateDevice(Device device);
-
-    void addDevice(Device device);
-
     void getOnlineUser();
 }

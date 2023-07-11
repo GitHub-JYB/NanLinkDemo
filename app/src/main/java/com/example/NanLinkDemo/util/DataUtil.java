@@ -6,10 +6,10 @@ import android.util.Log;
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.DataBase.MyDataBase;
 import com.example.NanLinkDemo.DB.bean.Device;
-import com.example.NanLinkDemo.DB.bean.Scene;
+import com.example.NanLinkDemo.DB.bean.DeviceData;
+import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.bean.DeviceMessage;
-import com.example.NanLinkDemo.ui.MyDialog;
-import com.google.gson.JsonArray;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,7 +32,6 @@ public class DataUtil {
             getDeviceListFromDB(context);
         }
     }
-
     private static void getDeviceListFromNetwork(Context context) {
         Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .getDeviceLIst()
@@ -41,7 +40,7 @@ public class DataUtil {
                 .subscribe(new Consumer<DeviceMessage>() {
                     @Override
                     public void accept(DeviceMessage deviceMessage) throws Exception {
-                        switch (deviceMessage.getCode()){
+                        switch (deviceMessage.getCode()) {
                             case 200:
                                 handleDeviceListData(deviceMessage.getData().getDeviceList());
                                 updateDataToDB(deviceMessage.getData().getDeviceList());
@@ -61,10 +60,13 @@ public class DataUtil {
                                 break;
                         }
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        getDeviceListFromDB(context);
+                    }
                 });
     }
-
-
 
     private static void getDeviceListFromDB(Context context) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
@@ -75,12 +77,11 @@ public class DataUtil {
                 .subscribe(new Consumer<List<Device>>() {
                     @Override
                     public void accept(List<Device> devices) throws Exception {
-                        if (devices.isEmpty()){
+                        if (devices.isEmpty()) {
                             getDeviceListFromAssets(context);
-                        }else {
+                        } else {
                             handleDeviceListData(devices);
                         }
-
                     }
                 });
     }
@@ -95,14 +96,14 @@ public class DataUtil {
                 outputStream.write(buffer, 0, len);
             }
             String rel = outputStream.toString();
-            Log.i("TAG", "getDeviceListFromAssets: " + rel);
+            Gson gson = new Gson();
+            DeviceMessage deviceMessage = gson.fromJson(rel, DeviceMessage.class);
+            handleDeviceListData(deviceMessage.getData().getDeviceList());
             inputStream.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-
 
     private static void handleDeviceListData(List<Device> devices) {
         HashMap<String, Device> deviceHashMap = new HashMap<String, Device>();
@@ -111,7 +112,6 @@ public class DataUtil {
         }
         MyApplication.setDeviceHashMap(deviceHashMap);
     }
-
 
     private static void updateDataToDB(ArrayList<Device> deviceList) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
@@ -156,7 +156,6 @@ public class DataUtil {
                 });
     }
 
-
     private static void updateDeviceToDB(Device device) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getDeviceListDao()
@@ -166,8 +165,37 @@ public class DataUtil {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-
                     }
                 });
+    }
+
+    public static void getDeviceData(Context context, String deviceId, String contentVersion) {
+        if (MyApplication.getInstance().isOpenNetwork()) {
+            getDeviceDataFromNetwork(context, deviceId, contentVersion);
+        }else {
+            getDeviceDataFromDB(context, deviceId, contentVersion);
+        }
+    }
+
+    private static void getDeviceDataFromNetwork(Context context, String deviceId, String contentVersion) {
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
+                .getDeviceData(deviceId,contentVersion)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<DeviceDataMessage>() {
+                    @Override
+                    public void accept(DeviceDataMessage deviceDataMessage) throws Exception {
+                        Log.i("TAG", "accept: " + deviceDataMessage.getData().toString());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.i("TAG", "accept: " + throwable.getMessage());
+                    }
+                });
+    }
+
+    private static void getDeviceDataFromDB(Context context, String deviceId, String contentVersion) {
+
     }
 }

@@ -31,7 +31,7 @@ public class LoginModelImpl implements LoginModel {
         LoginUser loginUser = new LoginUser();
         loginUser.setEmail(email);
         loginUser.setPassword(password);
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .login(loginUser)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -39,6 +39,11 @@ public class LoginModelImpl implements LoginModel {
                     @Override
                     public void accept(Message message) throws Exception {
                         presenter.sendMesToView(message);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        presenter.showWarnToView();
                     }
                 });
 

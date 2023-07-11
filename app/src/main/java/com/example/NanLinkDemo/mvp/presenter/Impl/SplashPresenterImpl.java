@@ -55,8 +55,6 @@ public class SplashPresenterImpl implements SplashPresenter {
                 MyApplication.getOnlineUser().setNickName(message.getData().getNickName());
                 MyApplication.getOnlineUser().setVocation(message.getData().getVocation());
                 model.updateUser(MyApplication.getOnlineUser());
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
-                view.finish();
                 break;
             case 1001:
             case 1002:
@@ -69,13 +67,16 @@ public class SplashPresenterImpl implements SplashPresenter {
             case 1009:
             case 1010:
             case 1011:
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
-                view.finish();
                 break;
         }
+        gotoMainActivity();
     }
 
-
+    @Override
+    public void gotoMainActivity(){
+        ARouter.getInstance().build(Constant.ACTIVITY_URL_Main).navigation();
+        view.finish();
+    }
     @Override
     public void getDeviceListFromModel() {
         model.getDeviceList();

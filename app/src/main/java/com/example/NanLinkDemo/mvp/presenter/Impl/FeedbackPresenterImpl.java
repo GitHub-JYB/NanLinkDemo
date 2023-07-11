@@ -2,6 +2,7 @@ package com.example.NanLinkDemo.mvp.presenter.Impl;
 
 import android.view.View;
 
+import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.Message;
 import com.example.NanLinkDemo.mvp.model.Impl.FeedbackModelImpl;
@@ -27,7 +28,11 @@ public class FeedbackPresenterImpl implements FeedbackPresenter {
                 break;
             case R.id.btn_submit:
                 view.startLoading();
-                model.submitFeedback(view.getFeedback());
+                if (!MyApplication.getInstance().isOpenNetwork()){
+                    showWarnToView();
+                }else {
+                    model.submitFeedback(view.getFeedback());
+                }
                 break;
         }
     }
@@ -39,9 +44,9 @@ public class FeedbackPresenterImpl implements FeedbackPresenter {
 
     @Override
     public void sendMesToView(Message message) {
-        view.stopLoading();
         switch (message.getCode()){
             case 200:
+                view.stopLoading();
                 view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_WhiteOneBtn,"意见反馈", "感谢您的意见反馈!", "完成", new MyDialog.NeutralOnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -61,8 +66,14 @@ public class FeedbackPresenterImpl implements FeedbackPresenter {
             case 1009:
             case 1010:
             case 1011:
-                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", message.getMsg().toString(),"重试", null);
+                showWarnToView();
                 break;
         }
+    }
+
+    @Override
+    public void showWarnToView(){
+        view.stopLoading();
+        view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器", "重试", null);
     }
 }

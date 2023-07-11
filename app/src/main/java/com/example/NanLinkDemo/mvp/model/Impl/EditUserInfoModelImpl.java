@@ -24,7 +24,7 @@ public class EditUserInfoModelImpl implements EditUserInfoModel {
 
     @Override
     public void editInfo(String token, EditUser user) {
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .editUserInfo(token, user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -32,6 +32,11 @@ public class EditUserInfoModelImpl implements EditUserInfoModel {
                     @Override
                     public void accept(Message message) throws Exception {
                         presenter.sendMesToView(message);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        presenter.showWarnToView();
                     }
                 });
 

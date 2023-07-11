@@ -49,9 +49,6 @@ public interface MainPresenter {
 
     void receiveQuerySceneFromSceneGroup(List<Scene> scenes, int type);
 
-    void getDeviceListFromModel();
-
-    void receiveDeviceList(DeviceMessage deviceMessage);
 
     void getOnlineUserFromModel();
 

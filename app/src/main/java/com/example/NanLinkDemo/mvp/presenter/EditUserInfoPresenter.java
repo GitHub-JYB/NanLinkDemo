@@ -8,4 +8,6 @@ public interface EditUserInfoPresenter {
     void switchOnclick(View v);
 
     void sendMesToView(Message message);
+
+    void showWarnToView();
 }

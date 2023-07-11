@@ -31,9 +31,9 @@ public class RegisterPresenterImpl implements RegisterPresenter {
 
     @Override
     public void sendMesToView(Message mes, String function) {
-        view.stopLoading();
         switch (mes.getCode()){
             case 200:
+                view.stopLoading();
                 switch (function){
                     case ApiClient.Function_Register:
                         view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn,"注册", "注册成功！\n您可使用该邮箱进行登录", "完成", new MyDialog.NeutralOnClickListener() {
@@ -62,9 +62,15 @@ public class RegisterPresenterImpl implements RegisterPresenter {
             case 1009:
             case 1010:
             case 1011:
-                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", mes.getMsg().toString(),"重试", null);
+                showWarnToView();
                 break;
         }
+    }
+
+    @Override
+    public void showWarnToView(){
+        view.stopLoading();
+        view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器", "重试", null);
     }
 
     @Override
@@ -112,11 +118,11 @@ public class RegisterPresenterImpl implements RegisterPresenter {
                     SnackBarUtil.show(view, "请输入6-20位密码");
 
                 }else if (checked){
+                    this.view.startLoading();
                     if (!MyApplication.getInstance().isOpenNetwork()){
-                        this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "无法连接服务器","重试", null);
+                        showWarnToView();
                         break;
                     }
-                    this.view.startLoading();
                     model.register(email, password, code, nickName);
                 }else {
                     SnackBarUtil.show(view, "请勾选用户协议");
@@ -127,11 +133,13 @@ public class RegisterPresenterImpl implements RegisterPresenter {
                 email = this.view.getEmail();
                 if (email.isEmpty()){
                     SnackBarUtil.show(view, "请输入邮箱");
-                }else if (!MyApplication.getInstance().isOpenNetwork()){
-                    this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器","重试", null);
                 }else {
                     this.view.startLoading();
-                    model.getCode(email, Constant.Code_Register);
+                    if (!MyApplication.getInstance().isOpenNetwork()){
+                        showWarnToView();
+                    }else {
+                        model.getCode(email, Constant.Code_Register);
+                    }
                 }
                 break;
         }

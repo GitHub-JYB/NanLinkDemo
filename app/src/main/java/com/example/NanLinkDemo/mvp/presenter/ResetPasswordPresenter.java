@@ -11,6 +11,8 @@ public interface ResetPasswordPresenter {
 
     void sendMesToView(Message message, String function);
 
+    void showWarnToView();
+
     void updateProgressCountToView(Long aLong);
 
     void endCountToView();

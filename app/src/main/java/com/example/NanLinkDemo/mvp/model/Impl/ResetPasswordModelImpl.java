@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -23,7 +24,7 @@ public class ResetPasswordModelImpl implements ForgetPasswordModel {
 
     @Override
     public void getCode(String email, int code_type) {
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .getCode(email, code_type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -32,12 +33,17 @@ public class ResetPasswordModelImpl implements ForgetPasswordModel {
                     public void accept(Message message) throws Exception {
                         presenter.sendMesToView(message, ApiClient.Function_GetCode);
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        presenter.showWarnToView();
+                    }
                 });
     }
 
     @Override
     public void verifyCode(String email, String code) {
-        ApiClient.getService(ApiClient.BASE_URL)
+        Disposable disposable = ApiClient.getService(ApiClient.BASE_URL)
                 .verifyCode(email, code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -45,6 +51,11 @@ public class ResetPasswordModelImpl implements ForgetPasswordModel {
                     @Override
                     public void accept(Message message) throws Exception {
                         presenter.sendMesToView(message, ApiClient.Function_VerifyCode);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        presenter.showWarnToView();
                     }
                 });
     }

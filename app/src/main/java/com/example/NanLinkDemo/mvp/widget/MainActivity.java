@@ -102,9 +102,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
 
     private void setPresenter() {
         presenter = new MainPresenterImpl(this);
-        if (MyApplication.getInstance().isOpenNetwork()) {
-            presenter.getDeviceListFromModel();
-        }
+        DataUtil.getDeviceList(this);
+        DataUtil.getDeviceData(this, "00002F", "2");
     }
 
     @Override

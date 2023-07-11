@@ -29,9 +29,9 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void sendMesToView(Message mes) {
-        view.stopLoading();
         switch (mes.getCode()) {
             case 200:
+                view.stopLoading();
                 loginData = mes.getData();
                 model.queryEmail(mes.getData().getEmail());
                 break;
@@ -46,11 +46,16 @@ public class LoginPresenterImpl implements LoginPresenter {
             case 1009:
             case 1010:
             case 1011:
-                view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", mes.getMsg().toString(), "重试", null);
+                showWarnToView();
                 break;
         }
     }
 
+    @Override
+    public void showWarnToView(){
+        view.stopLoading();
+        view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器", "重试", null);
+    }
 
     public LoginPresenterImpl(LoginView loginView) {
         this.view = loginView;
@@ -82,10 +87,10 @@ public class LoginPresenterImpl implements LoginPresenter {
                 } else if (password.length() < 6 || password.length() > 20) {
                     SnackBarUtil.show(view, "请输入6-20位密码");
                 } else if (checked) {
+                    this.view.startLoading();
                     if (!MyApplication.getInstance().isOpenNetwork()) {
-                        this.view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn, "错误", "无法连接服务器", "重试", null);
+                        showWarnToView();
                     } else {
-                        this.view.startLoading();
                         model.login(email, password);
                     }
                 } else {
