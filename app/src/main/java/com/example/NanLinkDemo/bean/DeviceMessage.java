@@ -12,7 +12,7 @@ public class DeviceMessage {
 
     private String msg;
 
-    private Data data;
+    private Data data = new Data();
 
     public String getMsg() {
         return msg;
@@ -40,7 +40,7 @@ public class DeviceMessage {
 
     public class Data{
         private int contentVersion;
-        private ArrayList<Device> deviceList;
+        private ArrayList<Device> deviceList = new ArrayList<>();
 
         public int getContentVersion() {
             return contentVersion;

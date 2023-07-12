@@ -1,7 +1,5 @@
 package com.example.NanLinkDemo.util;
 
-import com.example.NanLinkDemo.DB.bean.DeviceData;
-import com.example.NanLinkDemo.JsonTypeAdapter.StringDefault0Adapter;
 import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.bean.DeviceMessage;
 import com.example.NanLinkDemo.bean.EditUser;
@@ -18,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Single;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -75,7 +72,7 @@ public class ApiClient {
         Single<DeviceMessage> getDeviceLIst();
 
         @GET("/nanlinkDevice/v1/device/queryConfig")
-        Single<DeviceDataMessage> getDeviceData(@Query("deviceId") String deviceId, @Query("contentVersion") String contentVersion);
+        Single<DeviceDataMessage> getDeviceData(@Query("deviceId") String deviceId, @Query("contentVersion") int contentVersion);
     }
 
     private static Retrofit getClient(String url){
@@ -83,7 +80,7 @@ public class ApiClient {
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(getOkHttpClient())
-                        .addConverterFactory(GsonConverterFactory.create(buildGson()))
+                        .addConverterFactory(GsonConverterFactory.create())
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                         .build();
         }
@@ -102,17 +99,6 @@ public class ApiClient {
         builder.readTimeout(READ_TIME_OUT, TimeUnit.MILLISECONDS);
 
         return builder.build();
-    }
-
-    public static Gson buildGson() {
-        Gson gson = new GsonBuilder().serializeNulls()
-                    .registerTypeAdapter(String.class, new StringDefault0Adapter())
-                    .registerTypeAdapter(Double.class, new DoubleDefault0Adapter())
-                    .registerTypeAdapter(double.class, new DoubleDefault0Adapter())
-                    .registerTypeAdapter(Long.class, new LongDefault0Adapter())
-                    .registerTypeAdapter(long.class, new LongDefault0Adapter())
-                    .create();
-        return gson;
     }
 
 }

@@ -15,8 +15,8 @@ import io.reactivex.Single;
 @Dao
 public interface DeviceDataDao {
 
-    @Query("select * from deviceData")
-    Single<List<DeviceData>> getDeviceListInfo();
+    @Query("select * from deviceData where deviceId = :deviceId AND contentVersion = :contentVersion")
+    Single<List<DeviceData>> getDeviceDataInfo(String deviceId, int contentVersion);
 
     @Insert
     Single<Long> insert(DeviceData deviceData);

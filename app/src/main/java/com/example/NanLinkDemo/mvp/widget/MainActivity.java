@@ -12,6 +12,7 @@ import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.bean.Scene;
 import com.example.NanLinkDemo.DB.bean.SceneGroup;
 import com.example.NanLinkDemo.R;
+import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.bean.Menu;
 import com.example.NanLinkDemo.databinding.ActivityMainBinding;
 import com.example.NanLinkDemo.mvp.adapter.MenuAdapter;
@@ -103,7 +104,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements M
     private void setPresenter() {
         presenter = new MainPresenterImpl(this);
         DataUtil.getDeviceList(this);
-        DataUtil.getDeviceData(this, "00002F", "2");
     }
 
     @Override

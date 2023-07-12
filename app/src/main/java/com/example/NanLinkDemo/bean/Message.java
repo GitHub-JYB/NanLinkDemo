@@ -10,7 +10,7 @@ public class Message {
 
     private String msg;
 
-    private Data data;
+    private Data data = new Data();
 
     public String getMsg() {
         return msg;
