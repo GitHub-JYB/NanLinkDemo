@@ -29,10 +29,10 @@ public class ScanBleModelImpl implements ScanBleModel {
     }
 
     @Override
-    public void addBleFixture(Device device) {
+    public void addBleFixture(Fixture fixture) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
                 .getFixtureDao()
-                .insert(new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), device.getNAME(), device.getCH(),device.getDEVICE_ID(), "蓝牙", ""))
+                .insert(fixture)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {

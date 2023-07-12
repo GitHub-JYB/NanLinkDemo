@@ -353,7 +353,6 @@ public class MyDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 binding.myDialogInputText.setText("");
-                binding.myDialogInputText.setSelection(0);
             }
         });
 
@@ -361,7 +360,6 @@ public class MyDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 binding.myDialogCHInputText.setText("");
-                binding.myDialogCHInputText.setSelection(0);
             }
         });
 
@@ -369,7 +367,6 @@ public class MyDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 binding.myDialogAddFixtureCHInputText.setText("");
-                binding.myDialogAddFixtureCHInputText.setSelection(0);
             }
         });
 
@@ -386,7 +383,7 @@ public class MyDialog extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.toString().trim().isEmpty()){
+                if (editable == null || editable.toString().trim().isEmpty()){
                     return;
                 }
                 int CH = Integer.parseInt(editable.toString().trim());

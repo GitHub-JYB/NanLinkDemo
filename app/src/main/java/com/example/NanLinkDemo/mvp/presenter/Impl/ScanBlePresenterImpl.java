@@ -14,11 +14,14 @@ import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.Device;
+import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.mvp.model.Impl.ScanBleModelImpl;
 import com.example.NanLinkDemo.mvp.presenter.ScanBlePresenter;
 import com.example.NanLinkDemo.mvp.view.ScanBleView;
+import com.example.NanLinkDemo.mvp.widget.ScanBleActivity;
 import com.example.NanLinkDemo.ui.MyDialog;
 import com.example.NanLinkDemo.util.Constant;
+import com.example.NanLinkDemo.util.DataUtil;
 import com.example.NanLinkDemo.util.DateUtil;
 import com.example.NanLinkDemo.util.SnackBarUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
@@ -92,7 +95,15 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         if (unsetCHList.isEmpty() && unPassCHList.isEmpty()) {
             view.startLoading();
             for (Device device : passCHList) {
-                model.addBleFixture(device);
+                DataUtil.getDeviceData((ScanBleActivity)view, device.getDEVICE_ID(), device.getContentVersion(), new DataUtil.onReceiveDeviceDataListener() {
+                    @Override
+                    public void ReceiveDeviceData(String data) {
+                        Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), device.getNAME(), device.getCH(), device.getDEVICE_ID(), "蓝牙", "");
+                        fixture.setAgreementVersion(device.getAgreementVersion());
+                        fixture.setData(data);
+                        model.addBleFixture(fixture);
+                    }
+                });
             }
             view.stopLoading();
             ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();

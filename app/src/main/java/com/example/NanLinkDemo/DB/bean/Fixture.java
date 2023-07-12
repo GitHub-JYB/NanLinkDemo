@@ -33,7 +33,10 @@ public class Fixture {
     private String powerType;
     @ColumnInfo
     private int onlineType;
-
+    @ColumnInfo
+    private String Data;
+    @ColumnInfo
+    private int agreementVersion;
 
 
 
@@ -150,5 +153,21 @@ public class Fixture {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getData() {
+        return Data;
+    }
+
+    public void setData(String data) {
+        Data = data;
+    }
+
+    public int getAgreementVersion() {
+        return agreementVersion;
+    }
+
+    public void setAgreementVersion(int agreementVersion) {
+        this.agreementVersion = agreementVersion;
     }
 }

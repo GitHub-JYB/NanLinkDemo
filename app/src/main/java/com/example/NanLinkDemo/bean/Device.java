@@ -13,7 +13,8 @@ public class Device {
     private int CH;
     private int TYPE = 0;
     private String manufacturer_ID = "78";
-
+    private int contentVersion = 1;
+    private int agreementVersion = 0;
     private String manufacturer = "FEASY";
 
     private boolean selected = false;
@@ -43,8 +44,15 @@ public class Device {
             CH = (uuid[6] + 1) * 256 + uuid[7];
         }
         setCH(CH);
-//        setCH(Integer.parseInt(stringBuilder.toString()));
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(String.format("%08X", uuid[8]).substring(7));
+        stringBuilder.append(String.format("%08X", uuid[9]));
+        if (stringBuilder.toString().equals("000000000")){
+            setAgreementVersion(0);
+        }else {
+            setAgreementVersion(Integer.parseInt(stringBuilder.toString()));
+        }
+        stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("%02X", uuid[10]));
         stringBuilder.append(String.format("%02X", uuid[11]));
         stringBuilder.append(String.format("%02X", uuid[12]));
@@ -56,6 +64,11 @@ public class Device {
             setTYPE(1);
         }else {
             setTYPE(0);
+        }
+        if (Integer.parseInt(String.format("%08X",uuid[13]).substring(1, 7)) <= 1){
+            setContentVersion(1);
+        }else {
+            setContentVersion(Integer.parseInt(String.format("%08X",uuid[13]).substring(1, 7)));
         }
         setManufacturer_ID(String.valueOf(uuid[14]));
     }
@@ -127,5 +140,21 @@ public class Device {
 
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
+    }
+
+    public int getContentVersion() {
+        return contentVersion;
+    }
+
+    public void setContentVersion(int contentVersion) {
+        this.contentVersion = contentVersion;
+    }
+
+    public int getAgreementVersion() {
+        return agreementVersion;
+    }
+
+    public void setAgreementVersion(int agreementVersion) {
+        this.agreementVersion = agreementVersion;
     }
 }

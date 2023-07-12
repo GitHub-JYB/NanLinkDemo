@@ -85,6 +85,11 @@ public class DataUtil {
                             handleDeviceListData(devices);
                         }
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        getDeviceListFromAssets(context);
+                    }
                 });
     }
 
@@ -245,6 +250,11 @@ public class DataUtil {
                             }
                         }
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        getDeviceDataFromAssets(context, deviceId, contentVersion, listener);
+                    }
                 });
     }
 
@@ -268,11 +278,13 @@ public class DataUtil {
     }
 
     private static void handleDeviceData(DeviceDataMessage.Data deviceData, onReceiveDeviceDataListener listener) {
-        listener.ReceiveDeviceData(deviceData);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String data = gson.toJson(deviceData);
+        listener.ReceiveDeviceData(data);
     }
 
     public interface onReceiveDeviceDataListener {
-        void ReceiveDeviceData(DeviceDataMessage.Data deviceData);
+        void ReceiveDeviceData(String data);
     }
 
     private static void updateToDB(DeviceDataMessage.Data deviceData) {
