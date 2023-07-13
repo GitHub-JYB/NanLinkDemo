@@ -19,6 +19,8 @@ public class FixtureGroup {
     private int fixtureNum;
     @ColumnInfo
     private int DIM;
+    @ColumnInfo
+    private String data;
 
 
 
@@ -77,5 +79,13 @@ public class FixtureGroup {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }

@@ -29,6 +29,7 @@ public class Constant {
 
     public static final String ACTIVITY_URL_Add24GFixture = "/widget/Add24GFixtureActivity";
 
+    public static final String ACTIVITY_URL_ControlMode = "/widget/ControlModeActivity";
 
 
 

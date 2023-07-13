@@ -135,13 +135,15 @@ public class DataUtil {
                             }
                         } else {
                             for (Device device : deviceList) {
-                                for (Device device1 : devices) {
-                                    if (device.getDeviceId().equals(device1.getDeviceId())) {
-                                        device.setId(device1.getId());
+                                for (int i = 0; i < devices.size(); i++) {
+                                    if (device.getDeviceId().equals(devices.get(i).getDeviceId())) {
+                                        device.setId(devices.get(i).getId());
                                         updateDeviceToDB(device);
                                         break;
                                     }
-                                    addDeviceToDB(device);
+                                    if (i >= devices.size()){
+                                        addDeviceToDB(device);
+                                    }
                                 }
                             }
                         }

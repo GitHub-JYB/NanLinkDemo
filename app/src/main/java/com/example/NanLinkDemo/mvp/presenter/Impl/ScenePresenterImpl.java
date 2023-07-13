@@ -8,6 +8,7 @@ import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
 import com.example.NanLinkDemo.DB.bean.Scene;
 import com.example.NanLinkDemo.R;
+import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.bean.Menu;
 import com.example.NanLinkDemo.mvp.adapter.ThreePointAdapter;
 import com.example.NanLinkDemo.mvp.model.Impl.SceneModelImpl;
@@ -19,6 +20,8 @@ import com.example.NanLinkDemo.util.DateUtil;
 import com.example.NanLinkDemo.util.SnackBarUtil;
 import com.example.NanLinkDemo.util.SortUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -173,6 +176,9 @@ public class ScenePresenterImpl implements ScenePresenter {
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Controller).navigation();
                 break;
             case 7:
+                view.closeDrawLayout();
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_ControlMode).navigation();
+                break;
             case 8:
             case 10:
                 view.closeDrawLayout();
@@ -285,6 +291,39 @@ public class ScenePresenterImpl implements ScenePresenter {
     @Override
     public void FixtureMenuSwitch(Fixture fixture) {
             model.getFixtureMenu(fixture);
+    }
+
+    @Override
+    public void FixtureListDim(int position) {
+        if (fixtureGroupList.size() > 0) {
+            if (position < fixtureGroupList.size() + 1) {
+                FixtureGroup fixtureGroup = fixtureGroupList.get(position - 1);
+                fixtureGroup.setData(updateDim(fixtureGroup.getData()));
+                model.updateFixtureGroup(fixtureGroup);
+            } else {
+                Fixture fixture = fixtureList.get(position - fixtureGroupList.size() - 2);
+                fixture.setData(updateDim(fixture.getData()));
+                model.updateFixture(fixture);
+            }
+        } else {
+            Fixture fixture = fixtureList.get(position - 1);
+            fixture.setData(updateDim(fixture.getData()));
+            model.updateFixture(fixture);
+        }
+        view.setData(fixtureGroupList, fixtureList);
+
+    }
+
+    private String updateDim(String data) {
+        if (!data.isEmpty()) {
+            Gson gson = new Gson();
+            DeviceDataMessage.Data deviceData = gson.fromJson(data, DeviceDataMessage.Data.class);
+            deviceData.setDimItem(String.valueOf(-Integer.parseInt(deviceData.getDimItem())));
+            gson = new GsonBuilder().setPrettyPrinting().create();
+            data = gson.toJson(deviceData);
+            return data;
+        }
+        return "";
     }
 
     @Override

@@ -50,4 +50,6 @@ public interface ScenePresenter {
     void receiveSceneGroup(List<Scene> scenes);
 
     void FixtureMenuSwitch(Fixture fixture);
+
+    void FixtureListDim(int position);
 }

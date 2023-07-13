@@ -20,7 +20,7 @@ import com.example.NanLinkDemo.databinding.DialogMyBinding;
 public class MyDialog extends DialogFragment {
 
     DialogMyBinding binding;
-    static Boolean isCanceledOnTouchOutside = true;
+    Boolean isCanceledOnTouchOutside = true;
 
     public static final int Read_OneBtn_NormalTitle_WhiteOneBtn = 1;
     public static final int Read_OneBtn_NormalTitle_BlueOneBtn = 2;
@@ -43,6 +43,7 @@ public class MyDialog extends DialogFragment {
     public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_textForWrite = 19;
     public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_CH = 20;
     public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH = 21;
+    public static final int Read_OneBtn_NoTitle_BlueOneBtn = 22;
 
 
     private CharSequence title, bigSizeMessage, smallSizeMessage, bigSizeMessageOne, smallSizeMessageOne, bigSizeMessageTwo, smallSizeMessageTwo, neutralText, positiveText, negativeText;
@@ -308,11 +309,14 @@ public class MyDialog extends DialogFragment {
                 setNormalTitle();
                 setBlueTwoBtn();
                 break;
+            case Read_OneBtn_NoTitle_BlueOneBtn:
+                setReadNoTile();
+                setOneBtn();
+                setNoTitle();
+                setBlueOneBtn();
+                break;
         }
 
-        if (title.length() == 0) {
-            binding.myDialogTitle.setVisibility(View.INVISIBLE);
-        }
         binding.myDialogTitle.setText(title);
 
         binding.myDialogBigSize.setText(bigSizeMessage);
@@ -348,6 +352,8 @@ public class MyDialog extends DialogFragment {
 
         binding.myDialogAddFixtureCHName.setText(bigSizeMessage);
         binding.myDialogAddFixtureCHInputText.setText(smallSizeMessage);
+
+        binding.myDialogNoTitleMessage.setText(bigSizeMessage);
 
         binding.myDialogInputTextClean.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,7 +394,7 @@ public class MyDialog extends DialogFragment {
                 }
                 int CH = Integer.parseInt(editable.toString().trim());
                 if (CH > 512) {
-                    new MyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "重试", null).show(getFragmentManager(), "MyDialog");
+                    new MyDialog(MyDialog.Read_OneBtn_NoTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "确定", null).show(getFragmentManager(), "MyDialog");
                     binding.myDialogCHInputText.setText("");
                 }
             }
@@ -412,7 +418,7 @@ public class MyDialog extends DialogFragment {
                 }
                 int CH = Integer.parseInt(editable.toString().trim());
                 if (CH > 512) {
-                    new MyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "重试", null).show(getFragmentManager(), "MyDialog");
+                    new MyDialog(MyDialog.Read_OneBtn_NoTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "确定", null).show(getFragmentManager(), "MyDialog");
                     binding.myDialogAddFixtureCHInputText.setText("");
                 }
             }
@@ -445,11 +451,19 @@ public class MyDialog extends DialogFragment {
         binding.myDialogPositiveButton.setTextColor(getResources().getColor(R.color.warning));
     }
 
+
+    private void setNoTitle() {
+        binding.myDialogTitle.setVisibility(View.GONE);
+    }
+
+
     private void setNormalTitle() {
+        binding.myDialogTitle.setVisibility(View.VISIBLE);
         binding.myDialogTitle.setTextColor(getResources().getColor(R.color.blue));
     }
 
     private void setWarningTitle() {
+        binding.myDialogTitle.setVisibility(View.VISIBLE);
         binding.myDialogTitle.setTextColor(getResources().getColor(R.color.warning));
     }
 
@@ -461,7 +475,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogTwoMessage.setVisibility(View.GONE);
         binding.myDialogInputRemark.setVisibility(View.GONE);
         binding.myDialogAddFixtureCH.setVisibility(View.GONE);
-
+        binding.myDialogNoTitleContent.setVisibility(View.GONE);
     }
 
     private void setReadTwoMessage() {
@@ -471,6 +485,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogTwoMessage.setVisibility(View.VISIBLE);
         binding.myDialogInputRemark.setVisibility(View.GONE);
         binding.myDialogAddFixtureCH.setVisibility(View.GONE);
+        binding.myDialogNoTitleContent.setVisibility(View.GONE);
 
     }
 
@@ -481,6 +496,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogTwoMessage.setVisibility(View.GONE);
         binding.myDialogInputRemark.setVisibility(View.GONE);
         binding.myDialogAddFixtureCH.setVisibility(View.GONE);
+        binding.myDialogNoTitleContent.setVisibility(View.GONE);
     }
 
     private void setWriteCH() {
@@ -491,9 +507,20 @@ public class MyDialog extends DialogFragment {
         binding.myDialogInputRemark.setVisibility(View.GONE);
         binding.myDialogCHInput.setVisibility(View.VISIBLE);
         binding.myDialogAddFixtureCH.setVisibility(View.GONE);
+        binding.myDialogNoTitleContent.setVisibility(View.GONE);
 
     }
 
+    private void setReadNoTile() {
+        binding.myDialogInput.setVisibility(View.GONE);
+        binding.myDialogInputDescription.setVisibility(View.GONE);
+        binding.myDialogMessage.setVisibility(View.GONE);
+        binding.myDialogTwoMessage.setVisibility(View.GONE);
+        binding.myDialogInputRemark.setVisibility(View.GONE);
+        binding.myDialogCHInput.setVisibility(View.GONE);
+        binding.myDialogAddFixtureCH.setVisibility(View.GONE);
+        binding.myDialogNoTitleContent.setVisibility(View.VISIBLE);
+    }
 
     private void setWriteAddFixtureCH() {
         binding.myDialogInput.setVisibility(View.GONE);
@@ -503,6 +530,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogInputRemark.setVisibility(View.GONE);
         binding.myDialogCHInput.setVisibility(View.GONE);
         binding.myDialogAddFixtureCH.setVisibility(View.VISIBLE);
+        binding.myDialogNoTitleContent.setVisibility(View.GONE);
     }
 
     private void setTextForWrite() {
@@ -512,6 +540,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogTwoMessage.setVisibility(View.GONE);
         binding.myDialogInputRemark.setVisibility(View.GONE);
         binding.myDialogAddFixtureCH.setVisibility(View.GONE);
+        binding.myDialogNoTitleContent.setVisibility(View.GONE);
     }
 
     private void setWriteRemark() {
@@ -521,6 +550,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogTwoMessage.setVisibility(View.GONE);
         binding.myDialogInputRemark.setVisibility(View.VISIBLE);
         binding.myDialogAddFixtureCH.setVisibility(View.GONE);
+        binding.myDialogNoTitleContent.setVisibility(View.GONE);
     }
 
     private void setOneBtn() {

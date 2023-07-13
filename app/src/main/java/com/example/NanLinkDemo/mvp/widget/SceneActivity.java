@@ -95,7 +95,7 @@ public class SceneActivity extends BaseActivity<ActivitySceneBinding> implements
         fixtureAdapter.setRightSecondIconOnClickListener(new FixtureAdapter.RightSecondIconOnClickListener() {
             @Override
             public void onClick(int position) {
-
+                presenter.FixtureListDim(position);
             }
         });
         fixtureAdapter.setMenuInGroupOnClickListener(new FixtureAdapter.MenuInGroupOnClickListener() {

@@ -2,8 +2,14 @@ package com.example.NanLinkDemo.util;
 
 public class TransformUtil {
 
-    public static String byte2string() {
-        return "";
+    //byte转二进制
+    public static String byte2bit(byte b) {
+        return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
+    }
+
+    //二进制转十进制
+    public static int bit2int(String two) {
+        return Integer.parseInt(two, 2);
     }
 
     public static String updateCH(int CH) {

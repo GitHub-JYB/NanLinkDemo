@@ -7,6 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
     <color name="theme">#1A1A1A</color>
     <color name="nav">#202020</color>
     <color name="blue">#0078A3</color>

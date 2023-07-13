@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:background="@drawable/bg_dialog">
 
     <TextView
         android:id="@+id/my_dialog_title"
         android:text="创建场景"
         android:textColor="@color/blue"
-        android:textSize="19sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_alignParentTop="true"
+        android:visibility="gone"
         android:gravity="center"
         android:layout_width="290dp"
         android:layout_height="56dp"/>
@@ -20,8 +21,7 @@
         android:id="@+id/content"
         android:layout_width="290dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/my_dialog_title"
-        android:layout_centerInParent="true">
+        >
 
 
         <LinearLayout
@@ -215,6 +215,7 @@
 
         <LinearLayout
             android:orientation="vertical"
+            android:visibility="gone"
             android:id="@+id/my_dialog_AddFixture_CH"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -315,24 +316,41 @@
                 android:layout_height="match_parent"/>
         </RelativeLayout>
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/my_dialog_no_title_content"
+            android:layout_width="match_parent"
+            android:layout_height="112dp"
+            android:gravity="center"
+            >
+
+            <TextView
+                    android:id="@+id/my_dialog_no_title_message"
+                    android:text="请输入介于 1 - 512\n之间的数值"
+                    android:textColor="@color/white"
+                    android:textSize="17sp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+
     </RelativeLayout>
 
     <View
-        android:id="@+id/my_dialog_decoration"
         android:background="@color/decoration_dialog"
         android:layout_width="290dp"
-        android:layout_below="@+id/content"
         android:layout_height="1dp"/>
 
     <RelativeLayout
         android:layout_width="290dp"
         android:layout_height="44dp"
-        android:layout_below="@+id/my_dialog_decoration"
         >
 
         <Button
             android:text="重试"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:textColor="@color/blue"
             android:id="@+id/my_dialog_NeutralButton"
             android:gravity="center"
@@ -345,7 +363,7 @@
 
         <Button
             android:text="取消"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:textColor="@color/white"
             android:id="@+id/my_dialog_NegativeButton"
             android:gravity="center"
@@ -367,7 +385,7 @@
 
         <Button
             android:text="确认"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:textColor="@color/blue"
             android:gravity="center"
             android:visibility="gone"
@@ -380,4 +398,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

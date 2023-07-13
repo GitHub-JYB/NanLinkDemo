@@ -93,21 +93,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
 
     private void notice() {
         if (unsetCHList.isEmpty() && unPassCHList.isEmpty()) {
-            view.startLoading();
-            for (Device device : passCHList) {
-                DataUtil.getDeviceData((ScanBleActivity)view, device.getDEVICE_ID(), device.getContentVersion(), new DataUtil.onReceiveDeviceDataListener() {
-                    @Override
-                    public void ReceiveDeviceData(String data) {
-                        Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), device.getNAME(), device.getCH(), device.getDEVICE_ID(), "蓝牙", "");
-                        fixture.setAgreementVersion(device.getAgreementVersion());
-                        fixture.setData(data);
-                        model.addBleFixture(fixture);
-                    }
-                });
-            }
-            view.stopLoading();
-            ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
-            view.finish();
+            connectAndSetData();
         } else {
             if (!unsetCHList.isEmpty()) {
                 view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, "设置地址码", "有" + unsetCHList.size() + "台灯光设备的地址码\n需要进行设置", "取消", null, "设置", new MyDialog.PositiveOnClickListener() {
@@ -124,6 +110,28 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 public void onClick(View v) {
                     view.dismissMyDialog();
                     updateCH();
+                }
+            });
+        }
+    }
+
+    private void connectAndSetData() {
+        view.startLoading();
+        ArrayList<Device> successList = new ArrayList<>();
+        for (Device device : passCHList) {
+            DataUtil.getDeviceData((ScanBleActivity)view, device.getDEVICE_ID(), device.getContentVersion(), new DataUtil.onReceiveDeviceDataListener() {
+                @Override
+                public void ReceiveDeviceData(String data) {
+                    Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), device.getNAME(), device.getCH(), device.getDEVICE_ID(), "蓝牙", "");
+                    fixture.setAgreementVersion(device.getAgreementVersion());
+                    fixture.setData(data);
+                    model.addBleFixture(fixture);
+                    successList.add(device);
+                    if (successList.size() == passCHList.size()){
+                        view.stopLoading();
+                        ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
+                        view.finish();
+                    }
                 }
             });
         }
@@ -259,7 +267,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         model.updateScene(MyApplication.getScene());
     }
 
-    private Device FeasyFilter(ScanResult result) {
+    private Device UserFilter(ScanResult result) {
         ScanRecord scanRecord = result.getScanRecord();
         if (scanRecord != null && scanRecord.getDeviceName() != null && scanRecord.getDeviceName().startsWith("``NL")) {
             return new Device(result.getDevice().getAddress(), result.getScanRecord().getDeviceName());
@@ -267,7 +275,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         return null;
     }
 
-    private Device UserFilter(ScanResult result) {
+    private Device FeasyFilter(ScanResult result) {
         ScanRecord scanRecord = result.getScanRecord();
         if (scanRecord != null && scanRecord.getServiceData() != null && scanRecord.getServiceUuids() != null) {
             byte[] uuid = scanRecord.getServiceData().get(scanRecord.getServiceUuids().get(0));

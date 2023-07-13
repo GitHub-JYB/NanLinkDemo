@@ -1,7 +1,6 @@
 package com.example.NanLinkDemo.mvp.adapter;
 
 
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,14 @@ import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
 
 import com.example.NanLinkDemo.R;
+import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.databinding.FixtureGroupBinding;
 import com.example.NanLinkDemo.databinding.VpDecorationFixtureListBinding;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
 import com.example.NanLinkDemo.ui.UnlessLastItemDecoration;
 import com.example.NanLinkDemo.util.SortUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
+import com.google.gson.Gson;
 
 
 import java.util.ArrayList;
@@ -60,10 +61,10 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             VpItemFixtureBinding vpItemFixtureBinding = VpItemFixtureBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new ViewHolderFixtureList(vpItemFixtureBinding);
 
-        }else if (viewType == TYPE_DECORATION_FIXTURE_GROUP){
+        } else if (viewType == TYPE_DECORATION_FIXTURE_GROUP) {
             VpDecorationFixtureListBinding vpDecorationFixtureListBinding = VpDecorationFixtureListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new ViewHolderDecorationFixtureGroup(vpDecorationFixtureListBinding);
-        }else {
+        } else {
             FixtureGroupBinding vpItemFixtureGroupBinding = FixtureGroupBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
             return new ViewHolderFixtureGroupList(vpItemFixtureGroupBinding);
         }
@@ -71,55 +72,61 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ViewHolderFixtureList){
-            if (fixtureGroupList.isEmpty()){
-                ((ViewHolderFixtureList) holder).name.setText(fixtureListNoGroup.get(position - 1).getName());
-                ((ViewHolderFixtureList) holder).number.setText("CH: " + TransformUtil.updateCH(fixtureListNoGroup.get(position - 1).getCH()));
-                ((ViewHolderFixtureList) holder).connectType.setText(fixtureListNoGroup.get(position - 1).getConnectType());
-            }else {
-                ((ViewHolderFixtureList) holder).name.setText(fixtureListNoGroup.get(position - fixtureGroupList.size() - 2).getName());
-                ((ViewHolderFixtureList) holder).number.setText("CH: " + TransformUtil.updateCH(fixtureListNoGroup.get(position - fixtureGroupList.size() - 2).getCH()));
-                ((ViewHolderFixtureList) holder).connectType.setText(fixtureListNoGroup.get(position - fixtureGroupList.size() - 2).getConnectType());
+        if (holder instanceof ViewHolderFixtureList) {
+            Fixture fixture;
+            if (fixtureGroupList.isEmpty()) {
+                fixture = fixtureListNoGroup.get(position - 1);
+            } else {
+                fixture = fixtureListNoGroup.get(position - fixtureGroupList.size() - 2);
             }
-        }else if (holder instanceof ViewHolderFixtureGroupList){
+            ((ViewHolderFixtureList) holder).name.setText(fixture.getName());
+            ((ViewHolderFixtureList) holder).number.setText("CH: " + TransformUtil.updateCH(fixture.getCH()));
+            ((ViewHolderFixtureList) holder).connectType.setText(fixture.getConnectType());
+            if (!fixture.getData().isEmpty()){
+                Gson gson = new Gson();
+                DeviceDataMessage.Data deviceData = gson.fromJson(fixture.getData(), DeviceDataMessage.Data.class);
+                if (Integer.parseInt(deviceData.getDimItem()) > 0){
+                    ((ViewHolderFixtureList) holder).rightSecondIcon.setImageResource(R.drawable.ic_dim_on);
+                }else {
+                    ((ViewHolderFixtureList) holder).rightSecondIcon.setImageResource(R.drawable.ic_dim_off);
+                }
+            }
+        } else if (holder instanceof ViewHolderFixtureGroupList) {
             fixtureListInGroup = new ArrayList<>();
-            for (Fixture fixture : fixtureList){
-                if (Objects.equals(fixture.getFixtureGroupName(), fixtureGroupList.get(position - 1).getName())){
+            for (Fixture fixture : fixtureList) {
+                if (Objects.equals(fixture.getFixtureGroupName(), fixtureGroupList.get(position - 1).getName())) {
                     fixtureListInGroup.add(fixture);
                 }
             }
-
             ((ViewHolderFixtureGroupList) holder).name.setText(fixtureGroupList.get(position - 1).getName());
-            ((ViewHolderFixtureGroupList) holder).sceneNum.setText("设备数量: " + fixtureGroupList.get(position  - 1).getFixtureNum());
-            if (((ViewHolderFixtureGroupList) holder).showList && !fixtureListInGroup.isEmpty()){
+            ((ViewHolderFixtureGroupList) holder).sceneNum.setText("设备数量: " + fixtureGroupList.get(position - 1).getFixtureNum());
+            if (((ViewHolderFixtureGroupList) holder).showList && !fixtureListInGroup.isEmpty()) {
                 ((ViewHolderFixtureGroupList) holder).recyclerView.setVisibility(View.VISIBLE);
                 ((ViewHolderFixtureGroupList) holder).spreadIcon.setImageResource(R.drawable.ic_spread);
-            }else {
+            } else {
                 ((ViewHolderFixtureGroupList) holder).recyclerView.setVisibility(View.GONE);
                 ((ViewHolderFixtureGroupList) holder).spreadIcon.setImageResource(R.drawable.ic_close);
             }
             ((ViewHolderFixtureGroupList) holder).fixtureGroupAdapter.setData(fixtureListInGroup);
 
 
-
-
-        }else if (holder instanceof ViewHolderDecorationFixture){
+        } else if (holder instanceof ViewHolderDecorationFixture) {
             ((ViewHolderDecorationFixture) holder).name.setText("灯光设备");
-        }else if (holder instanceof ViewHolderDecorationFixtureGroup){
+        } else if (holder instanceof ViewHolderDecorationFixtureGroup) {
             ((ViewHolderDecorationFixtureGroup) holder).name.setText("设备群组");
         }
     }
 
     @Override
     public int getItemCount() {
-        if (fixtureListNoGroup.isEmpty() && fixtureGroupList.isEmpty()){
+        if (fixtureListNoGroup.isEmpty() && fixtureGroupList.isEmpty()) {
             return 0;
-        }else {
-            if (fixtureListNoGroup.isEmpty()){
+        } else {
+            if (fixtureListNoGroup.isEmpty()) {
                 return fixtureGroupList.size() + 1;
-            }else if (fixtureGroupList.isEmpty()){
+            } else if (fixtureGroupList.isEmpty()) {
                 return fixtureListNoGroup.size() + 1;
-            }else {
+            } else {
                 return fixtureListNoGroup.size() + fixtureGroupList.size() + 2;
             }
         }
@@ -157,8 +164,8 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.fixtureList = SortUtil.sortFixtureList((ArrayList<Fixture>) fixtureList, MyApplication.getScene().getSortPosition());
         this.fixtureGroupList = fixtureGroupList;
         this.fixtureListNoGroup = new ArrayList<>();
-        for (Fixture fixture : fixtureList){
-            if(fixture.getFixtureGroupName().equals("")){
+        for (Fixture fixture : fixtureList) {
+            if (fixture.getFixtureGroupName().equals("")) {
                 fixtureListNoGroup.add(fixture);
             }
         }
@@ -169,12 +176,13 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
         TextView name, number, connectType;
-
+        ImageView rightSecondIcon;
         public ViewHolderFixtureList(@NonNull VpItemFixtureBinding binding) {
             super(binding.getRoot());
             name = binding.name;
             number = binding.number;
             connectType = binding.connectType;
+            rightSecondIcon = binding.rightSecondIcon;
             ViewGroup.LayoutParams layoutParams = binding.fixture.getLayoutParams();
             layoutParams.width = MyApplication.dip2percentPx(361);
             layoutParams.height = MyApplication.dip2percentPx(68);
@@ -199,7 +207,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.menu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (menuOnClickListener != null){
+                    if (menuOnClickListener != null) {
                         menuOnClickListener.onClick(getAdapterPosition());
                     }
                 }
@@ -208,7 +216,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onClickListener != null){
+                    if (onClickListener != null) {
 
                         onClickListener.onClick(getAdapterPosition());
                     }
@@ -260,7 +268,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             fixtureGroupAdapter.setMenuOnClickListener(new FixtureGroupAdapter.MenuOnClickListener() {
                 @Override
                 public void onClick(Fixture fixture) {
-                    if (menuInGroupOnClickListener != null){
+                    if (menuInGroupOnClickListener != null) {
                         menuInGroupOnClickListener.onClick(fixture);
                     }
                 }
@@ -268,7 +276,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             fixtureGroupAdapter.setRightSecondIconOnClickListener(new FixtureGroupAdapter.RightSecondIconOnClickListener() {
                 @Override
                 public void onClick(Fixture fixture) {
-                    if (rightSecondIconInGroupOnClickListener != null){
+                    if (rightSecondIconInGroupOnClickListener != null) {
                         rightSecondIconInGroupOnClickListener.onClick(fixture);
                     }
                 }
@@ -296,7 +304,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.rightSecondIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (rightSecondOnClickListener != null){
+                    if (rightSecondOnClickListener != null) {
                         rightSecondOnClickListener.onClick(getAdapterPosition());
                     }
                 }
@@ -304,7 +312,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.menu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (menuOnClickListener != null){
+                    if (menuOnClickListener != null) {
                         menuOnClickListener.onClick(getAdapterPosition());
                     }
                 }
@@ -313,7 +321,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onClickListener != null){
+                    if (onClickListener != null) {
 
                         onClickListener.onClick(getAdapterPosition());
                     }
@@ -358,7 +366,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void onClick(int position);
     }
 
-    public void setOnClickListener(OnClickListener onClickListener){
+    public void setOnClickListener(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
@@ -366,7 +374,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void onClick(int position);
     }
 
-    public void setMenuOnClickListener(MenuOnClickListener menuOnClickListener){
+    public void setMenuOnClickListener(MenuOnClickListener menuOnClickListener) {
         this.menuOnClickListener = menuOnClickListener;
     }
 
@@ -374,7 +382,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void onClick(int position);
     }
 
-    public void setRightSecondIconOnClickListener(RightSecondIconOnClickListener rightSecondOnClickListener){
+    public void setRightSecondIconOnClickListener(RightSecondIconOnClickListener rightSecondOnClickListener) {
         this.rightSecondOnClickListener = rightSecondOnClickListener;
     }
 
@@ -382,7 +390,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void onClick(Fixture fixture);
     }
 
-    public void setMenuInGroupOnClickListener(MenuInGroupOnClickListener menuInGroupOnClickListener){
+    public void setMenuInGroupOnClickListener(MenuInGroupOnClickListener menuInGroupOnClickListener) {
         this.menuInGroupOnClickListener = menuInGroupOnClickListener;
     }
 
@@ -390,7 +398,7 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void onClick(Fixture fixture);
     }
 
-    public void setRightSecondIconInGroupOnClickListener(RightSecondIconInGroupOnClickListener rightSecondIconInGroupOnClickListener){
+    public void setRightSecondIconInGroupOnClickListener(RightSecondIconInGroupOnClickListener rightSecondIconInGroupOnClickListener) {
         this.rightSecondIconInGroupOnClickListener = rightSecondIconInGroupOnClickListener;
     }
 

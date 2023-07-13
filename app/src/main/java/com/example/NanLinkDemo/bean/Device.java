@@ -2,6 +2,7 @@ package com.example.NanLinkDemo.bean;
 
 
 import com.example.NanLinkDemo.Application.MyApplication;
+import com.example.NanLinkDemo.util.TransformUtil;
 
 public class Device {
 
@@ -45,13 +46,9 @@ public class Device {
         }
         setCH(CH);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.format("%08X", uuid[8]).substring(7));
-        stringBuilder.append(String.format("%08X", uuid[9]));
-        if (stringBuilder.toString().equals("000000000")){
-            setAgreementVersion(0);
-        }else {
-            setAgreementVersion(Integer.parseInt(stringBuilder.toString()));
-        }
+        stringBuilder.append(TransformUtil.byte2bit(uuid[8]).substring(7));
+        stringBuilder.append(TransformUtil.byte2bit(uuid[9]));
+        setAgreementVersion(TransformUtil.bit2int(stringBuilder.toString()));
         stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("%02X", uuid[10]));
         stringBuilder.append(String.format("%02X", uuid[11]));
@@ -60,16 +57,13 @@ public class Device {
         if (!MyApplication.getDeviceHashMap().isEmpty()){
             setNAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
         }
-        if (String.format("%08X", uuid[13]).charAt(String.format("%08X", uuid[13]).length() - 1) == '1'){
-            setTYPE(1);
-        }else {
-            setTYPE(0);
+        String bit = TransformUtil.byte2bit(uuid[13]);
+        setTYPE(TransformUtil.bit2int(bit.substring(7)));
+        int contentVersion = TransformUtil.bit2int(bit.substring(1,7));
+        if (contentVersion <= 1){
+            contentVersion = 1;
         }
-        if (Integer.parseInt(String.format("%08X",uuid[13]).substring(1, 7)) <= 1){
-            setContentVersion(1);
-        }else {
-            setContentVersion(Integer.parseInt(String.format("%08X",uuid[13]).substring(1, 7)));
-        }
+        setContentVersion(contentVersion);
         setManufacturer_ID(String.valueOf(uuid[14]));
     }
 

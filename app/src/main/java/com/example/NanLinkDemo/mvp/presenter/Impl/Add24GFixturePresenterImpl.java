@@ -13,8 +13,10 @@ import com.example.NanLinkDemo.mvp.adapter.Add24GAdapter;
 import com.example.NanLinkDemo.mvp.model.Impl.Add24GFixtureModelImpl;
 import com.example.NanLinkDemo.mvp.presenter.Add24GFixturePresenter;
 import com.example.NanLinkDemo.mvp.view.Add24GFixtureView;
+import com.example.NanLinkDemo.mvp.widget.Add24GFixtureActivity;
 import com.example.NanLinkDemo.ui.MyDialog;
 import com.example.NanLinkDemo.util.Constant;
+import com.example.NanLinkDemo.util.DataUtil;
 import com.example.NanLinkDemo.util.DateUtil;
 import com.example.NanLinkDemo.util.SnackBarUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
@@ -68,44 +70,87 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
             String deviceId = "";
             switch (view.getCheckIndexType()){
                 case 0:
-                    deviceId = "FFFFFA";
+                    deviceId = "FFFFF1";
                     break;
                 case 1:
                     switch (view.getCheckIndexCCTRange()){
                         case 0:
-                            deviceId = "FFFFFB";
+                            deviceId = "FFFFF2";
                             break;
                         case 1:
-                            deviceId = "FFFFFC";
+                            deviceId = "FFFFF3";
                             break;
                         case 2:
-                            deviceId = "FFFFFD";
+                            deviceId = "FFFFF4";
                             break;
                         case 3:
-                            deviceId = "FFFFFE";
+                            deviceId = "FFFFF5";
                             break;
                     }
                 case 2:
-                    switch (view.getCheckIndexGM()){
+                    switch (view.getCheckIndexCCTRange()){
                         case 0:
-                            deviceId = "FFFFFF";
+                            switch (view.getCheckIndexGM()){
+                                case 0:
+                                    deviceId = "FFFFF6";
+                                    break;
+                                case 1:
+                                    deviceId = "FFFFFA";
+                                    break;
+                            }
                             break;
                         case 1:
-                            deviceId = "FFFFFG";
+                            switch (view.getCheckIndexGM()){
+                                case 0:
+                                    deviceId = "FFFFF7";
+                                    break;
+                                case 1:
+                                    deviceId = "FFFFFB";
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            switch (view.getCheckIndexGM()){
+                                case 0:
+                                    deviceId = "FFFFF8";
+                                    break;
+                                case 1:
+                                    deviceId = "FFFFFC";
+                                    break;
+                            }
+                            break;
+                        case 3:
+                            switch (view.getCheckIndexGM()){
+                                case 0:
+                                    deviceId = "FFFFF9";
+                                    break;
+                                case 1:
+                                    deviceId = "FFFFFD";
+                                    break;
+                            }
+                            break;
                     }
-            }
-            for (Add24GFixture add24GFixture : add24GFixtures){
-                Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), add24GFixture.getName(), add24GFixture.getCH(), deviceId, "2.4G", "");
-                MyApplication.getFixtures().add(fixture);
-                model.addFixture(fixture);
 
             }
-            Scene scene = MyApplication.getScene();
-            scene.setFixtureNum(MyApplication.getFixtures().size());
-            scene.setModifiedDate(DateUtil.getTime());
-            MyApplication.setScene(scene);
-            model.updateScene(scene);
-            ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
+            String finalDeviceId = deviceId;
+            DataUtil.getDeviceData((Add24GFixtureActivity)view, deviceId, 1, new DataUtil.onReceiveDeviceDataListener() {
+                @Override
+                public void ReceiveDeviceData(String data) {
+                    for (Add24GFixture add24GFixture : add24GFixtures){
+                        Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), add24GFixture.getName(), add24GFixture.getCH(), finalDeviceId, "2.4G", "");
+                        fixture.setData(data);
+                        MyApplication.getFixtures().add(fixture);
+                        model.addFixture(fixture);
+                    }
+                    Scene scene = MyApplication.getScene();
+                    scene.setFixtureNum(MyApplication.getFixtures().size());
+                    scene.setModifiedDate(DateUtil.getTime());
+                    MyApplication.setScene(scene);
+                    model.updateScene(scene);
+                    ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
+
+                }
+            });
 
         } else {
             view.showMyDialog(MyDialog.Read_TwoBtn_NormalTitle_WhiteTwoBtn, "更改地址码", "有" + unPassCHList.size() + "台灯光设备的地址码\n因与其它设备重复需要更改", "取消", null, "更改", new MyDialog.PositiveOnClickListener() {
@@ -184,7 +229,7 @@ public class Add24GFixturePresenterImpl implements Add24GFixturePresenter {
         view.setListViewOnOutRangeListener(new Add24GAdapter.OnOutRangeListener() {
             @Override
             public void onOutRange() {
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "确定", null);
+                view.showMyDialog(MyDialog.Read_OneBtn_NoTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "确定", null);
             }
         });
         view.setListViewOnCheckCompleteListener(new Add24GAdapter.OnCheckCompleteListener() {
