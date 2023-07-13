@@ -22,6 +22,7 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
     private ArrayList<Fixture> hasGroupFixtureList;
 
     private ArrayList<Fixture> noGroupFixtureList;
+    private int fixtureNum, completeNum;
 
     public ManageFixturePresenterImpl(ManageFixtureView view) {
         this.view = view;
@@ -52,22 +53,13 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
                 break;
             case R.id.finish:
                 view.startLoading();
-                int fixtureNum = 0;
+                fixtureNum = completeNum = 0;
                 for (Fixture fixture : fixtureList){
                     if (fixture.getFixtureGroupName().equals(view.getFixtureGroupName())){
                         fixtureNum++;
                     }
                     model.updateFixture(fixture);
                 }
-                for (FixtureGroup fixtureGroup : MyApplication.getFixtureGroups()){
-                    if(fixtureGroup.getName().equals(view.getFixtureGroupName())){
-                        fixtureGroup.setFixtureNum(fixtureNum);
-                        model.updateFixtureGroup(fixtureGroup);
-                    }
-                }
-
-                view.stopLoading();
-                view.finish();
                 break;
         }
     }
@@ -88,5 +80,25 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
         }
         view.showFixture(fixtureList);
 
+    }
+
+    @Override
+    public void completeUpdateFixture() {
+        completeNum++;
+        if (completeNum == fixtureNum){
+            for (FixtureGroup fixtureGroup : MyApplication.getFixtureGroups()){
+                if(fixtureGroup.getName().equals(view.getFixtureGroupName())){
+                    fixtureGroup.setFixtureNum(fixtureNum);
+                    model.updateFixtureGroup(fixtureGroup);
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void completeUpdateFixtureGroup() {
+        view.stopLoading();
+        view.finish();
     }
 }

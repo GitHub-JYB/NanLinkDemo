@@ -46,6 +46,7 @@ public class ManageFixtureModelImpl implements ManageFixtureModel {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
+                        presenter.completeUpdateFixture();
                     }
                 });
     }
@@ -60,7 +61,7 @@ public class ManageFixtureModelImpl implements ManageFixtureModel {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-
+                        presenter.completeUpdateFixtureGroup();
                     }
                 });
     }

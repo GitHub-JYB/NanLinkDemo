@@ -14,4 +14,8 @@ public interface ManageFixturePresenter {
     void switchOnclick(View view);
 
     void receiveFixtureList(String fixtureGroupName, List<Fixture> fixtures);
+
+    void completeUpdateFixture();
+
+    void completeUpdateFixtureGroup();
 }

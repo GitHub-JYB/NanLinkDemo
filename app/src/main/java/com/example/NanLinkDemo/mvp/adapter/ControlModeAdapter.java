@@ -21,10 +21,11 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private static final int TYPE_FIXTURE_GROUP = 0;
     private static final int TYPE_FIXTURE = 1;
-    private ArrayList<Fixture> fixtureList = new ArrayList<>();
     private ArrayList<Fixture> noGroupFixtureList = new ArrayList<>();
 
-    private ArrayList<FixtureGroup> fixtureGroupList = new ArrayList<>();
+    private ArrayList<FixtureGroup> hasFixtureGroupList = new ArrayList<>();
+    private ArrayList<Fixture> hasGroupFixtureList = new ArrayList<>();
+    private ArrayList<Integer> CHList;
 
 
     @NonNull
@@ -44,44 +45,74 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderFixtureControl) {
-            if (fixtureGroupList == null){
-                ((ViewHolderFixtureControl) holder).control.setName(noGroupFixtureList.get(position).getName());
-                ((ViewHolderFixtureControl) holder).control.setCH("CH: " + TransformUtil.updateCH(noGroupFixtureList.get(position).getCH()));
-
-            }else {
-                ((ViewHolderFixtureControl) holder).control.setName(noGroupFixtureList.get(position - fixtureGroupList.size()).getName());
-                ((ViewHolderFixtureControl) holder).control.setCH("CH: " + TransformUtil.updateCH(noGroupFixtureList.get(position - fixtureGroupList.size()).getCH()));
-            }
+            ((ViewHolderFixtureControl) holder).control.setName(noGroupFixtureList.get(position - hasFixtureGroupList.size()).getName());
+            ((ViewHolderFixtureControl) holder).control.setCH("CH: " + TransformUtil.updateCH(noGroupFixtureList.get(position - hasFixtureGroupList.size()).getCH()));
         } else if (holder instanceof ViewHolderFixtureGroupControl) {
-            ((ViewHolderFixtureGroupControl) holder).control.setName(fixtureGroupList.get(position).getName());
-
+            ((ViewHolderFixtureGroupControl) holder).control.setName(hasFixtureGroupList.get(position).getName());
+            CHList = new ArrayList<>();
+            for (Fixture fixture : hasGroupFixtureList) {
+                if (fixture.getFixtureGroupName().equals(hasFixtureGroupList.get(position).getName())) {
+                    CHList.add(fixture.getCH());
+                }
+            }
+            if (CHList.size() == 1) {
+                ((ViewHolderFixtureGroupControl) holder).control.setCH("CH: " + TransformUtil.updateCH(CHList.get(0)));
+            } else if (CHList.size() == 2) {
+                if (CHList.get(0) > CHList.get(1)) {
+                    ((ViewHolderFixtureGroupControl) holder).control.setCH("CH: " + TransformUtil.updateCH(CHList.get(1)) + ", " + TransformUtil.updateCH(CHList.get(0)));
+                } else {
+                    ((ViewHolderFixtureGroupControl) holder).control.setCH("CH: " + TransformUtil.updateCH(CHList.get(0)) + ", " + TransformUtil.updateCH(CHList.get(1)));
+                }
+            } else {
+                int min;
+                for (int i = 0; i < CHList.size() - 1; i++) {
+                    for (int j = i + 1; j < CHList.size(); j++) {
+                        if (CHList.get(j) < CHList.get(i)) {
+                            min = CHList.get(j);
+                            CHList.set(j, CHList.get(i));
+                            CHList.set(i, min);
+                        }
+                    }
+                }
+                for (int i = 0; i < CHList.size() - 1; i++) {
+                    if (CHList.get(i + 1) - CHList.get(i) > 1) {
+                        ((ViewHolderFixtureGroupControl) holder).control.setCH("CH: " + TransformUtil.updateCH(CHList.get(0)) + ", " + TransformUtil.updateCH(CHList.get(1)) + "...");
+                        break;
+                    }
+                    if (i >= CHList.size() - 2){
+                        ((ViewHolderFixtureGroupControl) holder).control.setCH("CH: " + TransformUtil.updateCH(CHList.get(0)) + " - " + TransformUtil.updateCH(CHList.get(CHList.size() - 1)));
+                    }
+                }
+            }
         }
     }
 
 
     @Override
     public int getItemCount() {
-        return fixtureGroupList == null ? noGroupFixtureList.size() : noGroupFixtureList.size() + fixtureGroupList.size();
+        return noGroupFixtureList.size() + hasFixtureGroupList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (fixtureGroupList != null && position < fixtureGroupList.size()) {
+        if (position < hasFixtureGroupList.size()) {
             return TYPE_FIXTURE_GROUP;
         } else {
             return TYPE_FIXTURE;
-
         }
-
-
     }
 
     public void setData(ArrayList<FixtureGroup> fixtureGroupList, ArrayList<Fixture> fixtureList) {
-        this.fixtureGroupList = fixtureGroupList;
-        this.fixtureList = fixtureList;
         for (Fixture fixture : fixtureList) {
             if (fixture.getFixtureGroupName().equals("")) {
                 noGroupFixtureList.add(fixture);
+            } else {
+                hasGroupFixtureList.add(fixture);
+            }
+        }
+        for (FixtureGroup fixtureGroup : fixtureGroupList) {
+            if (fixtureGroup.getFixtureNum() != 0) {
+                hasFixtureGroupList.add(fixtureGroup);
             }
         }
         notifyDataSetChanged();
