@@ -8,13 +8,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.ActivityRecycleviewSettingBinding;
 import com.example.NanLinkDemo.mvp.adapter.ControlModeAdapter;
-import com.example.NanLinkDemo.mvp.adapter.SettingAdapter;
 import com.example.NanLinkDemo.mvp.presenter.Impl.ControlModePresenterImpl;
 import com.example.NanLinkDemo.mvp.view.ControlModeView;
 import com.example.NanLinkDemo.util.Constant;
@@ -48,6 +46,11 @@ public class ControlModeActivity extends BaseActivity<ActivityRecycleviewSetting
     }
 
 
+    @Override
+    public void showControls(ArrayList<FixtureGroup> fixtureGroups, ArrayList<Fixture> fixtures){
+        adapter.setData(fixtureGroups, fixtures);
+    }
+
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
@@ -57,8 +60,14 @@ public class ControlModeActivity extends BaseActivity<ActivityRecycleviewSetting
         binding.recycleView.addItemDecoration(decoration);
 
         adapter = new ControlModeAdapter();
-        adapter.setData(MyApplication.getFixtureGroups(), MyApplication.getFixtures());
+        presenter.getDataList();
         binding.recycleView.setAdapter(adapter);
+        adapter.setOnDataUpdateListener(new ControlModeAdapter.OnDataUpdateListener() {
+            @Override
+            public void onDataUpdate(int position, String dim) {
+                presenter.updateDim(position, dim);
+            }
+        });
     }
 
     @Override

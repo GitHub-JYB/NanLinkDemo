@@ -7,4 +7,6 @@ import java.util.ArrayList;
 
 public interface ControlModeView {
     void setPresenter();
+
+    void showControls(ArrayList<FixtureGroup> fixtureGroups, ArrayList<Fixture> fixtures);
 }

@@ -52,44 +52,20 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ViewHolderFixtureControl) holder).control.setName(noGroupFixtureList.get(position - hasFixtureGroupList.size()).getName());
             ((ViewHolderFixtureControl) holder).control.setCH("CH: " + TransformUtil.updateCH(noGroupFixtureList.get(position - hasFixtureGroupList.size()).getCH()));
             String data = noGroupFixtureList.get(position - hasFixtureGroupList.size()).getData();
-            if(!data.equals("")){
+            if (!data.equals("")) {
                 Gson gson = new Gson();
                 DeviceDataMessage.Data deviceData = gson.fromJson(data, DeviceDataMessage.Data.class);
                 ((ViewHolderFixtureControl) holder).control.setSeekBar(Integer.parseInt(deviceData.getLuminance().split("LT_")[1]), 0, 1, Integer.parseInt(deviceData.getDimItem()));
-                ((ViewHolderFixtureControl) holder).control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
-                    @Override
-                    public void onDataChanged(int index) {
-                        ((ViewHolderFixtureControl) holder).control.setData(((ViewHolderFixtureControl) holder).control.getData() + "%");
-                        deviceData.setDimItem((String) ((ViewHolderFixtureControl) holder).control.getData());
-                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                        String data = gson.toJson(deviceData);
-                        if (onDataUpdateListener != null){
-                            onDataUpdateListener.onDataUpdate(, data);
-                        }
-                    }
-                });
                 ((ViewHolderFixtureControl) holder).control.setData(((ViewHolderFixtureControl) holder).control.getData() + "%");
             }
         } else if (holder instanceof ViewHolderFixtureGroupControl) {
             ((ViewHolderFixtureGroupControl) holder).control.setName(hasFixtureGroupList.get(position).getName());
             ((ViewHolderFixtureGroupControl) holder).control.setCH(getGroupCH(hasFixtureGroupList.get(position).getName()));
             String data = hasFixtureGroupList.get(position).getData();
-            if(!data.equals("")){
+            if (!data.equals("")) {
                 Gson gson = new Gson();
                 DeviceDataMessage.Data deviceData = gson.fromJson(data, DeviceDataMessage.Data.class);
                 ((ViewHolderFixtureGroupControl) holder).control.setSeekBar(Integer.parseInt(deviceData.getLuminance().split("LT_")[1]), 0, 1, Integer.parseInt(deviceData.getDimItem()));
-                ((ViewHolderFixtureGroupControl) holder).control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
-                    @Override
-                    public void onDataChanged(int index) {
-                        ((ViewHolderFixtureGroupControl) holder).control.setData(((ViewHolderFixtureGroupControl) holder).control.getData() + "%");
-                        deviceData.setDimItem((String) ((ViewHolderFixtureGroupControl) holder).control.getData());
-                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                        String data = gson.toJson(deviceData);
-                        if (onDataUpdateListener != null){
-                            onDataUpdateListener.onDataUpdate(, data);
-                        }
-                    }
-                });
                 ((ViewHolderFixtureGroupControl) holder).control.setData(((ViewHolderFixtureGroupControl) holder).control.getData() + "%");
             }
         }
@@ -102,11 +78,11 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 CHList.add(fixture.getCH());
             }
         }
-         if (CHList.size() == 2) {
+        if (CHList.size() == 2) {
             if (CHList.get(0) > CHList.get(1)) {
-                return  "CH: " + TransformUtil.updateCH(CHList.get(1)) + ", " + TransformUtil.updateCH(CHList.get(0));
+                return "CH: " + TransformUtil.updateCH(CHList.get(1)) + ", " + TransformUtil.updateCH(CHList.get(0));
             } else {
-               return "CH: " + TransformUtil.updateCH(CHList.get(0)) + ", " + TransformUtil.updateCH(CHList.get(1));
+                return "CH: " + TransformUtil.updateCH(CHList.get(0)) + ", " + TransformUtil.updateCH(CHList.get(1));
             }
         } else {
             int min;
@@ -121,9 +97,9 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             for (int i = 0; i < CHList.size() - 1; i++) {
                 if (CHList.get(i + 1) - CHList.get(i) > 1) {
-                   return "CH: " + TransformUtil.updateCH(CHList.get(0)) + ", " + TransformUtil.updateCH(CHList.get(1)) + "...";
+                    return "CH: " + TransformUtil.updateCH(CHList.get(0)) + ", " + TransformUtil.updateCH(CHList.get(1)) + "...";
                 }
-                if (i >= CHList.size() - 2){
+                if (i >= CHList.size() - 2) {
                     return "CH: " + TransformUtil.updateCH(CHList.get(0)) + " - " + TransformUtil.updateCH(CHList.get(CHList.size() - 1));
                 }
             }
@@ -172,6 +148,15 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             control = binding.control;
             control.setTitleVisibility(View.GONE);
             control.setGroupLogoVisibility(View.GONE);
+            control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanged(int index) {
+                    control.setData(control.getData() + "%");
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), (String) control.getData());
+                    }
+                }
+            });
         }
     }
 
@@ -184,6 +169,15 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(binding.getRoot());
             control = binding.control;
             control.setTitleVisibility(View.GONE);
+            control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanged(int index) {
+                    control.setData(control.getData() + "%");
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), (String) control.getData());
+                    }
+                }
+            });
         }
     }
 
@@ -192,6 +186,6 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public interface OnDataUpdateListener {
-        void onDataUpdate(int position, String data);
+        void onDataUpdate(int position, String dim);
     }
 }
