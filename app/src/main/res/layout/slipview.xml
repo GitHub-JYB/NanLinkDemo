@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/content"
@@ -118,7 +117,14 @@
         <SeekBar
             android:id="@+id/seekbar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxHeight="4dp"
+            android:minHeight="4dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:splitTrack="false"
+            android:thumbOffset="6dp"
+            android:thumb="@drawable/bg_selector_thumb_seekbar_on"/>
 
         <ImageView
             android:id="@+id/add"

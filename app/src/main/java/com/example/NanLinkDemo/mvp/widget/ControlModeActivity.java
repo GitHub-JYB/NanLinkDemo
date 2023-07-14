@@ -47,10 +47,6 @@ public class ControlModeActivity extends BaseActivity<ActivityRecycleviewSetting
         presenter = new ControlModePresenterImpl(this);
     }
 
-    @Override
-    public void showControls(ArrayList<FixtureGroup> fixtureGroups, ArrayList<Fixture> fixtures) {
-
-    }
 
     private void initRecyclerView() {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
