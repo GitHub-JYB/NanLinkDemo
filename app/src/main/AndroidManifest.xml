@@ -67,6 +67,7 @@
         <activity android:name=".mvp.widget.ScanControllerActivity" />
         <activity android:name=".mvp.widget.Add24GFixtureActivity" />
         <activity android:name=".mvp.widget.ControlModeActivity" />
+        <activity android:name=".mvp.widget.ControlActivity" />
     </application>
 
 </manifest>

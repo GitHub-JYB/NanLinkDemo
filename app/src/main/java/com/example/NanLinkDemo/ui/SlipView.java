@@ -10,10 +10,12 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.SlipviewBinding;
+import com.example.NanLinkDemo.util.SnackBarUtil;
 
 public class SlipView extends RelativeLayout {
 
@@ -22,6 +24,10 @@ public class SlipView extends RelativeLayout {
 
     private OnDataChangeListener onDataChangeListener;
     private int max, min, step, value;
+    private int delayTime = 2;
+    private String remark;
+    private OnDataClickListener onDataClickListener;
+    private OnDelayTimeClickListener onDelayTimeClickListener;
 
     public SlipView(Context context) {
         this(context, null);
@@ -55,7 +61,7 @@ public class SlipView extends RelativeLayout {
             public void onClick(View v) {
                 value = -(value - min) + min;
                 updateView(value);
-                if (onDataChangeListener != null){
+                if (onDataChangeListener != null) {
                     onDataChangeListener.onDataChanged(value);
                 }
             }
@@ -74,7 +80,7 @@ public class SlipView extends RelativeLayout {
                 if (value < max) {
                     value += step;
                     updateView(value);
-                    if (onDataChangeListener != null){
+                    if (onDataChangeListener != null) {
                         onDataChangeListener.onDataChanged(value);
                     }
                 }
@@ -90,7 +96,7 @@ public class SlipView extends RelativeLayout {
                 if (value > min) {
                     value -= step;
                     updateView(value);
-                    if (onDataChangeListener != null){
+                    if (onDataChangeListener != null) {
                         onDataChangeListener.onDataChanged(value);
                     }
                 }
@@ -116,7 +122,7 @@ public class SlipView extends RelativeLayout {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if (onDataChangeListener != null){
+                if (onDataChangeListener != null) {
                     onDataChangeListener.onDataChanged(value);
                 }
             }
@@ -143,14 +149,14 @@ public class SlipView extends RelativeLayout {
         binding.CH.setVisibility(visibility);
     }
 
-    //设置数据
-    public void setData(String data) {
-        binding.data.setText(data);
+    //设置remark, 在设置进度之前调用
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
-    //获取数据
+    //获取数值
     public CharSequence getData() {
-        return binding.data.getText();
+        return String.valueOf(value);
     }
 
     //设置控件名称
@@ -164,8 +170,13 @@ public class SlipView extends RelativeLayout {
     }
 
     //设置延时开关时间
-    public void setDelayTime(String title) {
-        binding.delayTime.setText(title);
+    public void setDelayTime(int delayTime) {
+        binding.delayTime.setText(delayTime + "秒");
+    }
+
+    //获取延时开关时间
+    public CharSequence getDelayTime() {
+        return String.valueOf(delayTime);
     }
 
     //设置控件延时开关时间可见性
@@ -203,9 +214,25 @@ public class SlipView extends RelativeLayout {
             binding.seekbar.getProgressDrawable().setBounds(bounds);
             binding.seekbar.setThumb(getResources().getDrawable(R.drawable.bg_selector_thumb_seekbar_on));
             binding.data.setTextColor(getResources().getColor(R.color.blue));
-            binding.data.setText(String.valueOf(value));
+            binding.data.setText(transformData(value));
+            binding.data.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onDataClickListener != null){
+                        onDataClickListener.onDataClick(view);
+                    }
+                }
+            });
             binding.delayTime.setClickable(true);
             binding.delayTime.setTextColor(getResources().getColor(R.color.blue));
+            binding.delayTime.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onDelayTimeClickListener != null){
+                        onDelayTimeClickListener.onDelayTimeClick(view);
+                    }
+                }
+            });
             binding.delayBtn.setClickable(true);
             binding.delayBtn.setImageResource(R.drawable.ic_dim_open);
             binding.add.setImageResource(R.drawable.ic_slip_add);
@@ -223,7 +250,7 @@ public class SlipView extends RelativeLayout {
             binding.seekbar.getProgressDrawable().setBounds(bounds);
             binding.seekbar.setThumb(getResources().getDrawable(R.drawable.bg_selector_thumb_seekbar_off));
             binding.data.setTextColor(getResources().getColor(R.color.unable));
-            binding.data.setText(String.valueOf(-(value - min) + min));
+            binding.data.setText(transformData(-(value - min) + min));
             binding.delayTime.setClickable(true);
             binding.delayTime.setTextColor(getResources().getColor(R.color.unable));
             binding.delayBtn.setClickable(true);
@@ -233,12 +260,38 @@ public class SlipView extends RelativeLayout {
         }
     }
 
-    //设置控件按键的切换事件
+    private String transformData(int value) {
+        switch (remark) {
+            case "亮度":
+                return value + "%";
+        }
+        return String.valueOf(value);
+    }
+
+    //设置数据更新监听事件
     public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener) {
         this.onDataChangeListener = onDataChangeListener;
     }
 
     public interface OnDataChangeListener {
         void onDataChanged(int index);
+    }
+
+    //设置数据点击监听事件
+    public void setOnDataClickListener(OnDataClickListener onDataClickListener) {
+        this.onDataClickListener = onDataClickListener;
+    }
+
+    public interface OnDataClickListener {
+        void onDataClick(View view);
+    }
+
+    //设置延时时间点击监听事件
+    public void setOnDelayTimeClickListener(OnDelayTimeClickListener onDelayTimeClickListener) {
+        this.onDelayTimeClickListener = onDelayTimeClickListener;
+    }
+
+    public interface OnDelayTimeClickListener {
+        void onDelayTimeClick(View view);
     }
 }

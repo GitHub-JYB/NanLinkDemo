@@ -14,6 +14,7 @@ import com.example.NanLinkDemo.mvp.adapter.ThreePointAdapter;
 import com.example.NanLinkDemo.mvp.model.Impl.SceneModelImpl;
 import com.example.NanLinkDemo.mvp.presenter.ScenePresenter;
 import com.example.NanLinkDemo.mvp.view.SceneView;
+import com.example.NanLinkDemo.mvp.widget.ControlActivity;
 import com.example.NanLinkDemo.ui.MyDialog;
 import com.example.NanLinkDemo.util.Constant;
 import com.example.NanLinkDemo.util.DateUtil;
@@ -263,14 +264,13 @@ public class ScenePresenterImpl implements ScenePresenter {
     public void FixtureListSwitch(int position) {
         if (fixtureGroupList.isEmpty()) {
             if (position > 0) {
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_WhiteOneBtn, "点击设备群组: " + fixtureGroupList.get(position - 1).getName(), "该功能还没开发", "重试", null);
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureList.get(position - 1).getId()).withInt("type", ControlActivity.TYPE_FIXTURE).navigation();
             }
         } else {
             if (position > 0 && position <= fixtureGroupList.size()) {
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_WhiteOneBtn, "点击设备群组: " + fixtureGroupList.get(position - 1).getName(), "该功能还没开发", "重试", null);
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureGroupList.get(position - 1).getId()).withInt("type", ControlActivity.TYPE_FIXTURE_GROUP).navigation();
             } else if (position > fixtureGroupList.size() + 1) {
-                view.showMyDialog(MyDialog.Read_OneBtn_NormalTitle_WhiteOneBtn, "点击设备: " + fixtureGroupList.get(position - fixtureGroupList.size() - 2).getName(), "该功能还没开发", "重试", null);
-
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureList.get(position - fixtureGroupList.size() - 2).getId()).withInt("type", ControlActivity.TYPE_FIXTURE).navigation();
             }
         }
     }

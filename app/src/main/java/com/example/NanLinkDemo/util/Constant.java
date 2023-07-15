@@ -26,12 +26,9 @@ public class Constant {
     public static final String ACTIVITY_URL_ManageFixture = "/widget/ManageFixtureActivity";
     public static final String ACTIVITY_URL_Controller = "/widget/ControllerActivity";
     public static final String ACTIVITY_URL_ScanController = "/widget/ScanControllerActivity";
-
     public static final String ACTIVITY_URL_Add24GFixture = "/widget/Add24GFixtureActivity";
-
     public static final String ACTIVITY_URL_ControlMode = "/widget/ControlModeActivity";
-
-
+    public static final String ACTIVITY_URL_Control = "/widget/ControlActivity";
 
     public static final int Code_Register = 0;
     public static final int Code_ResetPassword = 1;

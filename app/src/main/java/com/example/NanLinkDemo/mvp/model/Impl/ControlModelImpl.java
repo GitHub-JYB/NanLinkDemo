@@ -4,47 +4,49 @@ import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.DataBase.MyDataBase;
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
-import com.example.NanLinkDemo.mvp.model.ControllerModeModel;
-import com.example.NanLinkDemo.mvp.presenter.Impl.ControlModePresenterImpl;
+import com.example.NanLinkDemo.mvp.model.ControlModel;
+import com.example.NanLinkDemo.mvp.presenter.Impl.ControlPresenterImpl;
+
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class ControlModeModelImpl implements ControllerModeModel {
-    private final ControlModePresenterImpl presenter;
+public class ControlModelImpl implements ControlModel {
+    private final ControlPresenterImpl presenter;
 
-    public ControlModeModelImpl(ControlModePresenterImpl presenter) {
+    public ControlModelImpl(ControlPresenterImpl presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void updateFixtureGroup(FixtureGroup fixtureGroup) {
+    public void getFixture(int id) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getFixtureGroupDao()
-                .updateFixtureGroupInfo(fixtureGroup)
+                .getFixtureDao()
+                .getFixtureInfoFromId(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
+                .subscribe(new Consumer<List<Fixture>>() {
                     @Override
-                    public void accept(Integer integer) throws Exception {
-
+                    public void accept(List<Fixture> fixtures) throws Exception {
+                        presenter.receiveFixtureList(fixtures);
                     }
                 });
     }
 
     @Override
-    public void updateFixture(Fixture fixture) {
+    public void getFixtureGroup(int id) {
         Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
-                .getFixtureDao()
-                .updateFixtureInfo(fixture)
+                .getFixtureGroupDao()
+                .getFixtureGroupInfoFromId(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Integer>() {
+                .subscribe(new Consumer<List<FixtureGroup>>() {
                     @Override
-                    public void accept(Integer integer) throws Exception {
-
+                    public void accept(List<FixtureGroup> fixtureGroups) throws Exception {
+                        presenter.receiveFixtureGroupList(fixtureGroups);
                     }
                 });
     }

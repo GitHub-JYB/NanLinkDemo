@@ -25,6 +25,10 @@ public interface FixtureDao {
     @Query("select * from fixture where email = :email AND sceneName = :sceneName AND CH = :CH")
     Single<List<Fixture>> getFixtureInfoFromName(String email, String sceneName, int CH);
 
+    @Query("select * from fixture where id = :id")
+    Single<List<Fixture>> getFixtureInfoFromId(int id);
+
+
     @Insert
     Single<Long> insert(Fixture fixtures);
 

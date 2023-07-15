@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
-    tools:context=".mvp.widget.SceneGroupActivity">
+    tools:context=".mvp.widget.ControlActivity">
 
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/theme"
-        android:orientation="vertical">
+        android:background="@color/theme">
 
-        <com.example.NanLinkDemo.ui.MyToolbar
-            android:id="@+id/toolbar"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleView"
-            android:layout_marginTop="10dp"
+        <com.example.NanLinkDemo.ui.ControlToolbar
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/theme">
+            android:layout_height="wrap_content"/>
 
-        </androidx.recyclerview.widget.RecyclerView>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 
 

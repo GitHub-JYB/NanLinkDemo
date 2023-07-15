@@ -22,6 +22,9 @@ public interface FixtureGroupDao {
     @Query("select * from fixturegroup where email = :email AND sceneName = :sceneName AND name = :name")
     Single<List<FixtureGroup>> getFixtureGroupInfoFromName(String email, String sceneName, String name);
 
+    @Query("select * from fixturegroup where id = :id")
+    Single<List<FixtureGroup>> getFixtureGroupInfoFromId(int id);
+
     @Insert
     Single<Long> insert(FixtureGroup fixtureGroups);
 

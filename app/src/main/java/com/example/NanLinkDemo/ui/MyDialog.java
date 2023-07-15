@@ -44,6 +44,8 @@ public class MyDialog extends DialogFragment {
     public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_CH = 20;
     public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH = 21;
     public static final int Read_OneBtn_NoTitle_BlueOneBtn = 22;
+    public static final int Write_TwoBtn_NormalTitle_BlueTwoBtn_Data = 23;
+
 
 
     private CharSequence title, bigSizeMessage, smallSizeMessage, bigSizeMessageOne, smallSizeMessageOne, bigSizeMessageTwo, smallSizeMessageTwo, neutralText, positiveText, negativeText;
@@ -298,6 +300,7 @@ public class MyDialog extends DialogFragment {
                 setBlueTwoBtn();
                 break;
             case Write_TwoBtn_NormalTitle_BlueTwoBtn_CH:
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_Data:
                 setWriteCH();
                 setTwoBtn();
                 setNormalTitle();
@@ -324,9 +327,14 @@ public class MyDialog extends DialogFragment {
 
         binding.myDialogInputText.setText(bigSizeMessage);
         binding.myDialogInputText.setSelection(bigSizeMessage.length());
-        binding.myDialogCHInputText.setText(bigSizeMessage);
-        binding.myDialogCHInputText.setSelection(bigSizeMessage.length());
-
+        if (type == Write_TwoBtn_NormalTitle_BlueTwoBtn_Data) {
+            binding.tip.setText(bigSizeMessage);
+            binding.myDialogCHInputText.setText(smallSizeMessage);
+            binding.myDialogCHInputText.setSelection(smallSizeMessage.length());
+        }else {
+            binding.myDialogCHInputText.setText(bigSizeMessage);
+            binding.myDialogCHInputText.setSelection(bigSizeMessage.length());
+        }
         binding.myDialogInputDescription.setText(smallSizeMessage);
         binding.myDialogInputTextRemark.setText(bigSizeMessage);
         binding.myDialogInputTextRemark.setSelection(bigSizeMessage.length());
@@ -375,30 +383,31 @@ public class MyDialog extends DialogFragment {
                 binding.myDialogAddFixtureCHInputText.setText("");
             }
         });
+        if (type == Write_TwoBtn_NormalTitle_BlueTwoBtn_CH) {
+            binding.myDialogCHInputText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        binding.myDialogCHInputText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable == null || editable.toString().trim().isEmpty()){
-                    return;
                 }
-                int CH = Integer.parseInt(editable.toString().trim());
-                if (CH > 512) {
-                    new MyDialog(MyDialog.Read_OneBtn_NoTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "确定", null).show(getFragmentManager(), "MyDialog");
-                    binding.myDialogCHInputText.setText("");
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
                 }
-            }
-        });
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (editable == null || editable.toString().trim().isEmpty()) {
+                        return;
+                    }
+                    int CH = Integer.parseInt(editable.toString().trim());
+                    if (CH > 512) {
+                        new MyDialog(MyDialog.Read_OneBtn_NoTitle_BlueOneBtn, "", "请输入介于 1 - 512\n之间的数值", "确定", null).show(getFragmentManager(), "MyDialog");
+                        binding.myDialogCHInputText.setText("");
+                    }
+                }
+            });
+        }
 
         binding.myDialogAddFixtureCHInputText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -413,7 +422,7 @@ public class MyDialog extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.toString().trim().isEmpty()){
+                if (editable.toString().trim().isEmpty()) {
                     return;
                 }
                 int CH = Integer.parseInt(editable.toString().trim());
@@ -484,6 +493,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogMessage.setVisibility(View.GONE);
         binding.myDialogTwoMessage.setVisibility(View.VISIBLE);
         binding.myDialogInputRemark.setVisibility(View.GONE);
+        binding.myDialogCHInput.setVisibility(View.GONE);
         binding.myDialogAddFixtureCH.setVisibility(View.GONE);
         binding.myDialogNoTitleContent.setVisibility(View.GONE);
 
@@ -495,6 +505,7 @@ public class MyDialog extends DialogFragment {
         binding.myDialogMessage.setVisibility(View.GONE);
         binding.myDialogTwoMessage.setVisibility(View.GONE);
         binding.myDialogInputRemark.setVisibility(View.GONE);
+        binding.myDialogCHInput.setVisibility(View.GONE);
         binding.myDialogAddFixtureCH.setVisibility(View.GONE);
         binding.myDialogNoTitleContent.setVisibility(View.GONE);
     }
@@ -685,6 +696,7 @@ public class MyDialog extends DialogFragment {
             case Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark:
                 return binding.myDialogInputTextRemark.getText().toString().trim();
             case Write_TwoBtn_NormalTitle_BlueTwoBtn_CH:
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_Data:
                 return binding.myDialogCHInputText.getText().toString().trim();
             case Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH:
                 return binding.myDialogAddFixtureCHInputText.getText().toString().trim();
@@ -692,4 +704,22 @@ public class MyDialog extends DialogFragment {
                 return binding.myDialogInputText.getText().toString().trim();
         }
     }
+
+    // 清除输入框文本
+    public void clearInputText() {
+        switch (type) {
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_Remark:
+                binding.myDialogInputTextRemark.setText("");
+                break;
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_CH:
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_Data:
+                binding.myDialogCHInputText.setText("");
+                break;
+            case Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH:
+                binding.myDialogAddFixtureCHInputText.setText("");
+            default:
+                binding.myDialogInputText.setText("");
+        }
+    }
+
 }

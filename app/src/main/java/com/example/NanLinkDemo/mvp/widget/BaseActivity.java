@@ -131,6 +131,9 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         myDialog.show(getSupportFragmentManager(), "MyDialog");
     }
 
+    public void clearInputText() {
+        myDialog.clearInputText();
+    }
 
     public String getInputTextMyDialog() {
         return myDialog.getInputText();

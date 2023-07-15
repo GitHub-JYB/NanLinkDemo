@@ -12,7 +12,9 @@ import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
 import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.databinding.VpItemControlBinding;
+import com.example.NanLinkDemo.ui.MyDialog;
 import com.example.NanLinkDemo.ui.SlipView;
+import com.example.NanLinkDemo.util.SnackBarUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,6 +32,8 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private ArrayList<Fixture> hasGroupFixtureList = new ArrayList<>();
     private ArrayList<Integer> CHList;
     private OnDataUpdateListener onDataUpdateListener;
+    private ControlModeAdapter.OnDataClickListener onDataClickListener;
+    private OnDelayTimeClickListener onDelayTimeClickListener;
 
 
     @NonNull
@@ -56,7 +60,8 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 Gson gson = new Gson();
                 DeviceDataMessage.Data deviceData = gson.fromJson(data, DeviceDataMessage.Data.class);
                 ((ViewHolderFixtureControl) holder).control.setSeekBar(Integer.parseInt(deviceData.getLuminance().split("LT_")[1]), 0, 1, Integer.parseInt(deviceData.getDimItem()));
-                ((ViewHolderFixtureControl) holder).control.setData(((ViewHolderFixtureControl) holder).control.getData() + "%");
+                ((ViewHolderFixtureControl) holder).control.setDelayTime(Integer.parseInt(deviceData.getDimDelay()));
+
             }
         } else if (holder instanceof ViewHolderFixtureGroupControl) {
             ((ViewHolderFixtureGroupControl) holder).control.setName(hasFixtureGroupList.get(position).getName());
@@ -66,7 +71,8 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 Gson gson = new Gson();
                 DeviceDataMessage.Data deviceData = gson.fromJson(data, DeviceDataMessage.Data.class);
                 ((ViewHolderFixtureGroupControl) holder).control.setSeekBar(Integer.parseInt(deviceData.getLuminance().split("LT_")[1]), 0, 1, Integer.parseInt(deviceData.getDimItem()));
-                ((ViewHolderFixtureGroupControl) holder).control.setData(((ViewHolderFixtureGroupControl) holder).control.getData() + "%");
+                ((ViewHolderFixtureGroupControl) holder).control.setDelayTime(Integer.parseInt(deviceData.getDimDelay()));
+
             }
         }
     }
@@ -122,19 +128,11 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public void setData(ArrayList<FixtureGroup> fixtureGroupList, ArrayList<Fixture> fixtureList) {
-        for (Fixture fixture : fixtureList) {
-            if (fixture.getFixtureGroupName().equals("")) {
-                noGroupFixtureList.add(fixture);
-            } else {
-                hasGroupFixtureList.add(fixture);
-            }
-        }
-        for (FixtureGroup fixtureGroup : fixtureGroupList) {
-            if (fixtureGroup.getFixtureNum() != 0) {
-                hasFixtureGroupList.add(fixtureGroup);
-            }
-        }
+    public void setData(ArrayList<FixtureGroup> hasFixtureGroupList, ArrayList<Fixture> hasGroupFixtureList, ArrayList<Fixture> noGroupFixtureList) {
+        this.hasFixtureGroupList = hasFixtureGroupList;
+        this.hasGroupFixtureList = hasGroupFixtureList;
+        this.noGroupFixtureList = noGroupFixtureList;
+
         notifyDataSetChanged();
     }
 
@@ -148,10 +146,26 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             control = binding.control;
             control.setTitleVisibility(View.GONE);
             control.setGroupLogoVisibility(View.GONE);
+            control.setRemark("亮度");
+            control.setOnDelayTimeClickListener(new SlipView.OnDelayTimeClickListener() {
+                @Override
+                public void onDelayTimeClick(View view) {
+                    if (onDelayTimeClickListener != null){
+                        onDelayTimeClickListener.onDataClick(getAdapterPosition(), (String) control.getDelayTime());
+                    }
+                }
+            });
+            control.setOnDataClickListener(new SlipView.OnDataClickListener() {
+                @Override
+                public void onDataClick(View view) {
+                    if (onDataClickListener != null){
+                        onDataClickListener.onDataClick(getAdapterPosition(), (String) control.getData());
+                    }
+                }
+            });
             control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
                 @Override
                 public void onDataChanged(int index) {
-                    control.setData(control.getData() + "%");
                     if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), (String) control.getData());
                     }
@@ -169,10 +183,26 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(binding.getRoot());
             control = binding.control;
             control.setTitleVisibility(View.GONE);
+            control.setRemark("亮度");
+            control.setOnDelayTimeClickListener(new SlipView.OnDelayTimeClickListener() {
+                @Override
+                public void onDelayTimeClick(View view) {
+                    if (onDelayTimeClickListener != null){
+                        onDelayTimeClickListener.onDataClick(getAdapterPosition(), (String) control.getDelayTime());
+                    }
+                }
+            });
+            control.setOnDataClickListener(new SlipView.OnDataClickListener() {
+                @Override
+                public void onDataClick(View view) {
+                    if (onDataClickListener != null){
+                        onDataClickListener.onDataClick(getAdapterPosition(), (String) control.getData());
+                    }
+                }
+            });
             control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
                 @Override
                 public void onDataChanged(int index) {
-                    control.setData(control.getData() + "%");
                     if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), (String) control.getData());
                     }
@@ -187,5 +217,21 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public interface OnDataUpdateListener {
         void onDataUpdate(int position, String dim);
+    }
+
+    public void setOnDataClickListener(OnDataClickListener onDataClickListener) {
+        this.onDataClickListener = onDataClickListener;
+    }
+
+    public interface OnDataClickListener {
+        void onDataClick(int position, String dim);
+    }
+
+    public void setOnDelayTimeClickListener(OnDelayTimeClickListener onDelayTimeClickListener) {
+        this.onDelayTimeClickListener = onDelayTimeClickListener;
+    }
+
+    public interface OnDelayTimeClickListener {
+        void onDataClick(int position, String delayTime);
     }
 }

@@ -3,253 +3,265 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/bg_dialog">
+    android:background="@drawable/bg_dialog"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/my_dialog_title"
+        android:layout_width="290dp"
+        android:layout_height="56dp"
+        android:gravity="center"
         android:text="创建场景"
         android:textColor="@color/blue"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:visibility="gone"
-        android:gravity="center"
-        android:layout_width="290dp"
-        android:layout_height="56dp"/>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/content"
         android:layout_width="290dp"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
 
         <LinearLayout
-            android:orientation="vertical"
-            android:visibility="gone"
             android:id="@+id/my_dialog_two_message"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <View
-                android:background="@color/decoration_dialog"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:background="@color/decoration_dialog" />
 
             <RelativeLayout
                 android:id="@+id/my_dialog_two_message_one"
                 android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_height="56dp">
+                android:layout_height="56dp"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/my_dialog_big_size_message_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="该场景名称已存在,\n请尝试使用其它名称。"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/my_dialog_small_size_message_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/my_dialog_big_size_message_one"
+                    android:gravity="center"
                     android:text="该场景名称已存在,\n请尝试使用其它名称。"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    android:layout_below="@+id/my_dialog_big_size_message_one"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <View
-                android:background="@color/decoration_dialog"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:background="@color/decoration_dialog" />
 
             <RelativeLayout
                 android:id="@+id/my_dialog_two_message_two"
                 android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_height="56dp">
+                android:layout_height="56dp"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/my_dialog_big_size_message_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="该场景名称已存在,\n请尝试使用其它名称。"
                     android:textColor="@color/white"
-                    android:textSize="17sp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/my_dialog_small_size_message_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/my_dialog_big_size_message_two"
+                    android:gravity="center"
                     android:text="该场景名称已存在,\n请尝试使用其它名称。"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    android:layout_below="@+id/my_dialog_big_size_message_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:textSize="12sp" />
             </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/my_dialog_message"
             android:layout_width="match_parent"
-            android:layout_height="60dp">
-
+            android:layout_height="60dp"
+            android:visibility="gone">
 
 
             <TextView
                 android:id="@+id/my_dialog_big_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="该场景名称已存在,\n请尝试使用其它名称。"
                 android:textColor="@color/white"
-                android:textSize="17sp"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/my_dialog_small_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/my_dialog_big_size"
+                android:gravity="center"
                 android:text="该场景名称已存在,\n请尝试使用其它名称。"
                 android:textColor="@color/white"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:layout_below="@+id/my_dialog_big_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/my_dialog_input"
             android:layout_width="match_parent"
             android:layout_height="36dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/bg_unable_btn_login"
-            android:layout_centerHorizontal="true">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/my_dialog_input_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/my_dialog_inputText"
-                android:textSize="17sp"
-                android:textColor="@color/nav"
+                android:gravity="center"
                 android:text="1111"
-                android:gravity="center"/>
+                android:textColor="@color/nav"
+                android:textSize="17sp" />
 
 
             <EditText
                 android:id="@+id/my_dialog_inputText"
-                android:textColor="@color/white"
-                android:textSize="17sp"
-                android:gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/my_dialog_inputText_clean"
+                android:background="@null"
+                android:gravity="start"
                 android:inputType="text"
-                android:text="11111"
                 android:paddingStart="12dp"
-                android:paddingEnd="12dp"
                 android:paddingTop="7dp"
+                android:paddingEnd="12dp"
                 android:paddingBottom="7dp"
                 android:singleLine="true"
-                android:background="@null"
-                android:layout_toStartOf="@+id/my_dialog_inputText_clean"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:text="11111"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
 
             <ImageButton
                 android:id="@+id/my_dialog_inputText_clean"
                 android:layout_width="35dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_clear_text"
+                android:layout_alignParentEnd="true"
                 android:background="@android:color/transparent"
-                android:layout_alignParentEnd="true"/>
+                android:src="@drawable/ic_clear_text" />
 
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/my_dialog_CH_input"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="25dp"
+            android:layout_height="68dp"
             android:layout_marginBottom="24dp"
-            android:visibility="gone"
-            android:background="@drawable/bg_unable_btn_login"
-            android:layout_centerHorizontal="true">
+            android:visibility="gone">
 
 
+            <TextView
+                android:id="@+id/tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="请输入一个介于1-512之间的数值"
+                android:textColor="@color/login_hintText"
+                android:textSize="12sp"
 
-            <EditText
-                android:id="@+id/my_dialog_CH_inputText"
-                android:textColor="@color/white"
-                android:textSize="17sp"
-                android:gravity="start"
-                android:layout_centerVertical="true"
-                android:inputType="number"
-                android:text="11111"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="7dp"
-                android:paddingBottom="7dp"
-                android:singleLine="true"
-                android:background="@null"
-                android:layout_toStartOf="@+id/my_dialog_CH_inputText_clean"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                />
 
-            <ImageButton
-                android:id="@+id/my_dialog_CH_inputText_clean"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_clear_text"
-                android:background="@android:color/transparent"
-                android:layout_alignParentEnd="true"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/bg_unable_btn_login">
 
+                <EditText
+                    android:id="@+id/my_dialog_CH_inputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/my_dialog_CH_inputText_clean"
+                    android:background="@null"
+                    android:gravity="start"
+                    android:inputType="number"
+                    android:paddingStart="12dp"
+                    android:paddingTop="7dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="7dp"
+                    android:singleLine="true"
+                    android:text="11111"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+                <ImageButton
+                    android:id="@+id/my_dialog_CH_inputText_clean"
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_clear_text" />
+            </RelativeLayout>
         </RelativeLayout>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:visibility="gone"
             android:id="@+id/my_dialog_AddFixture_CH"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="44dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_dim_on"/>
+                    android:src="@drawable/ic_dim_on" />
 
                 <TextView
                     android:id="@+id/my_dialog_AddFixture_CH_Name"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:textSize="17sp"
-                    android:textColor="@color/login_hintText"
                     android:gravity="center"
-                    android:text="BULB 8C"/>
+                    android:text="BULB 8C"
+                    android:textColor="@color/login_hintText"
+                    android:textSize="17sp" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="37dp"
                 android:gravity="center"
+                android:text="请输入一个介于1和512之间的数值"
                 android:textColor="@color/login_hintText"
-                android:textSize="12sp"
-                android:text="请输入一个介于1和512之间的数值"/>
+                android:textSize="12sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -257,33 +269,33 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="25dp"
                 android:layout_marginBottom="24dp"
-                android:background="@drawable/bg_unable_btn_login"
-                >
-            <EditText
-                android:id="@+id/my_dialog_AddFixture_CH_inputText"
-                android:textColor="@color/white"
-                android:textSize="17sp"
-                android:gravity="start"
-                android:layout_centerVertical="true"
-                android:inputType="number"
-                android:text="11111"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="7dp"
-                android:paddingBottom="7dp"
-                android:singleLine="true"
-                android:background="@null"
-                android:layout_toStartOf="@+id/my_dialog_AddFixture_CH_inputText_clean"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:background="@drawable/bg_unable_btn_login">
 
-            <ImageButton
-                android:id="@+id/my_dialog_AddFixture_CH_inputText_clean"
-                android:layout_width="36dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_clear_text"
-                android:background="@android:color/transparent"
-                android:layout_alignParentEnd="true"/>
+                <EditText
+                    android:id="@+id/my_dialog_AddFixture_CH_inputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/my_dialog_AddFixture_CH_inputText_clean"
+                    android:background="@null"
+                    android:gravity="start"
+                    android:inputType="number"
+                    android:paddingStart="12dp"
+                    android:paddingTop="7dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="7dp"
+                    android:singleLine="true"
+                    android:text="11111"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+                <ImageButton
+                    android:id="@+id/my_dialog_AddFixture_CH_inputText_clean"
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_clear_text" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -293,45 +305,44 @@
             android:id="@+id/my_dialog_input_remark"
             android:layout_width="match_parent"
             android:layout_height="84dp"
-            android:visibility="gone"
+            android:layout_centerHorizontal="true"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/bg_unable_btn_login"
-            android:layout_centerHorizontal="true">
+            android:visibility="gone">
 
             <EditText
                 android:id="@+id/my_dialog_inputText_remark"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
+                android:background="@null"
+                android:gravity="start"
                 android:inputType="text"
                 android:paddingStart="12dp"
-                android:paddingEnd="12dp"
                 android:paddingTop="7dp"
+                android:paddingEnd="12dp"
                 android:paddingBottom="7dp"
-                android:background="@null"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:textColor="@color/white"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:id="@+id/my_dialog_no_title_content"
             android:layout_width="match_parent"
             android:layout_height="112dp"
             android:gravity="center"
-            >
+            android:orientation="vertical">
 
             <TextView
-                    android:id="@+id/my_dialog_no_title_message"
-                    android:text="请输入介于 1 - 512\n之间的数值"
-                    android:textColor="@color/white"
-                    android:textSize="17sp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                android:id="@+id/my_dialog_no_title_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="请输入介于 1 - 512\n之间的数值"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
 
 
         </LinearLayout>
@@ -339,62 +350,61 @@
     </RelativeLayout>
 
     <View
-        android:background="@color/decoration_dialog"
         android:layout_width="290dp"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:background="@color/decoration_dialog" />
 
     <RelativeLayout
         android:layout_width="290dp"
-        android:layout_height="44dp"
-        >
+        android:layout_height="44dp">
 
         <Button
-            android:text="重试"
-            android:textSize="17sp"
-            android:textColor="@color/blue"
             android:id="@+id/my_dialog_NeutralButton"
-            android:gravity="center"
-            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="重试"
+            android:textColor="@color/blue"
+            android:textSize="17sp" />
 
 
         <Button
-            android:text="取消"
-            android:textSize="17sp"
-            android:textColor="@color/white"
             android:id="@+id/my_dialog_NegativeButton"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone"
-            android:background="@android:color/transparent"
-            android:layout_toStartOf="@+id/decoration_dialog_Positive_Negative"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/decoration_dialog_Positive_Negative"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:visibility="gone" />
 
         <View
             android:id="@+id/decoration_dialog_Positive_Negative"
             android:layout_width="1dp"
-            android:layout_centerHorizontal="true"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:visibility="gone"
+            android:layout_centerHorizontal="true"
             android:background="@color/decoration_dialog"
-            android:layout_height="match_parent"/>
+            android:visibility="gone" />
 
         <Button
-            android:text="确认"
-            android:textSize="17sp"
-            android:textColor="@color/blue"
-            android:gravity="center"
-            android:visibility="gone"
-            android:background="@android:color/transparent"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/decoration_dialog_Positive_Negative"
             android:id="@+id/my_dialog_PositiveButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/decoration_dialog_Positive_Negative"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="确认"
+            android:textColor="@color/blue"
+            android:textSize="17sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

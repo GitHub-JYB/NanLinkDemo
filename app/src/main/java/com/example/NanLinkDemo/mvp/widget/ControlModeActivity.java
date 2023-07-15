@@ -47,8 +47,8 @@ public class ControlModeActivity extends BaseActivity<ActivityRecycleviewSetting
 
 
     @Override
-    public void showControls(ArrayList<FixtureGroup> fixtureGroups, ArrayList<Fixture> fixtures){
-        adapter.setData(fixtureGroups, fixtures);
+    public void showControls(ArrayList<FixtureGroup> hasFixtureGroupList, ArrayList<Fixture> hasGroupFixtureList, ArrayList<Fixture> noGroupFixtureList){
+        adapter.setData(hasFixtureGroupList, hasGroupFixtureList, noGroupFixtureList);
     }
 
     private void initRecyclerView() {
@@ -62,6 +62,18 @@ public class ControlModeActivity extends BaseActivity<ActivityRecycleviewSetting
         adapter = new ControlModeAdapter();
         presenter.getDataList();
         binding.recycleView.setAdapter(adapter);
+        adapter.setOnDelayTimeClickListener(new ControlModeAdapter.OnDelayTimeClickListener() {
+            @Override
+            public void onDataClick(int position, String delayTime) {
+                presenter.clickDelayTime(position, delayTime);
+            }
+        });
+        adapter.setOnDataClickListener(new ControlModeAdapter.OnDataClickListener() {
+            @Override
+            public void onDataClick(int position, String dim) {
+                presenter.clickData(position, dim);
+            }
+        });
         adapter.setOnDataUpdateListener(new ControlModeAdapter.OnDataUpdateListener() {
             @Override
             public void onDataUpdate(int position, String dim) {
