@@ -15,6 +15,7 @@
         android:background="@color/theme">
 
         <com.example.NanLinkDemo.ui.ControlToolbar
+            android:id="@+id/controlToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

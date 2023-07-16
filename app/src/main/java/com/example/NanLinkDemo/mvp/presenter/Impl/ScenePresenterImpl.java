@@ -264,13 +264,28 @@ public class ScenePresenterImpl implements ScenePresenter {
     public void FixtureListSwitch(int position) {
         if (fixtureGroupList.isEmpty()) {
             if (position > 0) {
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureList.get(position - 1).getId()).withInt("type", ControlActivity.TYPE_FIXTURE).navigation();
+                if (fixtureList.get(position - 1).getData().isEmpty()){
+                    view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "配置文件有误", "确定", null );
+                    return;
+                }else {
+                    ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureList.get(position - 1).getId()).withInt("type", ControlActivity.TYPE_FIXTURE).navigation();
+                }
             }
         } else {
             if (position > 0 && position <= fixtureGroupList.size()) {
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureGroupList.get(position - 1).getId()).withInt("type", ControlActivity.TYPE_FIXTURE_GROUP).navigation();
+                if (fixtureGroupList.get(position - 1).getData().isEmpty()){
+                    view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "配置文件有误", "确定", null );
+                    return;
+                }else {
+                    ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureGroupList.get(position - 1).getId()).withInt("type", ControlActivity.TYPE_FIXTURE_GROUP).navigation();
+                }
             } else if (position > fixtureGroupList.size() + 1) {
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureList.get(position - fixtureGroupList.size() - 2).getId()).withInt("type", ControlActivity.TYPE_FIXTURE).navigation();
+                if (fixtureList.get(position - fixtureGroupList.size() - 2).getData().isEmpty()){
+                    view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "配置文件有误", "确定", null );
+                    return;
+                }else {
+                    ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureList.get(position - fixtureGroupList.size() - 2).getId()).withInt("type", ControlActivity.TYPE_FIXTURE).navigation();
+                }
             }
         }
     }

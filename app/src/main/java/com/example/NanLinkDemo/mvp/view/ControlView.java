@@ -5,6 +5,12 @@ import com.example.NanLinkDemo.bean.Menu;
 import java.util.ArrayList;
 
 public interface ControlView {
+    void setSecondTitle(String secondTitle);
+
+    void setFan(int resId);
+
+    void setMode(String mode);
+
     void setTitle(String title);
 
     void initMenu();
@@ -14,4 +20,6 @@ public interface ControlView {
     void openDrawLayout();
 
     void closeDrawLayout();
+
+    void finish();
 }

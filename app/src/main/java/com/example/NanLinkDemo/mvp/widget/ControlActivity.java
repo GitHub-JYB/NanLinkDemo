@@ -53,16 +53,31 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
 
 
     private void initToolbar() {
-        binding.toolbar.setLeftBtnIcon(R.drawable.ic_back);
-        binding.toolbar.setRightBtnIcon(R.drawable.ic_menu);
-        binding.toolbar.setLeftBtnOnClickListener(this);
-        binding.toolbar.setRightBtnOnClickListener(this);
+        binding.controlToolbar.setLeftBtnIcon(R.drawable.ic_back);
+        binding.controlToolbar.setRightBtnIcon(R.drawable.ic_menu);
+        binding.controlToolbar.setLeftBtnOnClickListener(this);
+        binding.controlToolbar.setRightBtnOnClickListener(this);
     }
 
 
     @Override
+    public void setSecondTitle(String secondTitle){
+        binding.controlToolbar.setSecondTitle(secondTitle);
+    }
+
+    @Override
+    public void setFan(int resId){
+        binding.controlToolbar.setRightSecondBtnIcon(resId);
+    }
+
+    @Override
+    public void setMode(String mode){
+        binding.controlToolbar.setMode(mode);
+    }
+
+    @Override
     public void setTitle(String title) {
-        binding.toolbar.setTitle(title);
+        binding.controlToolbar.setTitle(title);
     }
 
     private void setPresenter() {
