@@ -85,7 +85,7 @@ public class ManageFixturePresenterImpl implements ManageFixturePresenter {
     @Override
     public void completeUpdateFixture() {
         completeNum++;
-        if (completeNum == fixtureNum){
+        if (completeNum == fixtureList.size()){
             for (FixtureGroup fixtureGroup : MyApplication.getFixtureGroups()){
                 if(fixtureGroup.getName().equals(view.getFixtureGroupName())){
                     fixtureGroup.setFixtureNum(fixtureNum);

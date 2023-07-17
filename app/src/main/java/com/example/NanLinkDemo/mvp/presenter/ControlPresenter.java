@@ -4,7 +4,9 @@ import android.view.View;
 
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
+import com.example.NanLinkDemo.bean.Menu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ControlPresenter {
@@ -19,4 +21,10 @@ public interface ControlPresenter {
     void receiveFixtureGroupList(List<FixtureGroup> fixtureGroups);
 
     void receiveFixtureList(List<Fixture> fixtures);
+
+    void switchModeChange(int position);
+
+    void receiveFixtureMenu(ArrayList<Menu> menuArrayList);
+
+    void receiveFixtureGroupMenu(ArrayList<Menu> menuArrayList);
 }

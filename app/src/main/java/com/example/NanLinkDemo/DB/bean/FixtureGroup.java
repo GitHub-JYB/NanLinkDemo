@@ -22,6 +22,9 @@ public class FixtureGroup {
     @ColumnInfo
     private String data;
 
+    @ColumnInfo
+    private int ModeIndex = 0;
+
 
 
 
@@ -87,5 +90,13 @@ public class FixtureGroup {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public int getModeIndex() {
+        return ModeIndex;
+    }
+
+    public void setModeIndex(int modeIndex) {
+        ModeIndex = modeIndex;
     }
 }

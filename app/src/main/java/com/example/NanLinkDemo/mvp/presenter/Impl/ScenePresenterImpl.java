@@ -264,7 +264,7 @@ public class ScenePresenterImpl implements ScenePresenter {
     public void FixtureListSwitch(int position) {
         if (fixtureGroupList.isEmpty()) {
             if (position > 0) {
-                if (fixtureList.get(position - 1).getData().isEmpty()){
+                if (fixtureList.get(position - 1).getData() == null){
                     view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "配置文件有误", "确定", null );
                     return;
                 }else {
@@ -273,14 +273,14 @@ public class ScenePresenterImpl implements ScenePresenter {
             }
         } else {
             if (position > 0 && position <= fixtureGroupList.size()) {
-                if (fixtureGroupList.get(position - 1).getData().isEmpty()){
+                if (fixtureGroupList.get(position - 1).getData() == null){
                     view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "配置文件有误", "确定", null );
                     return;
                 }else {
                     ARouter.getInstance().build(Constant.ACTIVITY_URL_Control).withInt("id", fixtureGroupList.get(position - 1).getId()).withInt("type", ControlActivity.TYPE_FIXTURE_GROUP).navigation();
                 }
             } else if (position > fixtureGroupList.size() + 1) {
-                if (fixtureList.get(position - fixtureGroupList.size() - 2).getData().isEmpty()){
+                if (fixtureList.get(position - fixtureGroupList.size() - 2).getData() == null){
                     view.showMyDialog(MyDialog.Read_OneBtn_WarningTitle_BlueOneBtn,"错误", "配置文件有误", "确定", null );
                     return;
                 }else {

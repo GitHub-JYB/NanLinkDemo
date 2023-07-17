@@ -103,9 +103,18 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (((ViewHolderFixtureGroupList) holder).showList && !fixtureListInGroup.isEmpty()) {
                 ((ViewHolderFixtureGroupList) holder).recyclerView.setVisibility(View.VISIBLE);
                 ((ViewHolderFixtureGroupList) holder).spreadIcon.setImageResource(R.drawable.ic_spread);
+                ((ViewHolderFixtureGroupList) holder).spreadIcon.setClickable(true);
+                ((ViewHolderFixtureGroupList) holder).rightSecondIcon.setClickable(true);
+                ((ViewHolderFixtureGroupList) holder).root.setClickable(true);
+
             } else {
                 ((ViewHolderFixtureGroupList) holder).recyclerView.setVisibility(View.GONE);
                 ((ViewHolderFixtureGroupList) holder).spreadIcon.setImageResource(R.drawable.ic_close);
+                ((ViewHolderFixtureGroupList) holder).spreadIcon.setClickable(false);
+                ((ViewHolderFixtureGroupList) holder).rightSecondIcon.setClickable(false);
+                ((ViewHolderFixtureGroupList) holder).root.setClickable(false);
+
+
             }
             ((ViewHolderFixtureGroupList) holder).fixtureGroupAdapter.setData(fixtureListInGroup);
 
@@ -231,18 +240,20 @@ public class FixtureAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         FixtureGroupAdapter fixtureGroupAdapter;
         TextView name, sceneNum;
 
-        ImageView spreadIcon;
+        ImageView spreadIcon, rightSecondIcon;
         RecyclerView recyclerView;
-
+        RelativeLayout root;
         boolean showList = false;
 
 
         public ViewHolderFixtureGroupList(@NonNull FixtureGroupBinding binding) {
             super(binding.getRoot());
+            root = binding.getRoot();
             name = binding.name;
             sceneNum = binding.number;
             recyclerView = binding.recyclerView;
             spreadIcon = binding.spreadIcon;
+            rightSecondIcon = binding.rightSecondIcon;
             ViewGroup.LayoutParams layoutParams = binding.fixtureGroup.getLayoutParams();
             layoutParams.width = MyApplication.dip2percentPx(361);
             layoutParams.height = MyApplication.dip2percentPx(68);

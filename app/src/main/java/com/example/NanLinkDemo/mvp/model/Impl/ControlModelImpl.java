@@ -1,12 +1,18 @@
 package com.example.NanLinkDemo.mvp.model.Impl;
 
+import static com.example.NanLinkDemo.bean.Menu.TYPE_ITEM_gray_bg;
+import static com.example.NanLinkDemo.bean.Menu.TYPE_ITEM_nav_bg;
+
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.DataBase.MyDataBase;
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
+import com.example.NanLinkDemo.R;
+import com.example.NanLinkDemo.bean.Menu;
 import com.example.NanLinkDemo.mvp.model.ControlModel;
 import com.example.NanLinkDemo.mvp.presenter.Impl.ControlPresenterImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -49,5 +55,62 @@ public class ControlModelImpl implements ControlModel {
                         presenter.receiveFixtureGroupList(fixtureGroups);
                     }
                 });
+    }
+
+    @Override
+    public void updateFixture(Fixture fixture) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureDao()
+                .updateFixtureInfo(fixture)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+
+                    }
+                });
+    }
+
+    @Override
+    public void updateFixtureGroup(FixtureGroup fixtureGroup) {
+        Disposable disposable = MyDataBase.getInstance(MyApplication.getInstance())
+                .getFixtureGroupDao()
+                .updateFixtureGroupInfo(fixtureGroup)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getFixtureMenu() {
+        ArrayList<Menu> menuArrayList = new ArrayList<>();
+        menuArrayList.add(new Menu(0,"", 0, TYPE_ITEM_nav_bg));
+        menuArrayList.add(new Menu(-1,"更改地址码", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(-1,"风扇控制", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu());
+        menuArrayList.add(new Menu(-1,"删除该设备", 0, TYPE_ITEM_gray_bg));
+        presenter.receiveFixtureMenu(menuArrayList);
+    }
+
+    @Override
+    public void getFixtureGroupMenu() {
+        ArrayList<Menu> menuArrayList = new ArrayList<>();
+        menuArrayList.add(new Menu(0,"", 0, TYPE_ITEM_nav_bg));
+        menuArrayList.add(new Menu(-1,"管理群组", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(-1,"群组模式", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu());
+        menuArrayList.add(new Menu(-1,"更改地址码", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(-1,"风扇控制", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu());
+        menuArrayList.add(new Menu(-1,"重新开始特效", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu());
+        menuArrayList.add(new Menu(-1,"删除该设备群组", 0, TYPE_ITEM_gray_bg));
+        presenter.receiveFixtureGroupMenu(menuArrayList);
     }
 }

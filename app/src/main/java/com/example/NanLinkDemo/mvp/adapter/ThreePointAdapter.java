@@ -1,7 +1,6 @@
 package com.example.NanLinkDemo.mvp.adapter;
 
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,6 @@ public class ThreePointAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderTitleThreePoint){

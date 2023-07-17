@@ -6,6 +6,7 @@ public class Menu {
     public static final int TYPE_EMPTY = 1;
     public static final int TYPE_ITEM_gray_bg = 2;
     public static final int TYPE_ITEM_nav_bg = 3;
+    public static final int TYPE_ITEM_Control = 4;
 
 
 

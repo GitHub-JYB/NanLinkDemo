@@ -2,15 +2,28 @@ package com.example.NanLinkDemo.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.NanLinkDemo.Application.MyApplication;
+import com.example.NanLinkDemo.R;
+import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.databinding.ControltoolbarBinding;
+import com.example.NanLinkDemo.databinding.FlmModeRecycleviewBinding;
+import com.example.NanLinkDemo.databinding.VpItemFlmmodeBinding;
+import com.example.NanLinkDemo.mvp.adapter.FlmModeListAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ControlToolbar extends RelativeLayout {
@@ -19,6 +32,10 @@ public class ControlToolbar extends RelativeLayout {
 
 
     ControltoolbarBinding binding;
+    private OnModeChangeListener onModeChangeListener;
+    private FlmModeListAdapter adapter;
+    private ArrayList<DeviceDataMessage.FlmMode> modeList = new ArrayList<>();
+    private OnShowListener onShowListener;
 
     public ControlToolbar(Context context) {
         this(context,null);
@@ -44,6 +61,51 @@ public class ControlToolbar extends RelativeLayout {
         LinearLayout.LayoutParams lp= (LinearLayout.LayoutParams) binding.statusBar.getLayoutParams();
         lp.height= MyApplication.statusHigh;
         binding.statusBar.setLayoutParams(lp);
+        binding.mode.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout linearLayout = (LinearLayout) inflate(getContext(), R.layout.flm_mode_recycleview, null);
+                RecyclerView recyclerView = linearLayout.findViewById(R.id.recycleView);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                adapter = new FlmModeListAdapter();
+                adapter.setData(modeList);
+                recyclerView.setAdapter(adapter);
+
+                PopupWindow popupWindow = new PopupWindow(linearLayout, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+
+                popupWindow.setFocusable(true); // 获取焦点
+
+                popupWindow.setOutsideTouchable(true);//获取外部触摸事件
+
+                popupWindow.setTouchable(true);//能够响应触摸事件
+
+                adapter.setOnClickListener(new FlmModeListAdapter.OnClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        if (onModeChangeListener != null){
+                            onModeChangeListener.ModeChange(position);
+                        }
+                        if (position < modeList.size()){
+                            setMode(modeList.get(position).getRemark());
+                        }
+                        popupWindow.dismiss();
+                    }
+                });
+
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        if (onShowListener != null){
+                            onShowListener.showList(false);
+                        }
+                    }
+                });
+                popupWindow.showAsDropDown(binding.mode, 0 , 2);
+                if (onShowListener != null){
+                    onShowListener.showList(true);
+                }
+            }
+        });
     }
 
     // 设置左侧按键点击事件
@@ -199,6 +261,8 @@ public class ControlToolbar extends RelativeLayout {
     // 设置模式按键点击事件
     public void setModeBtnOnClickListener(OnClickListener li){
         binding.mode.setOnClickListener(li);
+
+
     }
 
     // 设置模式
@@ -206,5 +270,28 @@ public class ControlToolbar extends RelativeLayout {
         binding.mode.setText(mode);
     }
 
+    // 设置模式
+    public void setModeList(ArrayList<DeviceDataMessage.FlmMode> modeList){
+       this.modeList = modeList;
+    }
+
+
+    // 设置模式变化监听事件
+    public void setOnModeChangeListener(OnModeChangeListener onModeChangeListener){
+        this.onModeChangeListener = onModeChangeListener;
+    }
+
+    public interface OnModeChangeListener{
+        void ModeChange(int position);
+    }
+
+    // 设置模式列表展示监听事件
+    public void setOnShowListener(OnShowListener onShowListener){
+        this.onShowListener = onShowListener;
+    }
+
+    public interface OnShowListener{
+        void showList(boolean show);
+    }
 
 }

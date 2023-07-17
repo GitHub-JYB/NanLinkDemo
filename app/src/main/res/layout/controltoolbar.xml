@@ -32,7 +32,8 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_back" />
 
-            <RelativeLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
@@ -46,17 +47,17 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="17sp" />
+
                 <TextView
                     android:id="@+id/second_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/title"
-                    android:textSize="12sp"
+                    android:gravity="center"
                     android:textColor="@color/login_hintText"
-                    />
+                    android:textSize="12sp" />
 
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/right_second_btn"
@@ -64,8 +65,8 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/right_btn"
-                android:src="@drawable/ic_full_fan"
-                android:background="@android:color/transparent" />
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_full_fan" />
 
             <ImageButton
                 android:id="@+id/right_btn"
@@ -97,32 +98,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_toEndOf="@+id/undo_btn"
-                android:src="@drawable/ic_redo"
-                android:background="@android:color/transparent" />
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_redo" />
 
 
             <RelativeLayout
                 android:layout_width="182dp"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:background="@color/gray"
-                >
+                android:background="@color/gray">
 
                 <TextView
                     android:id="@+id/mode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:text="色温模式"
                     android:gravity="center"
+                    android:text="色温模式"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/blue"
-                    />
+                    android:background="@color/blue" />
 
 
             </RelativeLayout>
@@ -140,16 +140,13 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray"
                 android:layout_alignParentBottom="true"
-                />
+                android:background="@color/gray" />
 
         </RelativeLayout>
 
 
     </LinearLayout>
-
-
 
 
 </LinearLayout>

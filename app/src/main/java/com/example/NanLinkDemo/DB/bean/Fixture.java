@@ -38,6 +38,9 @@ public class Fixture {
     @ColumnInfo
     private int agreementVersion;
 
+    @ColumnInfo
+    private int ModeIndex = 0;
+
 
 
     public Fixture(String email, String sceneName, String fixTureName, int CH, String DEVICE_ID, String connectType, String fixtureGroupName){
@@ -169,5 +172,13 @@ public class Fixture {
 
     public void setAgreementVersion(int agreementVersion) {
         this.agreementVersion = agreementVersion;
+    }
+
+    public int getModeIndex() {
+        return ModeIndex;
+    }
+
+    public void setModeIndex(int modeIndex) {
+        ModeIndex = modeIndex;
     }
 }

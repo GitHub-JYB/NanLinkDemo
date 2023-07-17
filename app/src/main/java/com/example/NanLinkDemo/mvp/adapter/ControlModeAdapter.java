@@ -61,7 +61,6 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 DeviceDataMessage.Data deviceData = gson.fromJson(data, DeviceDataMessage.Data.class);
                 ((ViewHolderFixtureControl) holder).control.setSeekBar(Integer.parseInt(deviceData.getLuminance().split("LT_")[1]), 0, 1, Integer.parseInt(deviceData.getDimItem()));
                 ((ViewHolderFixtureControl) holder).control.setDelayTime(Integer.parseInt(deviceData.getDimDelay()));
-
             }
         } else if (holder instanceof ViewHolderFixtureGroupControl) {
             ((ViewHolderFixtureGroupControl) holder).control.setName(hasFixtureGroupList.get(position).getName());

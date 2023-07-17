@@ -1,8 +1,6 @@
 package com.example.NanLinkDemo.mvp.adapter;
 
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.NanLinkDemo.Application.MyApplication;
@@ -40,15 +39,16 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof ViewHolderItemFixture){
                 ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
                 if (fixtureList.get(position).getTYPE() == 0){
-                    ((ViewHolderItemFixture) holder).number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
-                    ((ViewHolderItemFixture) holder).number.setTextColor(Color.parseColor("#8E8E8E"));
+                    TextView number = ((ViewHolderItemFixture) holder).number;
+                    number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
+                    number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.login_hintText));
                     if (fixtureList.get(position).getCH() == 0){
-                        ((ViewHolderItemFixture) holder).number.setTextColor(Color.parseColor("#FFFF33"));
-                        ((ViewHolderItemFixture) holder).number.setText("CH: 未设置");
+                        number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
+                        number.setText("CH: 未设置");
                     }
                     for (Fixture fixture : MyApplication.getFixtures()){
                         if (fixtureList.get(position).getCH() == fixture.getCH()){
-                            ((ViewHolderItemFixture) holder).number.setTextColor(Color.parseColor("#FFFF33"));
+                            number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
                         }
                     }
                 }else {

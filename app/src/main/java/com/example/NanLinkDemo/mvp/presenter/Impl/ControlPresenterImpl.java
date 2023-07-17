@@ -6,12 +6,15 @@ import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.DeviceDataMessage;
+import com.example.NanLinkDemo.bean.Menu;
 import com.example.NanLinkDemo.mvp.model.Impl.ControlModelImpl;
 import com.example.NanLinkDemo.mvp.presenter.ControlPresenter;
 import com.example.NanLinkDemo.mvp.view.ControlView;
 import com.example.NanLinkDemo.mvp.widget.ControlActivity;
+import com.example.NanLinkDemo.util.TransformUtil;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControlPresenterImpl implements ControlPresenter {
@@ -19,6 +22,9 @@ public class ControlPresenterImpl implements ControlPresenter {
     private final ControlModelImpl model;
     private FixtureGroup fixtureGroup;
     private Fixture fixture;
+    private int type;
+    private int modeIndex;
+    private ArrayList<Menu> menuArrayList;
 
     public ControlPresenterImpl(ControlView view) {
         this.view = view;
@@ -27,7 +33,14 @@ public class ControlPresenterImpl implements ControlPresenter {
 
     @Override
     public void getMenuFromModel() {
-
+        switch (type) {
+            case ControlActivity.TYPE_FIXTURE:
+                model.getFixtureMenu();
+                break;
+            case ControlActivity.TYPE_FIXTURE_GROUP:
+                model.getFixtureGroupMenu();
+                break;
+        }
     }
 
     @Override
@@ -40,11 +53,16 @@ public class ControlPresenterImpl implements ControlPresenter {
         switch (v.getId()){
             case R.id.left_btn:
                 view.finish();
+                break;
+            case R.id.right_btn:
+                view.initMenu();
+                break;
         }
     }
 
     @Override
     public void getControlDataFromModel(int type, int id) {
+        this.type = type;
         switch (type) {
             case ControlActivity.TYPE_FIXTURE:
                 model.getFixture(id);
@@ -61,6 +79,7 @@ public class ControlPresenterImpl implements ControlPresenter {
             fixtureGroup = fixtureGroups.get(0);
             view.setTitle(fixtureGroup.getName());
             view.setSecondTitle("设备数量: " + fixtureGroup.getFixtureNum());
+            modeIndex = fixtureGroup.getModeIndex();
             showData(fixtureGroup.getData());
 
         }
@@ -71,15 +90,44 @@ public class ControlPresenterImpl implements ControlPresenter {
         if (!fixtures.isEmpty()) {
             fixture = fixtures.get(0);
             view.setTitle(fixture.getName());
-            view.setSecondTitle("CH: " + fixture.getCH() + "    " + fixture.getConnectType());
+            view.setSecondTitle("CH: " + TransformUtil.updateCH(fixture.getCH()) + "    " + fixture.getConnectType());
+            modeIndex = fixture.getModeIndex();
             showData(fixture.getData());
         }
+    }
+
+    @Override
+    public void switchModeChange(int position) {
+        switch (type) {
+            case ControlActivity.TYPE_FIXTURE:
+                fixture.setModeIndex(position);
+                model.updateFixture(fixture);
+                break;
+            case ControlActivity.TYPE_FIXTURE_GROUP:
+                fixtureGroup.setModeIndex(position);
+                model.updateFixtureGroup(fixtureGroup);
+                break;
+        }
+    }
+
+    @Override
+    public void receiveFixtureMenu(ArrayList<Menu> menuArrayList) {
+        this.menuArrayList = menuArrayList;
+        view.showMenu(menuArrayList);
+        view.openDrawLayout();
+    }
+
+    @Override
+    public void receiveFixtureGroupMenu(ArrayList<Menu> menuArrayList) {
+        this.menuArrayList = menuArrayList;
+        view.showMenu(menuArrayList);
+        view.openDrawLayout();
     }
 
     private void showData(String data) {
         Gson gson = new Gson();
         DeviceDataMessage.Data deviceData = gson.fromJson(data, DeviceDataMessage.Data.class);
-        view.setMode(deviceData.getFlmModeList().get(0).getRemark());
+        view.setMode(deviceData.getFlmModeList().get(modeIndex).getRemark());
         String fan = deviceData.getFan().get(0);
         switch (fan) {
             case "FAN_SMART":
@@ -103,5 +151,6 @@ public class ControlPresenterImpl implements ControlPresenter {
                 }
                 break;
         }
+        view.setModeList(deviceData.getFlmModeList());
     }
 }
