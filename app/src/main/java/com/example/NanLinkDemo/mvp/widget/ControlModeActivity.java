@@ -64,7 +64,7 @@ public class ControlModeActivity extends BaseActivity<ActivityRecycleviewSetting
         binding.recycleView.setAdapter(adapter);
         adapter.setOnDelayTimeClickListener(new ControlModeAdapter.OnDelayTimeClickListener() {
             @Override
-            public void onDataClick(int position, String delayTime) {
+            public void onDelayTimeClick(int position, String delayTime) {
                 presenter.clickDelayTime(position, delayTime);
             }
         });

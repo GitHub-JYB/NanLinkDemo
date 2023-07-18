@@ -25,9 +25,10 @@ public class SlipView extends RelativeLayout {
     private OnDataChangeListener onDataChangeListener;
     private int max, min, step, value;
     private int delayTime = 2;
-    private String remark;
+    private String remark = "";
     private OnDataClickListener onDataClickListener;
     private OnDelayTimeClickListener onDelayTimeClickListener;
+    private int onDataColor = R.color.white;
 
     public SlipView(Context context) {
         this(context, null);
@@ -142,7 +143,9 @@ public class SlipView extends RelativeLayout {
     //设置控件CH名称
     public void setCH(String CH) {
         binding.CH.setText(CH);
+        binding.CH.setVisibility(VISIBLE);
     }
+
 
     //设置控件CH可见性
     public void setCHVisibility(int visibility) {
@@ -154,6 +157,11 @@ public class SlipView extends RelativeLayout {
         this.remark = remark;
     }
 
+    // 设置数值亮时的颜色
+    public void setOnDataColor(int onDataColor){
+        this.onDataColor = onDataColor;
+    }
+
     //获取数值
     public CharSequence getData() {
         return String.valueOf(value);
@@ -162,6 +170,7 @@ public class SlipView extends RelativeLayout {
     //设置控件名称
     public void setName(String title) {
         binding.name.setText(title);
+        binding.name.setVisibility(VISIBLE);
     }
 
     //设置控件名称可见性
@@ -172,6 +181,7 @@ public class SlipView extends RelativeLayout {
     //设置延时开关时间
     public void setDelayTime(int delayTime) {
         binding.delayTime.setText(delayTime + "秒");
+        binding.delayTime.setVisibility(VISIBLE);
     }
 
     //获取延时开关时间
@@ -213,7 +223,7 @@ public class SlipView extends RelativeLayout {
             binding.seekbar.setProgressDrawable(getResources().getDrawable(R.drawable.bg_on_seekbar_slipview));
             binding.seekbar.getProgressDrawable().setBounds(bounds);
             binding.seekbar.setThumb(getResources().getDrawable(R.drawable.bg_selector_thumb_seekbar_on));
-            binding.data.setTextColor(getResources().getColor(R.color.blue));
+            binding.data.setTextColor(getResources().getColor(onDataColor));
             binding.data.setText(transformData(value));
             binding.data.setOnClickListener(new OnClickListener() {
                 @Override
@@ -264,6 +274,8 @@ public class SlipView extends RelativeLayout {
         switch (remark) {
             case "亮度":
                 return value + "%";
+            case "色温":
+                return value + "K";
         }
         return String.valueOf(value);
     }

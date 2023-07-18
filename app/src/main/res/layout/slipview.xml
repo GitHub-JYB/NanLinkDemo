@@ -19,7 +19,7 @@
                 android:id="@+id/CH"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CH: 001"
+                android:visibility="gone"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
 
@@ -32,13 +32,14 @@
                     android:id="@+id/group_logo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:src="@drawable/ic_group_logo" />
 
                 <TextView
                     android:id="@+id/name"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pavotube II 6C"
                     android:textColor="@color/login_hintText"
                     android:textSize="12sp" />
 
@@ -51,13 +52,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="亮度"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
 
@@ -65,8 +66,7 @@
                 android:id="@+id/data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="50%"
-                android:textColor="@color/able"
+                android:textColor="@color/white"
                 android:textSize="17sp" />
 
 
@@ -80,6 +80,7 @@
 
             <ImageView
                 android:id="@+id/delay_btn"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_dim_open"
@@ -88,12 +89,12 @@
 
             <Button
                 android:id="@+id/delay_time"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:background="@color/transparent"
                 android:gravity="center"
-                android:text="2秒"
                 android:textColor="@color/blue"
                 android:textSize="12sp" />
 

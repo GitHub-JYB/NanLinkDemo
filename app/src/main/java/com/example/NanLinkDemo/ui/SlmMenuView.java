@@ -17,12 +17,13 @@ import androidx.annotation.Nullable;
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.BoxviewBinding;
+import com.example.NanLinkDemo.databinding.SlmmenuviewBinding;
 
 import java.util.ArrayList;
 
-public class BoxView extends RelativeLayout {
+public class SlmMenuView extends RelativeLayout {
 
-    private BoxviewBinding binding;
+    private SlmmenuviewBinding binding;
 
     private int width = MyApplication.dip2px(84);
     private int height = MyApplication.dip2px(40);
@@ -31,25 +32,25 @@ public class BoxView extends RelativeLayout {
     private float textSize = 12;
     private OnCheckedChangeListener onCheckedChangeListener;
 
-    public BoxView(Context context) {
+    public SlmMenuView(Context context) {
         this(context, null);
     }
 
-    public BoxView(Context context, @Nullable AttributeSet attrs) {
+    public SlmMenuView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public BoxView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SlmMenuView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public BoxView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SlmMenuView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initView();
     }
 
     private void initView() {
-        binding = BoxviewBinding.inflate(LayoutInflater.from(getContext()), this, true);
+        binding = SlmmenuviewBinding.inflate(LayoutInflater.from(getContext()), this, true);
 
 
     }
@@ -82,35 +83,6 @@ public class BoxView extends RelativeLayout {
     //设置按键默认选的位置
     public void check(int index) {
         this.index = index;
-    }
-
-    //设置控件按键列表数据,需要最后面调用
-    public void setData(ArrayList<String> dataList) {
-        binding.group.removeAllViews();
-        if (dataList.size() != 0) {
-            for (int i = 0; i < dataList.size(); i++) {
-                RadioButton radioButton = new RadioButton(getContext());
-                radioButton.setLayoutParams(new ViewGroup.LayoutParams(width, height));
-                radioButton.setBackgroundResource(R.drawable.bg_selector_btn_boxview);
-                radioButton.setGravity(Gravity.CENTER);
-                radioButton.setText(dataList.get(i));
-                radioButton.setTextColor(getResources().getColor(R.color.white));
-                radioButton.setButtonDrawable(new BitmapDrawable((Bitmap) null));
-                radioButton.setId(i);
-                radioButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-                binding.group.addView(radioButton);
-
-            }
-            binding.group.check(index <= dataList.size() ? index: 0);
-            binding.group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    if (onCheckedChangeListener != null){
-                        onCheckedChangeListener.onCheckedChanged(checkedId);
-                    }
-                }
-            });
-        }
     }
 
     //设置控件按键的切换事件

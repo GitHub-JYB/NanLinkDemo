@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
+import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.DeviceDataMessage;
-import com.example.NanLinkDemo.databinding.VpItemControlBinding;
+import com.example.NanLinkDemo.databinding.VpItemSlipControlBinding;
 import com.example.NanLinkDemo.ui.MyDialog;
 import com.example.NanLinkDemo.ui.SlipView;
 import com.example.NanLinkDemo.util.SnackBarUtil;
@@ -39,13 +40,13 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        VpItemControlBinding vpItemControlBinding;
+        VpItemSlipControlBinding vpItemControlBinding;
         switch (viewType) {
             case TYPE_FIXTURE_GROUP:
-                vpItemControlBinding = VpItemControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                vpItemControlBinding = VpItemSlipControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderFixtureGroupControl(vpItemControlBinding);
             default:
-                vpItemControlBinding = VpItemControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                vpItemControlBinding = VpItemSlipControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderFixtureControl(vpItemControlBinding);
         }
     }
@@ -140,17 +141,19 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         SlipView control;
 
-        public ViewHolderFixtureControl(@NonNull VpItemControlBinding binding) {
+        public ViewHolderFixtureControl(@NonNull VpItemSlipControlBinding binding) {
             super(binding.getRoot());
             control = binding.control;
             control.setTitleVisibility(View.GONE);
             control.setGroupLogoVisibility(View.GONE);
+            control.setDelayBtnVisibility(View.VISIBLE);
+            control.setOnDataColor(R.color.blue);
             control.setRemark("亮度");
             control.setOnDelayTimeClickListener(new SlipView.OnDelayTimeClickListener() {
                 @Override
                 public void onDelayTimeClick(View view) {
                     if (onDelayTimeClickListener != null){
-                        onDelayTimeClickListener.onDataClick(getAdapterPosition(), (String) control.getDelayTime());
+                        onDelayTimeClickListener.onDelayTimeClick(getAdapterPosition(), (String) control.getDelayTime());
                     }
                 }
             });
@@ -178,16 +181,18 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         SlipView control;
 
-        public ViewHolderFixtureGroupControl(@NonNull VpItemControlBinding binding) {
+        public ViewHolderFixtureGroupControl(@NonNull VpItemSlipControlBinding binding) {
             super(binding.getRoot());
             control = binding.control;
             control.setTitleVisibility(View.GONE);
+            control.setDelayBtnVisibility(View.VISIBLE);
+            control.setOnDataColor(R.color.blue);
             control.setRemark("亮度");
             control.setOnDelayTimeClickListener(new SlipView.OnDelayTimeClickListener() {
                 @Override
                 public void onDelayTimeClick(View view) {
                     if (onDelayTimeClickListener != null){
-                        onDelayTimeClickListener.onDataClick(getAdapterPosition(), (String) control.getDelayTime());
+                        onDelayTimeClickListener.onDelayTimeClick(getAdapterPosition(), (String) control.getDelayTime());
                     }
                 }
             });
@@ -231,6 +236,6 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public interface OnDelayTimeClickListener {
-        void onDataClick(int position, String delayTime);
+        void onDelayTimeClick(int position, String delayTime);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.NanLinkDemo.mvp.presenter.Impl;
 
+
 import android.view.View;
+
 
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
@@ -25,6 +27,7 @@ public class ControlPresenterImpl implements ControlPresenter {
     private int type;
     private int modeIndex;
     private ArrayList<Menu> menuArrayList;
+    private DeviceDataMessage.Data deviceData;
 
     public ControlPresenterImpl(ControlView view) {
         this.view = view;
@@ -50,7 +53,7 @@ public class ControlPresenterImpl implements ControlPresenter {
 
     @Override
     public void switchOnclick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.left_btn:
                 view.finish();
                 break;
@@ -101,10 +104,12 @@ public class ControlPresenterImpl implements ControlPresenter {
         switch (type) {
             case ControlActivity.TYPE_FIXTURE:
                 fixture.setModeIndex(position);
+                view.setData(deviceData.getFlmModeList().get(position).getFirstControls());
                 model.updateFixture(fixture);
                 break;
             case ControlActivity.TYPE_FIXTURE_GROUP:
                 fixtureGroup.setModeIndex(position);
+                view.setData(deviceData.getFlmModeList().get(position).getFirstControls());
                 model.updateFixtureGroup(fixtureGroup);
                 break;
         }
@@ -113,6 +118,14 @@ public class ControlPresenterImpl implements ControlPresenter {
     @Override
     public void receiveFixtureMenu(ArrayList<Menu> menuArrayList) {
         this.menuArrayList = menuArrayList;
+        if (deviceData.getFan().size() < 2){
+            for (Menu menu : menuArrayList){
+                if (menu.getText().equals("风扇控制")){
+                    menuArrayList.remove(menu);
+                    break;
+                }
+            }
+        }
         view.showMenu(menuArrayList);
         view.openDrawLayout();
     }
@@ -120,37 +133,74 @@ public class ControlPresenterImpl implements ControlPresenter {
     @Override
     public void receiveFixtureGroupMenu(ArrayList<Menu> menuArrayList) {
         this.menuArrayList = menuArrayList;
+        if (deviceData.getFan().size() < 2){
+            for (Menu menu : menuArrayList){
+                if (menu.getText().equals("风扇控制")){
+                    menuArrayList.remove(menu);
+                    break;
+                }
+            }
+        }
+        if (!deviceData.getFlmModeList().get(modeIndex).getRemark().equals("像素特效模式")){
+            for (Menu menu : menuArrayList){
+                if (menu.getText().equals("群组模式")){
+                    menuArrayList.remove(menu);
+                    break;
+                }
+            }
+        }
         view.showMenu(menuArrayList);
         view.openDrawLayout();
     }
 
+    @Override
+    public void clickDelayTime(int position, String delayTime) {
+
+    }
+
+    @Override
+    public void clickData(int position, String dim) {
+
+    }
+
+    @Override
+    public void updateDim(int position, String dim) {
+
+    }
+
     private void showData(String data) {
         Gson gson = new Gson();
-        DeviceDataMessage.Data deviceData = gson.fromJson(data, DeviceDataMessage.Data.class);
-        view.setMode(deviceData.getFlmModeList().get(modeIndex).getRemark());
-        String fan = deviceData.getFan().get(0);
-        switch (fan) {
-            case "FAN_SMART":
-                view.setFan(R.drawable.ic_full_fan);
-                break;
-            case "FAN_FULL":
-                if (deviceData.getFan().size() == 2) {
-                    view.setFan(R.drawable.ic_on_fan);
-                } else {
+        deviceData = gson.fromJson(data, DeviceDataMessage.Data.class);
+        if (deviceData.getFan().size() > 1) {
+            String fan = deviceData.getFan().get(0);
+            switch (fan) {
+                case "FAN_SMART":
                     view.setFan(R.drawable.ic_full_fan);
-                }
-                break;
-            case "FAN_HALF":
-                view.setFan(R.drawable.ic_half_fan);
-                break;
-            case "FAN_OFF":
-                if (deviceData.getFan().size() == 2) {
-                    view.setFan(R.drawable.ic_off_fan);
-                } else {
-                    view.setFan(R.drawable.ic_slient_fan);
-                }
-                break;
+                    break;
+                case "FAN_FULL":
+                    if (deviceData.getFan().size() == 2) {
+                        view.setFan(R.drawable.ic_on_fan);
+                    } else {
+                        view.setFan(R.drawable.ic_full_fan);
+                    }
+                    break;
+                case "FAN_HALF":
+                    view.setFan(R.drawable.ic_half_fan);
+                    break;
+                case "FAN_OFF":
+                    if (deviceData.getFan().size() == 2) {
+                        view.setFan(R.drawable.ic_off_fan);
+                    } else {
+                        view.setFan(R.drawable.ic_slient_fan);
+                    }
+                    break;
+            }
+        }else {
+            view.setFanVisibility(View.GONE);
         }
+        view.setMode(deviceData.getFlmModeList().get(modeIndex).getRemark());
         view.setModeList(deviceData.getFlmModeList());
+        view.setDimAndDelayTime(Integer.parseInt(deviceData.getDimItem()),Integer.parseInt(deviceData.getDimDelay()));
+        view.setData(deviceData.getFlmModeList().get(modeIndex).getFirstControls());
     }
 }

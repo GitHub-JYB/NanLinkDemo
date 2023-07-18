@@ -2,11 +2,9 @@ package com.example.NanLinkDemo.mvp.widget;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.core.view.GravityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -14,6 +12,7 @@ import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.bean.Menu;
 import com.example.NanLinkDemo.databinding.ActivityControlBinding;
+import com.example.NanLinkDemo.mvp.adapter.ControlAdapter;
 import com.example.NanLinkDemo.mvp.adapter.MenuAdapter;
 import com.example.NanLinkDemo.mvp.presenter.Impl.ControlPresenterImpl;
 import com.example.NanLinkDemo.mvp.view.ControlView;
@@ -35,6 +34,7 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
     public static final int TYPE_FIXTURE = 0;
     public static final int TYPE_FIXTURE_GROUP = 1;
     private ControlPresenterImpl presenter;
+    private ControlAdapter controlAdapter;
 
 
     @Override
@@ -43,6 +43,7 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
         setPresenter();
         initControlData();
         initToolbar();
+        initRecycleView();
     }
 
     private void initControlData() {
@@ -54,6 +55,36 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
     protected void onStart() {
         super.onStart();
         checkPermission();
+    }
+
+    private void initRecycleView() {
+        binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
+
+        controlAdapter = new ControlAdapter();
+        binding.recycleView.setAdapter(controlAdapter);
+        controlAdapter.setOnDelayTimeClickListener(new ControlAdapter.OnDelayTimeClickListener() {
+            @Override
+            public void onDelayTimeClick(int position, String delayTime) {
+                presenter.clickDelayTime(position, delayTime);
+            }
+        });
+        controlAdapter.setOnDataClickListener(new ControlAdapter.OnDataClickListener() {
+            @Override
+            public void onDataClick(int position, String dim) {
+                presenter.clickData(position, dim);
+            }
+        });
+        controlAdapter.setOnDataUpdateListener(new ControlAdapter.OnDataUpdateListener() {
+            @Override
+            public void onDataUpdate(int position, String dim) {
+                presenter.updateDim(position, dim);
+            }
+        });
+    }
+
+    @Override
+    public void setData(ArrayList<DeviceDataMessage.Control> controls) {
+        controlAdapter.setData(controls);
     }
 
 
@@ -93,6 +124,11 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
     @Override
     public void setFan(int resId){
         binding.controlToolbar.setRightSecondBtnIcon(resId);
+    }
+
+    @Override
+    public void setFanVisibility(int visibility){
+        binding.controlToolbar.setRightSecondBtnIconVisibility(visibility);
     }
 
     @Override
@@ -141,7 +177,11 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
         binding.drawerLayout.closeDrawers();
     }
 
-
+    @Override
+    public void setDimAndDelayTime(int dim, int delayTime) {
+        controlAdapter.setDelayTime(delayTime);
+        controlAdapter.setDim(dim);
+    }
 
 
     @Override

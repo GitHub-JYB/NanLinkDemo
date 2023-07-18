@@ -27,4 +27,10 @@ public interface ControlPresenter {
     void receiveFixtureMenu(ArrayList<Menu> menuArrayList);
 
     void receiveFixtureGroupMenu(ArrayList<Menu> menuArrayList);
+
+    void clickDelayTime(int position, String delayTime);
+
+    void clickData(int position, String dim);
+
+    void updateDim(int position, String dim);
 }

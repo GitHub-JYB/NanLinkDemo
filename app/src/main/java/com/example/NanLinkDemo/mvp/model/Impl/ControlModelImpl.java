@@ -1,5 +1,6 @@
 package com.example.NanLinkDemo.mvp.model.Impl;
 
+import static com.example.NanLinkDemo.bean.Menu.TYPE_ITEM_Control;
 import static com.example.NanLinkDemo.bean.Menu.TYPE_ITEM_gray_bg;
 import static com.example.NanLinkDemo.bean.Menu.TYPE_ITEM_nav_bg;
 
@@ -91,10 +92,10 @@ public class ControlModelImpl implements ControlModel {
     public void getFixtureMenu() {
         ArrayList<Menu> menuArrayList = new ArrayList<>();
         menuArrayList.add(new Menu(0,"", 0, TYPE_ITEM_nav_bg));
-        menuArrayList.add(new Menu(-1,"更改地址码", 0, TYPE_ITEM_gray_bg));
-        menuArrayList.add(new Menu(-1,"风扇控制", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(0,"更改地址码", 0, TYPE_ITEM_Control));
+        menuArrayList.add(new Menu(0,"风扇控制", 0, TYPE_ITEM_Control));
         menuArrayList.add(new Menu());
-        menuArrayList.add(new Menu(-1,"删除该设备", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(0,"删除该设备", 0, TYPE_ITEM_Control));
         presenter.receiveFixtureMenu(menuArrayList);
     }
 
@@ -102,15 +103,15 @@ public class ControlModelImpl implements ControlModel {
     public void getFixtureGroupMenu() {
         ArrayList<Menu> menuArrayList = new ArrayList<>();
         menuArrayList.add(new Menu(0,"", 0, TYPE_ITEM_nav_bg));
-        menuArrayList.add(new Menu(-1,"管理群组", 0, TYPE_ITEM_gray_bg));
-        menuArrayList.add(new Menu(-1,"群组模式", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(0,"管理群组", 0, TYPE_ITEM_Control));
+        menuArrayList.add(new Menu(0,"群组模式", 0, TYPE_ITEM_Control));
         menuArrayList.add(new Menu());
-        menuArrayList.add(new Menu(-1,"更改地址码", 0, TYPE_ITEM_gray_bg));
-        menuArrayList.add(new Menu(-1,"风扇控制", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(0,"更改地址码", 0, TYPE_ITEM_Control));
+        menuArrayList.add(new Menu(0,"风扇控制", 0, TYPE_ITEM_Control));
         menuArrayList.add(new Menu());
-        menuArrayList.add(new Menu(-1,"重新开始特效", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(0,"重新开始特效", 0, TYPE_ITEM_Control));
         menuArrayList.add(new Menu());
-        menuArrayList.add(new Menu(-1,"删除该设备群组", 0, TYPE_ITEM_gray_bg));
+        menuArrayList.add(new Menu(0,"删除该设备群组", 0, TYPE_ITEM_Control));
         presenter.receiveFixtureGroupMenu(menuArrayList);
     }
 }
