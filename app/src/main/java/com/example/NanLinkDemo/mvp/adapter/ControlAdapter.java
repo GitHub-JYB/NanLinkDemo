@@ -34,7 +34,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private OnDelayTimeClickListener onDelayTimeClickListener;
     private ArrayList<DeviceDataMessage.Control> controls;
 
-    private int dim = 50 ;
+    private int dim = 50;
 
     private int delayTime = 2;
 
@@ -42,7 +42,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType){
+        switch (viewType) {
             case TYPE_SLIP:
                 VpItemSlipControlBinding vpItemControlBinding = VpItemSlipControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderSlipControl(vpItemControlBinding);
@@ -65,43 +65,53 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         DeviceDataMessage.Control control = controls.get(position);
-        if (holder instanceof ViewHolderBoxControl){
+        if (holder instanceof ViewHolderBoxControl) {
             int selectIndex = control.getSelectIndex();
-            if (control.getControls().size() > 1){
+            if (control.getControls().size() > 1) {
                 ((ViewHolderBoxControl) holder).control.setTitle(control.getRemark());
                 ((ViewHolderBoxControl) holder).control.check(selectIndex);
                 ArrayList<String> boxTextList = new ArrayList<>();
-                for (DeviceDataMessage.Control control1 : control.getControls()){
+                for (DeviceDataMessage.Control control1 : control.getControls()) {
                     boxTextList.add(control1.getRemark());
                 }
                 ((ViewHolderBoxControl) holder).control.setData(boxTextList);
-            }else {
+            } else {
                 ((ViewHolderBoxControl) holder).control.setVisibility(View.GONE);
             }
             ((ViewHolderBoxControl) holder).controlAdapter.setData(control.getControls().get(selectIndex).getControls());
-        }else if (holder instanceof ViewHolderSlipControl){
+        } else if (holder instanceof ViewHolderSlipControl) {
             int max = Integer.parseInt(control.getElements().getMax());
             int min = Integer.parseInt(control.getElements().getMin());
             int step = Integer.parseInt(control.getElements().getStep());
             int value = Integer.parseInt(control.getElements().getItem());
             ((ViewHolderSlipControl) holder).control.setRemark(control.getRemark());
             ((ViewHolderSlipControl) holder).control.setTitle(control.getRemark());
-            if (control.getElements().getToggle() == null){
+            if (control.getElements().getToggle() == null) {
                 ((ViewHolderSlipControl) holder).control.setDelayBtnVisibility(View.GONE);
-            }else {
+            } else {
                 ((ViewHolderSlipControl) holder).control.setDelayBtnVisibility(View.VISIBLE);
             }
-            if (control.getElements().getDelay() == null){
+            if (control.getElements().getDelay() == null) {
                 ((ViewHolderSlipControl) holder).control.setDelayTimeVisibility(View.GONE);
-            }else {
+            } else {
                 ((ViewHolderSlipControl) holder).control.setDelayTime(delayTime);
             }
-            if (control.getRemark().equals("亮度")){
+            if (control.getRemark().equals("亮度")) {
                 ((ViewHolderSlipControl) holder).control.setSeekBar(max, min, step, dim);
-            }else {
+            } else {
                 ((ViewHolderSlipControl) holder).control.setSeekBar(max, min, step, value);
             }
 
+        } else if (holder instanceof ViewHolderSlmControl) {
+            int selectIndex = control.getSelectIndex();
+            ArrayList<String> menuTextList = new ArrayList<>();
+            for (DeviceDataMessage.Control control1 : control.getControls()) {
+                menuTextList.add(control1.getRemark());
+            }
+            ((ViewHolderSlmControl) holder).control.setTitle(menuTextList.get(selectIndex));
+            ((ViewHolderSlmControl) holder).control.check(selectIndex);
+            ((ViewHolderSlmControl) holder).control.setMenuData(menuTextList);
+            ((ViewHolderSlmControl) holder).controlAdapter.setData(control.getControls().get(selectIndex).getControls());
         }
     }
 
@@ -113,7 +123,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        switch (controls.get(position).getControlType()){
+        switch (controls.get(position).getControlType()) {
             case "slip":
                 return TYPE_SLIP;
             case "box":
@@ -182,6 +192,12 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             controlAdapter.setDim(dim);
             controlAdapter.setDelayTime(delayTime);
             binding.recyclerView.setAdapter(controlAdapter);
+            binding.control.setOnCheckedChangeListener(new BoxView.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(int index) {
+                    controlAdapter.setData(controls.get(getAdapterPosition()).getControls().get(index).getControls());
+                }
+            });
         }
     }
 
@@ -190,9 +206,22 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         SlmMenuView control;
 
+        ControlAdapter controlAdapter;
+
         public ViewHolderSlmControl(@NonNull VpItemSlmMenuControlBinding binding) {
             super(binding.getRoot());
             control = binding.control;
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.recyclerView.getContext()));
+            controlAdapter = new ControlAdapter();
+            controlAdapter.setDim(dim);
+            controlAdapter.setDelayTime(delayTime);
+            binding.recyclerView.setAdapter(controlAdapter);
+            binding.control.setOnIndexChangeListener(new SlmMenuView.OnIndexChangeListener() {
+                @Override
+                public void onIndexChanged(int index) {
+                    controlAdapter.setData(controls.get(getAdapterPosition()).getControls().get(index).getControls());
+                }
+            });
         }
     }
 
@@ -210,11 +239,11 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public void setDelayTime(int delayTime){
+    public void setDelayTime(int delayTime) {
         this.delayTime = delayTime;
     }
 
-    public void setDim(int dim){
+    public void setDim(int dim) {
         this.dim = dim;
     }
 

@@ -273,9 +273,15 @@ public class SlipView extends RelativeLayout {
     private String transformData(int value) {
         switch (remark) {
             case "亮度":
+            case "饱和度":
+            case "亮暗比例":
                 return value + "%";
             case "色温":
                 return value + "K";
+            case "速度":
+                return value + " 秒";
+            case "间隔":
+                return value / 1000.0 + " 秒";
         }
         return String.valueOf(value);
     }

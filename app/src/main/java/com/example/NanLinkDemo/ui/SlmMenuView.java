@@ -7,17 +7,26 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.BoxviewBinding;
 import com.example.NanLinkDemo.databinding.SlmmenuviewBinding;
+import com.example.NanLinkDemo.mvp.adapter.FlmMenuListAdapter;
+import com.example.NanLinkDemo.mvp.adapter.FlmModeListAdapter;
 
 import java.util.ArrayList;
 
@@ -25,12 +34,11 @@ public class SlmMenuView extends RelativeLayout {
 
     private SlmmenuviewBinding binding;
 
-    private int width = MyApplication.dip2px(84);
-    private int height = MyApplication.dip2px(40);
     private int index = 0;
 
-    private float textSize = 12;
-    private OnCheckedChangeListener onCheckedChangeListener;
+    private OnIndexChangeListener onIndexChangeListener;
+    private ArrayList<String> menuData = new ArrayList<>();
+    private OnShowListener onShowListener;
 
     public SlmMenuView(Context context) {
         this(context, null);
@@ -51,8 +59,93 @@ public class SlmMenuView extends RelativeLayout {
 
     private void initView() {
         binding = SlmmenuviewBinding.inflate(LayoutInflater.from(getContext()), this, true);
+        binding.title.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout linearLayout = (LinearLayout) inflate(getContext(), R.layout.slm_menu, null);
+                RecyclerView recyclerView = linearLayout.findViewById(R.id.recycleView);
+                LinearLayout background = linearLayout.findViewById(R.id.background);
+                TextView title = linearLayout.findViewById(R.id.title);
+                title.setText(menuData.get(index));
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                FlmMenuListAdapter adapter = new FlmMenuListAdapter();
+                adapter.setData(menuData);
+                recyclerView.setAdapter(adapter);
 
+                PopupWindow popupWindow = new PopupWindow(linearLayout, LinearLayout.LayoutParams.MATCH_PARENT,  MyApplication.heightPixels - MyApplication.dip2px(108), true);
 
+                popupWindow.setFocusable(true); // 获取焦点
+
+                popupWindow.setOutsideTouchable(true);//获取外部触摸事件
+
+                popupWindow.setTouchable(true);//能够响应触摸事件
+
+                adapter.setOnClickListener(new FlmMenuListAdapter.OnClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        if (onIndexChangeListener != null){
+                            onIndexChangeListener.onIndexChanged(position);
+                        }
+                        if (position < menuData.size()){
+                            setTitle(menuData.get(position));
+                        }
+                        index = position;
+                        popupWindow.dismiss();
+                    }
+                });
+                background.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        if (onShowListener != null){
+                            onShowListener.showList(false);
+                        }
+                    }
+                });
+                popupWindow.showAsDropDown(binding.getRoot());
+                if (onShowListener != null){
+                    onShowListener.showList(true);
+                }
+            }
+        });
+        if (menuData.size() < 1){
+            binding.pre.setClickable(false);
+            binding.next.setClickable(false);
+        }else {
+            binding.pre.setClickable(true);
+            binding.next.setClickable(true);
+        }
+        binding.next.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                index++;
+                if (index > menuData.size() - 1){
+                    index = 0;
+                }
+                setTitle(menuData.get(index));
+                if (onIndexChangeListener != null){
+                    onIndexChangeListener.onIndexChanged(index);
+                }
+            }
+        });
+        binding.pre.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                index--;
+                if (index < 0){
+                    index = menuData.size() - 1;
+                }
+                setTitle(menuData.get(index));
+                if (onIndexChangeListener != null){
+                    onIndexChangeListener.onIndexChanged(index);
+                }
+            }
+        });
     }
 
     // 设置是否隐藏
@@ -65,20 +158,11 @@ public class SlmMenuView extends RelativeLayout {
         binding.title.setText(title);
     }
 
-    //设置按键高度
-    public void setHeight(int height) {
-        this.height = height;
+    //设置数据
+    public void setMenuData(ArrayList<String> menuData) {
+        this.menuData = menuData;
     }
 
-    //设置按键宽度
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    //设置按键文字大小,单位sp
-    public void setTextSize(float textSize) {
-        this.textSize = textSize;
-    }
 
     //设置按键默认选的位置
     public void check(int index) {
@@ -86,11 +170,20 @@ public class SlmMenuView extends RelativeLayout {
     }
 
     //设置控件按键的切换事件
-    public void setOnCheckedChangeListener(OnCheckedChangeListener onCheckedChangeListener) {
-        this.onCheckedChangeListener = onCheckedChangeListener;
+    public void setOnIndexChangeListener(OnIndexChangeListener onIndexChangeListener) {
+        this.onIndexChangeListener = onIndexChangeListener;
     }
 
-    public interface OnCheckedChangeListener{
-        void onCheckedChanged(int index);
+    public interface OnIndexChangeListener{
+        void onIndexChanged(int index);
+    }
+
+    //设置列表是否显示监听事件
+    public void setOnShowListener(OnShowListener onShowListener) {
+        this.onShowListener = onShowListener;
+    }
+
+    public interface OnShowListener{
+        void showList(boolean show);
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="108dp"
+    android:background="@color/mask"
+    android:gravity="center_horizontal"
+    android:id="@+id/background">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray"
+        android:gravity="center_horizontal">
+
+        <RelativeLayout
+            android:layout_width="296dp"
+            android:layout_height="59dp">
+
+            <View
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:background="@color/mask"
+                android:rotation="45"
+                android:translationX="-16dp"
+                android:translationY="-16dp" />
+
+            <RelativeLayout
+                android:layout_width="148dp"
+                android:layout_height="44dp"
+                android:layout_centerHorizontal="true"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/able"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/under_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/blue" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:background="@color/mask"
+                android:rotation="45"
+                android:translationX="16dp"
+                android:translationY="-16dp" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="36dp"></androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+</LinearLayout>
