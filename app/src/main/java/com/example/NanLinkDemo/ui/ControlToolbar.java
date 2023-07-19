@@ -35,7 +35,6 @@ public class ControlToolbar extends RelativeLayout {
     private OnModeChangeListener onModeChangeListener;
     private FlmModeListAdapter adapter;
     private ArrayList<DeviceDataMessage.FlmMode> modeList = new ArrayList<>();
-    private OnShowListener onShowListener;
 
     public ControlToolbar(Context context) {
         this(context,null);
@@ -70,8 +69,7 @@ public class ControlToolbar extends RelativeLayout {
                 adapter = new FlmModeListAdapter();
                 adapter.setData(modeList);
                 recyclerView.setAdapter(adapter);
-
-                PopupWindow popupWindow = new PopupWindow(linearLayout, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+                PopupWindow popupWindow = new PopupWindow(linearLayout, LinearLayout.LayoutParams.MATCH_PARENT, MyApplication.heightPixels - binding.getRoot().getHeight(), true);
 
                 popupWindow.setFocusable(true); // 获取焦点
 
@@ -92,18 +90,14 @@ public class ControlToolbar extends RelativeLayout {
                     }
                 });
 
-                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                linearLayout.setOnClickListener(new OnClickListener() {
                     @Override
-                    public void onDismiss() {
-                        if (onShowListener != null){
-                            onShowListener.showList(false);
-                        }
+                    public void onClick(View view) {
+                        popupWindow.dismiss();
                     }
                 });
-                popupWindow.showAsDropDown(binding.mode, 0 , 2);
-                if (onShowListener != null){
-                    onShowListener.showList(true);
-                }
+                popupWindow.showAsDropDown(binding.getRoot());
+
             }
         });
     }
@@ -283,15 +277,6 @@ public class ControlToolbar extends RelativeLayout {
 
     public interface OnModeChangeListener{
         void ModeChange(int position);
-    }
-
-    // 设置模式列表展示监听事件
-    public void setOnShowListener(OnShowListener onShowListener){
-        this.onShowListener = onShowListener;
-    }
-
-    public interface OnShowListener{
-        void showList(boolean show);
     }
 
 }

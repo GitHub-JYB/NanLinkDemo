@@ -195,7 +195,9 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.control.setOnCheckedChangeListener(new BoxView.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(int index) {
-                    controlAdapter.setData(controls.get(getAdapterPosition()).getControls().get(index).getControls());
+                    if (index >= 0) {
+                        controlAdapter.setData(controls.get(getAdapterPosition()).getControls().get(index).getControls());
+                    }
                 }
             });
         }

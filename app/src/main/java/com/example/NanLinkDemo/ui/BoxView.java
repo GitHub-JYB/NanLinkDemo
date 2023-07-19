@@ -101,7 +101,8 @@ public class BoxView extends RelativeLayout {
                 binding.group.addView(radioButton);
 
             }
-            binding.group.check(index <= dataList.size() ? index: 0);
+            binding.group.clearCheck();
+            binding.group.check(index < dataList.size() ? index : 0);
             binding.group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {

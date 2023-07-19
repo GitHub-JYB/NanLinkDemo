@@ -93,12 +93,6 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
         binding.controlToolbar.setRightBtnIcon(R.drawable.ic_menu);
         binding.controlToolbar.setLeftBtnOnClickListener(this);
         binding.controlToolbar.setRightBtnOnClickListener(this);
-        binding.controlToolbar.setOnShowListener(new ControlToolbar.OnShowListener() {
-            @Override
-            public void showList(boolean show) {
-                updateContentAlpha(show);
-            }
-        });
         binding.controlToolbar.setOnModeChangeListener(new ControlToolbar.OnModeChangeListener() {
             @Override
             public void ModeChange(int position) {
@@ -106,15 +100,6 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
             }
         });
     }
-
-    private void updateContentAlpha(boolean show) {
-        if (show){
-            binding.contentAlpha.setAlpha(0.65f);
-        } else {
-            binding.contentAlpha.setAlpha(0);
-        }
-    }
-
 
     @Override
     public void setSecondTitle(String secondTitle){

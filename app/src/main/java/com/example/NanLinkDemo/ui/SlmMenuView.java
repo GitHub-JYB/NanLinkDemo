@@ -72,7 +72,7 @@ public class SlmMenuView extends RelativeLayout {
                 adapter.setData(menuData);
                 recyclerView.setAdapter(adapter);
 
-                PopupWindow popupWindow = new PopupWindow(linearLayout, LinearLayout.LayoutParams.MATCH_PARENT,  MyApplication.heightPixels - MyApplication.dip2px(108), true);
+                PopupWindow popupWindow = new PopupWindow(linearLayout, LinearLayout.LayoutParams.MATCH_PARENT,  MyApplication.heightPixels - MyApplication.statusHigh - MyApplication.dip2px(88), true);
 
                 popupWindow.setFocusable(true); // 获取焦点
 
