@@ -26,6 +26,9 @@ public class MyApplication extends Application {
     public static int widthPixels;
     public static int heightPixels;
     public static int statusHigh;
+
+    private static int controlToolbarHigh;
+
     private static float scale;
 
     private static float fontScale;
@@ -98,6 +101,14 @@ public class MyApplication extends Application {
 
     public static void setFixtures(ArrayList<Fixture> fixtures) {
         MyApplication.fixtures = fixtures;
+    }
+
+    public static int getControlToolbarHigh() {
+        return controlToolbarHigh;
+    }
+
+    public static void setControlToolbarHigh(int controlToolbarHigh) {
+        MyApplication.controlToolbarHigh = controlToolbarHigh;
     }
 
 

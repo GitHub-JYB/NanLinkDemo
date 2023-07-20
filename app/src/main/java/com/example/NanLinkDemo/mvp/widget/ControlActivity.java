@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.bean.Menu;

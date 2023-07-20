@@ -38,7 +38,6 @@ public class SlmMenuView extends RelativeLayout {
 
     private OnIndexChangeListener onIndexChangeListener;
     private ArrayList<String> menuData = new ArrayList<>();
-    private OnShowListener onShowListener;
 
     public SlmMenuView(Context context) {
         this(context, null);
@@ -70,9 +69,12 @@ public class SlmMenuView extends RelativeLayout {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 FlmMenuListAdapter adapter = new FlmMenuListAdapter();
                 adapter.setData(menuData);
+                int[] location = new int[2];
+                binding.getRoot().getLocationOnScreen(location);
+                int y = location[1];
                 recyclerView.setAdapter(adapter);
 
-                PopupWindow popupWindow = new PopupWindow(linearLayout, LinearLayout.LayoutParams.MATCH_PARENT,  MyApplication.heightPixels - MyApplication.statusHigh - MyApplication.dip2px(88), true);
+                PopupWindow popupWindow = new PopupWindow(linearLayout, LinearLayout.LayoutParams.MATCH_PARENT,  MyApplication.heightPixels + MyApplication.statusHigh - y, true);
 
                 popupWindow.setFocusable(true); // 获取焦点
 
@@ -99,18 +101,7 @@ public class SlmMenuView extends RelativeLayout {
                         popupWindow.dismiss();
                     }
                 });
-                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        if (onShowListener != null){
-                            onShowListener.showList(false);
-                        }
-                    }
-                });
                 popupWindow.showAsDropDown(binding.getRoot());
-                if (onShowListener != null){
-                    onShowListener.showList(true);
-                }
             }
         });
         if (menuData.size() < 1){
@@ -176,14 +167,5 @@ public class SlmMenuView extends RelativeLayout {
 
     public interface OnIndexChangeListener{
         void onIndexChanged(int index);
-    }
-
-    //设置列表是否显示监听事件
-    public void setOnShowListener(OnShowListener onShowListener) {
-        this.onShowListener = onShowListener;
-    }
-
-    public interface OnShowListener{
-        void showList(boolean show);
     }
 }

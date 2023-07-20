@@ -36,7 +36,7 @@
         <service
             android:name=".service.BleScanService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".mvp.widget.SplashActivity"
@@ -68,6 +68,7 @@
         <activity android:name=".mvp.widget.Add24GFixtureActivity" />
         <activity android:name=".mvp.widget.ControlModeActivity" />
         <activity android:name=".mvp.widget.ControlActivity" />
+        <activity android:name=".mvp.widget.TestActivity" />
     </application>
 
 </manifest>

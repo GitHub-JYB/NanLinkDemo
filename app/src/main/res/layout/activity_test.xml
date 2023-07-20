@@ -3,16 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
 
     <com.example.NanLinkDemo.ui.MyToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.example.NanLinkDemo.ui.BoxView
-        android:id="@+id/box"
+    <com.example.NanLinkDemo.ui.DoubleSlideSeekBar
+        android:id="@+id/doubleslide_withrule"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+
+        />
 
 </LinearLayout>

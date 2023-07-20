@@ -4,6 +4,7 @@ package com.example.NanLinkDemo.mvp.presenter.Impl;
 import android.view.View;
 
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
 import com.example.NanLinkDemo.R;
@@ -13,6 +14,7 @@ import com.example.NanLinkDemo.mvp.model.Impl.ControlModelImpl;
 import com.example.NanLinkDemo.mvp.presenter.ControlPresenter;
 import com.example.NanLinkDemo.mvp.view.ControlView;
 import com.example.NanLinkDemo.mvp.widget.ControlActivity;
+import com.example.NanLinkDemo.util.Constant;
 import com.example.NanLinkDemo.util.TransformUtil;
 import com.google.gson.Gson;
 
@@ -48,7 +50,11 @@ public class ControlPresenterImpl implements ControlPresenter {
 
     @Override
     public void menuSwitch(int position) {
-
+        switch (position){
+            case 1:
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Test).navigation();
+                break;
+        }
     }
 
     @Override
