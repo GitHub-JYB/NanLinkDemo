@@ -13,10 +13,10 @@
 
     <com.example.NanLinkDemo.ui.DoubleSlideSeekBar
         android:id="@+id/doubleslide_withrule"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
+        android:layout_width="246dp"
+        android:layout_height="50dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         />
 
 </LinearLayout>
