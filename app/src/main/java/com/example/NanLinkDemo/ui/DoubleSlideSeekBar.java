@@ -22,8 +22,8 @@ public class DoubleSlideSeekBar extends View {
     private int line_height = 2;
     private int max = 10;
     private int min = 0;
-    private int minItem = 1;
-    private int maxItem = 9;
+    private int minItem = 0;
+    private int maxItem = 0;
     private boolean isClickMinItem;
     private int length;
 
@@ -121,10 +121,18 @@ public class DoubleSlideSeekBar extends View {
                 if (isClickMinItem) {
                     if(x >= getPaddingLeft() && x <= (float) maxItem / (max - min) * length + getPaddingLeft()){
                         minItem = (int) ((x - getPaddingLeft()) / length * (max - min));
+                    }else if (x < getPaddingLeft()){
+                        minItem = min;
+                    }else if (x > (float) maxItem / (max - min) * length + getPaddingLeft()){
+                        minItem = maxItem;
                     }
                 }else {
                     if(x <= length + getPaddingLeft() && x >= (float) minItem / (max - min) * length + getPaddingLeft()){
                         maxItem = (int) ((x - getPaddingLeft()) / length * (max - min));
+                    }else if (x > length + getPaddingLeft()){
+                        maxItem = max;
+                    }else if (x < (float) minItem / (max - min) * length + getPaddingLeft()){
+                        maxItem = minItem;
                     }
                 }
                 invalidate();
@@ -138,12 +146,14 @@ public class DoubleSlideSeekBar extends View {
 
     public void setMax(int max){
         this.max = max;
+        invalidate();
+
     }
 
     public void setProgress(int maxItem, int minItem){
-        this.maxItem = maxItem;
-        this.minItem = minItem;
-
+        this.maxItem = Math.min(maxItem, max);
+        this.minItem = Math.min(minItem, max);
+        invalidate();
     }
 
 }
