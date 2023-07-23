@@ -181,7 +181,7 @@ public class ControlPresenterImpl implements ControlPresenter {
             String fan = deviceData.getFan().get(0);
             switch (fan) {
                 case "FAN_SMART":
-                    view.setFan(R.drawable.ic_full_fan);
+                    view.setFan(R.drawable.ic_smart_fan);
                     break;
                 case "FAN_FULL":
                     if (deviceData.getFan().size() == 2) {

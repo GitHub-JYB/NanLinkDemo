@@ -5,13 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.databinding.VpItemBoxControlBinding;
+import com.example.NanLinkDemo.databinding.VpItemColorDropDownControlBinding;
+import com.example.NanLinkDemo.databinding.VpItemColorslipControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemDividerControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemDoubleSlipControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemEmptyControlBinding;
@@ -34,6 +39,8 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_DIVIDER = 4;
     private static final int TYPE_DOUBLE_SLIP = 5;
     private static final int TYPE_TOUCH_BTN = 6;
+    private static final int TYPE_COLOR_SLIP = 7;
+    private static final int TYPE_COLOR_DROP_DOWN = 8;
 
 
     private OnDataUpdateListener onDataUpdateListener;
@@ -68,6 +75,12 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_TOUCH_BTN:
                 VpItemTouchbtnControlBinding vpItemTouchbtnControlBinding = VpItemTouchbtnControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderTouchBtnControl(vpItemTouchbtnControlBinding);
+            case TYPE_COLOR_SLIP:
+                VpItemColorslipControlBinding vpItemColorslipControlBinding = VpItemColorslipControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new ViewHolderColorSlipControl(vpItemColorslipControlBinding);
+            case TYPE_COLOR_DROP_DOWN:
+                VpItemColorDropDownControlBinding vpItemColorDropDownControlBinding = VpItemColorDropDownControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new ViewHolderColorDropDownControl(vpItemColorDropDownControlBinding);
             default:
                 VpItemEmptyControlBinding vpItemEmptyControlBinding = VpItemEmptyControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderEmptyControl(vpItemEmptyControlBinding);
@@ -137,10 +150,10 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if (dim < minItem) {
                     if (dim < 1f / 10 * (max - min)) {
                         ((ViewHolderDoubleSlipControl) holder).control.setSeekBar(max, min, step, dim, (int) (1f / 100 * (max - min)));
-                    }else {
+                    } else {
                         ((ViewHolderDoubleSlipControl) holder).control.setSeekBar(max, min, step, dim, (int) (dim - 1f / 10 * (max - min)));
                     }
-                }else {
+                } else {
                     ((ViewHolderDoubleSlipControl) holder).control.setSeekBar(max, min, step, dim, minItem);
                 }
             } else {
@@ -157,8 +170,40 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((ViewHolderSlmControl) holder).control.check(selectIndex);
             ((ViewHolderSlmControl) holder).control.setMenuData(menuTextList);
             ((ViewHolderSlmControl) holder).controlAdapter.setData(control.getControls().get(selectIndex).getControls());
-        }else if (holder instanceof ViewHolderTouchBtnControl){
+        } else if (holder instanceof ViewHolderTouchBtnControl) {
             ((ViewHolderTouchBtnControl) holder).control.setText(control.getRemark());
+        } else if (holder instanceof ViewHolderColorSlipControl) {
+            int max = Integer.parseInt(control.getElements().getMax());
+            int min = Integer.parseInt(control.getElements().getMin());
+            int step = Integer.parseInt(control.getElements().getStep());
+            int value = Integer.parseInt(control.getElements().getItem());
+            ((ViewHolderColorSlipControl) holder).control.setRemark(control.getRemark());
+            ((ViewHolderColorSlipControl) holder).control.setTitle(control.getRemark());
+            if (control.getElements().getToggle() == null) {
+                ((ViewHolderColorSlipControl) holder).control.setDelayBtnVisibility(View.GONE);
+            } else {
+                ((ViewHolderColorSlipControl) holder).control.setDelayBtnVisibility(View.VISIBLE);
+            }
+            if (control.getElements().getDelay() == null) {
+                ((ViewHolderColorSlipControl) holder).control.setDelayTimeVisibility(View.GONE);
+            } else {
+                ((ViewHolderColorSlipControl) holder).control.setDelayTime(delayTime);
+            }
+            ((ViewHolderColorSlipControl) holder).control.setSeekBar(max, min, step, value);
+            int num = max - control.getControls().size();
+            if (num > 0) {
+                for (int i = 0; i < num; i++) {
+                    control.getControls().add(control.getControls().get(0));
+                }
+            }
+            ArrayList<DeviceDataMessage.Control> dataList = new ArrayList<>();
+            for (int i = 0; i < value; i++) {
+                dataList.add(control.getControls().get(i));
+            }
+            ((ViewHolderColorSlipControl) holder).controlAdapter.setData(dataList);
+        }else if (holder instanceof ViewHolderColorDropDownControl){
+            ((ViewHolderColorDropDownControl) holder).num.setText("颜色 " + (position + 1));
+            ((ViewHolderColorDropDownControl) holder).controlAdapter.setData(control.getControls());
         }
     }
 
@@ -183,6 +228,10 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 return TYPE_DOUBLE_SLIP;
             case "touchBtn":
                 return TYPE_TOUCH_BTN;
+            case "colorSlip":
+                return TYPE_COLOR_SLIP;
+            case "colorDropDown":
+                return TYPE_COLOR_DROP_DOWN;
             default:
                 return TYPE_UNKNOW;
         }
@@ -263,6 +312,41 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    class ViewHolderColorSlipControl extends RecyclerView.ViewHolder {
+
+
+        SlipView control;
+
+        ControlAdapter controlAdapter;
+
+        public ViewHolderColorSlipControl(@NonNull VpItemColorslipControlBinding binding) {
+            super(binding.getRoot());
+            control = binding.control;
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.recyclerView.getContext()));
+            controlAdapter = new ControlAdapter();
+            controlAdapter.setDim(dim);
+            controlAdapter.setDelayTime(delayTime);
+            binding.recyclerView.setAdapter(controlAdapter);
+            binding.control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanged(int index) {
+                    int num = Integer.parseInt(controls.get(getAdapterPosition()).getElements().getMax()) - controls.get(getAdapterPosition()).getControls().size();
+                    if (num > 0) {
+                        for (int i = 0; i < num; i++) {
+                            controls.get(getAdapterPosition()).getControls().add(controls.get(getAdapterPosition()).getControls().get(0));
+                        }
+                    }
+                    ArrayList<DeviceDataMessage.Control> dataList = new ArrayList<>();
+                    for (int i = 0; i < index; i++) {
+                        dataList.add(controls.get(getAdapterPosition()).getControls().get(i));
+                    }
+                    controlAdapter.setData(dataList);
+                }
+            });
+        }
+    }
+
+
     class ViewHolderBoxControl extends RecyclerView.ViewHolder {
 
 
@@ -317,6 +401,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
         Button control;
+
         public ViewHolderTouchBtnControl(@NonNull VpItemTouchbtnControlBinding binding) {
             super(binding.getRoot());
             control = binding.control;
@@ -336,6 +421,48 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(binding.getRoot());
         }
     }
+
+    class ViewHolderColorDropDownControl extends RecyclerView.ViewHolder {
+
+
+        ImageView color, show;
+        TextView num, data1, data2;
+
+        ControlAdapter controlAdapter;
+
+        public ViewHolderColorDropDownControl(@NonNull VpItemColorDropDownControlBinding binding) {
+            super(binding.getRoot());
+            color = binding.color;
+            show = binding.show;
+            num = binding.num;
+            data1 = binding.data1;
+            data2 = binding.data2;
+
+            binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.recyclerView.getContext()));
+            controlAdapter = new ControlAdapter();
+            controlAdapter.setDim(dim);
+            controlAdapter.setDelayTime(delayTime);
+            binding.recyclerView.setAdapter(controlAdapter);
+            binding.recyclerView.setVisibility(View.GONE);
+            binding.show.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int visibility = binding.recyclerView.getVisibility();
+                    switch (visibility) {
+                        case View.GONE:
+                            binding.recyclerView.setVisibility(View.VISIBLE);
+                            binding.show.setImageResource(R.drawable.ic_spread);
+                            break;
+                        case View.VISIBLE:
+                            binding.recyclerView.setVisibility(View.GONE);
+                            binding.show.setImageResource(R.drawable.ic_close);
+                            break;
+                    }
+                }
+            });
+        }
+    }
+
 
     public void setDelayTime(int delayTime) {
         this.delayTime = delayTime;
