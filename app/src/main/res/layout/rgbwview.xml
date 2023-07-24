@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@id/index_0"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <RadioButton
+            android:id="@+id/index_0"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:button="@drawable/bg_selector_console" />
+
+        <RadioButton
+            android:id="@+id/index_1"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginEnd="29dp"
+            android:button="@drawable/bg_selector_rgbw_color" />
+
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/view_index_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.example.NanLinkDemo.ui.SlipView
+            android:id="@+id/r_slip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.example.NanLinkDemo.ui.SlipView
+            android:id="@+id/g_slip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.example.NanLinkDemo.ui.SlipView
+            android:id="@+id/b_slip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+        <com.example.NanLinkDemo.ui.SlipView
+            android:id="@+id/w_slip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/view_index_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.example.NanLinkDemo.ui.RgbwColorView
+            android:id="@+id/rgbw_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="31dp"
+            android:layout_marginEnd="31dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

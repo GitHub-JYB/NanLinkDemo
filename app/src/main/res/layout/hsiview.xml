@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:id="@+id/color"
+            android:layout_width="191dp"
+            android:layout_height="30dp" />
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@id/index_0"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <RadioButton
+            android:id="@+id/index_0"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:button="@drawable/bg_selector_hsi_color" />
+
+        <RadioButton
+            android:id="@+id/index_1"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginEnd="29dp"
+            android:button="@drawable/bg_selector_console" />
+
+        <RadioButton
+            android:id="@+id/index_2"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:button="@drawable/ic_hsi_camera" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/view_index_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.example.NanLinkDemo.ui.HsiColorView
+            android:id="@+id/hsi_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="74dp"
+            android:paddingEnd="74dp">
+
+            <TextView
+                android:id="@+id/HSI_text"
+                android:layout_width="83dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/bg_border_hsi_text"
+                android:gravity="center"
+                android:text="H: 100"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
+
+
+            <TextView
+                android:id="@+id/SAT_text"
+                android:layout_width="83dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/bg_border_hsi_text"
+                android:gravity="center"
+                android:text="S: 100%"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/view_index_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.example.NanLinkDemo.ui.SlipView
+            android:id="@+id/HSI_slip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.example.NanLinkDemo.ui.SlipView
+            android:id="@+id/SAT_slip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.example.NanLinkDemo.ui.SlipView
+            android:id="@+id/CCT_slip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</LinearLayout>

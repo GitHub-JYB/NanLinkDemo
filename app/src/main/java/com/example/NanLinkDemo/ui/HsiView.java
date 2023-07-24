@@ -1,29 +1,39 @@
 package com.example.NanLinkDemo.ui;
 
-
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
+import android.graphics.Outline;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewOutlineProvider;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.R;
+import com.example.NanLinkDemo.databinding.HsiviewBinding;
+import com.example.NanLinkDemo.databinding.SlmmenuviewBinding;
+import com.example.NanLinkDemo.mvp.adapter.FlmMenuListAdapter;
 
+import java.util.ArrayList;
 
-public class HsiView extends View {
+public class HsiView extends RelativeLayout {
 
-    private int HSI = 0;
-    private int SAT = 100;
+    private HsiviewBinding binding;
 
-    private OnDataChangeListener listener;
-    private int r;
+    private int HSI, SAT;
+
+    private OnDataChangeListener onDataChangeListener;
 
     public HsiView(Context context) {
         this(context, null);
@@ -39,109 +49,143 @@ public class HsiView extends View {
 
     public HsiView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        initView();
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        Paint circlePaint = new Paint();
-        Drawable colorDrawable = getResources().getDrawable(R.drawable.bg_color_hsi);
-        Bitmap colorBitmap = Transparency(drawableToBitmap(colorDrawable));
-        canvas.drawBitmap(colorBitmap, (getWidth() - colorBitmap.getWidth()) / 2, (getHeight() - colorBitmap.getHeight()) / 2, circlePaint);
-        Paint pointerPaint = new Paint();
-        Drawable pointerDrawable = getResources().getDrawable(R.drawable.ic_pointer);
-        Bitmap pointerBitmap = drawableToBitmap(pointerDrawable);
-        r = colorBitmap.getWidth() / 2;
-        float pointX = (float) (r + getPaddingLeft() + (SAT / 100 * r * Math.cos((360 - HSI) * Math.PI * 2 / 360)));
-        float pointY = (float) (r + getPaddingTop() + (SAT / 100 * r * Math.sin((360 - HSI) * Math.PI * 2 / 360)));
-
-
-        canvas.drawBitmap(pointerBitmap, pointX - (pointerBitmap.getWidth() / 2), pointY - (pointerBitmap.getHeight() / 2), pointerPaint);
-    }
-
-    private Bitmap drawableToBitmap(Drawable drawable) {
-        int w = drawable.getIntrinsicWidth();
-        int h = drawable.getIntrinsicHeight();
-        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-        Bitmap bitmap = Bitmap.createBitmap(w, h, config);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, w, h);
-        drawable.draw(canvas);
-        return bitmap;
-    }
-
-
-    private Bitmap Transparency(Bitmap bitmap) {
-        int minX = bitmap.getWidth();
-        int minY = bitmap.getHeight();
-        int maxX = -1;
-        int maxY = -1;
-        for (int y = 0; y < bitmap.getHeight(); y++) {
-            for (int x = 0; x < bitmap.getWidth(); x++) {
-                int alpha = (bitmap.getPixel(x, y) >> 24) & 255;
-                if (alpha > 0) {
-                    if (x < minX) {
-                        minX = x;
-                    }
-                    if (x > maxX) {
-                        maxX = x;
-                    }
-                    if (y < minY) {
-                        minY = y;
-                    }
-                    if (y > maxY) {
-                        maxY = y;
-                    }
+    private void initView() {
+        binding = HsiviewBinding.inflate(LayoutInflater.from(getContext()), this, true);
+        setHSI(HSI);
+        setSAT(SAT);
+        binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.index_0:
+                        binding.viewIndex0.setVisibility(VISIBLE);
+                        binding.viewIndex1.setVisibility(GONE);
+                        break;
+                    case R.id.index_1:
+                        binding.viewIndex0.setVisibility(GONE);
+                        binding.viewIndex1.setVisibility(VISIBLE);
+                        break;
+                    case R.id.index_2:
+                        break;
                 }
             }
-        }
-        if ((maxX < minX) || (maxY < minY)) {
-            return null;
-        }
-        return Bitmap.createBitmap(bitmap, minX, minY, (maxX - minX) + 1, (maxY - minY) + 1);
+        });
+
+        binding.hsiColor.setOnDataChangeListener(new HsiColorView.OnDataChangeListener() {
+            @Override
+            public void onProgressChanged(HsiColorView hsiView, int hsi, int sat) {
+                HSI = hsi;
+                SAT = sat;
+                setHSI(hsi);
+                setSAT(sat);
+            }
+
+            @Override
+            public void onStopTrackingTouch(HsiColorView hsiView) {
+
+            }
+        });
+        binding.HSISlip.setRemark("色相");
+        binding.HSISlip.setTitle("色相");
+        binding.HSISlip.setDelayTimeVisibility(View.GONE);
+        binding.HSISlip.setDelayBtnVisibility(View.GONE);
+        binding.HSISlip.setSeekBar(360, 0, 1, HSI);
+        binding.HSISlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+            @Override
+            public void onDataChanged(int index) {
+                HSI = index;
+                setHSI(HSI);
+                if (onDataChangeListener != null) {
+                    onDataChangeListener.onDataChanged(HSI, SAT);
+                }
+            }
+        });
+
+        binding.SATSlip.setRemark("饱和度");
+        binding.SATSlip.setTitle("饱和度");
+        binding.SATSlip.setDelayTimeVisibility(View.GONE);
+        binding.SATSlip.setDelayBtnVisibility(View.GONE);
+        binding.SATSlip.setSeekBar(100, 0, 1, SAT);
+        binding.SATSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+            @Override
+            public void onDataChanged(int index) {
+                SAT = index;
+                setSAT(SAT);
+                if (onDataChangeListener != null) {
+                    onDataChangeListener.onDataChanged(HSI, SAT);
+                }
+            }
+        });
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        getParent().requestDisallowInterceptTouchEvent(true);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-                updateData(event.getX(), event.getY());
+    private void updateColor() {
+        float[] hsl = new float[3];
+        hsl[0] = HSI;
+        hsl[1] = SAT / 100.0f;
+        hsl[2] = (50 + (100 - SAT) / 2f) / 100.0f;
+        binding.color.setClipToOutline(true);
+        binding.color.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0,0,view.getWidth(),view.getHeight(),MyApplication.dip2px(6));
+            }
+        });
+        binding.color.setBackgroundColor(ColorUtils.HSLToColor(hsl));
+    }
+
+
+    //设置数据
+    public void setHSI(int HSI) {
+        this.HSI = HSI;
+        binding.hsiColor.setHSI(HSI);
+        binding.HSIText.setText("H: " + HSI);
+        binding.HSISlip.setSeekBar(360, 0, 1, HSI);
+        updateColor();
+    }
+
+    public void setSAT(int SAT) {
+        this.SAT = SAT;
+        binding.hsiColor.setSAT(SAT);
+        binding.SATText.setText("S: " + SAT + "%");
+        binding.SATSlip.setSeekBar(100, 0, 1, SAT);
+        updateColor();
+
+    }
+
+    public void setCCT(int max, int min, int step, int value) {
+        binding.CCTSlip.setRemark("色温");
+        binding.CCTSlip.setTitle("色温");
+        binding.CCTSlip.setVisibility(VISIBLE);
+        binding.CCTSlip.setDelayTimeVisibility(View.GONE);
+        binding.CCTSlip.setDelayBtnVisibility(View.GONE);
+        binding.CCTSlip.setSeekBar(max, min, step, value);
+    }
+
+    //设置按键默认选的位置
+    public void check(int index) {
+        switch (index) {
+            case 0:
+                binding.radioGroup.check(R.id.index_0);
+                break;
+            case 1:
+                binding.radioGroup.check(R.id.index_1);
+                break;
+            case 2:
+                binding.radioGroup.check(R.id.index_2);
                 break;
         }
-        return true;
     }
 
-    private void updateData(float x, float y) {
-        double length = Math.sqrt(Math.pow(x - r - getPaddingLeft(), 2) + Math.pow(y - r - getPaddingTop(), 2));
-        if (length > r) {
-            return;
-        }
-        SAT = (int) (100 * length / r);
-        if (x - r - getPaddingLeft() > 0){
-            HSI = -(int) (Math.atan((y - r - getPaddingTop()) / (x - r - getPaddingLeft())) / Math.PI * 180);
-            if (HSI < 0){
-                HSI += 360;
-            }
-        }else {
-            HSI = 180 - (int) (Math.atan((y - r - getPaddingTop()) / (x - r - getPaddingLeft())) / Math.PI * 180);
-        }
-        if (listener != null){
-            listener.onProgressChanged(this, HSI, SAT);
-        }
-        invalidate();
-    }
-
-    public void setOnDataChangeListener(OnDataChangeListener listener) {
-        this.listener = listener;
+    //设置控件按键的切换事件
+    public void setOnDataChangeListener(OnDataChangeListener onDataChangeListener) {
+        this.onDataChangeListener = onDataChangeListener;
     }
 
 
     public interface OnDataChangeListener {
-        void onProgressChanged(HsiView hsiView, int HSI, int SAT);
-
-        void onStopTrackingTouch(HsiView hsiView);
+        void onDataChanged(int HSI, int SAT);
     }
-
 }
