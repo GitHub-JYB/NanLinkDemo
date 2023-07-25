@@ -24,6 +24,7 @@ public class XYColorView extends View {
     private float pointX = -1, pointY = -1;
     private OnDataChangeListener listener;
     private Bitmap colorBitmap, pointerBitmap;
+    private float RedX, RedY, BlueX, BlueY, GreenX, GreenY;
 
     public XYColorView(Context context) {
         this(context, null);
@@ -59,22 +60,22 @@ public class XYColorView extends View {
         }
         canvas.drawBitmap(colorBitmap, (getWidth() - colorBitmap.getWidth()) / 2f + getPaddingLeft(), (getHeight() - colorBitmap.getHeight()) / 2f + getPaddingTop(), colorPaint);
 
-
-        float RedX = getPaddingLeft() + colorBitmap.getWidth() * (330 - 93) / 330f;
-        float RedY = getPaddingTop() + colorBitmap.getHeight() - (RedX - getPaddingLeft()) * 30 / 68f;
-        float BlueY = getPaddingTop() + colorBitmap.getHeight() * (330 - 56) / 330f;
-        float BlueX = (colorBitmap.getHeight() - BlueY + getPaddingTop()) * 16 / 7f + getPaddingLeft();
-//        float GreenX = RedX * 19 / 68f;
-//        float GreenY = getPaddingTop() + colorBitmap.getHeight() - (getPaddingTop() + colorBitmap.getHeight() - BlueY) * 69 / 7f;
+        float unit = (330 - 93 - 56) / 330f * colorBitmap.getWidth() / (68 - 7);
+        RedX = getPaddingLeft() + colorBitmap.getWidth() * (330 - 93) / 330f;
+        BlueY = getPaddingTop() + colorBitmap.getHeight() * (330 - 56) / 330f;
+        RedY = BlueY - (30 - 7) * unit;
+        BlueX = RedX - (68 - 16) * unit;
+        GreenX = RedX - (68 - 19) * unit;;
+        GreenY = BlueY - (69 - 7) * unit;;
         Paint linePaint = new Paint();
         linePaint.setAntiAlias(true);
         linePaint.setColor(getResources().getColor(R.color.black));
         linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(1);
+        linePaint.setStrokeWidth(MyApplication.dip2px(1));
 
         canvas.drawLine(RedX, RedY, BlueX, BlueY, linePaint);
-//        canvas.drawLine(BlueX, BlueY, GreenX, GreenY, linePaint);
-//        canvas.drawLine(GreenX, GreenY, RedX, RedY, linePaint);
+        canvas.drawLine(BlueX, BlueY, GreenX, GreenY, linePaint);
+        canvas.drawLine(GreenX, GreenY, RedX, RedY, linePaint);
 
 
         Paint pointerPaint = new Paint();
@@ -133,19 +134,19 @@ public class XYColorView extends View {
     }
 
     private void updateData(float x, float y) {
-        if (x >= getPaddingLeft() + pointerBitmap.getWidth() * 0.5 && x <= colorBitmap.getWidth() + getPaddingLeft() + pointerBitmap.getWidth() * 0.5) {
+        if (x >= BlueX && x <= RedX) {
             pointX = x;
-        }else if (x < getPaddingLeft() + pointerBitmap.getWidth() * 0.5){
-            pointX = (float) (getPaddingLeft() + pointerBitmap.getWidth() * 0.5);
-        }else if (x > colorBitmap.getWidth() + getPaddingLeft() + pointerBitmap.getWidth() * 0.5){
-            pointX = (float) (colorBitmap.getWidth() + getPaddingLeft() + pointerBitmap.getWidth() * 0.5);
+        }else if (x < BlueX){
+            pointX = BlueX;
+        }else if (x > RedX){
+            pointX = RedX;
         }
-        if (y >= getPaddingTop() + pointerBitmap.getHeight() * 0.5 && y <= colorBitmap.getHeight() + getPaddingTop() + pointerBitmap.getHeight() * 0.5) {
+        if (y <= BlueY && y >= GreenY) {
             pointY = y;
-        }else if (y < getPaddingTop() + pointerBitmap.getHeight() * 0.5){
-            pointY = (float) (getPaddingTop() + pointerBitmap.getHeight() * 0.5);
-        }else if (y > colorBitmap.getHeight() + getPaddingTop() + pointerBitmap.getHeight() * 0.5){
-            pointY = (float) (colorBitmap.getHeight() + getPaddingTop() + pointerBitmap.getHeight() * 0.5);
+        }else if (y < GreenY){
+            pointY = GreenY;
+        }else if (y > BlueY){
+            pointY = BlueY;
         }
         float[] hsl = new float[3];
         hsl[0] = (float) ((pointX - getPaddingLeft() - pointerBitmap.getWidth() * 0.5) / colorBitmap.getWidth() * 360);
