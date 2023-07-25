@@ -19,25 +19,25 @@ import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.R;
 
 
-public class RgbwColorView extends View {
+public class XYColorView extends View {
 
     private float pointX = -1, pointY = -1;
     private OnDataChangeListener listener;
     private Bitmap colorBitmap, pointerBitmap;
 
-    public RgbwColorView(Context context) {
+    public XYColorView(Context context) {
         this(context, null);
     }
 
-    public RgbwColorView(Context context, @Nullable AttributeSet attrs) {
+    public XYColorView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RgbwColorView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public XYColorView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public RgbwColorView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public XYColorView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -58,6 +58,23 @@ public class RgbwColorView extends View {
             colorBitmap = getColorBitmap();
         }
         canvas.drawBitmap(colorBitmap, (getWidth() - colorBitmap.getWidth()) / 2f + getPaddingLeft(), (getHeight() - colorBitmap.getHeight()) / 2f + getPaddingTop(), colorPaint);
+
+
+        float RedX = getPaddingLeft() + colorBitmap.getWidth() * (330 - 93) / 330f;
+        float RedY = getPaddingTop() + colorBitmap.getHeight() - (RedX - getPaddingLeft()) * 30 / 68f;
+        float BlueY = getPaddingTop() + colorBitmap.getHeight() * (330 - 56) / 330f;
+        float BlueX = (colorBitmap.getHeight() - BlueY + getPaddingTop()) * 16 / 7f + getPaddingLeft();
+//        float GreenX = RedX * 19 / 68f;
+//        float GreenY = getPaddingTop() + colorBitmap.getHeight() - (getPaddingTop() + colorBitmap.getHeight() - BlueY) * 69 / 7f;
+        Paint linePaint = new Paint();
+        linePaint.setAntiAlias(true);
+        linePaint.setColor(getResources().getColor(R.color.black));
+        linePaint.setStyle(Paint.Style.STROKE);
+        linePaint.setStrokeWidth(1);
+
+        canvas.drawLine(RedX, RedY, BlueX, BlueY, linePaint);
+//        canvas.drawLine(BlueX, BlueY, GreenX, GreenY, linePaint);
+//        canvas.drawLine(GreenX, GreenY, RedX, RedY, linePaint);
 
 
         Paint pointerPaint = new Paint();
@@ -84,11 +101,11 @@ public class RgbwColorView extends View {
 
 
     private Bitmap getColorBitmap() {
-        Drawable drawable = getResources().getDrawable(R.drawable.bg_color_rgbw);
+        Drawable drawable = getResources().getDrawable(R.drawable.bg_color_xy);
 //        int w = drawable.getIntrinsicWidth() - pointerDrawable.getIntrinsicWidth();
 //        int h = drawable.getIntrinsicHeight() - pointerDrawable.getIntrinsicHeight();
-        int w = getWidth() - getPaddingLeft() - getPaddingRight() - MyApplication.dip2px(40);
-        int h = getHeight() - getPaddingTop() - getPaddingBottom() - MyApplication.dip2px(40);
+        int w = getWidth() - getPaddingLeft() - getPaddingRight();
+        int h = getHeight() - getPaddingTop() - getPaddingBottom();
 
         Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
         Bitmap bitmap = Bitmap.createBitmap(w, h, config);
@@ -155,9 +172,9 @@ public class RgbwColorView extends View {
     }
 
     public interface OnDataChangeListener {
-        void onProgressChanged(RgbwColorView rgbwColorView, int r, int g, int b, int w);
+        void onProgressChanged(XYColorView rgbwColorView, int r, int g, int b, int w);
 
-        void onStopTrackingTouch(RgbwColorView rgbwColorView);
+        void onStopTrackingTouch(XYColorView rgbwColorView);
     }
 
 }

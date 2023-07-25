@@ -3,24 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <com.example.NanLinkDemo.ui.MyToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.example.NanLinkDemo.ui.RgbwColorView
+    <com.example.NanLinkDemo.ui.XYColorView
 
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-
-        />
-
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:background="@color/blue" />
 
 
 </LinearLayout>
