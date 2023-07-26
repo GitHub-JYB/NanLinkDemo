@@ -138,14 +138,14 @@ public class XYColorView extends View {
             pointX = x;
         }else if (x < BlueX){
             pointX = BlueX;
-        }else if (x > RedX){
+        }else {
             pointX = RedX;
         }
         if (y <= BlueY && y >= GreenY) {
             pointY = y;
         }else if (y < GreenY){
             pointY = GreenY;
-        }else if (y > BlueY){
+        }else {
             pointY = BlueY;
         }
         float[] hsl = new float[3];
