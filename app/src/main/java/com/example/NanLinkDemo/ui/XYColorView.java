@@ -68,9 +68,9 @@ public class XYColorView extends View {
         BlueX = RedX - (68 - 16) * unit;
         GreenX = RedX - (68 - 19) * unit;
         GreenY = BlueY - (69 - 7) * unit;
-        k1 =  -(RedY - BlueY) / (RedX - BlueX);
-        k2 =  -(GreenY - BlueY) / (GreenX - BlueX);
-        k3 =  -(GreenY - RedY) / (GreenX - RedX);
+        k1 = -(RedY - BlueY) / (RedX - BlueX);
+        k2 = -(GreenY - BlueY) / (GreenX - BlueX);
+        k3 = -(GreenY - RedY) / (GreenX - RedX);
 
 
         Paint linePaint = new Paint();
@@ -128,7 +128,21 @@ public class XYColorView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                updateData(event.getX(), event.getY());
+                float x = getX();
+                float y = getY();
+                if (event.getY() < GreenY) {
+                    y = GreenY;
+                }
+                if (event.getY() > BlueY) {
+                    y = BlueY;
+                }
+                if (event.getX() < BlueX) {
+                    x = BlueX;
+                }
+                if (event.getX() > RedX) {
+                    x = RedX;
+                }
+                updateData(x, y);
                 break;
             case MotionEvent.ACTION_UP:
                 if (listener != null) {
@@ -140,31 +154,30 @@ public class XYColorView extends View {
     }
 
     private void updateData(float x, float y) {
-        if (x >= BlueX && x <= GreenX && y <= BlueY && y >= GreenY) {
-            if (-(y - BlueY) / (x - BlueX) >= k1 && -(y - BlueY) / (x - BlueX) <= k2){
+        if (x <= GreenX) {
+            if (-(y - BlueY) / (x - BlueX) >= k1 && -(y - BlueY) / (x - BlueX) <= k2) {
                 pointX = x;
                 pointY = y;
-            }else if (-(y - BlueY) / (x - BlueX) < k1){
+            } else if (-(y - BlueY) / (x - BlueX) < k1) {
                 pointX = x;
                 pointY = BlueY - k1 * (x - BlueX);
-            }else if (-(y - BlueY) / (x - BlueX) > k2){
+            } else if (-(y - BlueY) / (x - BlueX) > k2) {
                 pointY = y;
                 pointX = (BlueY - y) / k2 + BlueX;
             }
-        }else if (x >= GreenX && x <= RedX && y <= BlueY && y >= GreenY) {
-            if (-(y - RedY) / (x - RedX) <= k1 && -(y - RedY) / (x - RedX) >= k3){
+        } else {
+            if (-(y - RedY) / (x - RedX) <= k1 && -(y - RedY) / (x - RedX) >= k3) {
                 pointX = x;
                 pointY = y;
+            } else if (-(y - RedY) / (x - RedX) > k1) {
+                pointX = x;
+                pointY = RedY - k1 * (x - RedX);
+            } else if (-(y - RedY) / (x - RedX) < k3) {
+                pointY = y;
+                pointX = (RedY - y) / k3 + RedX;
             }
-        }else if (y < GreenY){
-            pointY = GreenY;
-        }else if (y > BlueY){
-            pointY = BlueY;
-        }else if (x < BlueX){
-            pointX = BlueX;
-        }else if (x > RedX){
-            pointX = RedX;
         }
+
         float[] hsl = new float[3];
         hsl[0] = (float) ((pointX - getPaddingLeft() - pointerBitmap.getWidth() * 0.5) / colorBitmap.getWidth() * 360);
         hsl[1] = (float) ((pointY - getPaddingTop() - pointerBitmap.getHeight() * 0.5) / colorBitmap.getHeight());
@@ -174,7 +187,7 @@ public class XYColorView extends View {
         int r = Color.red(color);
         int g = Color.green(color);
         int b = Color.blue(color);
-        if (listener != null){
+        if (listener != null) {
             listener.onProgressChanged(this, r, g, b, w);
         }
         invalidate();
@@ -184,7 +197,7 @@ public class XYColorView extends View {
         this.listener = listener;
     }
 
-    public void clearPointer(){
+    public void clearPointer() {
         pointX = pointY = -1;
         invalidate();
     }

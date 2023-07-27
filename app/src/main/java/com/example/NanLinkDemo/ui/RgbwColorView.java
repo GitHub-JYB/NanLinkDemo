@@ -132,10 +132,10 @@ public class RgbwColorView extends View {
         }
         float[] hsl = new float[3];
         hsl[0] = (float) ((pointX - getPaddingLeft() - pointerBitmap.getWidth() * 0.5) / colorBitmap.getWidth() * 360);
-        hsl[1] = (float) ((pointY - getPaddingTop() - pointerBitmap.getHeight() * 0.5) / colorBitmap.getHeight());
-        hsl[2] = 0.5f + 0.5f - 0.5f * hsl[1];
+        hsl[1] = 1;
+        hsl[2] = 0.5f;
         int color = ColorUtils.HSLToColor(hsl);
-        int w = (int) ((1 - hsl[1]) * 255);
+        int w = (int) ((1 - (float) ((pointY - getPaddingTop() - pointerBitmap.getHeight() * 0.5) / colorBitmap.getHeight())) * 255);
         int r = Color.red(color);
         int g = Color.green(color);
         int b = Color.blue(color);
