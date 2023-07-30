@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -21,11 +22,15 @@ import com.example.NanLinkDemo.R;
 
 public class XYColorView extends View {
 
-    private float pointX = -1, pointY = -1;
+    private double pointX, pointY;
+    private double X = 0.3302;
+    private double Y = 0.3408;
     private OnDataChangeListener listener;
     private Bitmap colorBitmap, pointerBitmap;
-    private float RedX, RedY, BlueX, BlueY, GreenX, GreenY;
-    private float k1, k2, k3;
+    private double RedX, RedY, BlueX, BlueY, GreenX, GreenY;
+    private double k1, k2, k3;
+    private double kb, kr;
+    private double unit;
 
     public XYColorView(Context context) {
         this(context, null);
@@ -61,17 +66,18 @@ public class XYColorView extends View {
         }
         canvas.drawBitmap(colorBitmap, (getWidth() - colorBitmap.getWidth()) / 2f + getPaddingLeft(), (getHeight() - colorBitmap.getHeight()) / 2f + getPaddingTop(), colorPaint);
 
-        float unit = (330 - 93 - 56) / 330f * colorBitmap.getWidth() / (68 - 7);
+        unit = (330 - 93 - 56) / 330f * colorBitmap.getWidth() / (0.6800 - 0.0700);
         RedX = getPaddingLeft() + colorBitmap.getWidth() * (330 - 93) / 330f;
         BlueY = getPaddingTop() + colorBitmap.getHeight() * (330 - 56) / 330f;
-        RedY = BlueY - (30 - 7) * unit;
-        BlueX = RedX - (68 - 16) * unit;
-        GreenX = RedX - (68 - 19) * unit;
-        GreenY = BlueY - (69 - 7) * unit;
+        RedY = BlueY - (0.3000 - 0.0700) * unit;
+        BlueX = RedX - (0.6800 - 0.1600) * unit;
+        GreenX = RedX - (0.6800 - 0.1900) * unit;
+        GreenY = BlueY - (0.6900 - 0.0700) * unit;
         k1 = -(RedY - BlueY) / (RedX - BlueX);
         k2 = -(GreenY - BlueY) / (GreenX - BlueX);
         k3 = -(GreenY - RedY) / (GreenX - RedX);
-
+        pointX = (X - 0.1600) * unit + BlueX;
+        pointY = (Y - 0.0700) * unit + GreenY;
 
         Paint linePaint = new Paint();
         linePaint.setAntiAlias(true);
@@ -79,9 +85,9 @@ public class XYColorView extends View {
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setStrokeWidth(MyApplication.dip2px(1));
 
-        canvas.drawLine(RedX, RedY, BlueX, BlueY, linePaint);
-        canvas.drawLine(BlueX, BlueY, GreenX, GreenY, linePaint);
-        canvas.drawLine(GreenX, GreenY, RedX, RedY, linePaint);
+        canvas.drawLine((float) RedX, (float) RedY, (float) BlueX, (float) BlueY, linePaint);
+        canvas.drawLine((float) BlueX, (float) BlueY, (float) GreenX, (float) GreenY, linePaint);
+        canvas.drawLine((float) GreenX, (float) GreenY, (float) RedX, (float) RedY, linePaint);
 
 
         Paint pointerPaint = new Paint();
@@ -89,9 +95,7 @@ public class XYColorView extends View {
             pointerBitmap = getPointerBitmap();
         }
 
-        if (pointX != -1 && pointY != -1) {
-            canvas.drawBitmap(pointerBitmap, pointX - (pointerBitmap.getWidth() / 2f), pointY - (pointerBitmap.getHeight() / 2f), pointerPaint);
-        }
+        canvas.drawBitmap(pointerBitmap, (float) (pointX - (pointerBitmap.getWidth() / 2f)), (float) (pointY - (pointerBitmap.getHeight() / 2f)), pointerPaint);
     }
 
     private Bitmap getPointerBitmap() {
@@ -125,24 +129,58 @@ public class XYColorView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         getParent().requestDisallowInterceptTouchEvent(true);
+        float x = event.getX();
+        float y = event.getY();
+        kb = -(event.getY() - BlueY) / (event.getX() - BlueX);
+        kr = -(event.getY() - RedY) / (event.getX() - RedX);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                float x = getX();
-                float y = getY();
-                if (event.getY() < GreenY) {
-                    y = GreenY;
+                if (y > BlueY) {
+                    pointX = Math.min(RedX, Math.max(x, BlueX));
+                    pointY = BlueY - k1 * (pointX - BlueX);
+                } else if (y < GreenY) {
+                    if (x <= GreenX) {
+                        pointX = Math.max(x, BlueX);
+                        pointY = BlueY - k2 * (pointX - BlueX);
+                    } else {
+                        pointX = Math.min(x, RedX);
+                        pointY = RedY - k3 * (pointX - RedX);
+                    }
+                } else if (x < BlueX) {
+                    pointY = Math.min(BlueY, Math.max(y, GreenY));
+                    pointX = (BlueY - pointY) / k2 + BlueX;
+                } else if (x > RedX) {
+                    if (y < RedY) {
+                        pointY = Math.max(y, GreenY);
+                        pointX = (RedY - pointY) / k3 + RedX;
+                    } else {
+                        pointY = Math.min(y, BlueY);
+                        pointX = (RedY - pointY) / k1 + RedX;
+                    }
+                } else {
+                    if (kb < k1) {
+                        pointX = x;
+                        pointY = BlueY - k1 * (pointX - BlueX);
+                    } else if (kb > k2) {
+                        pointY = y;
+                        pointX = (BlueY - pointY) / k2 + BlueX;
+                    } else {
+                        if (kr < k3) {
+                            pointY = y;
+                            pointX = (RedY - pointY) / k3 + RedX;
+                        } else {
+                            pointX = x;
+                            pointY = y;
+                        }
+                    }
                 }
-                if (event.getY() > BlueY) {
-                    y = BlueY;
+                X = (pointX - BlueX) / unit + 0.1600;
+                Y = (pointY - GreenY) / unit + 0.0700;
+                if (listener != null) {
+                    listener.onProgressChanged(this, X, Y);
                 }
-                if (event.getX() < BlueX) {
-                    x = BlueX;
-                }
-                if (event.getX() > RedX) {
-                    x = RedX;
-                }
-                updateData(x, y);
+                invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 if (listener != null) {
@@ -153,59 +191,15 @@ public class XYColorView extends View {
         return true;
     }
 
-    private void updateData(float x, float y) {
-        if (x <= GreenX) {
-            if (-(y - BlueY) / (x - BlueX) >= k1 && -(y - BlueY) / (x - BlueX) <= k2) {
-                pointX = x;
-                pointY = y;
-            } else if (-(y - BlueY) / (x - BlueX) < k1) {
-                pointX = x;
-                pointY = BlueY - k1 * (x - BlueX);
-            } else if (-(y - BlueY) / (x - BlueX) > k2) {
-                pointY = y;
-                pointX = (BlueY - y) / k2 + BlueX;
-            }
-        } else {
-            if (-(y - RedY) / (x - RedX) <= k1 && -(y - RedY) / (x - RedX) >= k3) {
-                pointX = x;
-                pointY = y;
-            } else if (-(y - RedY) / (x - RedX) > k1) {
-                pointX = x;
-                pointY = RedY - k1 * (x - RedX);
-            } else if (-(y - RedY) / (x - RedX) < k3) {
-                pointY = y;
-                pointX = (RedY - y) / k3 + RedX;
-            }
-        }
-
-        float[] hsl = new float[3];
-        hsl[0] = (float) ((pointX - getPaddingLeft() - pointerBitmap.getWidth() * 0.5) / colorBitmap.getWidth() * 360);
-        hsl[1] = (float) ((pointY - getPaddingTop() - pointerBitmap.getHeight() * 0.5) / colorBitmap.getHeight());
-        hsl[2] = 0.5f + 0.5f - 0.5f * hsl[1];
-        int color = ColorUtils.HSLToColor(hsl);
-        int w = (int) ((1 - hsl[1]) * 255);
-        int r = Color.red(color);
-        int g = Color.green(color);
-        int b = Color.blue(color);
-        if (listener != null) {
-            listener.onProgressChanged(this, r, g, b, w);
-        }
-        invalidate();
-    }
 
     public void setOnDataChangeListener(OnDataChangeListener listener) {
         this.listener = listener;
     }
 
-    public void clearPointer() {
-        pointX = pointY = -1;
-        invalidate();
-    }
-
     public interface OnDataChangeListener {
-        void onProgressChanged(XYColorView rgbwColorView, int r, int g, int b, int w);
+        void onProgressChanged(XYColorView xyColorView, double x, double y);
 
-        void onStopTrackingTouch(XYColorView rgbwColorView);
+        void onStopTrackingTouch(XYColorView xyColorView);
     }
 
 }
