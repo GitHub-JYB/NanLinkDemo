@@ -11,12 +11,15 @@ import androidx.annotation.Nullable;
 
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.RgbwviewBinding;
+import com.example.NanLinkDemo.databinding.XyviewBinding;
+
+import java.util.ArrayList;
 
 public class XYView extends RelativeLayout {
 
-    private RgbwviewBinding binding;
+    private XyviewBinding binding;
 
-    private int r, g, b, w;
+    private int x = 3302, y = 3408;
 
     private OnDataChangeListener onDataChangeListener;
 
@@ -38,141 +41,86 @@ public class XYView extends RelativeLayout {
     }
 
     private void initView() {
-        binding = RgbwviewBinding.inflate(LayoutInflater.from(getContext()), this, true);
-        setR(r);
-        setG(g);
-        setB(b);
-        setW(w);
-        binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        binding = XyviewBinding.inflate(LayoutInflater.from(getContext()), this, true);
+        setX(x);
+        setY(y);
+        binding.curve.setTitle("色温曲线");
+        binding.curve.check(1);
+        ArrayList<String> curveText = new ArrayList<>();
+        curveText.add("显示");
+        curveText.add("隐藏");
+        binding.curve.setData(curveText);
+        binding.curve.setOnCheckedChangeListener(new BoxView.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.index_0:
-                        binding.viewIndex0.setVisibility(VISIBLE);
-                        binding.viewIndex1.setVisibility(GONE);
-                        break;
-                    case R.id.index_1:
-                        binding.viewIndex0.setVisibility(GONE);
-                        binding.viewIndex1.setVisibility(VISIBLE);
-                        break;
+            public void onCheckedChanged(int index) {
+                if (index == 0){
+                    binding.xyColor.showCurve();
+                }else {
+                    binding.xyColor.hideCurve();
                 }
             }
         });
 
-        binding.rgbwColor.setOnDataChangeListener(new RgbwColorView.OnDataChangeListener() {
+        binding.xyColor.setOnDataChangeListener(new XYColorView.OnDataChangeListener() {
             @Override
-            public void onProgressChanged(RgbwColorView rgbwColorView, int r, int g, int b, int w) {
-                setR(r);
-                setG(g);
-                setB(b);
-                setW(w);
-                if (onDataChangeListener != null) {
-                    onDataChangeListener.onDataChanged(r, g, b, w);
-                }
+            public void onProgressChanged(XYColorView xyColorView, int x, int y) {
+
             }
 
             @Override
-            public void onStopTrackingTouch(RgbwColorView rgbwColorView) {
+            public void onStopTrackingTouch(XYColorView xyColorView) {
 
             }
         });
-        binding.rSlip.setTitle("红 R");
-        binding.rSlip.setDelayTimeVisibility(View.GONE);
-        binding.rSlip.setDelayBtnVisibility(View.GONE);
-        binding.rSlip.setSeekBar(255, 0, 1, r);
-        binding.rSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+        binding.XSlip.setTitle("X");
+        binding.XSlip.setRemark("X");
+        binding.XSlip.setDelayTimeVisibility(View.GONE);
+        binding.XSlip.setDelayBtnVisibility(View.GONE);
+        binding.XSlip.setSeekBar(6800, 1600, 1, x);
+        binding.XSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
             @Override
             public void onDataChanged(int index) {
-                r = index;
-                setR(r);
-                binding.rgbwColor.clearPointer();
+                x = index;
+                setX(x);
                 if (onDataChangeListener != null) {
-                    onDataChangeListener.onRDataChanged(r);
+                    onDataChangeListener.onDataChanged(x, y);
                 }
             }
         });
 
-        binding.gSlip.setTitle("绿 G");
-        binding.gSlip.setDelayTimeVisibility(View.GONE);
-        binding.gSlip.setDelayBtnVisibility(View.GONE);
-        binding.gSlip.setSeekBar(255, 0, 1, g);
-        binding.gSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+        binding.YSlip.setTitle("Y");
+        binding.YSlip.setRemark("Y");
+        binding.YSlip.setDelayTimeVisibility(View.GONE);
+        binding.YSlip.setDelayBtnVisibility(View.GONE);
+        binding.YSlip.setSeekBar(6900, 700, 1, y);
+        binding.YSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
             @Override
             public void onDataChanged(int index) {
-                g = index;
-                setG(g);
-                binding.rgbwColor.clearPointer();
+                y = index;
+                setY(y);
                 if (onDataChangeListener != null) {
-                    onDataChangeListener.onGDataChanged(g);
+                    onDataChangeListener.onDataChanged(x, y);
                 }
             }
         });
 
-        binding.bSlip.setTitle("蓝 B");
-        binding.bSlip.setDelayTimeVisibility(View.GONE);
-        binding.bSlip.setDelayBtnVisibility(View.GONE);
-        binding.bSlip.setSeekBar(255, 0, 1, b);
-        binding.bSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
-            @Override
-            public void onDataChanged(int index) {
-                b = index;
-                setB(b);
-                binding.rgbwColor.clearPointer();
-                if (onDataChangeListener != null) {
-                    onDataChangeListener.onBDataChanged(b);
-                }
-            }
-        });
-
-        binding.wSlip.setTitle("白 W");
-        binding.wSlip.setDelayTimeVisibility(View.GONE);
-        binding.wSlip.setDelayBtnVisibility(View.GONE);
-        binding.wSlip.setSeekBar(255, 0, 1, w);
-        binding.wSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
-            @Override
-            public void onDataChanged(int index) {
-                w = index;
-                setW(w);
-                binding.rgbwColor.clearPointer();
-                if (onDataChangeListener != null) {
-                    onDataChangeListener.onWDataChanged(w);
-                }
-            }
-        });
     }
 
 
     //设置数据
-    public void setR(int r) {
-        this.r = r;
-        binding.rSlip.setSeekBar(255, 0, 1, r);
+    public void setX(int x) {
+        this.x = x;
+        binding.XSlip.setSeekBar(6800, 1600, 1, x);
     }
 
-    public void setG(int g) {
-        this.g = g;
-        binding.gSlip.setSeekBar(255, 0, 1, g);
-    }
-
-    public void setB(int b) {
-        this.b = b;
-        binding.bSlip.setSeekBar(255, 0, 1, b);
-    }
-
-    public void setW(int w) {
-        this.w = w;
-        binding.wSlip.setSeekBar(255, 0, 1, w);
+    public void setY(int y) {
+        this.y = y;
+        binding.YSlip.setSeekBar(6900, 700, 1, y);
     }
 
     //设置按键默认选的位置
     public void check(int index) {
-        switch (index) {
-            case 0:
-                binding.radioGroup.check(R.id.index_0);
-                break;
-            case 1:
-                binding.radioGroup.check(R.id.index_1);
-                break;
-        }
+        binding.curve.check(index);
     }
 
     //设置控件按键的切换事件
@@ -182,15 +130,6 @@ public class XYView extends RelativeLayout {
 
 
     public interface OnDataChangeListener {
-        void onDataChanged(int R, int G, int B, int W);
-
-        void onRDataChanged(int R);
-
-        void onGDataChanged(int G);
-
-        void onBDataChanged(int B);
-
-        void onWDataChanged(int W);
-
+        void onDataChanged(int x, int y);
     }
 }

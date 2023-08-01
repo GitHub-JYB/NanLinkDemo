@@ -284,6 +284,9 @@ public class SlipView extends RelativeLayout {
             case "间隔":
             case "时间间隔":
                 return value / 1000.0 + " 秒";
+            case "X":
+            case "Y":
+                return String.valueOf(value / 1000.0);
         }
         return String.valueOf(value);
     }

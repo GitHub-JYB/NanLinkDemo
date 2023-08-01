@@ -22,15 +22,15 @@ import com.example.NanLinkDemo.R;
 
 public class XYColorView extends View {
 
-    private double pointX, pointY;
-    private double X = 0.3302;
-    private double Y = 0.3408;
+    private float pointX, pointY;
+    private int X = 3302;
+    private int Y = 3408;
     private OnDataChangeListener listener;
     private Bitmap colorBitmap, pointerBitmap;
-    private double RedX, RedY, BlueX, BlueY, GreenX, GreenY;
-    private double k1, k2, k3;
-    private double kb, kr;
-    private double unit;
+    private float RedX, RedY, BlueX, BlueY, GreenX, GreenY;
+    private float k1, k2, k3;
+    private float kb, kr;
+    private float unit;
 
     public XYColorView(Context context) {
         this(context, null);
@@ -66,18 +66,18 @@ public class XYColorView extends View {
         }
         canvas.drawBitmap(colorBitmap, (getWidth() - colorBitmap.getWidth()) / 2f + getPaddingLeft(), (getHeight() - colorBitmap.getHeight()) / 2f + getPaddingTop(), colorPaint);
 
-        unit = (330 - 93 - 56) / 330f * colorBitmap.getWidth() / (0.6800 - 0.0700);
+        unit = (330 - 93 - 56) / 330f * colorBitmap.getWidth() / (6800 - 700);
         RedX = getPaddingLeft() + colorBitmap.getWidth() * (330 - 93) / 330f;
         BlueY = getPaddingTop() + colorBitmap.getHeight() * (330 - 56) / 330f;
-        RedY = BlueY - (0.3000 - 0.0700) * unit;
-        BlueX = RedX - (0.6800 - 0.1600) * unit;
-        GreenX = RedX - (0.6800 - 0.1900) * unit;
-        GreenY = BlueY - (0.6900 - 0.0700) * unit;
+        RedY = BlueY - (3000 - 700) * unit;
+        BlueX = RedX - (6800 - 1600) * unit;
+        GreenX = RedX - (6800 - 1900) * unit;
+        GreenY = BlueY - (6900 - 700) * unit;
         k1 = -(RedY - BlueY) / (RedX - BlueX);
         k2 = -(GreenY - BlueY) / (GreenX - BlueX);
         k3 = -(GreenY - RedY) / (GreenX - RedX);
-        pointX = (X - 0.1600) * unit + BlueX;
-        pointY = (Y - 0.0700) * unit + GreenY;
+        pointX = (X - 1600) * unit + BlueX;
+        pointY = (Y - 700) * unit + GreenY;
 
         Paint linePaint = new Paint();
         linePaint.setAntiAlias(true);
@@ -85,9 +85,9 @@ public class XYColorView extends View {
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setStrokeWidth(MyApplication.dip2px(1));
 
-        canvas.drawLine((float) RedX, (float) RedY, (float) BlueX, (float) BlueY, linePaint);
-        canvas.drawLine((float) BlueX, (float) BlueY, (float) GreenX, (float) GreenY, linePaint);
-        canvas.drawLine((float) GreenX, (float) GreenY, (float) RedX, (float) RedY, linePaint);
+        canvas.drawLine(RedX, RedY, BlueX, BlueY, linePaint);
+        canvas.drawLine(BlueX, BlueY, GreenX, GreenY, linePaint);
+        canvas.drawLine(GreenX, GreenY, RedX, RedY, linePaint);
 
 
         Paint pointerPaint = new Paint();
@@ -95,7 +95,7 @@ public class XYColorView extends View {
             pointerBitmap = getPointerBitmap();
         }
 
-        canvas.drawBitmap(pointerBitmap, (float) (pointX - (pointerBitmap.getWidth() / 2f)), (float) (pointY - (pointerBitmap.getHeight() / 2f)), pointerPaint);
+        canvas.drawBitmap(pointerBitmap, (pointX - (pointerBitmap.getWidth() / 2f)), (pointY - (pointerBitmap.getHeight() / 2f)), pointerPaint);
     }
 
     private Bitmap getPointerBitmap() {
@@ -175,8 +175,8 @@ public class XYColorView extends View {
                         }
                     }
                 }
-                X = (pointX - BlueX) / unit + 0.1600;
-                Y = (pointY - GreenY) / unit + 0.0700;
+                X = (int) ((pointX - BlueX) / unit + 0.5f) + 1600;
+                Y = (int)((pointY - GreenY) / unit + 0.5f) + 700;
                 if (listener != null) {
                     listener.onProgressChanged(this, X, Y);
                 }
@@ -196,8 +196,16 @@ public class XYColorView extends View {
         this.listener = listener;
     }
 
+    public void showCurve() {
+
+    }
+
+    public void hideCurve() {
+
+    }
+
     public interface OnDataChangeListener {
-        void onProgressChanged(XYColorView xyColorView, double x, double y);
+        void onProgressChanged(XYColorView xyColorView, int x, int y);
 
         void onStopTrackingTouch(XYColorView xyColorView);
     }
