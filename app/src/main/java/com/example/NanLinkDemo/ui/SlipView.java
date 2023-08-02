@@ -286,7 +286,7 @@ public class SlipView extends RelativeLayout {
                 return value / 1000.0 + " 秒";
             case "X":
             case "Y":
-                return String.valueOf(value / 1000.0);
+                return String.format("%.4f",value / 1000000.0);
         }
         return String.valueOf(value);
     }

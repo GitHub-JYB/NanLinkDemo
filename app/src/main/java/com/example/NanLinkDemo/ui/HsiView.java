@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewOutlineProvider;
@@ -125,7 +126,7 @@ public class HsiView extends RelativeLayout {
         float[] hsl = new float[3];
         hsl[0] = HSI;
         hsl[1] = SAT / 100.0f;
-        hsl[2] = (50 + (100 - SAT) / 2f) / 100.0f;
+        hsl[2] = 1;
         binding.color.setClipToOutline(true);
         binding.color.setOutlineProvider(new ViewOutlineProvider() {
             @Override
@@ -133,7 +134,7 @@ public class HsiView extends RelativeLayout {
                 outline.setRoundRect(0,0,view.getWidth(),view.getHeight(),MyApplication.dip2px(6));
             }
         });
-        binding.color.setBackgroundColor(ColorUtils.HSLToColor(hsl));
+        binding.color.setBackgroundColor(Color.HSVToColor(hsl));
     }
 
 

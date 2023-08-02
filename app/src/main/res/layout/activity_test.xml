@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.example.NanLinkDemo.ui.XYColorView
+    <com.example.NanLinkDemo.ui.XYView
 
         android:id="@+id/view"
         android:layout_width="match_parent"

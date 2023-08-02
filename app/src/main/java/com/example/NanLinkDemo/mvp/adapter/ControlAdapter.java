@@ -25,12 +25,14 @@ import com.example.NanLinkDemo.databinding.VpItemRgbwControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemSlipControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemSlmMenuControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemTouchbtnControlBinding;
+import com.example.NanLinkDemo.databinding.VpItemXyControlBinding;
 import com.example.NanLinkDemo.ui.BoxView;
 import com.example.NanLinkDemo.ui.DoubleSlipView;
 import com.example.NanLinkDemo.ui.HsiView;
 import com.example.NanLinkDemo.ui.RgbwView;
 import com.example.NanLinkDemo.ui.SlipView;
 import com.example.NanLinkDemo.ui.SlmMenuView;
+import com.example.NanLinkDemo.ui.XYView;
 
 import java.util.ArrayList;
 
@@ -47,6 +49,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_COLOR_DROP_DOWN = 8;
     private static final int TYPE_HSI = 9;
     private static final int TYPE_RGBW = 10;
+    private static final int TYPE_XY = 11;
 
 
     private OnDataUpdateListener onDataUpdateListener;
@@ -93,6 +96,9 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_RGBW:
                 VpItemRgbwControlBinding vpItemRgbwControlBinding = VpItemRgbwControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderRgbwControl(vpItemRgbwControlBinding);
+            case TYPE_XY:
+                VpItemXyControlBinding vpItemXyControlBinding = VpItemXyControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new ViewHolderXYControl(vpItemXyControlBinding);
             default:
                 VpItemEmptyControlBinding vpItemEmptyControlBinding = VpItemEmptyControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderEmptyControl(vpItemEmptyControlBinding);
@@ -229,6 +235,9 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((ViewHolderRgbwControl) holder).control.setG(Integer.parseInt(control.getElements().getG()));
             ((ViewHolderRgbwControl) holder).control.setB(Integer.parseInt(control.getElements().getB()));
             ((ViewHolderRgbwControl) holder).control.setW(Integer.parseInt(control.getElements().getW()));
+        }else if (holder instanceof ViewHolderXYControl){
+            ((ViewHolderXYControl) holder).control.setX(Integer.parseInt(control.getElements().getX()));
+            ((ViewHolderXYControl) holder).control.setY(Integer.parseInt(control.getElements().getY()));
         }
     }
 
@@ -261,6 +270,8 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 return TYPE_HSI;
             case "rgbw":
                 return TYPE_RGBW;
+            case "xy":
+                return TYPE_XY;
             default:
                 return TYPE_UNKNOW;
         }
@@ -454,6 +465,17 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         RgbwView control;
 
         public ViewHolderRgbwControl(@NonNull VpItemRgbwControlBinding binding) {
+            super(binding.getRoot());
+            control = binding.control;
+        }
+    }
+
+    class ViewHolderXYControl extends RecyclerView.ViewHolder {
+
+
+        XYView control;
+
+        public ViewHolderXYControl(@NonNull VpItemXyControlBinding binding) {
             super(binding.getRoot());
             control = binding.control;
         }

@@ -23,12 +23,14 @@ import com.example.NanLinkDemo.R;
 public class XYColorView extends View {
 
     private float pointX, pointY;
-    private int X = 3302;
-    private int Y = 3408;
+    private int X = 330200;
+    private int Y = 340800;
     private OnDataChangeListener listener;
     private Bitmap colorBitmap, pointerBitmap;
     private float RedX, RedY, BlueX, BlueY, GreenX, GreenY;
-    private float k1, k2, k3;
+    public static final int krb = (300000 - 70000) / (680000 - 160000);
+    public static final int kgb = (690000 - 70000) / (190000 - 160000);
+    public static final int kgr = (690000 - 300000) / (190000 - 680000);
     private float kb, kr;
     private float unit;
 
@@ -66,18 +68,16 @@ public class XYColorView extends View {
         }
         canvas.drawBitmap(colorBitmap, (getWidth() - colorBitmap.getWidth()) / 2f + getPaddingLeft(), (getHeight() - colorBitmap.getHeight()) / 2f + getPaddingTop(), colorPaint);
 
-        unit = (330 - 93 - 56) / 330f * colorBitmap.getWidth() / (6800 - 700);
+        unit = (330 - 93 - 56) / 330f * colorBitmap.getWidth() / (680000 - 70000);
         RedX = getPaddingLeft() + colorBitmap.getWidth() * (330 - 93) / 330f;
         BlueY = getPaddingTop() + colorBitmap.getHeight() * (330 - 56) / 330f;
-        RedY = BlueY - (3000 - 700) * unit;
-        BlueX = RedX - (6800 - 1600) * unit;
-        GreenX = RedX - (6800 - 1900) * unit;
-        GreenY = BlueY - (6900 - 700) * unit;
-        k1 = -(RedY - BlueY) / (RedX - BlueX);
-        k2 = -(GreenY - BlueY) / (GreenX - BlueX);
-        k3 = -(GreenY - RedY) / (GreenX - RedX);
-        pointX = (X - 1600) * unit + BlueX;
-        pointY = (Y - 700) * unit + GreenY;
+        RedY = BlueY - (300000 - 70000) * unit;
+        BlueX = RedX - (680000 - 160000) * unit;
+        GreenX = RedX - (680000 - 190000) * unit;
+        GreenY = BlueY - (690000 - 70000) * unit;
+
+        pointX = (X - 160000) * unit + BlueX;
+        pointY = (Y - 70000) * unit + GreenY;
 
         Paint linePaint = new Paint();
         linePaint.setAntiAlias(true);
@@ -138,45 +138,46 @@ public class XYColorView extends View {
             case MotionEvent.ACTION_MOVE:
                 if (y > BlueY) {
                     pointX = Math.min(RedX, Math.max(x, BlueX));
-                    pointY = BlueY - k1 * (pointX - BlueX);
+                    pointY = BlueY - krb * (pointX - BlueX);
                 } else if (y < GreenY) {
                     if (x <= GreenX) {
                         pointX = Math.max(x, BlueX);
-                        pointY = BlueY - k2 * (pointX - BlueX);
+                        pointY = BlueY - kgb * (pointX - BlueX);
                     } else {
                         pointX = Math.min(x, RedX);
-                        pointY = RedY - k3 * (pointX - RedX);
+                        pointY = RedY - kgr * (pointX - RedX);
                     }
                 } else if (x < BlueX) {
                     pointY = Math.min(BlueY, Math.max(y, GreenY));
-                    pointX = (BlueY - pointY) / k2 + BlueX;
+                    pointX = (BlueY - pointY) / kgb + BlueX;
                 } else if (x > RedX) {
-                    if (y < RedY) {
-                        pointY = Math.max(y, GreenY);
-                        pointX = (RedY - pointY) / k3 + RedX;
-                    } else {
-                        pointY = Math.min(y, BlueY);
-                        pointX = (RedY - pointY) / k1 + RedX;
-                    }
+                    return false;
+//                    if (y < RedY) {
+//                        pointY = Math.max(y, GreenY);
+//                        pointX = (RedY - pointY) / kgr + RedX;
+//                    } else {
+//                        pointY = Math.min(y, BlueY);
+//                        pointX = (RedY - pointY) / krb + RedX;
+//                    }
                 } else {
-                    if (kb < k1) {
+                    if (kb < krb) {
                         pointX = x;
-                        pointY = BlueY - k1 * (pointX - BlueX);
-                    } else if (kb > k2) {
+                        pointY = BlueY - krb * (pointX - BlueX);
+                    } else if (kb > kgb) {
                         pointY = y;
-                        pointX = (BlueY - pointY) / k2 + BlueX;
+                        pointX = (BlueY - pointY) / kgb + BlueX;
                     } else {
-                        if (kr < k3) {
+                        if (kr < kgr) {
                             pointY = y;
-                            pointX = (RedY - pointY) / k3 + RedX;
+                            pointX = (RedY - pointY) / kgr + RedX;
                         } else {
                             pointX = x;
                             pointY = y;
                         }
                     }
                 }
-                X = (int) ((pointX - BlueX) / unit + 0.5f) + 1600;
-                Y = (int)((pointY - GreenY) / unit + 0.5f) + 700;
+                X = (int) ((pointX - BlueX) / unit + 0.5f) + 160000;
+                Y = (int)((pointY - GreenY) / unit + 0.5f) + 70000;
                 if (listener != null) {
                     listener.onProgressChanged(this, X, Y);
                 }
