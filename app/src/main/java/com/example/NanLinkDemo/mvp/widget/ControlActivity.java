@@ -77,8 +77,8 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
         });
         controlAdapter.setOnDataUpdateListener(new ControlAdapter.OnDataUpdateListener() {
             @Override
-            public void onDataUpdate(int position, String dim) {
-                presenter.updateDim(position, dim);
+            public void onDataUpdate(int position, DeviceDataMessage.Control control) {
+                presenter.updateData(position, control);
             }
         });
     }

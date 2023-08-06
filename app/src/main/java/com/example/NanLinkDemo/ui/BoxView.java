@@ -84,6 +84,10 @@ public class BoxView extends RelativeLayout {
         this.index = index;
     }
 
+    public int getCheck(){
+        return index;
+    }
+
     //设置控件按键列表数据,需要最后面调用
     public void setData(ArrayList<String> dataList) {
         binding.group.removeAllViews();

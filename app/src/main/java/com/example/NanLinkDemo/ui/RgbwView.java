@@ -71,14 +71,14 @@ public class RgbwView extends RelativeLayout {
                 setG(g);
                 setB(b);
                 setW(w);
-                if (onDataChangeListener != null) {
-                    onDataChangeListener.onDataChanged(r, g, b, w);
-                }
+
             }
 
             @Override
             public void onStopTrackingTouch(RgbwColorView rgbwColorView) {
-
+                if (onDataChangeListener != null) {
+                    onDataChangeListener.onDataChanged(r, g, b, w);
+                }
             }
         });
         binding.rSlip.setTitle("红 R");
@@ -86,6 +86,11 @@ public class RgbwView extends RelativeLayout {
         binding.rSlip.setDelayBtnVisibility(View.GONE);
         binding.rSlip.setSeekBar(255, 0, 1, r);
         binding.rSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+            @Override
+            public void onDataChanging(int index) {
+
+            }
+
             @Override
             public void onDataChanged(int index) {
                 r = index;
@@ -103,6 +108,11 @@ public class RgbwView extends RelativeLayout {
         binding.gSlip.setSeekBar(255, 0, 1, g);
         binding.gSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
             @Override
+            public void onDataChanging(int index) {
+
+            }
+
+            @Override
             public void onDataChanged(int index) {
                 g = index;
                 setG(g);
@@ -119,6 +129,11 @@ public class RgbwView extends RelativeLayout {
         binding.bSlip.setSeekBar(255, 0, 1, b);
         binding.bSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
             @Override
+            public void onDataChanging(int index) {
+
+            }
+
+            @Override
             public void onDataChanged(int index) {
                 b = index;
                 setB(b);
@@ -134,6 +149,11 @@ public class RgbwView extends RelativeLayout {
         binding.wSlip.setDelayBtnVisibility(View.GONE);
         binding.wSlip.setSeekBar(255, 0, 1, w);
         binding.wSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+            @Override
+            public void onDataChanging(int index) {
+
+            }
+
             @Override
             public void onDataChanged(int index) {
                 w = index;

@@ -115,6 +115,9 @@ public class SlipView extends RelativeLayout {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 value = progress * step + min;
                 updateView(value);
+                if (onDataChangeListener != null) {
+                    onDataChangeListener.onDataChanging(value);
+                }
             }
 
             @Override
@@ -297,6 +300,7 @@ public class SlipView extends RelativeLayout {
     }
 
     public interface OnDataChangeListener {
+        void onDataChanging(int index);
         void onDataChanged(int index);
     }
 

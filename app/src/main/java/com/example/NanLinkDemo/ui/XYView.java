@@ -1,8 +1,13 @@
 package com.example.NanLinkDemo.ui;
 
+import static com.example.NanLinkDemo.ui.XYColorView.kgb;
+import static com.example.NanLinkDemo.ui.XYColorView.kgr;
+import static com.example.NanLinkDemo.ui.XYColorView.krb;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Outline;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,9 +52,6 @@ public class XYView extends RelativeLayout {
 
     private void initView() {
         binding = XyviewBinding.inflate(LayoutInflater.from(getContext()), this, true);
-        setX(x);
-        setY(y);
-        updateColor();
         binding.curve.setTitle("色温曲线");
         binding.curve.check(1);
         ArrayList<String> curveText = new ArrayList<>();
@@ -59,9 +61,9 @@ public class XYView extends RelativeLayout {
         binding.curve.setOnCheckedChangeListener(new BoxView.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(int index) {
-                if (index == 0){
+                if (index == 0) {
                     binding.xyColor.showCurve();
-                }else {
+                } else {
                     binding.xyColor.hideCurve();
                 }
             }
@@ -69,25 +71,52 @@ public class XYView extends RelativeLayout {
 
         binding.xyColor.setOnDataChangeListener(new XYColorView.OnDataChangeListener() {
             @Override
-            public void onProgressChanged(XYColorView xyColorView, int x, int y) {
+            public void onProgressChanged(XYColorView xyColorView, int X, int Y) {
+                x = X;
+                y = Y;
+                binding.XSlip.setSeekBar(680000, 160000, 100, x);
+                binding.YSlip.setSeekBar(690000, 70000, 100, y);
+                updateColor();
 
             }
 
             @Override
             public void onStopTrackingTouch(XYColorView xyColorView) {
-
+                if (onDataChangeListener != null) {
+                    onDataChangeListener.onDataChanged(x, y);
+                }
             }
         });
         binding.XSlip.setTitle("X");
         binding.XSlip.setRemark("X");
         binding.XSlip.setDelayTimeVisibility(View.GONE);
         binding.XSlip.setDelayBtnVisibility(View.GONE);
-        binding.XSlip.setSeekBar(680000, 160000, 100, x);
         binding.XSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
             @Override
-            public void onDataChanged(int index) {
+            public void onDataChanging(int index) {
                 x = index;
-                setX(x);
+                if (y < (int) ((x - 160000) * krb + 0.5f) / 100 * 100 + 70000) {
+                    y = (int) ((x - 160000) * krb + 0.5f) / 100 * 100 + 70000;
+                    binding.YSlip.setSeekBar(690000, 70000, 100, y);
+                } else {
+                    if (x <= 190000) {
+                        if (y > (int) ((x - 160000) * kgb + 0.5f) / 100 * 100 + 70000) {
+                            y = (int) ((x - 160000) * kgb + 0.5f) / 100 * 100 + 70000;
+                            binding.YSlip.setSeekBar(690000, 70000, 100, y);
+                        }
+                    } else {
+                        if (y > (int) ((x - 680000) * kgr + 0.5f) / 100 * 100 + 300000) {
+                            y = (int) ((x - 680000) * kgr + 0.5f) / 100 * 100 + 300000;
+                            binding.YSlip.setSeekBar(690000, 70000, 100, y);
+                        }
+                    }
+                }
+                binding.xyColor.setData(x, y);
+                updateColor();
+            }
+
+            @Override
+            public void onDataChanged(int index) {
                 if (onDataChangeListener != null) {
                     onDataChangeListener.onDataChanged(x, y);
                 }
@@ -98,18 +127,40 @@ public class XYView extends RelativeLayout {
         binding.YSlip.setRemark("Y");
         binding.YSlip.setDelayTimeVisibility(View.GONE);
         binding.YSlip.setDelayBtnVisibility(View.GONE);
-        binding.YSlip.setSeekBar(690000, 70000, 100, y);
         binding.YSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
             @Override
-            public void onDataChanged(int index) {
+            public void onDataChanging(int index) {
                 y = index;
-                setY(y);
+                if (x < (int) ((y - 70000) / kgb + 0.5f) / 100 * 100 + 160000) {
+                    x = (int) ((y - 70000) / kgb + 0.5f) / 100 * 100 + 160000;
+                    binding.XSlip.setSeekBar(680000, 160000, 100, x);
+                } else {
+                    if (y <= 300000) {
+                        if (x > (int) ((y - 70000) / krb + 0.5f) / 100 * 100 + 160000) {
+                            x = (int) ((y - 70000) / krb + 0.5f) / 100 * 100 + 160000;
+                            binding.XSlip.setSeekBar(680000, 160000, 100, x);
+                        }
+                    }else {
+                        if (x > (int) ((y - 300000) / kgr + 0.5f) / 100 * 100 + 680000) {
+                            x = (int) ((y - 300000) / kgr + 0.5f) / 100 * 100 + 680000;
+                            binding.XSlip.setSeekBar(680000, 160000, 100, x);
+                        }
+                    }
+                }
+
+                binding.xyColor.setData(x, y);
+                updateColor();
+            }
+
+            @Override
+            public void onDataChanged(int index) {
                 if (onDataChangeListener != null) {
                     onDataChangeListener.onDataChanged(x, y);
                 }
             }
         });
 
+        updateData(x, y);
     }
 
     private void updateColor() {
@@ -117,27 +168,22 @@ public class XYView extends RelativeLayout {
         binding.color.setOutlineProvider(new ViewOutlineProvider() {
             @Override
             public void getOutline(View view, Outline outline) {
-                outline.setRoundRect(0,0,view.getWidth(),view.getHeight(), MyApplication.dip2px(6));
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), MyApplication.dip2px(6));
             }
         });
-        float[] hsl = new float[3];
-        hsl[0] = 0;
-        hsl[1] = 1;
-        hsl[2] = 1;
-        binding.color.setBackgroundColor(Color.HSVToColor(hsl));
+        binding.color.setBackgroundColor(ColorUtils.XYZToColor(x / 10000.0f, y / 10000.0f, 100 - (x + y) / 10000.0f));
     }
-
 
     //设置数据
-    public void setX(int x) {
+    public void updateData(int x, int y) {
         this.x = x;
+        this.y = y;
         binding.XSlip.setSeekBar(680000, 160000, 100, x);
+        binding.YSlip.setSeekBar(690000, 70000, 100, y);
+        binding.xyColor.setData(x, y);
+        updateColor();
     }
 
-    public void setY(int y) {
-        this.y = y;
-        binding.YSlip.setSeekBar(690000, 70000, 100, y);
-    }
 
     //设置按键默认选的位置
     public void check(int index) {

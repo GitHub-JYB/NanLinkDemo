@@ -134,6 +134,9 @@ public class DoubleSlipView extends RelativeLayout {
                 maxValue = maxItem * step + min;
                 minValue = minItem * step + min;
                 updateView(maxValue, minValue);
+                if (onDataChangeListener != null) {
+                    onDataChangeListener.onDataChanging(maxValue, minValue);
+                }
             }
 
             @Override
@@ -316,6 +319,7 @@ public class DoubleSlipView extends RelativeLayout {
     }
 
     public interface OnDataChangeListener {
+        void onDataChanging(int maxItem, int minItem);
         void onDataChanged(int maxItem, int minItem);
     }
 

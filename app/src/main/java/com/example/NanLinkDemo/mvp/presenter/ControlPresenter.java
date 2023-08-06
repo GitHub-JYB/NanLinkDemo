@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.DB.bean.FixtureGroup;
+import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.bean.Menu;
 
 import java.util.ArrayList;
@@ -32,5 +33,5 @@ public interface ControlPresenter {
 
     void clickData(int position, String dim);
 
-    void updateDim(int position, String dim);
+    void updateData(int position, DeviceDataMessage.Control control);
 }

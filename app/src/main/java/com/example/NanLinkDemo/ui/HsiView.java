@@ -86,7 +86,9 @@ public class HsiView extends RelativeLayout {
 
             @Override
             public void onStopTrackingTouch(HsiColorView hsiView) {
-
+                if (onDataChangeListener != null) {
+                    onDataChangeListener.onDataChanged(HSI, SAT);
+                }
             }
         });
         binding.HSISlip.setRemark("色相");
@@ -95,6 +97,11 @@ public class HsiView extends RelativeLayout {
         binding.HSISlip.setDelayBtnVisibility(View.GONE);
         binding.HSISlip.setSeekBar(360, 0, 1, HSI);
         binding.HSISlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+            @Override
+            public void onDataChanging(int index) {
+
+            }
+
             @Override
             public void onDataChanged(int index) {
                 HSI = index;
@@ -111,6 +118,11 @@ public class HsiView extends RelativeLayout {
         binding.SATSlip.setDelayBtnVisibility(View.GONE);
         binding.SATSlip.setSeekBar(100, 0, 1, SAT);
         binding.SATSlip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+            @Override
+            public void onDataChanging(int index) {
+
+            }
+
             @Override
             public void onDataChanged(int index) {
                 SAT = index;

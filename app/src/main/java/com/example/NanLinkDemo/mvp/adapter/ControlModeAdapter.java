@@ -167,6 +167,11 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             });
             control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
                 @Override
+                public void onDataChanging(int index) {
+
+                }
+
+                @Override
                 public void onDataChanged(int index) {
                     if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), (String) control.getData());
@@ -205,6 +210,11 @@ public class ControlModeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             });
             control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+
+                }
+
                 @Override
                 public void onDataChanged(int index) {
                     if (onDataUpdateListener != null) {

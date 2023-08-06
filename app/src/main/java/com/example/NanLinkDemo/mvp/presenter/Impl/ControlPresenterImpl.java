@@ -17,6 +17,7 @@ import com.example.NanLinkDemo.mvp.widget.ControlActivity;
 import com.example.NanLinkDemo.util.Constant;
 import com.example.NanLinkDemo.util.TransformUtil;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,15 +108,16 @@ public class ControlPresenterImpl implements ControlPresenter {
 
     @Override
     public void switchModeChange(int position) {
+        modeIndex = position;
         switch (type) {
             case ControlActivity.TYPE_FIXTURE:
-                fixture.setModeIndex(position);
-                view.setData(deviceData.getFlmModeList().get(position).getFirstControls());
+                fixture.setModeIndex(modeIndex);
+                view.setData(deviceData.getFlmModeList().get(modeIndex).getFirstControls());
                 model.updateFixture(fixture);
                 break;
             case ControlActivity.TYPE_FIXTURE_GROUP:
-                fixtureGroup.setModeIndex(position);
-                view.setData(deviceData.getFlmModeList().get(position).getFirstControls());
+                fixtureGroup.setModeIndex(modeIndex);
+                view.setData(deviceData.getFlmModeList().get(modeIndex).getFirstControls());
                 model.updateFixtureGroup(fixtureGroup);
                 break;
         }
@@ -170,7 +172,21 @@ public class ControlPresenterImpl implements ControlPresenter {
     }
 
     @Override
-    public void updateDim(int position, String dim) {
+    public void updateData(int position, DeviceDataMessage.Control control) {
+        deviceData.getFlmModeList().get(modeIndex).getFirstControls().set(position, control);
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String data = gson.toJson(deviceData);
+        switch (type){
+            case ControlActivity.TYPE_FIXTURE:
+                fixture.setData(data);
+                model.updateFixture(fixture);
+                break;
+            case ControlActivity.TYPE_FIXTURE_GROUP:
+                fixtureGroup.setData(data);
+                model.updateFixtureGroup(fixtureGroup);
+                break;
+        }
 
     }
 

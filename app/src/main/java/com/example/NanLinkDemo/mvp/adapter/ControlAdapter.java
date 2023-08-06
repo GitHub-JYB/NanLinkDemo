@@ -236,8 +236,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((ViewHolderRgbwControl) holder).control.setB(Integer.parseInt(control.getElements().getB()));
             ((ViewHolderRgbwControl) holder).control.setW(Integer.parseInt(control.getElements().getW()));
         }else if (holder instanceof ViewHolderXYControl){
-            ((ViewHolderXYControl) holder).control.setX(Integer.parseInt(control.getElements().getX()));
-            ((ViewHolderXYControl) holder).control.setY(Integer.parseInt(control.getElements().getY()));
+            ((ViewHolderXYControl) holder).control.updateData(Integer.parseInt(control.getElements().getX()), Integer.parseInt(control.getElements().getY()));
         }
     }
 
@@ -308,9 +307,19 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
             control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
                 @Override
+                public void onDataChanging(int index) {
+
+                }
+
+                @Override
                 public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    if (controlData.getRemark().equals("亮度")){
+                        setDim(index);
+                    }
+                    controlData.getElements().setItem(String.valueOf(index));
                     if (onDataUpdateListener != null) {
-                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), (String) control.getData());
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
             });
@@ -341,14 +350,26 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             });
-//            control.setOnDataChangeListener(new DoubleSlipView.OnDataChangeListener() {
-//                @Override
-//                public void onDataChanged(int index) {
-//                    if (onDataUpdateListener != null) {
-////                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), (String) control.getData());
-//                    }
-//                }
-//            });
+            control.setOnDataChangeListener(new DoubleSlipView.OnDataChangeListener() {
+
+                @Override
+                public void onDataChanging(int maxItem, int minItem) {
+
+                }
+
+                @Override
+                public void onDataChanged(int maxItem, int minItem) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    if (controlData.getRemark().equals("亮度范围")){
+                        setDim(maxItem);
+                    }
+                    controlData.getElements().setMaxItem(String.valueOf(maxItem));
+                    controlData.getElements().setMinItem(String.valueOf(minItem));
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
         }
     }
 
@@ -369,18 +390,37 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.recyclerView.setAdapter(controlAdapter);
             binding.control.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
                 @Override
+                public void onDataChanging(int index) {
+
+                }
+
+                @Override
                 public void onDataChanged(int index) {
-                    int num = Integer.parseInt(controls.get(getAdapterPosition()).getElements().getMax()) - controls.get(getAdapterPosition()).getControls().size();
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setItem(String.valueOf(index));
+                    int num = Integer.parseInt(controlData.getElements().getMax()) - controlData.getControls().size();
                     if (num > 0) {
                         for (int i = 0; i < num; i++) {
-                            controls.get(getAdapterPosition()).getControls().add(controls.get(getAdapterPosition()).getControls().get(0));
+                            controlData.getControls().add(controls.get(getAdapterPosition()).getControls().get(0));
                         }
                     }
                     ArrayList<DeviceDataMessage.Control> dataList = new ArrayList<>();
                     for (int i = 0; i < index; i++) {
-                        dataList.add(controls.get(getAdapterPosition()).getControls().get(i));
+                        dataList.add(controlData.getControls().get(i));
                     }
                     controlAdapter.setData(dataList);
+                    controlAdapter.setOnDataUpdateListener(new OnDataUpdateListener() {
+                        @Override
+                        public void onDataUpdate(int position, DeviceDataMessage.Control control) {
+                            controlData.getControls().set(position, control);
+                            if (onDataUpdateListener != null){
+                                onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                            }
+                        }
+                    });
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
                 }
             });
         }
@@ -405,8 +445,23 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.control.setOnCheckedChangeListener(new BoxView.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     if (index >= 0) {
-                        controlAdapter.setData(controls.get(getAdapterPosition()).getControls().get(index).getControls());
+                        controlData.setSelectIndex(index);
+                        controlAdapter.setData(controlData.getControls().get(binding.control.getCheck()).getControls());
+                        if (onDataUpdateListener != null){
+                            onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                        }
+                    }
+                }
+            });
+            controlAdapter.setOnDataUpdateListener(new OnDataUpdateListener() {
+                @Override
+                public void onDataUpdate(int position, DeviceDataMessage.Control control) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getControls().get(binding.control.getCheck()).getControls().set(position, control);
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
             });
@@ -431,7 +486,22 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.control.setOnIndexChangeListener(new SlmMenuView.OnIndexChangeListener() {
                 @Override
                 public void onIndexChanged(int index) {
-                    controlAdapter.setData(controls.get(getAdapterPosition()).getControls().get(index).getControls());
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.setSelectIndex(index);
+                    controlAdapter.setData(controlData.getControls().get(binding.control.getCheck()).getControls());
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+            controlAdapter.setOnDataUpdateListener(new OnDataUpdateListener() {
+                @Override
+                public void onDataUpdate(int position, DeviceDataMessage.Control control) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getControls().get(binding.control.getCheck()).getControls().set(position, control);
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
                 }
             });
         }
@@ -456,6 +526,17 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ViewHolderHsiControl(@NonNull VpItemHsiControlBinding binding) {
             super(binding.getRoot());
             control = binding.control;
+            control.setOnDataChangeListener(new HsiView.OnDataChangeListener() {
+                @Override
+                public void onDataChanged(int HSI, int SAT) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue(String.valueOf(HSI));
+                    controlData.getElements().setSat(String.valueOf(SAT));
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
         }
     }
 
@@ -467,6 +548,55 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ViewHolderRgbwControl(@NonNull VpItemRgbwControlBinding binding) {
             super(binding.getRoot());
             control = binding.control;
+            control.setOnDataChangeListener(new RgbwView.OnDataChangeListener() {
+                @Override
+                public void onDataChanged(int R, int G, int B, int W) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setR(String.valueOf(R));
+                    controlData.getElements().setG(String.valueOf(G));
+                    controlData.getElements().setB(String.valueOf(B));
+                    controlData.getElements().setW(String.valueOf(W));
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+
+                @Override
+                public void onRDataChanged(int R) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setR(String.valueOf(R));
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+
+                @Override
+                public void onGDataChanged(int G) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setG(String.valueOf(G));
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+
+                @Override
+                public void onBDataChanged(int B) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setB(String.valueOf(B));
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+
+                @Override
+                public void onWDataChanged(int W) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setW(String.valueOf(W));
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
         }
     }
 
@@ -478,6 +608,17 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ViewHolderXYControl(@NonNull VpItemXyControlBinding binding) {
             super(binding.getRoot());
             control = binding.control;
+            control.setOnDataChangeListener(new XYView.OnDataChangeListener() {
+                @Override
+                public void onDataChanged(int x, int y) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setX(String.valueOf(x));
+                    controlData.getElements().setY(String.valueOf(y));
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
         }
     }
 
@@ -516,6 +657,16 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             controlAdapter.setDim(dim);
             controlAdapter.setDelayTime(delayTime);
             binding.recyclerView.setAdapter(controlAdapter);
+            controlAdapter.setOnDataUpdateListener(new OnDataUpdateListener() {
+                @Override
+                public void onDataUpdate(int position, DeviceDataMessage.Control control) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getControls().set(position, control);
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
             binding.recyclerView.setVisibility(View.GONE);
             binding.show.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -550,7 +701,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface OnDataUpdateListener {
-        void onDataUpdate(int position, String dim);
+        void onDataUpdate(int position, DeviceDataMessage.Control control);
     }
 
     public void setOnDataClickListener(OnDataClickListener onDataClickListener) {

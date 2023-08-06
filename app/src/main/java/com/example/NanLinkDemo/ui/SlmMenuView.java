@@ -160,6 +160,10 @@ public class SlmMenuView extends RelativeLayout {
         this.index = index;
     }
 
+    public int getCheck(){
+        return index;
+    }
+
     //设置控件按键的切换事件
     public void setOnIndexChangeListener(OnIndexChangeListener onIndexChangeListener) {
         this.onIndexChangeListener = onIndexChangeListener;
