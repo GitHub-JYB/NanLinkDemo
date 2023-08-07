@@ -89,18 +89,17 @@ public class XYColorView extends View {
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setStrokeWidth(MyApplication.dip2px(1));
 
-        canvas.drawLine(RedX, 0, RedX, colorBitmap.getHeight(), linePaint);
-        canvas.drawLine(BlueX, 0, BlueX, colorBitmap.getHeight(), linePaint);
-        canvas.drawLine(GreenX, 0, GreenX, colorBitmap.getHeight(), linePaint);
-        canvas.drawLine(0, RedY, colorBitmap.getHeight(), RedY, linePaint);
-        canvas.drawLine(0, BlueY, colorBitmap.getHeight(), BlueY, linePaint);
-        canvas.drawLine(0, GreenY, colorBitmap.getHeight(), GreenY, linePaint);
+//        canvas.drawLine(RedX, 0, RedX, colorBitmap.getHeight(), linePaint);
+//        canvas.drawLine(BlueX, 0, BlueX, colorBitmap.getHeight(), linePaint);
+//        canvas.drawLine(GreenX, 0, GreenX, colorBitmap.getHeight(), linePaint);
+//        canvas.drawLine(0, RedY, colorBitmap.getHeight(), RedY, linePaint);
+//        canvas.drawLine(0, BlueY, colorBitmap.getHeight(), BlueY, linePaint);
+//        canvas.drawLine(0, GreenY, colorBitmap.getHeight(), GreenY, linePaint);
 
 
-
-//        canvas.drawLine(RedX, RedY, BlueX, BlueY, linePaint);
-//        canvas.drawLine(BlueX, BlueY, GreenX, GreenY, linePaint);
-//        canvas.drawLine(GreenX, GreenY, RedX, RedY, linePaint);
+        canvas.drawLine(RedX, RedY, BlueX, BlueY, linePaint);
+        canvas.drawLine(BlueX, BlueY, GreenX, GreenY, linePaint);
+        canvas.drawLine(GreenX, GreenY, RedX, RedY, linePaint);
 
 
         Paint pointerPaint = new Paint();
@@ -118,8 +117,7 @@ public class XYColorView extends View {
             curvePaint.setStrokeWidth(MyApplication.dip2px(1));
 
             ArrayList<Double> xList = new ArrayList<>();
-            xList.add(0.652728231);
-            xList.add(0.585713587);
+//            xList.add(0.585713587);
             xList.add(0.526677753);
             xList.add(0.476997683);
             xList.add(0.436936884);
@@ -139,8 +137,7 @@ public class XYColorView extends View {
             xList.add(0.280657749);
 
             ArrayList<Double> yList = new ArrayList<>();
-            yList.add(0.344483581);
-            yList.add(0.393126202);
+//            yList.add(0.393126202);
             yList.add(0.413299964);
             yList.add(0.413680112);
             yList.add(0.404082516);
@@ -162,9 +159,7 @@ public class XYColorView extends View {
             Path path = new Path();
             path.moveTo((float) (xList.get(0) * 1000000 - 160000) * unit + BlueX, BlueY - (float) (yList.get(0) * 1000000 - 70000) * unit);
             for (int i = 1; i < xList.size(); i++) {
-                if (inRange((float) (xList.get(i) * 1000000 - 160000) * unit + BlueX, BlueY - (float) (yList.get(i) * 1000000 - 70000) * unit)) {
-                    path.quadTo((float) (xList.get(i - 1) * 1000000 - 160000) * unit + BlueX, BlueY - (float) (yList.get(i - 1) * 1000000 - 70000) * unit, (float) (xList.get(i) * 1000000 - 160000) * unit + BlueX, BlueY - (float) (yList.get(i) * 1000000 - 70000) * unit);
-                }
+                path.quadTo((float) (xList.get(i - 1) * 1000000 - 160000) * unit + BlueX, BlueY - (float) (yList.get(i - 1) * 1000000 - 70000) * unit, (float) (xList.get(i) * 1000000 - 160000) * unit + BlueX, BlueY - (float) (yList.get(i) * 1000000 - 70000) * unit);
             }
             canvas.drawPath(path, curvePaint);
         }
@@ -189,7 +184,7 @@ public class XYColorView extends View {
 //        int h = drawable.getIntrinsicHeight() - pointerDrawable.getIntrinsicHeight();
         int w = getWidth() - getPaddingLeft() - getPaddingRight();
         int h = getHeight() - getPaddingTop() - getPaddingBottom();
-        int r = Math.min(w,h);
+        int r = Math.min(w, h);
 
         Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
         Bitmap bitmap = Bitmap.createBitmap(r, r, config);
