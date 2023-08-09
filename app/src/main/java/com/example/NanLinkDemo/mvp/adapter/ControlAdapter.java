@@ -16,6 +16,7 @@ import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.databinding.VpItemBoxControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemColorDropDownControlBinding;
+import com.example.NanLinkDemo.databinding.VpItemColordefaultControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemColorslipControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemDividerControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemDoubleSlipControlBinding;
@@ -50,6 +51,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_HSI = 9;
     private static final int TYPE_RGBW = 10;
     private static final int TYPE_XY = 11;
+    private static final int TYPE_COLOR_DEFAULT = 12;
 
 
     private OnDataUpdateListener onDataUpdateListener;
@@ -99,6 +101,9 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_XY:
                 VpItemXyControlBinding vpItemXyControlBinding = VpItemXyControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderXYControl(vpItemXyControlBinding);
+            case TYPE_COLOR_DEFAULT:
+                VpItemColordefaultControlBinding vpItemColordefaultControlBinding = VpItemColordefaultControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new ViewHolderColorDefaultControl(vpItemColordefaultControlBinding);
             default:
                 VpItemEmptyControlBinding vpItemEmptyControlBinding = VpItemEmptyControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderEmptyControl(vpItemEmptyControlBinding);
@@ -230,13 +235,24 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     ((ViewHolderHsiControl) holder).control.setCCT(Integer.parseInt(control1.getElements().getMax()), Integer.parseInt(control1.getElements().getMin()), Integer.parseInt(control1.getElements().getStep()), Integer.parseInt(control1.getElements().getItem()));
                 }
             }
-        }else if (holder instanceof ViewHolderRgbwControl){
+        } else if (holder instanceof ViewHolderRgbwControl) {
             ((ViewHolderRgbwControl) holder).control.setR(Integer.parseInt(control.getElements().getR()));
             ((ViewHolderRgbwControl) holder).control.setG(Integer.parseInt(control.getElements().getG()));
             ((ViewHolderRgbwControl) holder).control.setB(Integer.parseInt(control.getElements().getB()));
             ((ViewHolderRgbwControl) holder).control.setW(Integer.parseInt(control.getElements().getW()));
-        }else if (holder instanceof ViewHolderXYControl){
+        } else if (holder instanceof ViewHolderXYControl) {
             ((ViewHolderXYControl) holder).control.updateData(Integer.parseInt(control.getElements().getX()), Integer.parseInt(control.getElements().getY()));
+        } else if (holder instanceof ViewHolderColorDefaultControl) {
+            ((ViewHolderColorDefaultControl) holder).num.setRemark("颜色数量");
+            ((ViewHolderColorDefaultControl) holder).num.setTitle("颜色数量");
+            ((ViewHolderColorDefaultControl) holder).num.setDelayBtnVisibility(View.GONE);
+            ((ViewHolderColorDefaultControl) holder).num.setDelayTimeVisibility(View.GONE);
+            ((ViewHolderColorDefaultControl) holder).num.setSeekBar(Integer.parseInt(control.getElements().getMax()), Integer.parseInt(control.getElements().getMin()), Integer.parseInt(control.getElements().getStep()), Integer.parseInt(control.getElements().getItem()));
+            ((ViewHolderColorDefaultControl) holder).sat.setRemark("饱和度");
+            ((ViewHolderColorDefaultControl) holder).sat.setTitle("饱和度");
+            ((ViewHolderColorDefaultControl) holder).sat.setDelayBtnVisibility(View.GONE);
+            ((ViewHolderColorDefaultControl) holder).sat.setDelayTimeVisibility(View.GONE);
+            ((ViewHolderColorDefaultControl) holder).sat.setSeekBar(100, 0, 1, Integer.parseInt(control.getElements().getSat()));
         }
     }
 
@@ -271,6 +287,8 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 return TYPE_RGBW;
             case "xy":
                 return TYPE_XY;
+            case "colorDefault":
+                return TYPE_COLOR_DEFAULT;
             default:
                 return TYPE_UNKNOW;
         }
@@ -314,7 +332,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onDataChanged(int index) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
-                    if (controlData.getRemark().equals("亮度")){
+                    if (controlData.getRemark().equals("亮度")) {
                         setDim(index);
                     }
                     controlData.getElements().setItem(String.valueOf(index));
@@ -360,7 +378,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onDataChanged(int maxItem, int minItem) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
-                    if (controlData.getRemark().equals("亮度范围")){
+                    if (controlData.getRemark().equals("亮度范围")) {
                         setDim(maxItem);
                     }
                     controlData.getElements().setMaxItem(String.valueOf(maxItem));
@@ -413,7 +431,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         @Override
                         public void onDataUpdate(int position, DeviceDataMessage.Control control) {
                             controlData.getControls().set(position, control);
-                            if (onDataUpdateListener != null){
+                            if (onDataUpdateListener != null) {
                                 onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                             }
                         }
@@ -449,7 +467,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     if (index >= 0) {
                         controlData.setSelectIndex(index);
                         controlAdapter.setData(controlData.getControls().get(binding.control.getCheck()).getControls());
-                        if (onDataUpdateListener != null){
+                        if (onDataUpdateListener != null) {
                             onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                         }
                     }
@@ -460,7 +478,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onDataUpdate(int position, DeviceDataMessage.Control control) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getControls().get(binding.control.getCheck()).getControls().set(position, control);
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -489,7 +507,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.setSelectIndex(index);
                     controlAdapter.setData(controlData.getControls().get(binding.control.getCheck()).getControls());
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -499,7 +517,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onDataUpdate(int position, DeviceDataMessage.Control control) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getControls().get(binding.control.getCheck()).getControls().set(position, control);
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -532,7 +550,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getElements().setHue(String.valueOf(HSI));
                     controlData.getElements().setSat(String.valueOf(SAT));
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -556,7 +574,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     controlData.getElements().setG(String.valueOf(G));
                     controlData.getElements().setB(String.valueOf(B));
                     controlData.getElements().setW(String.valueOf(W));
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -565,7 +583,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onRDataChanged(int R) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getElements().setR(String.valueOf(R));
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -574,7 +592,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onGDataChanged(int G) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getElements().setG(String.valueOf(G));
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -583,7 +601,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onBDataChanged(int B) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getElements().setB(String.valueOf(B));
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -592,7 +610,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onWDataChanged(int W) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getElements().setW(String.valueOf(W));
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -614,7 +632,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getElements().setX(String.valueOf(x));
                     controlData.getElements().setY(String.valueOf(y));
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -662,7 +680,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onDataUpdate(int position, DeviceDataMessage.Control control) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getControls().set(position, control);
-                    if (onDataUpdateListener != null){
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -684,6 +702,74 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             });
+        }
+    }
+
+
+    class ViewHolderColorDefaultControl extends RecyclerView.ViewHolder {
+
+
+        SlipView num, sat;
+        View color1, color2, color3, color4, color5, color6, color7, color8, color9, color10, color11, color12, color13, color14, color15, color16, color17, color18, color19, color20, color21, color22, color23, color24;
+
+
+        public ViewHolderColorDefaultControl(@NonNull VpItemColordefaultControlBinding binding) {
+            super(binding.getRoot());
+            num = binding.number;
+            sat = binding.SATSlip;
+            num.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setItem(String.valueOf(index));
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+            sat.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setSat(String.valueOf(index));
+                    if (onDataUpdateListener != null){
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+            color1 = binding.color1;
+            color2 = binding.color2;
+            color3 = binding.color3;
+            color4 = binding.color4;
+            color5 = binding.color5;
+            color6 = binding.color6;
+            color7 = binding.color7;
+            color8 = binding.color8;
+            color9 = binding.color9;
+            color10 = binding.color10;
+            color11 = binding.color11;
+            color12 = binding.color12;
+            color13 = binding.color13;
+            color14 = binding.color14;
+            color15 = binding.color15;
+            color16 = binding.color16;
+            color17 = binding.color17;
+            color18 = binding.color18;
+            color19 = binding.color19;
+            color20 = binding.color20;
+            color21 = binding.color21;
+            color22 = binding.color22;
+            color23 = binding.color23;
+            color24 = binding.color24;
         }
     }
 

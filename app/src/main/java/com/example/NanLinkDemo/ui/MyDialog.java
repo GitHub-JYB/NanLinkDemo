@@ -360,8 +360,9 @@ public class MyDialog extends DialogFragment {
 
         binding.myDialogAddFixtureCHName.setText(bigSizeMessage);
         binding.myDialogAddFixtureCHInputText.setText(smallSizeMessage);
-        binding.myDialogAddFixtureCHInputText.setSelection(smallSizeMessage.length());
-
+        if (type == Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH) {
+            binding.myDialogAddFixtureCHInputText.setSelection(smallSizeMessage.length());
+        }
 
         binding.myDialogNoTitleMessage.setText(bigSizeMessage);
 

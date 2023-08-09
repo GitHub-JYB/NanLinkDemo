@@ -55,7 +55,7 @@ public class BoxView extends RelativeLayout {
     }
 
     // 设置是否隐藏
-    public void setVisibility(int visibility){
+    public void setVisibility(int visibility) {
         binding.getRoot().setVisibility(visibility);
     }
 
@@ -84,7 +84,7 @@ public class BoxView extends RelativeLayout {
         this.index = index;
     }
 
-    public int getCheck(){
+    public int getCheck() {
         return index;
     }
 
@@ -110,8 +110,11 @@ public class BoxView extends RelativeLayout {
             binding.group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    if (onCheckedChangeListener != null){
-                        onCheckedChangeListener.onCheckedChanged(checkedId);
+                    if (checkedId != -1) {
+                        index = checkedId;
+                        if (onCheckedChangeListener != null) {
+                            onCheckedChangeListener.onCheckedChanged(checkedId);
+                        }
                     }
                 }
             });
@@ -123,7 +126,7 @@ public class BoxView extends RelativeLayout {
         this.onCheckedChangeListener = onCheckedChangeListener;
     }
 
-    public interface OnCheckedChangeListener{
+    public interface OnCheckedChangeListener {
         void onCheckedChanged(int index);
     }
 }

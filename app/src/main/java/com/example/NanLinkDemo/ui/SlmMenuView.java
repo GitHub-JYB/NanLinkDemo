@@ -85,13 +85,14 @@ public class SlmMenuView extends RelativeLayout {
                 adapter.setOnClickListener(new FlmMenuListAdapter.OnClickListener() {
                     @Override
                     public void onClick(int position) {
-                        if (onIndexChangeListener != null){
-                            onIndexChangeListener.onIndexChanged(position);
-                        }
+
                         if (position < menuData.size()){
                             setTitle(menuData.get(position));
+                            index = position;
+                            if (onIndexChangeListener != null){
+                                onIndexChangeListener.onIndexChanged(index);
+                            }
                         }
-                        index = position;
                         popupWindow.dismiss();
                     }
                 });
