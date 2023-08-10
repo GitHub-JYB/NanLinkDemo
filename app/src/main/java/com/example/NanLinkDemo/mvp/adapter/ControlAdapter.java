@@ -1,6 +1,8 @@
 package com.example.NanLinkDemo.mvp.adapter;
 
 
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -243,6 +246,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else if (holder instanceof ViewHolderXYControl) {
             ((ViewHolderXYControl) holder).control.updateData(Integer.parseInt(control.getElements().getX()), Integer.parseInt(control.getElements().getY()));
         } else if (holder instanceof ViewHolderColorDefaultControl) {
+            int sat = Integer.parseInt(control.getElements().getSat());
             ((ViewHolderColorDefaultControl) holder).num.setRemark("颜色数量");
             ((ViewHolderColorDefaultControl) holder).num.setTitle("颜色数量");
             ((ViewHolderColorDefaultControl) holder).num.setDelayBtnVisibility(View.GONE);
@@ -252,7 +256,19 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((ViewHolderColorDefaultControl) holder).sat.setTitle("饱和度");
             ((ViewHolderColorDefaultControl) holder).sat.setDelayBtnVisibility(View.GONE);
             ((ViewHolderColorDefaultControl) holder).sat.setDelayTimeVisibility(View.GONE);
-            ((ViewHolderColorDefaultControl) holder).sat.setSeekBar(100, 0, 1, Integer.parseInt(control.getElements().getSat()));
+            ((ViewHolderColorDefaultControl) holder).sat.setSeekBar(100, 0, 1, sat);
+            for (int i = 0; i < ((ViewHolderColorDefaultControl) holder).views.size(); i++) {
+                if (i < Integer.parseInt(control.getElements().getItem())) {
+                    float[] hsv = new float[3];
+                    hsv[0] = ((ViewHolderColorDefaultControl) holder).hsiList.get(i);
+                    hsv[1] = sat / 100f;
+                    hsv[2] = 1;
+                    ((ViewHolderColorDefaultControl) holder).views.get(i).setBackgroundColor(Color.HSVToColor(hsv));
+                    ((ViewHolderColorDefaultControl) holder).views.get(i).setVisibility(View.VISIBLE);
+                } else {
+                    ((ViewHolderColorDefaultControl) holder).views.get(i).setVisibility(View.INVISIBLE);
+                }
+            }
         }
     }
 
@@ -710,8 +726,9 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
         SlipView num, sat;
-        View color1, color2, color3, color4, color5, color6, color7, color8, color9, color10, color11, color12, color13, color14, color15, color16, color17, color18, color19, color20, color21, color22, color23, color24;
+        ArrayList<View> views;
 
+        ArrayList<Integer> hsiList;
 
         public ViewHolderColorDefaultControl(@NonNull VpItemColordefaultControlBinding binding) {
             super(binding.getRoot());
@@ -726,7 +743,19 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onDataChanged(int index) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getElements().setItem(String.valueOf(index));
-                    if (onDataUpdateListener != null){
+                    for (int i = 0; i < views.size(); i++) {
+                        if (i < index) {
+                            float[] hsv = new float[3];
+                            hsv[0] = hsiList.get(i);
+                            hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                            hsv[2] = 1;
+                            views.get(i).setBackgroundColor(Color.HSVToColor(hsv));
+                            views.get(i).setVisibility(View.VISIBLE);
+                        } else {
+                            views.get(i).setVisibility(View.INVISIBLE);
+                        }
+                    }
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
@@ -741,35 +770,68 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onDataChanged(int index) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getElements().setSat(String.valueOf(index));
-                    if (onDataUpdateListener != null){
+                    for (int i = 0; i < views.size(); i++) {
+                        float[] hsv = new float[3];
+                        hsv[0] = hsiList.get(i);
+                        hsv[1] = index / 100f;
+                        hsv[2] = 1;
+                        views.get(i).setBackgroundColor(Color.HSVToColor(hsv));
+                    }
+                    if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
                 }
             });
-            color1 = binding.color1;
-            color2 = binding.color2;
-            color3 = binding.color3;
-            color4 = binding.color4;
-            color5 = binding.color5;
-            color6 = binding.color6;
-            color7 = binding.color7;
-            color8 = binding.color8;
-            color9 = binding.color9;
-            color10 = binding.color10;
-            color11 = binding.color11;
-            color12 = binding.color12;
-            color13 = binding.color13;
-            color14 = binding.color14;
-            color15 = binding.color15;
-            color16 = binding.color16;
-            color17 = binding.color17;
-            color18 = binding.color18;
-            color19 = binding.color19;
-            color20 = binding.color20;
-            color21 = binding.color21;
-            color22 = binding.color22;
-            color23 = binding.color23;
-            color24 = binding.color24;
+            views = new ArrayList<>();
+            views.add(binding.color1);
+            views.add(binding.color2);
+            views.add(binding.color3);
+            views.add(binding.color4);
+            views.add(binding.color5);
+            views.add(binding.color6);
+            views.add(binding.color7);
+            views.add(binding.color8);
+            views.add(binding.color9);
+            views.add(binding.color10);
+            views.add(binding.color11);
+            views.add(binding.color12);
+            views.add(binding.color13);
+            views.add(binding.color14);
+            views.add(binding.color15);
+            views.add(binding.color16);
+            views.add(binding.color17);
+            views.add(binding.color18);
+            views.add(binding.color19);
+            views.add(binding.color20);
+            views.add(binding.color21);
+            views.add(binding.color22);
+            views.add(binding.color23);
+            views.add(binding.color24);
+            hsiList = new ArrayList<>();
+            hsiList.add(0);
+            hsiList.add(120);
+            hsiList.add(240);
+            hsiList.add(60);
+            hsiList.add(180);
+            hsiList.add(300);
+            hsiList.add(30);
+            hsiList.add(150);
+            hsiList.add(270);
+            hsiList.add(90);
+            hsiList.add(210);
+            hsiList.add(330);
+            hsiList.add(15);
+            hsiList.add(135);
+            hsiList.add(255);
+            hsiList.add(75);
+            hsiList.add(195);
+            hsiList.add(315);
+            hsiList.add(45);
+            hsiList.add(165);
+            hsiList.add(285);
+            hsiList.add(105);
+            hsiList.add(225);
+            hsiList.add(350);
         }
     }
 
