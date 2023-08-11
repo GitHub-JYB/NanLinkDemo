@@ -75,28 +75,27 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:orientation="horizontal">
+            android:layout_alignParentEnd="true">
 
             <ImageView
                 android:id="@+id/delay_btn"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_dim_open"
                 android:textColor="@color/white"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/delay_time"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:background="@color/transparent"
                 android:gravity="center"
                 android:textColor="@color/blue"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="gone" />
 
 
         </LinearLayout>

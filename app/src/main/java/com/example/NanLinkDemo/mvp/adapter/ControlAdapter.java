@@ -763,7 +763,15 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             sat.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
                 @Override
                 public void onDataChanging(int index) {
-
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setSat(String.valueOf(index));
+                    for (int i = 0; i < views.size(); i++) {
+                        float[] hsv = new float[3];
+                        hsv[0] = hsiList.get(i);
+                        hsv[1] = index / 100f;
+                        hsv[2] = 1;
+                        views.get(i).setBackgroundColor(Color.HSVToColor(hsv));
+                    }
                 }
 
                 @Override
