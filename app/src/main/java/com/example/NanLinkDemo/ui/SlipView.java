@@ -131,6 +131,10 @@ public class SlipView extends RelativeLayout {
                 }
             }
         });
+        layoutParams = binding.color.getLayoutParams();
+        layoutParams.width = MyApplication.dip2percentPx(38);
+        layoutParams.height = MyApplication.dip2percentPx(38);
+        binding.color.setLayoutParams(layoutParams);
     }
 
     //设置控件标题名称
@@ -149,6 +153,12 @@ public class SlipView extends RelativeLayout {
         binding.CH.setVisibility(VISIBLE);
     }
 
+
+    // 设置颜色
+    public void setColor(int color){
+        binding.color.setBackgroundColor(color);
+        binding.color.setVisibility(VISIBLE);
+    }
 
     //设置控件CH可见性
     public void setCHVisibility(int visibility) {

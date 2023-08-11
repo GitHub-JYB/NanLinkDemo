@@ -1,7 +1,9 @@
 package com.example.NanLinkDemo.mvp.adapter;
 
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ActionBarPolicy;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +24,7 @@ import com.example.NanLinkDemo.bean.DeviceDataMessage;
 import com.example.NanLinkDemo.databinding.VpItemBoxControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemColorDropDownControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemColordefaultControlBinding;
+import com.example.NanLinkDemo.databinding.VpItemColormanualControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemColorslipControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemDividerControlBinding;
 import com.example.NanLinkDemo.databinding.VpItemDoubleSlipControlBinding;
@@ -55,6 +60,7 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_RGBW = 10;
     private static final int TYPE_XY = 11;
     private static final int TYPE_COLOR_DEFAULT = 12;
+    private static final int TYPE_COLOR_MANUAL = 13;
 
 
     private OnDataUpdateListener onDataUpdateListener;
@@ -107,6 +113,9 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case TYPE_COLOR_DEFAULT:
                 VpItemColordefaultControlBinding vpItemColordefaultControlBinding = VpItemColordefaultControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderColorDefaultControl(vpItemColordefaultControlBinding);
+            case TYPE_COLOR_MANUAL:
+                VpItemColormanualControlBinding vpItemColormanualControlBinding = VpItemColormanualControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+                return new ViewHolderColorManualControl(vpItemColormanualControlBinding);
             default:
                 VpItemEmptyControlBinding vpItemEmptyControlBinding = VpItemEmptyControlBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
                 return new ViewHolderEmptyControl(vpItemEmptyControlBinding);
@@ -230,6 +239,35 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else if (holder instanceof ViewHolderColorDropDownControl) {
             ((ViewHolderColorDropDownControl) holder).num.setText("颜色 " + (position + 1));
             ((ViewHolderColorDropDownControl) holder).controlAdapter.setData(control.getControls());
+            float[] hsv = new float[3];
+            int selectIndex = control.getControls().get(0).getSelectIndex();
+            switch (selectIndex) {
+                case 0:
+                    int cct = Integer.parseInt(control.getControls().get(0).getControls().get(selectIndex).getControls().get(0).getElements().getItem());
+                    int gm = Integer.parseInt(control.getControls().get(0).getControls().get(selectIndex).getControls().get(1).getElements().getItem());
+//                            hsv[0] = Integer.;
+//                            hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+//                            hsv[2] = 1;
+//                            color.setBackgroundColor(Color.HSVToColor(hsv));
+                    ((ViewHolderColorDropDownControl) holder).data1.setText("色温: " + cct + "K");
+                    ((ViewHolderColorDropDownControl) holder).data2.setText("红绿: " + gm);
+                    break;
+                case 1:
+                    int hsi = Integer.parseInt(control.getControls().get(0).getControls().get(selectIndex).getControls().get(0).getElements().getItem());
+                    int sat = Integer.parseInt(control.getControls().get(0).getControls().get(selectIndex).getControls().get(1).getElements().getItem());
+                    hsv[0] = hsi;
+                    hsv[1] = sat / 100f;
+                    hsv[2] = 1;
+                    ((ViewHolderColorDropDownControl) holder).color.setBackgroundColor(Color.HSVToColor(hsv));
+                    ((ViewHolderColorDropDownControl) holder).data1.setText("色相: " + hsi);
+                    ((ViewHolderColorDropDownControl) holder).data2.setText("饱和度: " + sat + "%");
+                    break;
+                case 2:
+                    ((ViewHolderColorDropDownControl) holder).color.setBackgroundColor(ContextCompat.getColor(((ViewHolderColorDropDownControl) holder).color.getContext(), R.color.black));
+                    ((ViewHolderColorDropDownControl) holder).data1.setText("黑色");
+                    ((ViewHolderColorDropDownControl) holder).data2.setVisibility(View.GONE);
+                    break;
+            }
         } else if (holder instanceof ViewHolderHsiControl) {
             ((ViewHolderHsiControl) holder).control.setHSI(Integer.parseInt(control.getElements().getHue()));
             ((ViewHolderHsiControl) holder).control.setSAT(Integer.parseInt(control.getElements().getSat()));
@@ -269,6 +307,53 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     ((ViewHolderColorDefaultControl) holder).views.get(i).setVisibility(View.INVISIBLE);
                 }
             }
+        } else if (holder instanceof ViewHolderColorManualControl) {
+            int sat = Integer.parseInt(control.getElements().getSat());
+            ((ViewHolderColorManualControl) holder).num.setRemark("颜色数量");
+            ((ViewHolderColorManualControl) holder).num.setTitle("颜色数量");
+            ((ViewHolderColorManualControl) holder).num.setDelayBtnVisibility(View.GONE);
+            ((ViewHolderColorManualControl) holder).num.setDelayTimeVisibility(View.GONE);
+            ((ViewHolderColorManualControl) holder).num.setSeekBar(Integer.parseInt(control.getElements().getMax()), Integer.parseInt(control.getElements().getMin()), Integer.parseInt(control.getElements().getStep()), Integer.parseInt(control.getElements().getItem()));
+            ((ViewHolderColorManualControl) holder).sat.setRemark("饱和度");
+            ((ViewHolderColorManualControl) holder).sat.setTitle("饱和度");
+            ((ViewHolderColorManualControl) holder).sat.setDelayBtnVisibility(View.GONE);
+            ((ViewHolderColorManualControl) holder).sat.setDelayTimeVisibility(View.GONE);
+            ((ViewHolderColorManualControl) holder).sat.setSeekBar(100, 0, 1, sat);
+            if (control.getElements().getHue1() != null) {
+                ((ViewHolderColorManualControl) holder).hsiList.set(0, Integer.parseInt(control.getElements().getHue1()));
+            }
+            if (control.getElements().getHue2() != null) {
+                ((ViewHolderColorManualControl) holder).hsiList.set(1, Integer.parseInt(control.getElements().getHue2()));
+            }
+            if (control.getElements().getHue3() != null) {
+                ((ViewHolderColorManualControl) holder).hsiList.set(2, Integer.parseInt(control.getElements().getHue3()));
+            }
+            if (control.getElements().getHue4() != null) {
+                ((ViewHolderColorManualControl) holder).hsiList.set(3, Integer.parseInt(control.getElements().getHue4()));
+            }
+            if (control.getElements().getHue5() != null) {
+                ((ViewHolderColorManualControl) holder).hsiList.set(4, Integer.parseInt(control.getElements().getHue5()));
+            }
+            if (control.getElements().getHue6() != null) {
+                ((ViewHolderColorManualControl) holder).hsiList.set(5, Integer.parseInt(control.getElements().getHue6()));
+            }
+            for (int i = 0; i < 6; i++) {
+                if (i < Integer.parseInt(control.getElements().getItem())) {
+                    ((ViewHolderColorManualControl) holder).views.get(i).setVisibility(View.VISIBLE);
+                } else {
+                    ((ViewHolderColorManualControl) holder).views.get(i).setVisibility(View.GONE);
+                }
+                ((ViewHolderColorManualControl) holder).views.get(i).setRemark("色相");
+                ((ViewHolderColorManualControl) holder).views.get(i).setTitle("色相 " + (i + 1));
+                ((ViewHolderColorManualControl) holder).views.get(i).setDelayBtnVisibility(View.GONE);
+                ((ViewHolderColorManualControl) holder).views.get(i).setDelayTimeVisibility(View.GONE);
+                float[] hsv = new float[3];
+                hsv[0] = ((ViewHolderColorManualControl) holder).hsiList.get(i);
+                hsv[1] = sat / 100f;
+                hsv[2] = 1;
+                ((ViewHolderColorManualControl) holder).views.get(i).setColor(Color.HSVToColor(hsv));
+                ((ViewHolderColorManualControl) holder).views.get(i).setSeekBar(360, 0, 1, (int) hsv[0]);
+            }
         }
     }
 
@@ -305,6 +390,8 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 return TYPE_XY;
             case "colorDefault":
                 return TYPE_COLOR_DEFAULT;
+            case "colorManual":
+                return TYPE_COLOR_MANUAL;
             default:
                 return TYPE_UNKNOW;
         }
@@ -696,6 +783,34 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void onDataUpdate(int position, DeviceDataMessage.Control control) {
                     DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
                     controlData.getControls().set(position, control);
+                    float[] hsv = new float[3];
+                    int selectIndex = controlData.getControls().get(position).getSelectIndex();
+                    switch (selectIndex) {
+                        case 0:
+                            int cct = Integer.parseInt(controlData.getControls().get(position).getControls().get(selectIndex).getControls().get(0).getElements().getItem());
+                            int gm = Integer.parseInt(controlData.getControls().get(position).getControls().get(selectIndex).getControls().get(1).getElements().getItem());
+//                            hsv[0] = Integer.;
+//                            hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+//                            hsv[2] = 1;
+//                            color.setBackgroundColor(Color.HSVToColor(hsv));
+                            data1.setText("色温: " + cct + "K");
+                            data2.setText("红绿: " + gm);
+                            break;
+                        case 1:
+                            int hsi = Integer.parseInt(controlData.getControls().get(position).getControls().get(selectIndex).getControls().get(0).getElements().getItem());
+                            int sat = Integer.parseInt(controlData.getControls().get(position).getControls().get(selectIndex).getControls().get(1).getElements().getItem());
+                            hsv[0] = hsi;
+                            hsv[1] = sat / 100f;
+                            hsv[2] = 1;
+                            color.setBackgroundColor(Color.HSVToColor(hsv));
+                            data1.setText("色相: " + hsi);
+                            data2.setText("饱和度: " + sat + "%");
+                            break;
+                        case 2:
+                            color.setBackgroundColor(ContextCompat.getColor(color.getContext(), R.color.black));
+                            data1.setText("黑色");
+                            break;
+                    }
                     if (onDataUpdateListener != null) {
                         onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
                     }
@@ -841,6 +956,261 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             hsiList.add(225);
             hsiList.add(350);
         }
+    }
+
+    class ViewHolderColorManualControl extends RecyclerView.ViewHolder {
+
+
+        SlipView num, sat;
+        ArrayList<SlipView> views;
+        ArrayList<Integer> hsiList;
+
+
+        public ViewHolderColorManualControl(@NonNull VpItemColormanualControlBinding binding) {
+            super(binding.getRoot());
+            num = binding.number;
+            sat = binding.SATSlip;
+            num.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setItem(String.valueOf(index));
+                    for (int i = 0; i < views.size(); i++) {
+                        if (i < index) {
+                            views.get(i).setVisibility(View.VISIBLE);
+                        } else {
+                            views.get(i).setVisibility(View.GONE);
+                        }
+                    }
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+            sat.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setSat(String.valueOf(index));
+                    for (int i = 0; i < views.size(); i++) {
+                        float[] hsv = new float[3];
+                        hsv[0] = hsiList.get(i);
+                        hsv[1] = index / 100f;
+                        hsv[2] = 1;
+                        views.get(i).setColor(Color.HSVToColor(hsv));
+                    }
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setSat(String.valueOf(index));
+                    for (int i = 0; i < views.size(); i++) {
+                        float[] hsv = new float[3];
+                        hsv[0] = hsiList.get(i);
+                        hsv[1] = index / 100f;
+                        hsv[2] = 1;
+                        views.get(i).setColor(Color.HSVToColor(hsv));
+                    }
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+            views = new ArrayList<>();
+            views.add(binding.HSI1Slip);
+            views.add(binding.HSI2Slip);
+            views.add(binding.HSI3Slip);
+            views.add(binding.HSI4Slip);
+            views.add(binding.HSI5Slip);
+            views.add(binding.HSI6Slip);
+            hsiList = new ArrayList<>();
+            for (int i = 0; i < 6; i++) {
+                hsiList.add(i, 30 * i);
+            }
+
+
+            binding.HSI1Slip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue1(String.valueOf(index));
+                    hsiList.set(0, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(0).setColor(Color.HSVToColor(hsv));
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue1(String.valueOf(index));
+                    hsiList.set(0, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(0).setColor(Color.HSVToColor(hsv));
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+
+
+            binding.HSI2Slip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue2(String.valueOf(index));
+                    hsiList.set(1, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(1).setColor(Color.HSVToColor(hsv));
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue2(String.valueOf(index));
+                    hsiList.set(1, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(1).setColor(Color.HSVToColor(hsv));
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+
+            binding.HSI3Slip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue3(String.valueOf(index));
+                    hsiList.set(2, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(2).setColor(Color.HSVToColor(hsv));
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue3(String.valueOf(index));
+                    hsiList.set(2, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(2).setColor(Color.HSVToColor(hsv));
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+
+            binding.HSI4Slip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue4(String.valueOf(index));
+                    hsiList.set(3, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(3).setColor(Color.HSVToColor(hsv));
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue4(String.valueOf(index));
+                    hsiList.set(3, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(3).setColor(Color.HSVToColor(hsv));
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+
+            binding.HSI5Slip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue5(String.valueOf(index));
+                    hsiList.set(4, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(4).setColor(Color.HSVToColor(hsv));
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue5(String.valueOf(index));
+                    hsiList.set(4, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(4).setColor(Color.HSVToColor(hsv));
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+
+            binding.HSI6Slip.setOnDataChangeListener(new SlipView.OnDataChangeListener() {
+                @Override
+                public void onDataChanging(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue6(String.valueOf(index));
+                    hsiList.set(5, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(5).setColor(Color.HSVToColor(hsv));
+                }
+
+                @Override
+                public void onDataChanged(int index) {
+                    DeviceDataMessage.Control controlData = controls.get(getAdapterPosition());
+                    controlData.getElements().setHue6(String.valueOf(index));
+                    hsiList.set(5, index);
+                    float[] hsv = new float[3];
+                    hsv[0] = index;
+                    hsv[1] = Integer.parseInt(controlData.getElements().getSat()) / 100f;
+                    hsv[2] = 1;
+                    views.get(5).setColor(Color.HSVToColor(hsv));
+                    if (onDataUpdateListener != null) {
+                        onDataUpdateListener.onDataUpdate(getAdapterPosition(), controlData);
+                    }
+                }
+            });
+        }
+
     }
 
 

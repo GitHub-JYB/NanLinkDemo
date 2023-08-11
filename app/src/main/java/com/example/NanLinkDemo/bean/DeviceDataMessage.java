@@ -325,6 +325,12 @@ public class DeviceDataMessage {
         private String toggle;
         private String delay;
         private String hue;
+        private String hue1;
+        private String hue2;
+        private String hue3;
+        private String hue4;
+        private String hue5;
+        private String hue6;
         private String sat;
         private String r;
         private String g;
@@ -459,6 +465,54 @@ public class DeviceDataMessage {
 
         public void setY(String y) {
             this.y = y;
+        }
+
+        public String getHue1() {
+            return hue1;
+        }
+
+        public void setHue1(String hue1) {
+            this.hue1 = hue1;
+        }
+
+        public String getHue2() {
+            return hue2;
+        }
+
+        public void setHue2(String hue2) {
+            this.hue2 = hue2;
+        }
+
+        public String getHue3() {
+            return hue3;
+        }
+
+        public void setHue3(String hue3) {
+            this.hue3 = hue3;
+        }
+
+        public String getHue4() {
+            return hue4;
+        }
+
+        public void setHue4(String hue4) {
+            this.hue4 = hue4;
+        }
+
+        public String getHue5() {
+            return hue5;
+        }
+
+        public void setHue5(String hue5) {
+            this.hue5 = hue5;
+        }
+
+        public String getHue6() {
+            return hue6;
+        }
+
+        public void setHue6(String hue6) {
+            this.hue6 = hue6;
         }
     }
 

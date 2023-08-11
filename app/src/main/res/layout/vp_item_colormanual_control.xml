@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <com.example.NanLinkDemo.ui.SlipView
+        android:id="@+id/number"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.NanLinkDemo.ui.SlipView
+        android:id="@+id/SAT_slip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.NanLinkDemo.ui.SlipView
+        android:id="@+id/HSI_1_slip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.example.NanLinkDemo.ui.SlipView
+        android:id="@+id/HSI_2_slip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.example.NanLinkDemo.ui.SlipView
+        android:id="@+id/HSI_3_slip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.example.NanLinkDemo.ui.SlipView
+        android:id="@+id/HSI_4_slip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.example.NanLinkDemo.ui.SlipView
+        android:id="@+id/HSI_5_slip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.example.NanLinkDemo.ui.SlipView
+        android:id="@+id/HSI_6_slip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</LinearLayout>
+
