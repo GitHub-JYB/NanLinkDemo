@@ -81,6 +81,12 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
                 presenter.updateData(position, control);
             }
         });
+        controlAdapter.setOnCameraListener(new ControlAdapter.OnCameraListener() {
+            @Override
+            public void gotoCamera() {
+                presenter.gotoCameraWithData();
+            }
+        });
     }
 
     @Override

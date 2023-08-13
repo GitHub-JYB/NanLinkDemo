@@ -22,6 +22,7 @@ import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.RgbwviewBinding;
 import com.example.NanLinkDemo.databinding.XyviewBinding;
+import com.example.NanLinkDemo.util.ColorUtil;
 
 import java.util.ArrayList;
 
@@ -171,7 +172,7 @@ public class XYView extends RelativeLayout {
                 outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), MyApplication.dip2px(6));
             }
         });
-        binding.color.setBackgroundColor(ColorUtils.XYZToColor(x / 10000.0f, y / 10000.0f, 100 - (x + y) / 10000.0f));
+        binding.color.setBackgroundColor(ColorUtil.XYToColor(x, y));
     }
 
     //设置数据

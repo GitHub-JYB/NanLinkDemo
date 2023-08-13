@@ -34,4 +34,6 @@ public interface ControlPresenter {
     void clickData(int position, String dim);
 
     void updateData(int position, DeviceDataMessage.Control control);
+
+    void gotoCameraWithData();
 }

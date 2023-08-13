@@ -27,7 +27,7 @@ public class ControlPresenterImpl implements ControlPresenter {
     private final ControlModelImpl model;
     private FixtureGroup fixtureGroup;
     private Fixture fixture;
-    private int type;
+    private int type, id;
     private int modeIndex;
     private ArrayList<Menu> menuArrayList;
     private DeviceDataMessage.Data deviceData;
@@ -51,7 +51,7 @@ public class ControlPresenterImpl implements ControlPresenter {
 
     @Override
     public void menuSwitch(int position) {
-        switch (position){
+        switch (position) {
             case 1:
                 ARouter.getInstance().build(Constant.ACTIVITY_URL_Test).navigation();
                 break;
@@ -73,6 +73,7 @@ public class ControlPresenterImpl implements ControlPresenter {
     @Override
     public void getControlDataFromModel(int type, int id) {
         this.type = type;
+        this.id = id;
         switch (type) {
             case ControlActivity.TYPE_FIXTURE:
                 model.getFixture(id);
@@ -126,9 +127,9 @@ public class ControlPresenterImpl implements ControlPresenter {
     @Override
     public void receiveFixtureMenu(ArrayList<Menu> menuArrayList) {
         this.menuArrayList = menuArrayList;
-        if (deviceData.getFan().size() < 2){
-            for (Menu menu : menuArrayList){
-                if (menu.getText().equals("风扇控制")){
+        if (deviceData.getFan().size() < 2) {
+            for (Menu menu : menuArrayList) {
+                if (menu.getText().equals("风扇控制")) {
                     menuArrayList.remove(menu);
                     break;
                 }
@@ -141,17 +142,17 @@ public class ControlPresenterImpl implements ControlPresenter {
     @Override
     public void receiveFixtureGroupMenu(ArrayList<Menu> menuArrayList) {
         this.menuArrayList = menuArrayList;
-        if (deviceData.getFan().size() < 2){
-            for (Menu menu : menuArrayList){
-                if (menu.getText().equals("风扇控制")){
+        if (deviceData.getFan().size() < 2) {
+            for (Menu menu : menuArrayList) {
+                if (menu.getText().equals("风扇控制")) {
                     menuArrayList.remove(menu);
                     break;
                 }
             }
         }
-        if (!deviceData.getFlmModeList().get(modeIndex).getRemark().equals("像素特效模式")){
-            for (Menu menu : menuArrayList){
-                if (menu.getText().equals("群组模式")){
+        if (!deviceData.getFlmModeList().get(modeIndex).getRemark().equals("像素特效模式")) {
+            for (Menu menu : menuArrayList) {
+                if (menu.getText().equals("群组模式")) {
                     menuArrayList.remove(menu);
                     break;
                 }
@@ -177,7 +178,7 @@ public class ControlPresenterImpl implements ControlPresenter {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String data = gson.toJson(deviceData);
-        switch (type){
+        switch (type) {
             case ControlActivity.TYPE_FIXTURE:
                 fixture.setData(data);
                 model.updateFixture(fixture);
@@ -188,6 +189,11 @@ public class ControlPresenterImpl implements ControlPresenter {
                 break;
         }
 
+    }
+
+    @Override
+    public void gotoCameraWithData() {
+        ARouter.getInstance().build(Constant.ACTIVITY_URL_Camera).withInt("type", type).withInt("id", id).navigation();
     }
 
     private void showData(String data) {
@@ -217,12 +223,12 @@ public class ControlPresenterImpl implements ControlPresenter {
                     }
                     break;
             }
-        }else {
+        } else {
             view.setFanVisibility(View.GONE);
         }
         view.setMode(deviceData.getFlmModeList().get(modeIndex).getRemark());
         view.setModeList(deviceData.getFlmModeList());
-        view.setDimAndDelayTime(Integer.parseInt(deviceData.getDimItem()),Integer.parseInt(deviceData.getDimDelay()));
+        view.setDimAndDelayTime(Integer.parseInt(deviceData.getDimItem()), Integer.parseInt(deviceData.getDimDelay()));
         view.setData(deviceData.getFlmModeList().get(modeIndex).getFirstControls());
     }
 }

@@ -25,6 +25,7 @@ import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.HsiviewBinding;
 import com.example.NanLinkDemo.databinding.SlmmenuviewBinding;
 import com.example.NanLinkDemo.mvp.adapter.FlmMenuListAdapter;
+import com.example.NanLinkDemo.util.ColorUtil;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,7 @@ public class HsiView extends RelativeLayout {
     private int HSI, SAT;
 
     private OnDataChangeListener onDataChangeListener;
+    private OnCameraListener onCameraListener;
 
     public HsiView(Context context) {
         this(context, null);
@@ -70,6 +72,9 @@ public class HsiView extends RelativeLayout {
                         binding.viewIndex1.setVisibility(VISIBLE);
                         break;
                     case R.id.index_2:
+                        if (onCameraListener != null){
+                            onCameraListener.gotoCamera();
+                        }
                         break;
                 }
             }
@@ -135,10 +140,6 @@ public class HsiView extends RelativeLayout {
     }
 
     private void updateColor() {
-        float[] hsl = new float[3];
-        hsl[0] = HSI;
-        hsl[1] = SAT / 100.0f;
-        hsl[2] = 1;
         binding.color.setClipToOutline(true);
         binding.color.setOutlineProvider(new ViewOutlineProvider() {
             @Override
@@ -146,7 +147,7 @@ public class HsiView extends RelativeLayout {
                 outline.setRoundRect(0,0,view.getWidth(),view.getHeight(),MyApplication.dip2px(6));
             }
         });
-        binding.color.setBackgroundColor(Color.HSVToColor(hsl));
+        binding.color.setBackgroundColor(ColorUtil.HsiSatToColor(HSI, SAT));
     }
 
 
@@ -200,5 +201,15 @@ public class HsiView extends RelativeLayout {
 
     public interface OnDataChangeListener {
         void onDataChanged(int HSI, int SAT);
+    }
+
+    //设置控件按键的切换事件
+    public void setOnCameraListener(OnCameraListener onCameraListener) {
+        this.onCameraListener = onCameraListener;
+    }
+
+
+    public interface OnCameraListener {
+        void gotoCamera();
     }
 }
