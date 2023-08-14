@@ -1,8 +1,15 @@
 package com.example.NanLinkDemo.mvp.widget;
 
+import static com.example.NanLinkDemo.util.Constant.PERMISSION_REQUEST_CODE;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -84,9 +91,20 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
         controlAdapter.setOnCameraListener(new ControlAdapter.OnCameraListener() {
             @Override
             public void gotoCamera() {
-                presenter.gotoCameraWithData();
+                if (checkCameraAble()) {
+                    presenter.gotoCameraWithData();
+                }
             }
         });
+    }
+
+    private boolean checkCameraAble() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
+            return false;
+        }
+        PackageManager packageManager = getPackageManager();
+        return packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) || packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT) || Camera.getNumberOfCameras() > 0 || Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD;
     }
 
     @Override
@@ -109,27 +127,27 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
     }
 
     @Override
-    public void setSecondTitle(String secondTitle){
+    public void setSecondTitle(String secondTitle) {
         binding.controlToolbar.setSecondTitle(secondTitle);
     }
 
     @Override
-    public void setFan(int resId){
+    public void setFan(int resId) {
         binding.controlToolbar.setRightSecondBtnIcon(resId);
     }
 
     @Override
-    public void setFanVisibility(int visibility){
+    public void setFanVisibility(int visibility) {
         binding.controlToolbar.setRightSecondBtnIconVisibility(visibility);
     }
 
     @Override
-    public void setMode(String mode){
+    public void setMode(String mode) {
         binding.controlToolbar.setMode(mode);
     }
 
     @Override
-    public void setModeList(ArrayList<DeviceDataMessage.FlmMode> modeList){
+    public void setModeList(ArrayList<DeviceDataMessage.FlmMode> modeList) {
         binding.controlToolbar.setModeList(modeList);
     }
 
@@ -180,9 +198,6 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
     public void onClick(View v) {
         presenter.switchOnclick(v);
     }
-
-
-
 
 
 }

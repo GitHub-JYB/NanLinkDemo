@@ -37,6 +37,7 @@ public class HsiView extends RelativeLayout {
 
     private OnDataChangeListener onDataChangeListener;
     private OnCameraListener onCameraListener;
+    private int checkIndex;
 
     public HsiView(Context context) {
         this(context, null);
@@ -64,14 +65,17 @@ public class HsiView extends RelativeLayout {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.index_0:
+                        checkIndex = 0;
                         binding.viewIndex0.setVisibility(VISIBLE);
                         binding.viewIndex1.setVisibility(GONE);
                         break;
                     case R.id.index_1:
+                        checkIndex = 1;
                         binding.viewIndex0.setVisibility(GONE);
                         binding.viewIndex1.setVisibility(VISIBLE);
                         break;
                     case R.id.index_2:
+                        check(checkIndex);
                         if (onCameraListener != null){
                             onCameraListener.gotoCamera();
                         }
@@ -180,6 +184,7 @@ public class HsiView extends RelativeLayout {
 
     //设置按键默认选的位置
     public void check(int index) {
+        checkIndex = index;
         switch (index) {
             case 0:
                 binding.radioGroup.check(R.id.index_0);

@@ -1,6 +1,7 @@
 package com.example.NanLinkDemo.mvp.presenter.Impl;
 
 
+import android.app.Activity;
 import android.view.View;
 
 
@@ -193,8 +194,10 @@ public class ControlPresenterImpl implements ControlPresenter {
 
     @Override
     public void gotoCameraWithData() {
-        ARouter.getInstance().build(Constant.ACTIVITY_URL_Camera).withInt("type", type).withInt("id", id).navigation();
+            ARouter.getInstance().build(Constant.ACTIVITY_URL_Camera).withInt("type", type).withInt("id", id).navigation();
     }
+
+
 
     private void showData(String data) {
         Gson gson = new Gson();
