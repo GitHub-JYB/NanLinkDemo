@@ -32,6 +32,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="放大"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:paddingStart="29dp"
+            android:paddingEnd="29dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/bg_able_btn_camera_zoom_able"
             android:layout_marginBottom="16dp"
             android:layout_centerHorizontal="true"
             android:layout_alignBottom="@id/preview"
@@ -71,7 +78,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/HSI_text"
-                android:text="111"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
 
@@ -96,7 +102,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/SAT_text"
-                android:text="1111"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
 
@@ -110,7 +115,7 @@
         android:layout_marginTop="13dp">
 
         <ImageView
-            android:id="@+id/getPhone"
+            android:id="@+id/getPhoto"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
@@ -125,7 +130,7 @@
             android:textColor="@color/white"
             android:textSize="17sp"
             android:layout_marginEnd="48dp"
-            android:layout_toStartOf="@id/getPhone"/>
+            android:layout_toStartOf="@id/getPhoto"/>
 
         <TextView
             android:id="@+id/complete"
@@ -136,7 +141,7 @@
             android:textColor="@color/white"
             android:textSize="17sp"
             android:layout_marginStart="48dp"
-            android:layout_toEndOf="@id/getPhone"/>
+            android:layout_toEndOf="@id/getPhoto"/>
     </RelativeLayout>
 
 

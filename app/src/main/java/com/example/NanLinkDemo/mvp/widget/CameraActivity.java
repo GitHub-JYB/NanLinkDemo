@@ -1,7 +1,14 @@
 package com.example.NanLinkDemo.mvp.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
+import android.graphics.Outline;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
@@ -15,6 +22,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
@@ -31,8 +39,10 @@ import com.example.NanLinkDemo.databinding.ActivityCameraBinding;
 import com.example.NanLinkDemo.databinding.ActivityLoginBinding;
 import com.example.NanLinkDemo.mvp.presenter.Impl.CameraPresenterImpl;
 import com.example.NanLinkDemo.mvp.view.CameraView;
+import com.example.NanLinkDemo.util.ColorUtil;
 import com.example.NanLinkDemo.util.Constant;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -49,15 +59,32 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     private Camera.CameraInfo cameraInfo;
     private Camera mCamera;
     private SurfaceHolder holder;
+    private boolean isZoomIn;
+    private int HSI, SAT;
+
 
     Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
         @Override
         public void onPreviewFrame(byte[] data, Camera camera) {
-            if (data != null){
+            if (data != null) {
                 Camera.Parameters parameters = camera.getParameters();
                 Camera.Size size = parameters.getPreviewSize();
+                YuvImage image = new YuvImage(data, ImageFormat.NV21, size.width, size.height, null);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                image.compressToJpeg(new Rect(0, 0, size.width, size.height), 100, outputStream);
+                byte[] bytes = outputStream.toByteArray();
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+                int color = bitmap.getPixel(bitmap.getWidth() / 2, bitmap.getHeight() / 2);
+                float[] hsv = new float[3];
+                Color.colorToHSV(color, hsv);
+                updateData((int) hsv[0], (int) (hsv[1] * 100));
             }
             camera.addCallbackBuffer(data);
+
         }
     };
 
@@ -69,20 +96,35 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
         setPresenter();
         initToolbar();
         initPreView();
-        initCamera();
         initControlData();
+        initBtn();
     }
 
-    private void initCamera() {
-        try {
+    private void initBtn() {
+        binding.retry.setOnClickListener(this);
+        binding.complete.setOnClickListener(this);
+        binding.getPhoto.setOnClickListener(this);
+        binding.changeView.setOnClickListener(this);
+    }
 
-            CameraManager cameraManager = (CameraManager) getBaseContext().getSystemService(Context.CAMERA_SERVICE);
-            cameraManager.getCameraCharacteristics("0");
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void showBtn(boolean isPreviewing) {
+        if (isPreviewing) {
+            binding.retry.setVisibility(View.GONE);
+            binding.complete.setVisibility(View.GONE);
+            binding.getPhoto.setClickable(true);
+            binding.getPhoto.setImageDrawable(getResources().getDrawable(R.drawable.bg_able_camera));
+            binding.changeView.setClickable(true);
+            binding.changeView.setBackgroundResource(R.drawable.bg_able_btn_camera_zoom_able);
+        } else {
+            binding.retry.setVisibility(View.VISIBLE);
+            binding.complete.setVisibility(View.VISIBLE);
+            binding.getPhoto.setClickable(false);
+            binding.getPhoto.setImageDrawable(getResources().getDrawable(R.drawable.bg_unable_camera));
+            binding.changeView.setClickable(false);
+            binding.changeView.setBackgroundResource(R.drawable.bg_able_btn_camera_zoom_unbale);
         }
-
     }
+
 
     @Override
     protected void onStart() {
@@ -108,7 +150,6 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
 
             @Override
             public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -118,8 +159,23 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
         });
     }
 
+    private void updateData(int HSI, int SAT) {
+        this.HSI = HSI;
+        this.SAT = SAT;
+        binding.color.setClipToOutline(true);
+        binding.color.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), MyApplication.dip2px(6));
+            }
+        });
+        binding.color.setBackgroundColor(ColorUtil.HsiSatToColor(HSI, SAT));
+        binding.HSI.setText(String.valueOf(HSI));
+        binding.SAT.setText(SAT + "%");
+    }
+
     private void releaseCamera() {
-        if (mCamera != null){
+        if (mCamera != null) {
             mCamera.stopPreview();
             mCamera.stopFaceDetection();
             mCamera.setPreviewCallback(null);
@@ -131,27 +187,28 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     private void openCamera(int cameraId) {
         try {
             releaseCamera();
-            if (cameraInfo == null){
+            if (cameraInfo == null) {
                 cameraInfo = new Camera.CameraInfo();
             }
             int numberOfCameras = Camera.getNumberOfCameras();
-            for (int i = 0; i < numberOfCameras; i++){
+            for (int i = 0; i < numberOfCameras; i++) {
                 Camera.getCameraInfo(i, cameraInfo);
-                if (cameraInfo.facing == cameraId){
+                if (cameraInfo.facing == cameraId) {
                     mCamera = Camera.open(i);
                     break;
                 }
             }
 
             startPreview();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             mCamera = null;
         }
     }
 
-    private void startPreview() {
+    public void startPreview() {
         try {
+            showBtn(true);
             WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
             Display display = manager.getDefaultDisplay();
             int width = display.getWidth();
@@ -168,9 +225,29 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
             mCamera.setPreviewCallbackWithBuffer(previewCallback);
 
             mCamera.startPreview();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void toggleZoom() {
+        isZoomIn = !isZoomIn;
+        if (isZoomIn) {
+            binding.changeView.setText("缩小");
+        } else {
+            binding.changeView.setText("放大");
+        }
+    }
+
+    @Override
+    public int getHSI() {
+        return HSI;
+    }
+
+    @Override
+    public int getSAT() {
+        return SAT;
     }
 
     private void adjustCameraOrientation() {
@@ -178,7 +255,7 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
 
         int degress = 0;
 
-        switch (rotation){
+        switch (rotation) {
             case Surface.ROTATION_0:
                 degress = 0;
                 break;
@@ -195,9 +272,9 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
 
         int result = 0;
 
-        if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK){
-            result = (cameraInfo.orientation - degress + 360 ) % 360;
-        }else if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
+        if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+            result = (cameraInfo.orientation - degress + 360) % 360;
+        } else if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             result = (cameraInfo.orientation + degress) % 360;
             result = (360 - result) % 360;
         }
@@ -206,12 +283,12 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     }
 
     private void initPreviewParams(int width, int height) {
-        if (mCamera != null){
+        if (mCamera != null) {
             Camera.Parameters parameters = mCamera.getParameters();
             List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
             Camera.Size bestSize = getBestSize(width, height, sizes);
             parameters.setPreviewSize(bestSize.width, bestSize.height);
-            parameters.setPictureSize(bestSize.width, bestSize.height);
+//            parameters.setPictureSize(bestSize.width, bestSize.height);
             parameters.setPreviewFormat(ImageFormat.NV21);
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             mCamera.setParameters(parameters);
@@ -222,16 +299,16 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
         Camera.Size bestSize = null;
         float uiRadio = (float) height / width;
         float minRadio = uiRadio;
-        for (Camera.Size previewSize : sizes){
+        for (Camera.Size previewSize : sizes) {
             float cameraRadio = (float) previewSize.width / previewSize.height;
 
             float offset = Math.abs(cameraRadio - minRadio);
-            if (offset < minRadio){
+            if (offset < minRadio) {
                 minRadio = offset;
                 bestSize = previewSize;
             }
 
-            if (uiRadio == cameraRadio){
+            if (uiRadio == cameraRadio) {
                 bestSize = previewSize;
                 break;
             }
@@ -251,6 +328,12 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     @Override
     public void setPresenter() {
         presenter = new CameraPresenterImpl(this);
+    }
+
+    @Override
+    public void stopPreview() {
+        showBtn(false);
+        mCamera.stopPreview();
     }
 
 

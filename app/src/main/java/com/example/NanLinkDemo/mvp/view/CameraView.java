@@ -4,4 +4,14 @@ public interface CameraView {
     void setPresenter();
 
     void finish();
+
+    void stopPreview();
+
+    void startPreview();
+
+    void toggleZoom();
+
+    int getHSI();
+
+    int getSAT();
 }

@@ -49,7 +49,6 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setPresenter();
-        initControlData();
         initToolbar();
         initRecycleView();
     }
@@ -63,6 +62,7 @@ public class ControlActivity extends BaseActivity<ActivityControlBinding> implem
     protected void onStart() {
         super.onStart();
         checkPermission();
+        initControlData();
     }
 
     private void initRecycleView() {
