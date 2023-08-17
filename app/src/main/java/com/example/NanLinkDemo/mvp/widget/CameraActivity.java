@@ -135,21 +135,16 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     private void initPreView() {
         holder = binding.preview.getHolder();
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
         holder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-                openCamera(Camera.CameraInfo.CAMERA_FACING_BACK);
+                setHolder(surfaceHolder);
             }
 
             @Override
             public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-                try {
-                    mCamera.setPreviewCallback(previewCallback);
-                    mCamera.setPreviewDisplay(surfaceHolder);
-                    mCamera.startPreview();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                setHolder(surfaceHolder);
             }
 
             @Override
@@ -157,6 +152,25 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
                 releaseCamera();
             }
         });
+
+        openCamera(Camera.CameraInfo.CAMERA_FACING_BACK);
+
+        setCameraParams();
+
+
+    }
+
+    private void setCameraParams() {
+        if (mCamera != null) {
+            initPreviewParams(MyApplication.widthPixels, MyApplication.heightPixels);
+
+            adjustCameraOrientation();
+
+            mCamera.addCallbackBuffer(new byte[MyApplication.widthPixels * MyApplication.heightPixels * 3 / 2]);
+
+            mCamera.setPreviewCallbackWithBuffer(previewCallback);
+
+        }
     }
 
     private void updateData(int HSI, int SAT) {
@@ -193,45 +207,34 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
                 }
             }
 
-            startPreview();
         } catch (Exception e) {
             e.printStackTrace();
             mCamera = null;
         }
     }
 
-    public void startPreview() {
+    public void setHolder(SurfaceHolder holder) {
         try {
-//            WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-//            Display display = manager.getDefaultDisplay();
-//            int width = display.getWidth();
-//            int height = display.getHeight();
-
-            int width = MyApplication.widthPixels;
-            int height = MyApplication.heightPixels;
-
-            initPreviewParams(width, height);
-
-            adjustCameraOrientation();
-
             mCamera.setPreviewDisplay(holder);
-
-            mCamera.addCallbackBuffer(new byte[width * height * 3 / 2]);
-
-            mCamera.setPreviewCallbackWithBuffer(previewCallback);
-
+//            mCamera.setPreviewCallbackWithBuffer(previewCallback);
             mCamera.startPreview();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public void startPreview() {
+        mCamera.startPreview();
+    }
+
     @Override
     public void toggleZoom() {
-        isZoomIn = !isZoomIn;
         if (mCamera != null) {
+
             Camera.Parameters parameters = mCamera.getParameters();
-            if (parameters.isZoomSupported()) {
+            if (parameters.isSmoothZoomSupported()) {
+                isZoomIn = !isZoomIn;
+
                 int maxZoom = parameters.getMaxZoom();
                 List<Integer> zoomRatios = parameters.getZoomRatios();
                 if (isZoomIn) {
@@ -296,15 +299,13 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     }
 
     private void initPreviewParams(int width, int height) {
-        if (mCamera != null) {
-            Camera.Parameters parameters = mCamera.getParameters();
-            List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
-            Camera.Size bestSize = getBestSize(width, height, sizes);
-            parameters.setPreviewSize(bestSize.width, bestSize.height);
-            parameters.setPreviewFormat(ImageFormat.NV21);
-            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-            mCamera.setParameters(parameters);
-        }
+        Camera.Parameters parameters = mCamera.getParameters();
+        List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
+        Camera.Size bestSize = getBestSize(width, height, sizes);
+        parameters.setPreviewSize(bestSize.width, bestSize.height);
+        parameters.setPreviewFormat(ImageFormat.NV21);
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        mCamera.setParameters(parameters);
     }
 
     private Camera.Size getBestSize(int width, int height, List<Camera.Size> sizes) {
@@ -312,7 +313,8 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
         float uiRadio = (float) height / width;
         float minRadio = uiRadio;
         for (Camera.Size previewSize : sizes) {
-            float cameraRadio = (float) previewSize.width / previewSize.height;
+//            float cameraRadio = (float) previewSize.width / previewSize.height;
+            float cameraRadio = (float) previewSize.height / previewSize.width;
 
             float offset = Math.abs(cameraRadio - minRadio);
             if (offset < minRadio) {
