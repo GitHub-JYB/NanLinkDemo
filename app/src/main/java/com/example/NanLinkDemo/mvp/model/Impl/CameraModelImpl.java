@@ -61,7 +61,7 @@ public class CameraModelImpl implements CameraModel {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-
+                        presenter.finishUpdate();
                     }
                 });
     }
@@ -76,7 +76,7 @@ public class CameraModelImpl implements CameraModel {
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer integer) throws Exception {
-
+                        presenter.finishUpdate();
                     }
                 });
     }

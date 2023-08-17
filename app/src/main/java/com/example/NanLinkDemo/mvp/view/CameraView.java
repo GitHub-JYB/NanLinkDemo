@@ -7,6 +7,8 @@ public interface CameraView {
 
     void stopPreview();
 
+    void updateBtn(boolean isPreviewing);
+
     void startPreview();
 
     void toggleZoom();

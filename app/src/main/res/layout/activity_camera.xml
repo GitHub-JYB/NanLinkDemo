@@ -1,148 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/theme"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:gravity="center_horizontal">
 
 
     <com.example.NanLinkDemo.ui.MyToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar">
 
-        <SurfaceView
-            android:id="@+id/preview"
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:layout_above="@id/control">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_pointer"
-            android:layout_centerInParent="true"/>
+            <SurfaceView
+                android:id="@+id/preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_pointer" />
+
+        </RelativeLayout>
+
+
 
         <TextView
             android:id="@+id/change_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/control"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_able_btn_camera_zoom_able"
+            android:paddingStart="29dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="29dp"
+            android:paddingBottom="5dp"
             android:text="放大"
             android:textColor="@color/white"
-            android:textSize="17sp"
-            android:paddingStart="29dp"
-            android:paddingEnd="29dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:background="@drawable/bg_able_btn_camera_zoom_able"
-            android:layout_marginBottom="16dp"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBottom="@id/preview"
-            />
+            android:textSize="17sp" />
 
-    </RelativeLayout>
-
-
-    <View
-        android:id="@+id/color"
-        android:layout_width="191dp"
-        android:layout_height="30dp"
-        android:background="@color/blue"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="14dp" />
-
-
-    <RelativeLayout
-        android:layout_width="191dp"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/control"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentBottom="true"
+            android:background="@color/theme"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="41dp">
 
-            <TextView
-                android:id="@+id/HSI_text"
-                android:layout_width="wrap_content"
+            <View
+                android:id="@+id/color"
+                android:layout_width="191dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:background="@color/blue" />
+
+
+            <RelativeLayout
+                android:layout_width="191dp"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:id="@+id/HSI_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="色相"
+                        android:textColor="@color/white"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/HSI"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/HSI_text"
+                        android:textColor="@color/white"
+                        android:textSize="17sp" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:id="@+id/SAT_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="饱和度"
+                        android:textColor="@color/white"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/SAT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/SAT_text"
+                        android:textColor="@color/white"
+                        android:textSize="17sp" />
+
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="色相"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
+                android:layout_marginTop="13dp">
 
-            <TextView
-                android:id="@+id/HSI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/HSI_text"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
+                <ImageView
+                    android:id="@+id/getPhoto"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/bg_able_camera" />
 
+                <TextView
+                    android:id="@+id/retry"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="48dp"
+                    android:layout_toStartOf="@id/getPhoto"
+                    android:gravity="center"
+                    android:text="重试"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/complete"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="48dp"
+                    android:layout_toEndOf="@id/getPhoto"
+                    android:gravity="center"
+                    android:text="完成"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+            </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true">
-
-            <TextView
-                android:id="@+id/SAT_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="饱和度"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/SAT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/SAT_text"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
-
-
-        </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp">
 
-        <ImageView
-            android:id="@+id/getPhoto"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/bg_able_camera"/>
-
-        <TextView
-            android:id="@+id/retry"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="重试"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            android:layout_marginEnd="48dp"
-            android:layout_toStartOf="@id/getPhoto"/>
-
-        <TextView
-            android:id="@+id/complete"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="完成"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            android:layout_marginStart="48dp"
-            android:layout_toEndOf="@id/getPhoto"/>
-    </RelativeLayout>
-
-
-</LinearLayout>
+</RelativeLayout>

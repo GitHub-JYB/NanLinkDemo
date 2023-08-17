@@ -1,42 +1,27 @@
 package com.example.NanLinkDemo.mvp.widget;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
-import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.NanLinkDemo.Application.MyApplication;
-import com.example.NanLinkDemo.DB.bean.Fixture;
-import com.example.NanLinkDemo.DB.bean.FixtureGroup;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.databinding.ActivityCameraBinding;
-import com.example.NanLinkDemo.databinding.ActivityLoginBinding;
 import com.example.NanLinkDemo.mvp.presenter.Impl.CameraPresenterImpl;
 import com.example.NanLinkDemo.mvp.view.CameraView;
 import com.example.NanLinkDemo.util.ColorUtil;
@@ -96,7 +81,6 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
         setPresenter();
         initToolbar();
         initPreView();
-        initControlData();
         initBtn();
     }
 
@@ -105,9 +89,17 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
         binding.complete.setOnClickListener(this);
         binding.getPhoto.setOnClickListener(this);
         binding.changeView.setOnClickListener(this);
+        binding.color.setClipToOutline(true);
+        binding.color.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), MyApplication.dip2px(6));
+            }
+        });
     }
 
-    private void showBtn(boolean isPreviewing) {
+    @Override
+    public void updateBtn(boolean isPreviewing) {
         if (isPreviewing) {
             binding.retry.setVisibility(View.GONE);
             binding.complete.setVisibility(View.GONE);
@@ -129,6 +121,7 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     @Override
     protected void onStart() {
         super.onStart();
+        initControlData();
     }
 
     private void initControlData() {
@@ -137,9 +130,6 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
 
 
     private void initPreView() {
-        ViewGroup.LayoutParams layoutParams = binding.preview.getLayoutParams();
-        layoutParams.height = layoutParams.width = MyApplication.widthPixels;
-        binding.preview.setLayoutParams(layoutParams);
         holder = binding.preview.getHolder();
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         holder.addCallback(new SurfaceHolder.Callback() {
@@ -150,6 +140,13 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
 
             @Override
             public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+                try {
+                    mCamera.setPreviewCallback(previewCallback);
+                    mCamera.setPreviewDisplay(surfaceHolder);
+                    mCamera.startPreview();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -162,13 +159,7 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     private void updateData(int HSI, int SAT) {
         this.HSI = HSI;
         this.SAT = SAT;
-        binding.color.setClipToOutline(true);
-        binding.color.setOutlineProvider(new ViewOutlineProvider() {
-            @Override
-            public void getOutline(View view, Outline outline) {
-                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), MyApplication.dip2px(6));
-            }
-        });
+
         binding.color.setBackgroundColor(ColorUtil.HsiSatToColor(HSI, SAT));
         binding.HSI.setText(String.valueOf(HSI));
         binding.SAT.setText(SAT + "%");
@@ -208,11 +199,13 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
 
     public void startPreview() {
         try {
-            showBtn(true);
-            WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-            Display display = manager.getDefaultDisplay();
-            int width = display.getWidth();
-            int height = display.getHeight();
+//            WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+//            Display display = manager.getDefaultDisplay();
+//            int width = display.getWidth();
+//            int height = display.getHeight();
+
+            int width = MyApplication.widthPixels;
+            int height = MyApplication.heightPixels;
 
             initPreviewParams(width, height);
 
@@ -233,11 +226,28 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     @Override
     public void toggleZoom() {
         isZoomIn = !isZoomIn;
-        if (isZoomIn) {
-            binding.changeView.setText("缩小");
-        } else {
-            binding.changeView.setText("放大");
+        if (mCamera != null) {
+            Camera.Parameters parameters = mCamera.getParameters();
+            if (parameters.isZoomSupported()) {
+                int maxZoom = parameters.getMaxZoom();
+                List<Integer> zoomRatios = parameters.getZoomRatios();
+                if (isZoomIn) {
+                    parameters.setZoom(maxZoom >= 10 ? 10 : maxZoom);
+                    binding.changeView.setText("缩小");
+                } else {
+                    parameters.setZoom(0);
+                    binding.changeView.setText("放大");
+                }
+                List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
+                Camera.Size bestSize = getBestSize(MyApplication.widthPixels, MyApplication.heightPixels, sizes);
+                parameters.setPreviewSize(bestSize.width, bestSize.height);
+                parameters.setPreviewFormat(ImageFormat.NV21);
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                mCamera.setParameters(parameters);
+
+            }
         }
+
     }
 
     @Override
@@ -288,7 +298,6 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
             List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
             Camera.Size bestSize = getBestSize(width, height, sizes);
             parameters.setPreviewSize(bestSize.width, bestSize.height);
-//            parameters.setPictureSize(bestSize.width, bestSize.height);
             parameters.setPreviewFormat(ImageFormat.NV21);
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             mCamera.setParameters(parameters);
@@ -332,7 +341,6 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
 
     @Override
     public void stopPreview() {
-        showBtn(false);
         mCamera.stopPreview();
     }
 
@@ -346,6 +354,6 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
     @Override
     protected void onStop() {
         super.onStop();
-
+        releaseCamera();
     }
 }

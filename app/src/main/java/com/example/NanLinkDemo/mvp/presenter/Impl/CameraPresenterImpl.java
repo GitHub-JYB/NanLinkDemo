@@ -36,9 +36,11 @@ public class CameraPresenterImpl implements CameraPresenter {
                 break;
             case R.id.getPhoto:
                 view.stopPreview();
+                view.updateBtn(false);
                 break;
             case R.id.retry:
                 view.startPreview();
+                view.updateBtn(true);
                 break;
             case R.id.complete:
                 switch (type) {
@@ -51,12 +53,15 @@ public class CameraPresenterImpl implements CameraPresenter {
                         model.updateFixtureGroup(fixtureGroup);
                         break;
                 }
-//                view.finish();
                 break;
             case R.id.change_view:
                 view.toggleZoom();
                 break;
         }
+    }
+
+    public void finishUpdate(){
+        view.finish();
     }
 
     private String updateData(String data) {
