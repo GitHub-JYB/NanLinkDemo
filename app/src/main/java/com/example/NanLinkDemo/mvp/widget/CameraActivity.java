@@ -232,7 +232,7 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
         if (mCamera != null) {
 
             Camera.Parameters parameters = mCamera.getParameters();
-            if (parameters.isSmoothZoomSupported()) {
+            if (parameters.isZoomSupported()) {
                 isZoomIn = !isZoomIn;
 
                 int maxZoom = parameters.getMaxZoom();
@@ -244,11 +244,6 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
                     parameters.setZoom(0);
                     binding.changeView.setText("放大");
                 }
-                List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
-                Camera.Size bestSize = getBestSize(MyApplication.widthPixels, MyApplication.heightPixels, sizes);
-                parameters.setPreviewSize(bestSize.width, bestSize.height);
-                parameters.setPreviewFormat(ImageFormat.NV21);
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
                 mCamera.setParameters(parameters);
 
             }
@@ -300,9 +295,9 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
 
     private void initPreviewParams(int width, int height) {
         Camera.Parameters parameters = mCamera.getParameters();
-        List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
-        Camera.Size bestSize = getBestSize(width, height, sizes);
-        parameters.setPreviewSize(bestSize.width, bestSize.height);
+//        List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
+//        Camera.Size bestSize = getBestSize(width, height, sizes);
+//        parameters.setPreviewSize(bestSize.width, bestSize.height);
         parameters.setPreviewFormat(ImageFormat.NV21);
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
         mCamera.setParameters(parameters);
@@ -313,8 +308,8 @@ public class CameraActivity extends BaseActivity<ActivityCameraBinding> implemen
         float uiRadio = (float) height / width;
         float minRadio = uiRadio;
         for (Camera.Size previewSize : sizes) {
-//            float cameraRadio = (float) previewSize.width / previewSize.height;
-            float cameraRadio = (float) previewSize.height / previewSize.width;
+            float cameraRadio = (float) previewSize.width / previewSize.height;
+//            float cameraRadio = (float) previewSize.height / previewSize.width;
 
             float offset = Math.abs(cameraRadio - minRadio);
             if (offset < minRadio) {
