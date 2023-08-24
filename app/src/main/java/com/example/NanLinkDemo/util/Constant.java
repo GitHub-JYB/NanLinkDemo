@@ -31,6 +31,8 @@ public class Constant {
     public static final String ACTIVITY_URL_Control = "/widget/ControlActivity";
     public static final String ACTIVITY_URL_Camera = "/widget/CameraActivity";
     public static final String ACTIVITY_URL_Test = "/widget/TestActivity";
+
+    public static final String ACTIVITY_URL_Bluetooth2Activity = "/widget/Bluetooth2Activity";
     public static final int Code_Register = 0;
     public static final int Code_ResetPassword = 1;
 

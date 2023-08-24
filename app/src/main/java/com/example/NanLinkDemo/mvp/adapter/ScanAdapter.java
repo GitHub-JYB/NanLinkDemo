@@ -15,6 +15,7 @@ import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.Device;
+import com.example.NanLinkDemo.bleConnect.ExtendedBluetoothDevice;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
 import com.example.NanLinkDemo.util.TransformUtil;
 
@@ -24,7 +25,7 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private OnClickListener onClickListener;
-    private ArrayList<Device> fixtureList;
+    private ArrayList<ExtendedBluetoothDevice> fixtureList;
 
 
     @NonNull
@@ -37,28 +38,32 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderItemFixture){
-                ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
-                if (fixtureList.get(position).getTYPE() == 0){
-                    TextView number = ((ViewHolderItemFixture) holder).number;
-                    number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
-                    number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.login_hintText));
-                    if (fixtureList.get(position).getCH() == 0){
-                        number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
-                        number.setText("CH: 未设置");
-                    }
-                    for (Fixture fixture : MyApplication.getFixtures()){
-                        if (fixtureList.get(position).getCH() == fixture.getCH()){
-                            number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
-                        }
-                    }
-                }else {
-                    ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getUUID());
-                }
-                if (fixtureList.get(position).isSelected()){
-                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_selected);
-                }else {
-                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_unselected);
-                }
+            ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getName());
+            ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getAddress());
+
+
+//                ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
+//                if (fixtureList.get(position).getTYPE() == 0){
+//                    TextView number = ((ViewHolderItemFixture) holder).number;
+//                    number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
+//                    number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.login_hintText));
+//                    if (fixtureList.get(position).getCH() == 0){
+//                        number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
+//                        number.setText("CH: 未设置");
+//                    }
+//                    for (Fixture fixture : MyApplication.getFixtures()){
+//                        if (fixtureList.get(position).getCH() == fixture.getCH()){
+//                            number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
+//                        }
+//                    }
+//                }else {
+//                    ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getUUID());
+//                }
+//                if (fixtureList.get(position).isSelected()){
+//                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_selected);
+//                }else {
+//                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_unselected);
+//                }
 
         }
     }
@@ -70,7 +75,7 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-    public void setData(ArrayList<Device> arrayList) {
+    public void setData(ArrayList<ExtendedBluetoothDevice> arrayList) {
         this.fixtureList = arrayList;
         notifyDataSetChanged();
     }

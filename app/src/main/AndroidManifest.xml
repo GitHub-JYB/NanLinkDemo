@@ -75,6 +75,7 @@
         <activity android:name=".mvp.widget.ControlActivity" />
         <activity android:name=".mvp.widget.CameraActivity" />
         <activity android:name=".mvp.widget.TestActivity" />
+        <activity android:name=".bleConnect.Bluetooth2Activity" />
     </application>
 
 </manifest>

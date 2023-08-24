@@ -253,7 +253,7 @@ public class NrfMeshRepository implements MeshProvisioningStatusCallbacks, MeshS
      *
      * @return {@link MeshManagerApi}
      */
-    MeshManagerApi getMeshManagerApi() {
+    public MeshManagerApi getMeshManagerApi() {
         return mMeshManagerApi;
     }
 

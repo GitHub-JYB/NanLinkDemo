@@ -164,7 +164,7 @@ public class ScanControllerActivity extends BaseActivity<ActivityRecycleviewScan
     @Override
     public void showController(ArrayList<Device> arrayList) {
         updateFinishBtn(arrayList);
-        adapter.setData(arrayList);
+//        adapter.setData(arrayList);
     }
 
     @Override

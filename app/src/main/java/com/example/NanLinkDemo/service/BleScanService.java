@@ -1,37 +1,33 @@
 package com.example.NanLinkDemo.service;
 
-import static com.example.NanLinkDemo.util.Constant.PERMISSION_REQUEST_CODE;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanRecord;
-import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
-import com.example.NanLinkDemo.bean.Device;
 
 import java.util.ArrayList;
+
+import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
+import no.nordicsemi.android.support.v18.scanner.ScanCallback;
+import no.nordicsemi.android.support.v18.scanner.ScanResult;
+import no.nordicsemi.android.support.v18.scanner.ScanSettings;
 
 public class BleScanService extends Service {
 
     public static final String resultAction = "BLEScan_Result";
     public static final String scanStateAction = "BLEScan_scanState";
-    private BluetoothLeScanner scanner;
+    private BluetoothLeScannerCompat scanner;
     private ScanCallback scanCallback;
     private boolean isScanning = false;
 
@@ -44,7 +40,7 @@ public class BleScanService extends Service {
         super.onCreate();
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-        scanner = bluetoothAdapter.getBluetoothLeScanner();
+        scanner = BluetoothLeScannerCompat.getScanner();
         scanCallback = new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {

@@ -54,7 +54,7 @@ public class ControlPresenterImpl implements ControlPresenter {
     public void menuSwitch(int position) {
         switch (position) {
             case 1:
-                ARouter.getInstance().build(Constant.ACTIVITY_URL_Test).navigation();
+                ARouter.getInstance().build(Constant.ACTIVITY_URL_Bluetooth2Activity).navigation();
                 break;
         }
     }

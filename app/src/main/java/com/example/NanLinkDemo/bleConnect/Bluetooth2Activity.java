@@ -17,7 +17,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.NanLinkDemo.R;
+import com.example.NanLinkDemo.util.Constant;
 import com.feasycom.feasymesh.library.MeshBeacon;
 import com.feasycom.feasymesh.library.MeshManagerApi;
 import com.feasycom.feasymesh.library.MeshNetwork;
@@ -36,6 +38,7 @@ import no.nordicsemi.android.support.v18.scanner.ScanRecord;
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
 import no.nordicsemi.android.support.v18.scanner.ScanSettings;
 
+@Route(path = Constant.ACTIVITY_URL_Bluetooth2Activity)
 public class Bluetooth2Activity extends AppCompatActivity implements View.OnClickListener {
 
     private String TAG = "test";
