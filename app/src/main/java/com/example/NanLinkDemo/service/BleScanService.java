@@ -30,6 +30,7 @@ public class BleScanService extends Service {
     private BluetoothLeScannerCompat scanner;
     private ScanCallback scanCallback;
     private boolean isScanning = false;
+    private ScanSettings scanSettings;
 
     public BleScanService() {
     }
@@ -38,8 +39,6 @@ public class BleScanService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
         scanner = BluetoothLeScannerCompat.getScanner();
         scanCallback = new ScanCallback() {
             @Override
@@ -50,16 +49,13 @@ public class BleScanService extends Service {
                 sendBroadcast(intent);
             }
         };
-        ScanSettings.Builder builder = new ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            builder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES);
-            builder.setMatchMode(ScanSettings.MATCH_MODE_STICKY);
-        }
-        if (bluetoothAdapter.isOffloadedScanBatchingSupported()) {
-            builder.setReportDelay(0L);
-        }
-        ScanSettings scanSettings = builder.build();
+
+        scanSettings = new ScanSettings.Builder()
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+                .setMatchMode(ScanSettings.MATCH_MODE_STICKY)
+                .setReportDelay(0L)
+                .build();
     }
 
     @Override
@@ -77,7 +73,7 @@ public class BleScanService extends Service {
                 intent1.putExtra("isScanning", true);
                 intent1.setAction(scanStateAction);
                 sendBroadcast(intent1);
-                scanner.startScan(scanCallback);
+                scanner.startScan(null, scanSettings, scanCallback);
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override

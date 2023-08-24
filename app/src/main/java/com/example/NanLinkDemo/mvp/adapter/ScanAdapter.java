@@ -38,32 +38,28 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderItemFixture){
-            ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getName());
-            ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getAddress());
-
-
-//                ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getNAME());
+                ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getDEVICE_NAME());
 //                if (fixtureList.get(position).getTYPE() == 0){
-//                    TextView number = ((ViewHolderItemFixture) holder).number;
-//                    number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
-//                    number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.login_hintText));
-//                    if (fixtureList.get(position).getCH() == 0){
-//                        number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
-//                        number.setText("CH: 未设置");
-//                    }
-//                    for (Fixture fixture : MyApplication.getFixtures()){
-//                        if (fixtureList.get(position).getCH() == fixture.getCH()){
-//                            number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
-//                        }
-//                    }
+                    TextView number = ((ViewHolderItemFixture) holder).number;
+                    number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
+                    number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.login_hintText));
+                    if (fixtureList.get(position).getCH() == 0){
+                        number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
+                        number.setText("CH: 未设置");
+                    }
+                    for (Fixture fixture : MyApplication.getFixtures()){
+                        if (fixtureList.get(position).getCH() == fixture.getCH()){
+                            number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
+                        }
+                    }
 //                }else {
 //                    ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getUUID());
 //                }
-//                if (fixtureList.get(position).isSelected()){
-//                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_selected);
-//                }else {
-//                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_unselected);
-//                }
+                if (fixtureList.get(position).isSelected()){
+                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_selected);
+                }else {
+                    ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_unselected);
+                }
 
         }
     }

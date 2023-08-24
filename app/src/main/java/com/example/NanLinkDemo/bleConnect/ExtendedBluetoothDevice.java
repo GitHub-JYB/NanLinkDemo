@@ -22,9 +22,11 @@
 package com.example.NanLinkDemo.bleConnect;
 
 import android.bluetooth.BluetoothDevice;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.NanLinkDemo.Application.MyApplication;
 import com.feasycom.feasymesh.library.MeshBeacon;
 
 import no.nordicsemi.android.support.v18.scanner.ScanRecord;
@@ -37,6 +39,12 @@ public class ExtendedBluetoothDevice implements Parcelable {
     private String name = "Unknown";
     private int rssi;
     private MeshBeacon beacon;
+    private String manufacturer = "FEASY";
+    private boolean selected = false;
+    private int CH;
+    private String DEVICE_ID;
+    private String DEVICE_NAME;
+
 
     public ExtendedBluetoothDevice(final ScanResult scanResult, final MeshBeacon beacon) {
         this.scanResult = scanResult;
@@ -57,6 +65,23 @@ public class ExtendedBluetoothDevice implements Parcelable {
         if(scanRecord != null) {
             this.name = scanRecord.getDeviceName();
             // this.name = scanResult.getDevice().getName();
+
+            if (scanRecord.getServiceData() != null && scanRecord.getServiceUuids() != null){
+                byte[] uuid = scanRecord.getServiceData().get(scanRecord.getServiceUuids().get(0));
+                if (uuid[7] >=0){
+                    setCH(uuid[6] * 256 + uuid[7]);
+                }else {
+                    setCH((uuid[6] + 1) * 256 + uuid[7]);
+                }
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(String.format("%02X", uuid[10]));
+                stringBuilder.append(String.format("%02X", uuid[11]));
+                stringBuilder.append(String.format("%02X", uuid[12]));
+                setDEVICE_ID(stringBuilder.toString());
+                if (!MyApplication.getDeviceHashMap().isEmpty()){
+                    setDEVICE_NAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
+                }
+            }
         }
         this.rssi = scanResult.getRssi();
     }
@@ -67,6 +92,11 @@ public class ExtendedBluetoothDevice implements Parcelable {
         name = in.readString();
         rssi = in.readInt();
         beacon = in.readParcelable(MeshBeacon.class.getClassLoader());
+        manufacturer = in.readString();
+        selected = in.readByte() != 0;
+        CH = in.readInt();
+        DEVICE_ID = in.readString();
+        DEVICE_NAME = in.readString();
     }
 
     @Override
@@ -76,6 +106,11 @@ public class ExtendedBluetoothDevice implements Parcelable {
         dest.writeString(name);
         dest.writeInt(rssi);
         dest.writeParcelable(beacon, flags);
+        dest.writeString(manufacturer);
+        dest.writeByte((byte) (selected ? 1 : 0));
+        dest.writeInt(CH);
+        dest.writeString(DEVICE_ID);
+        dest.writeString(DEVICE_NAME);
     }
 
     @Override
@@ -140,5 +175,52 @@ public class ExtendedBluetoothDevice implements Parcelable {
             return device.getAddress().equals(that.device.getAddress());
         }
         return super.equals(o);
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+        if (manufacturer.equals("USER")){
+            setCH(Integer.parseInt(name.substring(5,8)));
+            setDEVICE_ID(name.substring(9, 15));
+            if (!MyApplication.getDeviceHashMap().isEmpty()){
+                setDEVICE_NAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
+            }
+        }
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public int getCH() {
+        return CH;
+    }
+
+    public void setCH(int CH) {
+        this.CH = CH;
+    }
+
+    public String getDEVICE_ID() {
+        return DEVICE_ID;
+    }
+
+    public void setDEVICE_ID(String DEVICE_ID) {
+        this.DEVICE_ID = DEVICE_ID;
+    }
+
+    public String getDEVICE_NAME() {
+        return DEVICE_NAME;
+    }
+
+    public void setDEVICE_NAME(String DEVICE_NAME) {
+        this.DEVICE_NAME = DEVICE_NAME;
     }
 }

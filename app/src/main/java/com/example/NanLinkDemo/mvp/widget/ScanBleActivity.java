@@ -48,7 +48,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     private ScanBlePresenterImpl presenter;
     private BroadcastReceiver broadcastReceiver;
     private NrfMeshRepository nrfMeshRepository;
-    private ArrayList<ExtendedBluetoothDevice> mDevices;
+    private ArrayList<ExtendedBluetoothDevice> mDevices = new ArrayList<>();
     private Set<String> meshProvisioningAddress = new HashSet<String>();
 
 
@@ -88,6 +88,11 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
                             } else {
                                 if (meshProvisioningAddress.contains(result.getDevice().getAddress())) {
                                     updateScannerLiveData(result);
+                                }else {
+                                    if (result.getScanRecord().getDeviceName().startsWith("``NL")){
+                                        updateScannerLiveData(result);
+                                        meshProvisioningAddress.add(result.getDevice().getAddress());
+                                    }
                                 }
                             }
                         }
@@ -111,41 +116,46 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         if (scanRecord != null) {
             if (scanRecord.getBytes() != null) {
                 final byte[] beaconData = nrfMeshRepository.getMeshManagerApi().getMeshBeaconData(scanRecord.getBytes());
-                if (beaconData != null) {
-                    ExtendedBluetoothDevice device;
-
-                    MeshBeacon beacon = nrfMeshRepository.getMeshManagerApi().getMeshBeacon(beaconData);
-                    final int index = indexOf(result);
-                    if (index == -1) {
+                ExtendedBluetoothDevice device;
+                final int index = indexOf(result);
+                if (index == -1) {
+                    if (beaconData != null) {
+                        MeshBeacon beacon = nrfMeshRepository.getMeshManagerApi().getMeshBeacon(beaconData);
                         device = new ExtendedBluetoothDevice(result, beacon);
-                        // Update RSSI and name
-                        device.setRssi(result.getRssi());
-                        if (result.getDevice().getName() == null) {
-                            if (result.getScanRecord().getDeviceName() != null) {
-                                device.setName(result.getScanRecord().getDeviceName());
-                            }
-                        } else {
-                            device.setName(result.getDevice().getName());
+                    }else {
+                        device = new ExtendedBluetoothDevice(result);
+                        device.setManufacturer("USER");
+                    }
+
+                    // Update RSSI and name
+                    device.setRssi(result.getRssi());
+                    if (result.getDevice().getName() == null) {
+                        if (result.getScanRecord().getDeviceName() != null) {
+                            device.setName(result.getScanRecord().getDeviceName());
                         }
-                        mDevices.add(device);
-                        adapter.setData(mDevices);
                     } else {
-                        device = mDevices.get(index);
-                        // Update RSSI and name
-                        device.setRssi(result.getRssi());
-                        if (device.getName() == null) {
-                            if (result.getDevice().getName() != null) {
-                                device.setName(result.getDevice().getName());
-                                mDevices.set(index, device);
-                                adapter.setData(mDevices);
-                            } else if (result.getScanRecord().getDeviceName() != null) {
-                                device.setName(result.getScanRecord().getDeviceName());
-                                mDevices.set(index, device);
-                                adapter.setData(mDevices);
-                            }
+                        device.setName(result.getDevice().getName());
+                    }
+                    mDevices.add(device);
+                    adapter.setData(mDevices);
+                } else {
+                    device = mDevices.get(index);
+                    // Update RSSI and name
+                    device.setRssi(result.getRssi());
+                    if (device.getName() == null) {
+                        if (result.getDevice().getName() != null) {
+                            device.setName(result.getDevice().getName());
+                            mDevices.set(index, device);
+                            adapter.setData(mDevices);
+                        } else if (result.getScanRecord().getDeviceName() != null) {
+                            device.setName(result.getScanRecord().getDeviceName());
+                            mDevices.set(index, device);
+                            adapter.setData(mDevices);
                         }
                     }
                 }
+
+
             }
         }
     }
