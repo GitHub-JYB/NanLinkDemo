@@ -46,7 +46,6 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
     private boolean allSelected = false;
 
     ArrayList<ExtendedBluetoothDevice> deviceList = new ArrayList<>();
-    private ArrayList<byte[]> uuidList = new ArrayList<>();
     private ArrayList<ExtendedBluetoothDevice> selectedDeviceList;
     private ArrayList<ExtendedBluetoothDevice> unsetCHList, unPassCHList, passCHList;
 
@@ -134,7 +133,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
             DataUtil.getDeviceData((ScanBleActivity) view, device.getDEVICE_ID(), device.getContentVersion(), new DataUtil.onReceiveDeviceDataListener() {
                 @Override
                 public void ReceiveDeviceData(String data) {
-                    Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), device.getDEVICE_NAME(), device.getCH(), device.getDEVICE_ID(), "蓝牙", "");
+                    Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), device.getName(), device.getCH(), device.getDEVICE_ID(), "蓝牙", "");
                     fixture.setAgreementVersion(device.getAgreementVersion());
                     fixture.setData(data);
                     model.addBleFixture(fixture);
@@ -154,7 +153,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
             notice();
         } else {
             ExtendedBluetoothDevice device = unsetCHList.get(0);
-            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH, "设置地址码", device.getDEVICE_NAME(), TransformUtil.updateCH(device.getCH()), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
+            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH, "设置地址码", device.getName(), TransformUtil.updateCH(device.getCH()), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (view.getInputTextMyDialog().isEmpty()) {
@@ -187,7 +186,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
             notice();
         } else {
             ExtendedBluetoothDevice device = unPassCHList.get(0);
-            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH, "更改地址码", device.getDEVICE_NAME(), TransformUtil.updateCH(device.getCH()), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
+            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH, "更改地址码", device.getName(), TransformUtil.updateCH(device.getCH()), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (view.getInputTextMyDialog().isEmpty()) {
@@ -258,31 +257,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
             return;
         }
 
-        if (!meshProvisioningAddress.contains(device.getAddress())) {
-            meshProvisioningAddress.add(device.getAddress());
-            updateScannerLiveData(result);
-        } else {
-            if (meshProvisioningAddress.contains(device.getAddress())) {
-                updateScannerLiveData(result);
-            }
-        }
-
-        if (deviceList.isEmpty()) {
-            deviceList.add(device);
-        } else {
-            for (int i = 0; i < deviceList.size(); i++) {
-                if (device.getUUID().equals(deviceList.get(i).getUUID())) {
-                    boolean selected = deviceList.get(i).isSelected();
-                    device.setSelected(selected);
-                    deviceList.set(i, device);
-                    break;
-                }
-                if (i == deviceList.size() - 1) {
-                    deviceList.add(device);
-                }
-            }
-        }
-        view.showBle(deviceList);
+        updateScannerLiveData(result);
     }
 
     private void updateScannerLiveData(ScanResult result) {
@@ -388,7 +363,9 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                         if (String.format("%08X", uuid[13]).charAt(String.format("%08X", uuid[13]).length() - 1) == '1') {
                             return null;
                         }
-                        return new ExtendedBluetoothDevice(result, beacon);
+                        ExtendedBluetoothDevice device = new ExtendedBluetoothDevice(result, beacon);
+                        device.setUuid(uuid);
+                        return device;
                     }
                 }
             }
