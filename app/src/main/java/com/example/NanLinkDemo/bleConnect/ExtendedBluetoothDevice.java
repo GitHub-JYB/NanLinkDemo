@@ -43,7 +43,14 @@ public class ExtendedBluetoothDevice implements Parcelable {
     private boolean selected = false;
     private int CH;
     private String DEVICE_ID;
-    private String DEVICE_NAME;
+    private String DEVICE_NAME = "Unknown";
+
+    private String UUID;
+
+    private int TYPE = 0;
+    private String manufacturer_ID = "78";
+    private int contentVersion = 1;
+    private int agreementVersion = 0;
 
 
     public ExtendedBluetoothDevice(final ScanResult scanResult, final MeshBeacon beacon) {
@@ -97,6 +104,11 @@ public class ExtendedBluetoothDevice implements Parcelable {
         CH = in.readInt();
         DEVICE_ID = in.readString();
         DEVICE_NAME = in.readString();
+        UUID = in.readString();
+        TYPE = in.readInt();
+        manufacturer_ID = in.readString();
+        contentVersion = in.readInt();
+        agreementVersion = in.readInt();
     }
 
     @Override
@@ -111,6 +123,11 @@ public class ExtendedBluetoothDevice implements Parcelable {
         dest.writeInt(CH);
         dest.writeString(DEVICE_ID);
         dest.writeString(DEVICE_NAME);
+        dest.writeString(UUID);
+        dest.writeInt(TYPE);
+        dest.writeString(manufacturer_ID);
+        dest.writeInt(contentVersion);
+        dest.writeInt(agreementVersion);
     }
 
     @Override
@@ -223,5 +240,45 @@ public class ExtendedBluetoothDevice implements Parcelable {
 
     public void setDEVICE_NAME(String DEVICE_NAME) {
         this.DEVICE_NAME = DEVICE_NAME;
+    }
+
+    public int getTYPE() {
+        return TYPE;
+    }
+
+    public void setTYPE(int TYPE) {
+        this.TYPE = TYPE;
+    }
+
+    public String getManufacturer_ID() {
+        return manufacturer_ID;
+    }
+
+    public void setManufacturer_ID(String manufacturer_ID) {
+        this.manufacturer_ID = manufacturer_ID;
+    }
+
+    public int getContentVersion() {
+        return contentVersion;
+    }
+
+    public void setContentVersion(int contentVersion) {
+        this.contentVersion = contentVersion;
+    }
+
+    public int getAgreementVersion() {
+        return agreementVersion;
+    }
+
+    public void setAgreementVersion(int agreementVersion) {
+        this.agreementVersion = agreementVersion;
+    }
+
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 }
