@@ -1,6 +1,7 @@
 package com.example.NanLinkDemo.mvp.view;
 
 import com.example.NanLinkDemo.bean.Device;
+import com.example.NanLinkDemo.bleConnect.ExtendedBluetoothDevice;
 import com.example.NanLinkDemo.ui.MyDialog;
 
 import java.util.ArrayList;
@@ -10,13 +11,13 @@ public interface ScanBleView {
 
     void setPresenter();
 
-    void showBle(ArrayList<Device> arrayList);
+    void showBle(ArrayList<ExtendedBluetoothDevice> arrayList);
 
     void finish();
 
-    void updateAllSelectedBtn(ArrayList<Device> arrayList);
+    void updateAllSelectedBtn(ArrayList<ExtendedBluetoothDevice> arrayList);
 
-    void updateFinishBtn(ArrayList<Device> arrayList);
+    void updateFinishBtn(ArrayList<ExtendedBluetoothDevice> arrayList);
 
     void updateAllSelectedText(boolean allSelected);
 
@@ -37,5 +38,7 @@ public interface ScanBleView {
     void dismissMyDialog();
 
     String getInputTextMyDialog();
+
+    boolean checkPermission();
 
 }

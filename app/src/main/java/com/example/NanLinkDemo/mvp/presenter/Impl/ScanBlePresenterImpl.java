@@ -1,8 +1,6 @@
 package com.example.NanLinkDemo.mvp.presenter.Impl;
 
 
-import android.bluetooth.le.ScanRecord;
-import android.bluetooth.le.ScanResult;
 import android.content.Intent;
 import android.view.View;
 
@@ -15,6 +13,9 @@ import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.R;
 import com.example.NanLinkDemo.bean.Device;
 import com.example.NanLinkDemo.bean.DeviceDataMessage;
+import com.example.NanLinkDemo.bleConnect.BleMeshManager;
+import com.example.NanLinkDemo.bleConnect.ExtendedBluetoothDevice;
+import com.example.NanLinkDemo.bleConnect.NrfMeshRepository;
 import com.example.NanLinkDemo.mvp.model.Impl.ScanBleModelImpl;
 import com.example.NanLinkDemo.mvp.presenter.ScanBlePresenter;
 import com.example.NanLinkDemo.mvp.view.ScanBleView;
@@ -25,25 +26,36 @@ import com.example.NanLinkDemo.util.DataUtil;
 import com.example.NanLinkDemo.util.DateUtil;
 import com.example.NanLinkDemo.util.SnackBarUtil;
 import com.example.NanLinkDemo.util.TransformUtil;
+import com.feasycom.feasymesh.library.MeshBeacon;
+import com.feasycom.feasymesh.library.MeshManagerApi;
 
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import no.nordicsemi.android.support.v18.scanner.ScanRecord;
+import no.nordicsemi.android.support.v18.scanner.ScanResult;
 
 
 public class ScanBlePresenterImpl implements ScanBlePresenter {
     private final ScanBleView view;
     private final ScanBleModelImpl model;
+    private final NrfMeshRepository nrfMeshRepository;
 
     private boolean allSelected = false;
 
-    ArrayList<Device> deviceList = new ArrayList<>();
+    ArrayList<ExtendedBluetoothDevice> deviceList = new ArrayList<>();
     private ArrayList<byte[]> uuidList = new ArrayList<>();
-    private ArrayList<Device> selectedDeviceList;
-    private ArrayList<Device> unsetCHList, unPassCHList, passCHList;
+    private ArrayList<ExtendedBluetoothDevice> selectedDeviceList;
+    private ArrayList<ExtendedBluetoothDevice> unsetCHList, unPassCHList, passCHList;
+
+    private Set<String> meshProvisioningAddress = new HashSet<String>();
 
     public ScanBlePresenterImpl(ScanBleView view) {
         this.view = view;
         this.model = new ScanBleModelImpl(this);
+        nrfMeshRepository = new NrfMeshRepository(new MeshManagerApi((ScanBleActivity) view), new BleMeshManager((ScanBleActivity) view));
     }
 
     @Override
@@ -65,14 +77,14 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 break;
             case R.id.all_selected:
                 allSelected = !allSelected;
-                for (Device device : deviceList) {
+                for (ExtendedBluetoothDevice device : deviceList) {
                     device.setSelected(!allSelected);
                 }
                 view.showBle(deviceList);
                 break;
             case R.id.complete:
                 selectedDeviceList = new ArrayList<>();
-                for (Device device : deviceList) {
+                for (ExtendedBluetoothDevice device : deviceList) {
                     if (device.isSelected()) {
                         selectedDeviceList.add(device);
                     }
@@ -86,7 +98,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         }
     }
 
-    private void checkDeviceList(ArrayList<Device> selectedDeviceList) {
+    private void checkDeviceList(ArrayList<ExtendedBluetoothDevice> selectedDeviceList) {
         sortSelectedDeviceList(selectedDeviceList);
         notice();
     }
@@ -117,17 +129,17 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
 
     private void connectAndSetData() {
         view.startLoading();
-        ArrayList<Device> successList = new ArrayList<>();
-        for (Device device : passCHList) {
-            DataUtil.getDeviceData((ScanBleActivity)view, device.getDEVICE_ID(), device.getContentVersion(), new DataUtil.onReceiveDeviceDataListener() {
+        ArrayList<ExtendedBluetoothDevice> successList = new ArrayList<>();
+        for (ExtendedBluetoothDevice device : passCHList) {
+            DataUtil.getDeviceData((ScanBleActivity) view, device.getDEVICE_ID(), device.getContentVersion(), new DataUtil.onReceiveDeviceDataListener() {
                 @Override
                 public void ReceiveDeviceData(String data) {
-                    Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), device.getNAME(), device.getCH(), device.getDEVICE_ID(), "蓝牙", "");
+                    Fixture fixture = new Fixture(MyApplication.getOnlineUser().getEmail(), MyApplication.getScene().getName(), device.getDEVICE_NAME(), device.getCH(), device.getDEVICE_ID(), "蓝牙", "");
                     fixture.setAgreementVersion(device.getAgreementVersion());
                     fixture.setData(data);
                     model.addBleFixture(fixture);
                     successList.add(device);
-                    if (successList.size() == passCHList.size()){
+                    if (successList.size() == passCHList.size()) {
                         view.stopLoading();
                         ARouter.getInstance().build(Constant.ACTIVITY_URL_Scene).withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).navigation();
                         view.finish();
@@ -141,8 +153,8 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         if (unsetCHList.isEmpty()) {
             notice();
         } else {
-            Device device = unsetCHList.get(0);
-            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH, "设置地址码", device.getNAME(), TransformUtil.updateCH(device.getCH()), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
+            ExtendedBluetoothDevice device = unsetCHList.get(0);
+            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH, "设置地址码", device.getDEVICE_NAME(), TransformUtil.updateCH(device.getCH()), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (view.getInputTextMyDialog().isEmpty()) {
@@ -174,8 +186,8 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         if (unPassCHList.isEmpty()) {
             notice();
         } else {
-            Device device = unPassCHList.get(0);
-            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH, "更改地址码", device.getNAME(), TransformUtil.updateCH(device.getCH()), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
+            ExtendedBluetoothDevice device = unPassCHList.get(0);
+            view.showMyDialog(MyDialog.Write_TwoBtn_NormalTitle_BlueTwoBtn_AddFixture_CH, "更改地址码", device.getDEVICE_NAME(), TransformUtil.updateCH(device.getCH()), "取消", null, "确定", new MyDialog.PositiveOnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (view.getInputTextMyDialog().isEmpty()) {
@@ -203,12 +215,12 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         }
     }
 
-    private void sortSelectedDeviceList(ArrayList<Device> selectedDeviceList) {
+    private void sortSelectedDeviceList(ArrayList<ExtendedBluetoothDevice> selectedDeviceList) {
         unPassCHList = new ArrayList<>();
         passCHList = new ArrayList<>();
         unsetCHList = new ArrayList<>();
 
-        for (Device device : selectedDeviceList) {
+        for (ExtendedBluetoothDevice device : selectedDeviceList) {
             if (device.getCH() == 0) {
                 unsetCHList.add(device);
             } else {
@@ -238,10 +250,23 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
 
     @Override
     public void handleResult(ScanResult result) {
-        Device device = FeasyFilter(result) == null ? UserFilter(result) == null ? null : UserFilter(result) : FeasyFilter(result);
+        if (result.getScanRecord() == null) {
+            return;
+        }
+        ExtendedBluetoothDevice device = FeasyFilter(result) == null ? UserFilter(result) == null ? null : UserFilter(result) : FeasyFilter(result);
         if (device == null) {
             return;
         }
+
+        if (!meshProvisioningAddress.contains(device.getAddress())) {
+            meshProvisioningAddress.add(device.getAddress());
+            updateScannerLiveData(result);
+        } else {
+            if (meshProvisioningAddress.contains(device.getAddress())) {
+                updateScannerLiveData(result);
+            }
+        }
+
         if (deviceList.isEmpty()) {
             deviceList.add(device);
         } else {
@@ -260,6 +285,70 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         view.showBle(deviceList);
     }
 
+    private void updateScannerLiveData(ScanResult result) {
+        view.checkPermission();
+        ScanRecord scanRecord = result.getScanRecord();
+        if (scanRecord != null) {
+            if (scanRecord.getBytes() != null) {
+                final byte[] beaconData = nrfMeshRepository.getMeshManagerApi().getMeshBeaconData(scanRecord.getBytes());
+                ExtendedBluetoothDevice device;
+                final int index = indexOf(result);
+                if (index == -1) {
+                    if (beaconData != null) {
+                        MeshBeacon beacon = nrfMeshRepository.getMeshManagerApi().getMeshBeacon(beaconData);
+                        device = new ExtendedBluetoothDevice(result, beacon);
+                    } else {
+                        device = new ExtendedBluetoothDevice(result);
+                        device.setManufacturer("USER");
+                    }
+
+                    // Update RSSI and name
+                    device.setRssi(result.getRssi());
+                    if (result.getDevice().getName() == null) {
+                        if (result.getScanRecord().getDeviceName() != null) {
+                            device.setName(result.getScanRecord().getDeviceName());
+                        }
+                    } else {
+                        device.setName(result.getDevice().getName());
+                    }
+                    deviceList.add(device);
+                    view.showBle(deviceList);
+
+                } else {
+                    device = deviceList.get(index);
+                    // Update RSSI and name
+                    device.setRssi(result.getRssi());
+                    if (device.getName() == null) {
+                        if (result.getDevice().getName() != null) {
+                            device.setName(result.getDevice().getName());
+                            deviceList.set(index, device);
+                            view.showBle(deviceList);
+
+                        } else if (result.getScanRecord().getDeviceName() != null) {
+                            device.setName(result.getScanRecord().getDeviceName());
+                            deviceList.set(index, device);
+                            view.showBle(deviceList);
+
+                        }
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    private int indexOf(ScanResult result) {
+        int i = 0;
+        for (final ExtendedBluetoothDevice device : deviceList) {
+            if (device.matches(result))
+                return i;
+            i++;
+        }
+        return -1;
+    }
+
+
     @Override
     public void updateScene() {
         MyApplication.getScene().setFixtureNum(MyApplication.getScene().getFixtureNum() + 1);
@@ -267,33 +356,41 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         model.updateScene(MyApplication.getScene());
     }
 
-    private Device UserFilter(ScanResult result) {
+    private ExtendedBluetoothDevice UserFilter(ScanResult result) {
         ScanRecord scanRecord = result.getScanRecord();
         if (scanRecord != null && scanRecord.getDeviceName() != null && scanRecord.getDeviceName().startsWith("``NL")) {
-            return new Device(result.getDevice().getAddress(), result.getScanRecord().getDeviceName());
+            ExtendedBluetoothDevice device = new ExtendedBluetoothDevice(result);
+            device.setManufacturer("USER");
+            return device;
         }
         return null;
     }
 
-    private Device FeasyFilter(ScanResult result) {
+    private ExtendedBluetoothDevice FeasyFilter(ScanResult result) {
         ScanRecord scanRecord = result.getScanRecord();
         if (scanRecord != null && scanRecord.getServiceData() != null && scanRecord.getServiceUuids() != null) {
-            byte[] uuid = scanRecord.getServiceData().get(scanRecord.getServiceUuids().get(0));
-            if ((uuid != null ? uuid.length : 0) > 14) {
-                if (uuid[14] != 78) {
-                    return null;
+            if (scanRecord.getServiceUuids().get(0).toString().equals(BleMeshManager.MESH_PROVISIONING_UUID.toString())) {
+                final byte[] beaconData = nrfMeshRepository.getMeshManagerApi().getMeshBeaconData(scanRecord.getBytes());
+                if (beaconData != null) {
+                    MeshBeacon beacon = nrfMeshRepository.getMeshManagerApi().getMeshBeacon(beaconData);
+                    byte[] uuid = scanRecord.getServiceData().get(scanRecord.getServiceUuids().get(0));
+                    if ((uuid != null ? uuid.length : 0) > 14) {
+                        if (uuid[14] != 78) {
+                            return null;
+                        }
+                        byte checkNum = 0;
+                        for (int i = 6; i < 15; i++) {
+                            checkNum = (byte) (checkNum + uuid[i]);
+                        }
+                        if (checkNum != uuid[15]) {
+                            return null;
+                        }
+                        if (String.format("%08X", uuid[13]).charAt(String.format("%08X", uuid[13]).length() - 1) == '1') {
+                            return null;
+                        }
+                        return new ExtendedBluetoothDevice(result, beacon);
+                    }
                 }
-                byte checkNum = 0;
-                for (int i = 6; i < 15; i++) {
-                    checkNum = (byte) (checkNum + uuid[i]);
-                }
-                if (checkNum != uuid[15]) {
-                    return null;
-                }
-                if (String.format("%08X", uuid[13]).charAt(String.format("%08X", uuid[13]).length() - 1) == '1') {
-                    return null;
-                }
-                return new Device(result.getDevice().getAddress(), uuid);
             }
         }
         return null;

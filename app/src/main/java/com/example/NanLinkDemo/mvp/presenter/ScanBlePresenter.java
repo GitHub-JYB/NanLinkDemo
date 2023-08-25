@@ -1,9 +1,8 @@
 package com.example.NanLinkDemo.mvp.presenter;
 
-import android.bluetooth.le.ScanResult;
 import android.view.View;
 
-import com.example.NanLinkDemo.bean.Device;
+import no.nordicsemi.android.support.v18.scanner.ScanResult;
 
 public interface ScanBlePresenter {
     void onClickSwitch(int position);

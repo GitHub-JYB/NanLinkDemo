@@ -53,18 +53,6 @@ public class ExtendedBluetoothDevice implements Parcelable {
         if(scanRecord != null) {
             this.name = scanRecord.getDeviceName();
             // this.name = scanResult.getDevice().getName();
-        }
-        this.rssi = scanResult.getRssi();
-        this.beacon = beacon;
-    }
-
-    public ExtendedBluetoothDevice(final ScanResult scanResult) {
-        this.scanResult = scanResult;
-        this.device = scanResult.getDevice();
-        final ScanRecord scanRecord = scanResult.getScanRecord();
-        if(scanRecord != null) {
-            this.name = scanRecord.getDeviceName();
-            // this.name = scanResult.getDevice().getName();
 
             if (scanRecord.getServiceData() != null && scanRecord.getServiceUuids() != null){
                 byte[] uuid = scanRecord.getServiceData().get(scanRecord.getServiceUuids().get(0));
@@ -82,6 +70,18 @@ public class ExtendedBluetoothDevice implements Parcelable {
                     setDEVICE_NAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
                 }
             }
+        }
+        this.rssi = scanResult.getRssi();
+        this.beacon = beacon;
+    }
+
+    public ExtendedBluetoothDevice(final ScanResult scanResult) {
+        this.scanResult = scanResult;
+        this.device = scanResult.getDevice();
+        final ScanRecord scanRecord = scanResult.getScanRecord();
+        if(scanRecord != null) {
+            this.name = scanRecord.getDeviceName();
+            // this.name = scanResult.getDevice().getName();
         }
         this.rssi = scanResult.getRssi();
     }
@@ -148,6 +148,13 @@ public class ExtendedBluetoothDevice implements Parcelable {
 
     public void setName(final String name) {
         this.name = name;
+        if (manufacturer.equals("USER")){
+            setCH(Integer.parseInt(name.substring(5,8)));
+            setDEVICE_ID(name.substring(9, 15));
+            if (!MyApplication.getDeviceHashMap().isEmpty()){
+                setDEVICE_NAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
+            }
+        }
     }
 
     public int getRssi() {
@@ -183,13 +190,7 @@ public class ExtendedBluetoothDevice implements Parcelable {
 
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
-        if (manufacturer.equals("USER")){
-            setCH(Integer.parseInt(name.substring(5,8)));
-            setDEVICE_ID(name.substring(9, 15));
-            if (!MyApplication.getDeviceHashMap().isEmpty()){
-                setDEVICE_NAME(MyApplication.getDeviceHashMap().get(DEVICE_ID).getDeviceName());
-            }
-        }
+
     }
 
     public boolean isSelected() {

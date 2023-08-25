@@ -47,9 +47,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     private ScanAdapter adapter;
     private ScanBlePresenterImpl presenter;
     private BroadcastReceiver broadcastReceiver;
-    private NrfMeshRepository nrfMeshRepository;
-    private ArrayList<ExtendedBluetoothDevice> mDevices = new ArrayList<>();
-    private Set<String> meshProvisioningAddress = new HashSet<String>();
+
 
 
     @Override
@@ -57,7 +55,6 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         super.onCreate(savedInstanceState);
         setPresenter();
         checkPermission();
-        nrfMeshRepository = new NrfMeshRepository(new MeshManagerApi(this), new BleMeshManager(this));
         initToolbar();
         initRecyclerView();
         initBtn();
@@ -75,31 +72,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
                 } else if (action.equals(BleScanService.resultAction)) {
                     Bundle bundle = intent.getExtras();
                     ScanResult result = (ScanResult) bundle.get("result");
-
-                    try {
-                        if (result.getScanRecord() != null) {
-                            if (result.getScanRecord().getServiceUuids() != null) {
-                                if (result.getScanRecord().getServiceUuids().get(0).toString().equals(BleMeshManager.MESH_PROVISIONING_UUID.toString())) {
-                                    if (!meshProvisioningAddress.contains(result.getDevice().getAddress())) {
-                                        meshProvisioningAddress.add(result.getDevice().getAddress());
-                                    }
-                                    updateScannerLiveData(result);
-                                }
-                            } else {
-                                if (meshProvisioningAddress.contains(result.getDevice().getAddress())) {
-                                    updateScannerLiveData(result);
-                                }else {
-                                    if (result.getScanRecord().getDeviceName().startsWith("``NL")){
-                                        updateScannerLiveData(result);
-                                        meshProvisioningAddress.add(result.getDevice().getAddress());
-                                    }
-                                }
-                            }
-                        }
-                    } catch (
-                            Exception ex) {
-                    }
-//                    presenter.handleResult(result);
+                    presenter.handleResult(result);
                 }
             }
         };
@@ -110,65 +83,6 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
         startScan();
     }
 
-    private void updateScannerLiveData(ScanResult result) {
-        checkPermission();
-        ScanRecord scanRecord = result.getScanRecord();
-        if (scanRecord != null) {
-            if (scanRecord.getBytes() != null) {
-                final byte[] beaconData = nrfMeshRepository.getMeshManagerApi().getMeshBeaconData(scanRecord.getBytes());
-                ExtendedBluetoothDevice device;
-                final int index = indexOf(result);
-                if (index == -1) {
-                    if (beaconData != null) {
-                        MeshBeacon beacon = nrfMeshRepository.getMeshManagerApi().getMeshBeacon(beaconData);
-                        device = new ExtendedBluetoothDevice(result, beacon);
-                    }else {
-                        device = new ExtendedBluetoothDevice(result);
-                        device.setManufacturer("USER");
-                    }
-
-                    // Update RSSI and name
-                    device.setRssi(result.getRssi());
-                    if (result.getDevice().getName() == null) {
-                        if (result.getScanRecord().getDeviceName() != null) {
-                            device.setName(result.getScanRecord().getDeviceName());
-                        }
-                    } else {
-                        device.setName(result.getDevice().getName());
-                    }
-                    mDevices.add(device);
-                    adapter.setData(mDevices);
-                } else {
-                    device = mDevices.get(index);
-                    // Update RSSI and name
-                    device.setRssi(result.getRssi());
-                    if (device.getName() == null) {
-                        if (result.getDevice().getName() != null) {
-                            device.setName(result.getDevice().getName());
-                            mDevices.set(index, device);
-                            adapter.setData(mDevices);
-                        } else if (result.getScanRecord().getDeviceName() != null) {
-                            device.setName(result.getScanRecord().getDeviceName());
-                            mDevices.set(index, device);
-                            adapter.setData(mDevices);
-                        }
-                    }
-                }
-
-
-            }
-        }
-    }
-
-    private int indexOf(no.nordicsemi.android.support.v18.scanner.ScanResult result) {
-        int i = 0;
-        for (final ExtendedBluetoothDevice device : mDevices) {
-            if (device.matches(result))
-                return i;
-            i++;
-        }
-        return -1;
-    }
 
     @Override
     public void startScan() {
@@ -199,21 +113,21 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     }
 
     @Override
-    public void showBle(ArrayList<Device> arrayList) {
+    public void showBle(ArrayList<ExtendedBluetoothDevice> arrayList) {
         updateAllSelectedBtn(arrayList);
         updateFinishBtn(arrayList);
-//        adapter.setData(arrayList);
+        adapter.setData(arrayList);
     }
 
     @Override
-    public void updateAllSelectedBtn(ArrayList<Device> arrayList) {
+    public void updateAllSelectedBtn(ArrayList<ExtendedBluetoothDevice> arrayList) {
         binding.allSelected.setClickable(!arrayList.isEmpty());
         if (arrayList.isEmpty()) {
             binding.allSelected.setBackgroundResource(R.drawable.bg_unable_btn_selected);
         } else {
             binding.allSelected.setBackgroundResource(R.drawable.bg_able_btn_selected);
             boolean allSelected = false;
-            for (Device device : arrayList) {
+            for (ExtendedBluetoothDevice device : arrayList) {
                 if (!device.isSelected()) {
                     allSelected = false;
                     break;
@@ -225,7 +139,7 @@ public class ScanBleActivity extends BaseActivity<ActivityRecycleviewScanBinding
     }
 
     @Override
-    public void updateFinishBtn(ArrayList<Device> arrayList) {
+    public void updateFinishBtn(ArrayList<ExtendedBluetoothDevice> arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
             if (arrayList.get(i).isSelected()) {
                 binding.complete.setClickable(true);
