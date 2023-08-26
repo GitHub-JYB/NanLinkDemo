@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.NanLinkDemo.Application.MyApplication;
 import com.example.NanLinkDemo.DB.bean.Fixture;
 import com.example.NanLinkDemo.R;
-import com.example.NanLinkDemo.bean.Device;
 import com.example.NanLinkDemo.bleConnect.ExtendedBluetoothDevice;
 import com.example.NanLinkDemo.databinding.VpItemFixtureBinding;
 import com.example.NanLinkDemo.util.TransformUtil;
@@ -39,7 +38,7 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderItemFixture){
                 ((ViewHolderItemFixture) holder).name.setText(fixtureList.get(position).getDEVICE_NAME());
-//                if (fixtureList.get(position).getTYPE() == 0){
+                if (fixtureList.get(position).getTYPE() == 0){
                     TextView number = ((ViewHolderItemFixture) holder).number;
                     number.setText("CH: " + TransformUtil.updateCH(fixtureList.get(position).getCH()));
                     number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.login_hintText));
@@ -52,9 +51,9 @@ public class ScanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             number.setTextColor(ContextCompat.getColor(number.getContext(), R.color.warnCH));
                         }
                     }
-//                }else {
-//                    ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getUUID());
-//                }
+                }else {
+                    ((ViewHolderItemFixture) holder).number.setText(fixtureList.get(position).getAddress());
+                }
                 if (fixtureList.get(position).isSelected()){
                     ((ViewHolderItemFixture) holder).menu.setImageResource(R.drawable.ic_selected);
                 }else {

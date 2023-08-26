@@ -43,7 +43,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
     private final ScanBleModelImpl model;
     private final NrfMeshRepository nrfMeshRepository;
 
-    private boolean allSelected = false;
+    private boolean allSelected;
 
     ArrayList<ExtendedBluetoothDevice> deviceList = new ArrayList<>();
     private ArrayList<ExtendedBluetoothDevice> selectedDeviceList;
@@ -77,7 +77,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
             case R.id.all_selected:
                 allSelected = !allSelected;
                 for (ExtendedBluetoothDevice device : deviceList) {
-                    device.setSelected(!allSelected);
+                    device.setSelected(allSelected);
                 }
                 view.showBle(deviceList);
                 break;
@@ -91,7 +91,7 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
                 checkDeviceList(selectedDeviceList);
                 break;
             case R.id.toolbar_right_btn:
-                deviceList.clear();
+                deviceList = new ArrayList<>();
                 view.showBle(deviceList);
                 view.startScan();
         }
@@ -256,59 +256,21 @@ public class ScanBlePresenterImpl implements ScanBlePresenter {
         if (device == null) {
             return;
         }
-
-        updateScannerLiveData(result);
-    }
-
-    private void updateScannerLiveData(ScanResult result) {
-        view.checkPermission();
-        ScanRecord scanRecord = result.getScanRecord();
-        if (scanRecord != null) {
-            if (scanRecord.getBytes() != null) {
-                final byte[] beaconData = nrfMeshRepository.getMeshManagerApi().getMeshBeaconData(scanRecord.getBytes());
-                ExtendedBluetoothDevice device;
-                final int index = indexOf(result);
-                if (index == -1) {
-                    if (beaconData != null) {
-                        MeshBeacon beacon = nrfMeshRepository.getMeshManagerApi().getMeshBeacon(beaconData);
-                        device = new ExtendedBluetoothDevice(result, beacon);
-                    } else {
-                        device = new ExtendedBluetoothDevice(result);
-                        device.setManufacturer("USER");
-                    }
-
-                    // Update RSSI and name
-                    device.setRssi(result.getRssi());
-                    if (result.getDevice().getName() == null) {
-                        if (result.getScanRecord().getDeviceName() != null) {
-                            device.setName(result.getScanRecord().getDeviceName());
-                        }
-                    } else {
-                        device.setName(result.getDevice().getName());
-                    }
-                    deviceList.add(device);
+        int index = indexOf(result);
+        if (index == -1) {
+            deviceList.add(device);
+            view.showBle(deviceList);
+        } else {
+            if (device.getManufacturer().equals("USER")) {
+                if (!deviceList.get(index).getName().equals(device.getName())) {
+                    deviceList.get(index).setName(device.getName());
                     view.showBle(deviceList);
-
-                } else {
-                    device = deviceList.get(index);
-                    // Update RSSI and name
-                    device.setRssi(result.getRssi());
-                    if (device.getName() == null) {
-                        if (result.getDevice().getName() != null) {
-                            device.setName(result.getDevice().getName());
-                            deviceList.set(index, device);
-                            view.showBle(deviceList);
-
-                        } else if (result.getScanRecord().getDeviceName() != null) {
-                            device.setName(result.getScanRecord().getDeviceName());
-                            deviceList.set(index, device);
-                            view.showBle(deviceList);
-
-                        }
-                    }
                 }
-
-
+            } else {
+                if (!deviceList.get(index).getUuid().equals(device.getUuid())) {
+                    deviceList.get(index).setUuid(device.getUuid());
+                    view.showBle(deviceList);
+                }
             }
         }
     }

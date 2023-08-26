@@ -43,7 +43,7 @@ public class ExtendedBluetoothDevice implements Parcelable {
     private int rssi;
     private MeshBeacon beacon;
     private String manufacturer = "FEASY";
-    private boolean selected = false;
+    private boolean selected;
     private int CH;
     private String DEVICE_ID;
     private String DEVICE_NAME = "Unknown";
@@ -193,7 +193,9 @@ public class ExtendedBluetoothDevice implements Parcelable {
 
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
-
+        if (manufacturer.equals("USER")) {
+            setName(name);
+        }
     }
 
     public boolean isSelected() {
